@@ -1,0 +1,181 @@
+<div class="container9">
+
+	<div class="card bg-light mb-3 w-75" style="max-width: 100%">
+		<!-- <div class="card-header">
+			<div class="row" style="text-align:right;"> 
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
+					<h2 class="text-left">Vendedores</h2>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<button class="btn btn-link" type="" (click)="moForm()">
+						<i class="fas fa-plus-square"></i> {{msj_enlace}}
+					</button>
+				</div>
+			</div>
+		</div> -->
+		<div class="card-body text-info panel panel-login" *ngIf="vendedorService.mostrarForm">
+				<form #vendedorForm="ngForm" (ngSubmit)="onSubmit(vendedorForm)">
+						<!-- TO UPDATE -->
+						<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="vendedorService.selectedVendedor.$key">
+					
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<!-- <mat-label>Id</mat-label>  -->
+									<input
+										placeholder="Id" 
+										value=""
+										type="number"
+										name="idvendedor"
+										#idvendedor="ngModel"
+										[(ngModel)]="vendedorService.selectedVendedor.idvendedor"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="4"
+										[readonly]="vendedorService.idFieldReadOnly"
+										required
+										class="form-control"
+								  	/>
+									<div *ngIf="idvendedor.invalid && (idvendedor.dirty || idvendedor.touched)" class="text-danger">
+										<div *ngIf="idvendedor.errors.required">
+											<small>Se requiere Id</small>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+								<div class="form-group">
+									<!-- <mat-label>Descripción</mat-label> -->
+									<input
+										placeholder="Descripción"
+										value=""
+										name="descripcion"
+										#descripcion="ngModel"
+										[(ngModel)]="vendedorService.selectedVendedor.descripcion"
+										required
+										class="form-control"
+								  	/>
+									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+										<div *ngIf="descripcion.errors.required">
+											<small>Se requiere una descripción</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<!-- <mat-label>Nombre de Usuario</mat-label> -->
+								<input
+									placeholder="Nombre de usuario"
+									value=""
+									name="vusr"
+									#vusr="ngModel"
+									[(ngModel)]="vendedorService.selectedVendedor.vusr"
+									required
+									class="form-control"
+									pattern="^[a-z0-9]{8,15}$"
+								/>
+								<div *ngIf="vusr.invalid && (vusr.dirty || vusr.touched)" class="text-danger">
+									<div *ngIf="vusr.errors.required">
+										<small>Se requiere nombre de usuario</small>
+									</div>
+									<div *ngIf="vusr.errors?.pattern">
+										<small>Nombre de usuario inválido</small>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<div class="form-group">
+									<!-- <mat-label>Contraseña</mat-label> -->
+									<input
+										placeholder="Contraseña"
+										value=""
+										type="password"
+										name="vpasswd"
+										#vpasswd="ngModel"
+										[(ngModel)]="vendedorService.selectedVendedor.vpasswd"
+										required
+										class="form-control"
+									/>
+									<div *ngIf="vpasswd.invalid && (vpasswd.dirty || vpasswd.touched)" class="text-danger">
+										<div *ngIf="vpasswd.errors.required">
+											<small>Se requiere una contraseña</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<div class="form-group">
+									<!-- <mat-label>Email</mat-label> -->
+									<input
+										placeholder="Email" 
+										value=""
+										type="email"
+										aria-describedby="emailHelp" 
+										name="vemail"
+										#vemail="ngModel"
+										[(ngModel)]="vendedorService.selectedVendedor.vemail"
+										required
+										class="form-control"
+										pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}"
+									/>
+									<div *ngIf="vemail.invalid && (vemail.dirty || vemail.touched)" class="text-danger">
+										<div *ngIf="vemail.errors.required">
+											<small>Se requiere un email</small>
+										</div>
+										<div *ngIf="vemail.errors?.pattern">
+											<small>Por favor ingrese una dirección de correo válida</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<div class="form-group">
+									<!-- <mat-label>Zona</mat-label> -->
+									<select 
+										placeholder="Zona"
+										class="form-select" 
+										aria-label="Default select example"
+										required
+										name="vzona"
+										#vzona="ngModel"
+										[(ngModel)]="vendedorService.selectedVendedor.vzona"
+										class="form-control"
+										pattern="^[a-zA-Z0-9 ]{2,35}$"
+									>
+										<option disabled selected value="sel@" >--Zona de venta--</option>
+										<option *ngFor = "let z of zonasList">
+											{{z.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="vzona.invalid && (vzona.dirty || vzona.touched)" class="text-danger">
+										<div *ngIf="vzona.errors.required">
+											<small>Se requiere una zona</small>
+										</div>
+										<div *ngIf="vzona.errors?.pattern">
+											<small>Se requiere una zona</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+							
+						<div class="form-group" style="text-align:right;padding-top: 10px;">
+							<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="vendedorForm.invalid">
+								Guardar
+							</button>
+							<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(vendedorForm)">
+								Reset
+							</button>
+						</div>
+					</form>
+		</div>
+	</div>
+	
+	</div>

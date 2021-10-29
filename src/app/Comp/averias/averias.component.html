@@ -1,0 +1,38 @@
+<div class="container88">
+	<!-- <h4> GESTION DE DATOS MAESTROS </h4> -->
+	<mat-tab-group animationDuration="0ms"> 
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-wrench"></i></button> Registrar averías
+			</ng-template>
+			<div>	
+				<div class="col-md-12">
+					<app-registrar-averias></app-registrar-averias>
+					<app-reg-ave-list></app-reg-ave-list>
+				</div>
+			</div>  
+		</mat-tab>
+	
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-cogs"></i></button> Resolución de averías
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-modificar-averias></app-modificar-averias>
+				</div>	
+			</div>  
+		</mat-tab>
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-cogs"></i></button> Cierre de averías
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-cerrar-averias></app-cerrar-averias>
+				</div>	
+			</div>  
+		</mat-tab>
+	</mat-tab-group>
+</div>

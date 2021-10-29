@@ -1,0 +1,342 @@
+
+	<mat-dialog-content style="width: 100%;">
+		<div class="card-body text-info panel panel-login" *ngIf="this.averiaShow.uid" style="border-style:solid;border-width:1px;">
+			<button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;</button>
+				
+			<div class="row">
+				<br/><br/>
+			</div>
+			<form #averiaFormne="ngForm" *ngIf="this.averiaShow.uid">			
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4" style="border-color: blue;border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+						<div class="card">
+									<!--T  R   B   L-->
+							<div class="card-body" style="height: 200px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">ID Cliente</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.averiaShow.idcliente}}</mat-label>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Cliente</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.averiaShow.nomcliente}}</mat-label>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Vendedor</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.averiaShow.nomvendedor}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Email</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.averiaShow.email}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+							<div class="card">
+								<div class="card-body" style="height: 150px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+
+
+									<div class="row" >
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 105px;">
+													<span class="input-group-text" style="width: 100px;" id="inputGroup-sizing-sm">N° Doc. Ref</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.averiaShow.nrodocumento}}</mat-label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row" >
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 105px;">
+													<span class="input-group-text" style="width: 100px;" id="inputGroup-sizing-sm">Tipo Doc</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.averiaShow.tipodocumento}}</mat-label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row" >
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 105px;">
+													<span class="input-group-text" style="width: 100px;" id="inputGroup-sizing-sm">Fecha Doc</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.averiaShow.fechadocumento.toDate() | date: 'dd/MM/yyyy hh:mm a'}}</mat-label>
+												</div>
+											</div>
+										</div>
+									</div>
+			
+								</div>
+							</div>
+						
+					</div>
+
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+						<div class="card">
+							<div class="card-body" style="height: 200px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Avería</span>
+											</div>
+											<div class="abs-center-fecha">
+												<mat-label>{{this.averiaShow.fechaaveria.toDate() | date: 'dd/MM/yyyy' }}</mat-label>
+											</div>
+										</div>	
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fe. Resolución</span>
+											</div>
+											<div class="abs-center-fecha">
+												<!-- .toDate() | date: 'dd/MM/yyyy hh:mm a' -->
+												<mat-label>{{this.fechaderesolucion }}</mat-label>
+											</div>
+										</div>	
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fe. Cierre</span>
+											</div>
+											<div class="abs-center-fecha">
+												<mat-label>{{this.fechadecierre }}</mat-label>
+											</div>
+										</div>	
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+											  <span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Status</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.averiaShow.status}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>		
+					</div>
+
+
+				</div>
+
+
+
+
+
+				<div class="row" style="height: 5px;"></div>
+				<div class="row">
+					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
+								<div class="row" style="padding-top: 2px;">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<table class="table-bordered table-striped table-sm table-responsive" style="max-height: 350px;">
+											<thead>
+												<tr>
+													<th scope="col"><mat-label style="font-size:smaller;">CÓDIGO</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">MATERIAL</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">MOTIVO</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANT</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">PRECIO</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">TOTAL</mat-label></th>
+												<th *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA'" scope="col" style="text-align:left;"><mat-label style="font-size:smaller;">RESOLUCIÓN</mat-label></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr *ngFor="let ave of this.averiaslistDet; index as i">
+													<td class="col-0">{{ave.codigodematerial}}</td>
+													<td class="col-1">{{ave.descripcionmaterial}}</td>
+													<td class="col-2">{{ave.motivoaveria}}</td>
+													<td class="col-3" style="text-align:right;">{{ave.cantidadmaterial| currency:" ":'symbol':'2.0'}}</td>
+													<td class="col-4" style="text-align:right;">{{ave.preciomaterial | currency:" "}}</td>
+													<td class="col-5" style="text-align:right;">{{ave.totalpormaterial | currency:" "}}</td>
+													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && ave.aprobado" class="col-5" style="text-align:left;">ACEPTDA</td>
+													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && !ave.aprobado" class="col-5" style="text-align:left;">RECHAZADA</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card" style="padding-right: 0px;padding-left: 0px;">
+							<div class="card-body" style="padding-right: 3px;padding-left: 3px;">
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Monto Original</span>
+											</div>
+											<div class="abs-right">
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.averiaShow.montoOriginal | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Total Avería</span>
+											</div>
+											<div class="abs-right">
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.averiaShow.totalaveria | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">% Reclamo</span>
+											</div>
+											<div class="abs-right">
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.averiaShow.porcentajeReclamo | currency:' '}}%">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-body">
+
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Texto Avería</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<p style="width: 100%;">
+											{{this.averiaShow.txtAveria}}
+										</p>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Texto Avería</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<p style="width: 100%;">
+											{{this.averiaShow.txtResolucion}}
+										</p>
+									</div>
+								</div>
+
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Texto Avería</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<p style="width: 100%;">
+											{{this.averiaShow.txtCierre}}
+										</p>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
+
+									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
+										
+											<button 
+												smat-stroked-button 
+												style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+												type="reset" 
+												(click)="onClose()">
+													Atrás
+												</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> 
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</mat-dialog-content>

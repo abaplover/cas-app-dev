@@ -1,0 +1,115 @@
+
+<div class="h-100 w-100" style="background-image:url('../../../assets/img/fondo.jpg');background-repeat:no-repeat; background-size: cover;">
+
+
+
+  <!-- *ngIf="!isSignedIn" -->
+<div class="container">
+  <div class="card align-items-center h-100 w-100" style="padding-top: 90px; background-color: transparent; border-width: 0px;">
+
+    <!--****************************************************************************
+		*************************Aun no se implementa***********************************-->
+    <div class="card bg-light mb-3 w-50" style="display: none;">
+      <div class="card-body">
+        <div *ngIf="!isSignedIn">
+          <h2>Regístrate</h2>
+          <div class="form-group">
+            <input
+              type="text"
+              #emailSignup
+              class="form-control"
+              placeholder="Ingrese email"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              #passwdSignup
+              class="form-control"
+              placeholder="Ingrese Contraseña"
+            />
+          </div>
+          <button
+            class="btn btn-primary"
+            (click)="onSignup(emailSignup.value, passwdSignup.value)"
+          >
+            Enviar
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--****************************************************************************
+		*************************Aun no se implementa***********************************-->
+
+    <div class="card bg-light mb-3" style="width: 300px;" *ngIf="!this.firebaseservices.getcurrentusrtrueorfalse()">
+      <div class="card-header text-center">
+        <mat-icon>settings_system_daydream</mat-icon><br />
+        <h1>Iniciar sesión</h1>
+      </div>
+      <div class="card-body text-info">
+        <div class="panel panel-login" style="padding: 10px;">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                formControlName="email"
+                #email
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+              />
+              <!-- <mat-hint class="text-info">
+                Correo electrónico o nombre de usuario
+              </mat-hint> -->
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">El correo es requerido</div>
+                <div *ngIf="f.email.errors.email">
+                  Debe ingresar una dirección de correo valida
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                placeholder="Contraseña"
+                formControlName="password"
+                #passwd
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+              />
+              <div
+                *ngIf="submitted && f.password.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.password.errors.required">La contraseña es requerida</div>
+                <div *ngIf="f.password.errors.minlength">
+                  La contraseña debe tener una longitud mayor o igual a 6 caracateres 
+                </div>
+              </div>
+            </div>
+            <div *ngIf="this.userError" class="invalidUser">
+              <p>Usuario o contraseña incorrecta</p>
+            </div>
+            <div class="form-group form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="remember" />
+                Recuérdame
+              </label>
+            </div>
+            <div class="form-group" style="text-align: right">
+              <button type="submit" class="btn btn-primary" (click)="onSignin(email.value, passwd.value)" style="font-size: large;">
+                Entrar
+              </button>
+            </div>
+          </form> 
+        </div> 
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+ <!-- <app-home *ngIf="isSignedIn" (isLogout)="handleLogout()"></app-home>  -->
+</div>
+

@@ -1,0 +1,780 @@
+<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
+	<div class="card-body text-info panel panel-login" *ngIf="gestionaveriasService.mostrarForm" style="border-style: solid; border-width: 0px;">
+		<!--<form #avForm="ngForm" (ngSubmit)="onSubmit(avForm)">-->
+		<form #avForm="ngForm" #pForm (ngSubmit)="agregardetalles()">
+
+			<div class="row">
+				<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 195px;">
+							<div class="row" style="height: 45px;" *ngIf="!this.gestionaveriasService.readonlyField">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<!-- <div class="input-group-prepend" >
+											<span class="input-group-text" id="inputGroup-sizing-sm">Cliente</span>
+										 </div> -->
+										
+										<div class="form-group">
+											<div class="ng-autocomplete" > 
+												<ng-autocomplete 
+													[data]="clienteList"
+													[searchKeyword]="keywordCli"
+													placeHolder="Cliente"
+													[itemTemplate]="itemTemplate"
+													[notFoundTemplate]="notFoundTemplate"
+													name="idcliente"
+													(inputChanged)='onChangeSearch($event)'
+													(selected)='selectEvent($event)'
+													(inputCleared) = 'closeautoComplete()'
+													[(ngModel)]="this.gestionaveriasService.valorAutCli"
+													notFoundText="No existe"
+													[disabled]="this.gestionaveriasService.readonlyField"
+													
+												>                                 
+												</ng-autocomplete>
+												<ng-template #itemTemplate let-item>
+													<a [innerHTML]="item.idesc"></a>
+												</ng-template>
+												<ng-template #notFoundTemplate let-notFound>
+													<div [innerHTML]="notFound"></div>
+												</ng-template>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Cliente</span>
+										</div>
+										<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+											placeholder=""
+											type="text"
+											name="nomcliente"
+											id="nomcliente"
+											#nomcliente="ngModel"
+											[(ngModel)]="this.gestionaveriasService.nomrifCli"
+											required
+											class="form-control"
+											aria-label="Small"
+											readonly
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Vendedor</span>
+										</div>
+										<input 
+											aria-label="Small" 
+											aria-describedby="inputGroup-sizing-sm"
+											type="text"
+											name="nomvendedor"
+											id="nomvendedor"
+											#name="ngModel"
+											[(ngModel)]="this.gestionaveriasService.averia_.nomvendedor"
+											required
+											class="form-control"
+											readonly
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Email</span>
+										</div>
+										<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+											placeholder=""
+											type="text"
+											name="email"
+											id="email"
+											#email="ngModel"
+											[(ngModel)]="this.gestionaveriasService.averia_.email"
+											required
+											class="form-control"
+											aria-label="Small"
+											readonly
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 195px; ">
+
+							<div class="row">
+								<!-- #nrodocumento="ngModel"
+								value={{pedl.uid}} *ngFor = "let pedl of lpedidoList" 
+							
+									[disabled]="this.gestionaveriasService.readonlyField"
+							-->
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<!-- <div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc/Fac</span>
+										</div> -->
+										<!-- <select 
+											value=selected
+											name="nrodocUID"
+											id="nrodocUID"
+											#nrodocUID="ngModel"
+											[(ngModel)]="this.gestionaveriasService.averia_.nrodocUID"
+											required
+											[disabled]="this.gestionaveriasService.readonlyField"
+											class="form-control"
+											(change)="selectedFactDoc($event)"
+										>
+											<option value="{{pedl.nrofactura+'<>'+pedl.uid+'*'+pedl.tipodoc+'='+pedl.ffactura.seconds}}" *ngFor = "let pedl of this.gestionaveriasService.lpedidoList">
+												{{pedl.nrofactura}}
+											</option>
+										</select>	 -->
+										
+										<div class="input-group-prepend" style="width: 125px;" *ngIf="this.gestionaveriasService.readonlyField">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc/Fac</span>
+										 </div>
+										<div class="abs-center" *ngIf="this.gestionaveriasService.readonlyField">
+											<mat-label>{{this.gestionaveriasService.averia_.nrodocumento}}</mat-label>
+										</div>
+
+										<div class="ng-autocompleteDoc" *ngIf="!this.gestionaveriasService.readonlyField"> 
+												<ng-autocomplete 
+													[data]="this.gestionaveriasService.lpedidoList"
+													[searchKeyword]="keywordDoc"
+													placeHolder="N° Doc/Fac"
+													[itemTemplate]="itemTemplateDoc"
+													[notFoundTemplate]="notFoundTemplateDoc"
+													name="nrodocUID"
+													(inputChanged)='onChangeSearchDoc($event)'
+													(selected)='selectEventDoc($event)'
+													(inputCleared) = 'closeautoCompleteDoc()'
+													notFoundText="No existe"
+													[disabled]="this.gestionaveriasService.readonlyField"
+													
+												>                                 
+												</ng-autocomplete>
+												<ng-template #itemTemplateDoc let-item>
+													<a [innerHTML]="item.nrofactura"></a>
+												</ng-template>
+												<ng-template #notFoundTemplateDoc let-notFound>
+													<div [innerHTML]="notFound"></div>
+												</ng-template>
+										</div>
+
+
+
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Doc</span>
+										</div>
+
+										<div class="abs-center">
+											<mat-label>{{this.gestionaveriasService.averia_.tipodocumento}}</mat-label>
+										</div>
+
+										 <!-- <input 
+											aria-label="Small" 
+											aria-describedby="inputGroup-sizing-sm"
+											placeholder=""
+											type="text"
+											readonly=true
+											name="tipodocumento"
+											[(ngModel)]="this.gestionaveriasService.averia_.tipodocumento"
+											class="form-control"
+										 /> -->
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Doc</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.timeFD}}</mat-label>
+										</div>
+										<!-- <input
+											type="date"
+											[max]="maxDate"
+											name="fechadoc"
+											id="fechadoc"
+											#fechadoc="ngModel"
+											[(ngModel)]="this.timeFD"
+											required
+											class="form-control date-input"
+											readonly=true
+										/> -->
+									</div>
+								</div>
+							</div>
+							<!-- <div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Condición Pago</span>
+										 </div>
+										<select 
+												value=selected
+												name="condiciondepago"
+												id="condiciondepago"
+												#condiciondepago="ngModel"
+												[(ngModel)]="this.gestionaveriasService.averia_.condiciondepago"
+												required
+												[disabled]="this.gestionaveriasService.readonlyField"
+												class="form-control form-select form-select-sm" 
+												aria-label=".form-select-sm example"
+												>
+												<option value={{cpl.descripcion}} *ngFor = "let cpl of cpagoList">
+													{{cpl.descripcion}}
+												</option>
+										</select>
+										<div *ngIf="condiciondepago.invalid && (condiciondepago.dirty || condiciondepago.touched)" class="text-danger">
+											<div *ngIf="condiciondepago.errors.required">
+												<small>Campo requerido</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento %</span>
+										 </div>
+										<input placeholder=""
+												aria-label="Small" 
+												aria-describedby="inputGroup-sizing-sm"
+												type="number"
+												name="descuentoporc"
+												[(ngModel)]="this.gestionaveriasService.averia_.descuentoporc"
+												step="1"
+												min=1
+												max=100
+												pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
+												(keyup)="txtdescpchange($event)"
+												(change)="txtdescpchange($event)"
+												#rateInput2= "ngModel"
+												class="form-control"
+										/>
+										<div *ngIf="rateInput2.errors && (rateInput2.dirty || rateInput2.touched)">
+											<div [hidden]="!rateInput2.errors.pattern" class="text-danger">
+												El % de descuento debe estar entre 0 y 100
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento Valor</span>
+										 </div>
+										 <input 
+											 aria-label="Small" 
+											aria-describedby="inputGroup-sizing-sm"
+											 placeholder=""
+											 type="number"
+											 name="descuentovalor"
+											 [(ngModel)]="this.gestionaveriasService.averia_.descuentovalor"
+											 step="1"
+											 min=1
+											 (keyup)="txtdescvchange($event)"
+											 (change)="txtdescvchange($event)"
+											 class="form-control"
+										 />
+									</div>
+								</div>
+							</div> -->
+
+						</div>
+					</div>	
+				</div>
+
+				<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px;  height: 195px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 135px;">
+											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Averia</span>
+										 </div>
+										<input 
+											type="date"
+											[max]="maxDate"
+											name="fechaaveria"
+											id="fechaaveria"
+											#fechaaveria="ngModel"
+											[(ngModel)]="this.gestionaveriasService.start_time"
+											required
+											class="form-control"
+										/>
+									</div>
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 135px;">
+											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fe. Resolución</span>
+										 </div>
+										<input 
+											type="date"
+											[max]="maxDate"
+											name="fechares"
+											id="fechares"
+											#fechaaveria="ngModel"
+											[(ngModel)]="this.gestionaveriasService.fechares"
+											class="form-control"
+											readonly=true
+										/>
+									</div>
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 135px;">
+											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fe. Cierre</span>
+										 </div>
+										<input 
+											type="date"
+											[max]="maxDate"
+											name="fechacierre"
+											id="fechacierre"
+											#fechaaveria="ngModel"
+											[(ngModel)]="this.gestionaveriasService.fechacierre"
+											class="form-control"
+											readonly=true
+										/>
+									</div>
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 135px;">
+											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Status</span>
+										 </div>
+										<div class="abs-center">
+											<mat-label>{{this.gestionaveriasService.averia_.status}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div> <!--Fila cabecera-->
+
+			<div class="row" style="height: 5px;"></div>
+			<div class="row">
+				<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
+							<div class="row">
+								<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5" style="padding-right: 1px;">
+									<div class="row">
+										<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold;">CÓDIGO</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<select 
+												value=selected
+												name="codigodematerial"
+												[(ngModel)]="this.codigodematerial"
+												required
+												(change)="selectedchangeCodMat($event,cantidadmaterial)"
+												class="form-control form-select form-select-sm"
+												aria-label=".form-select-sm example"
+												>
+													<option>Ninguno</option>
+													<option value={{avd.codigodematerial}} *ngFor = "let avd of this.gestionaveriasService.averiaslistDet">
+														{{avd.codigodematerial}}
+													</option>
+												</select>
+											</div>
+											
+										</div>
+										<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9" style="padding-left: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold;">MATERIAL</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<select value=selected
+												name="codigodemateriald"
+												[(ngModel)]="this.codigodematerial"
+												required
+												(change)="selectedchangeCodMat($event,cantidadmaterial)"
+												class="form-control form-select form-select-sm"
+												aria-label=".form-select-sm example"
+												>
+													<option>Ninguno</option>
+													<option value={{avd.codigodematerial}} *ngFor = "let avd of this.gestionaveriasService.averiaslistDet">
+														{{avd.descripcionmaterial}}
+													</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+
+
+
+
+								<!--NO VA-->
+								<!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px; display: none;">
+									<mat-label style="font-size:smaller; font-weight: bold;">UME</mat-label>
+									<div class="input-group input-group-sm mb-3">
+										<input 
+											type="text"
+											name="unidaddemedida"
+											[(ngModel)]="this.gestionaveriasService.averia_.unidaddemedida"
+											required
+											readonly=true
+											class="form-control"
+										/>
+									</div>
+								</div> -->
+								<!--NO VA-->
+
+
+
+
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;padding-right: 1px;">
+									<mat-label style="font-size:smaller; font-weight: bold;">CANT</mat-label>
+									<div class="input-group input-group-sm mb-3">
+										<input 
+											type="text"
+											name="maxCant"
+											[(ngModel)]="this.maxCant"
+											readonly=true
+											class="form-control"
+											style="background-color: gainsboro;color: red;"
+										/>
+										<input placeholder=""
+											cdkFocusInitial
+											type="number"
+											name="cantidadmaterial"
+											id="cantidadmaterial"
+											[(ngModel)]="this.cantidadmaterial"
+											required
+											[max]="this.maxCant"
+											step="1"
+											min=1
+											oninput="this.value=(parseInt(this.value))"
+											(keyup)="txtctnchange($event)"
+											(change)="txtctnchange($event)"
+											class="form-control"
+											
+										/>
+									</div>
+								</div>
+
+
+
+								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+									<mat-label style="font-size:smaller; font-weight: bold;">PRECIO</mat-label>
+									<div class="input-group input-group-sm mb-3">
+										<input
+											type="text"
+											name="preciomaterial"
+											id="preciomaterial"
+											[(ngModel)]="this.preciomaterial"
+											required
+											readonly=true
+											class="form-control"
+										/>
+									</div>
+								</div>
+
+								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;padding-right: 1px;">
+									<mat-label style="font-size:smaller; font-weight: bold;">MONTO</mat-label>
+									<div class="input-group input-group-sm mb-3">
+										<input matInput placeholder=""
+											type="text"
+											name="totalpormaterial"
+											id="totalpormaterial"
+											[(ngModel)]="this.totalpormaterial"
+											required
+											readonly=true
+											class="form-control"
+										>
+									</div>
+								</div>
+
+								
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<mat-label style="font-size:smaller; font-weight: bold;">MOTIVO</mat-label>
+									<div class="input-group input-group-sm mb-3">
+										<select 
+											value=selected
+											name="motivoAve"
+											id="motivoAve"
+											[(ngModel)]="this.motivoAve"
+											required
+											class="form-control form-select form-select-sm" 
+											aria-label=".form-select-sm example"
+											>
+											<option value={{mave.descripcion}} *ngFor = "let mave of maveriaList">
+												{{mave.descripcion}}
+											</option>
+										</select>
+									</div>
+								</div>
+							
+
+
+								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+									<button 
+										type="submit" 
+										class="btn btn-link"
+										[disabled]="avForm.invalid"
+									>
+									<i class="fas fa-plus fa-3x"></i>
+									</button>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+					<div class="row" style="height: 5px;"></div>
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-13 col-xl-12">
+							<div class="card">
+								<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+									<div class="row" style="padding-top: 2px;">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="border-color: chocolate;border-style: solid;border-width: 0px;">
+											<table class="table-bordered table-striped table-sm table-responsive" style="max-height: 500px;width: 100%;">
+												<!-- <thead>
+												  <tr>
+													<th scope="col">Código</th>
+													<th scope="col">Material</th>
+													<th scope="col">UME</th>
+													<th scope="col" style="text-align: right;">Cantidad</th>
+													<th scope="col" style="text-align: right;">Precio</th>
+													<th scope="col" style="text-align: right;">Total</th>
+													<th scope="col">-</th>
+												  </tr>
+												</thead> -->
+												<tbody class="thead-secondary table-secondary">
+												  <tr *ngFor="let ave of this.gestionaveriasService.matrisDetAveria; index as i">
+													<td class="col-0" scope="row">{{ave.codigodematerial}}</td>
+													<td class="col-1">{{ave.descripcionmaterial}}</td>
+													<td class="col-3"style="text-align: left;">{{ave.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
+													<td class="col-4"style="text-align: right;">{{ave.preciomaterial | currency:" "}}</td>
+													<td class="col-5"style="text-align: right;">{{ave.totalpormaterial | currency:" "}}</td>
+													<td class="col-2"style="text-align: left;">{{ave.motivoaveria}}</td>
+													<th class="col-6" style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th>
+												  </tr>
+												</tbody>
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+
+				</div>
+				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+							<!-- <div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">SubTotal.</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.tmontb | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Descuento</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.tmontd | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Base Imponible</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.tmontb-this.gestionaveriasService.tmontd | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">IVA</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.tmonti | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div> -->
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Monto Original</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.averia_.montoOriginal | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Total Averías</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.averia_.totalaveria | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">% Reclamo</span>
+										</div>
+										<div class="abs-right">
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.gestionaveriasService.averia_.porcentajeReclamo | currency:' '}}%">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left: 8px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<textarea 
+										rows="3"
+										cols="25" 
+										placeholder="Texto Avería"
+										name="txtAveria"
+										maxlength="200"
+										id="txtAveria"
+										[(ngModel)]="this.gestionaveriasService.averia_.txtAveria"
+									>
+									</textarea>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<textarea 
+										rows="3"
+										cols="25" 
+										placeholder="Texto Resolución"
+										name="txtresolucion"
+										maxlength="200"
+										id="txtresolucion"
+										[(ngModel)]="this.gestionaveriasService.averia_.txtResolucion"
+										readonly=true
+									>
+									</textarea>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<textarea 
+										rows="3"
+										cols="25" 
+										placeholder="Texto Cierre"
+										name="txtcierre"
+										maxlength="200"
+										id="txtcierre"
+										[(ngModel)]="this.gestionaveriasService.averia_.txtCierre"
+										readonly=true
+									>
+									</textarea>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
+
+									<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
+										<button 
+											class="btn-space" 
+											smat-stroked-button 
+											style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
+											type="button" 
+											[disabled]="this.gestionaveriasService.enviar !== true"
+											(click)="generarpdf(avForm)"
+											id="btnenviar"
+											name="btnenviar"
+										>
+											{{this.gestionaveriasService.txtBtnAccion}}
+										</button>
+										<button 
+											smat-stroked-button 
+											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+											type="button" 
+											(click)="resetForm(avForm)">
+												Atrás
+											</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+			
+		
+		</form>
+	</div>
+</div><!--class card-->

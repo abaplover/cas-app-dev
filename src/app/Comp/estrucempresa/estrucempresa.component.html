@@ -1,0 +1,83 @@
+<!--<app-products></app-products>-->
+
+<div class="container88">
+	<h3> ESTRUCTURA DE LA EMPRESA </h3>
+	<mat-tab-group animationDuration="0ms"> 
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">apartment</mat-icon>
+				Datos de la empresa	
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-datoemp></app-datoemp>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-datoemp-list></app-datoemp-list>
+				</div>
+			</div>
+		</mat-tab>
+
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">beenhere</mat-icon>
+				Zona de Ventas
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-zventa></app-zventa>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-zventa-list></app-zventa-list>
+				</div>
+			</div>
+		</mat-tab>
+
+
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">content_copy</mat-icon>
+				Tipo de Documentos
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-tipod></app-tipod>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-tipod-list></app-tipod-list>
+				</div>
+			</div>
+		</mat-tab>
+
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">support_agent</mat-icon>
+				Vendedores	
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-vendedor></app-vendedor>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-vendedor-list></app-vendedor-list>
+				</div>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
+
+
+
+
+</div>

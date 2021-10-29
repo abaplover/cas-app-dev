@@ -1,0 +1,101 @@
+.container9{
+	padding-top: 5px;
+}
+.campo-width {
+	width: 100%;
+	height: 50px;
+}
+.idcampo-width {
+	width: 50%;
+}
+.btn-space {
+    margin-right: 8px;
+}
+
+.mat-form-field {
+	font-size: 14px;
+	width: 90%;
+}
+  
+th.mat-sort-header-sorted {
+	color: black;
+}
+
+.mat-column-Fecha {
+	width: 155px !important;
+	text-align: center;
+}
+
+.mat-column-Status {
+	width: 60px !important;
+	text-align: left;
+}
+
+.mat-column-Cliente {
+	width: 140px !important;
+	text-align: left;
+}
+
+.mat-column-Vendedor {
+	width: 140px !important;
+	text-align: left;
+}
+
+.mat-column-Subtotal {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontoimpuesto {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontodescuento {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontoneto {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-Opc {
+	width: 120px !important;
+	text-align: right;
+}
+.mat-column-uid {
+	width: 10px !important;
+	text-align: left;
+	padding-right: 8px;
+}
+.header-align-right{
+	display: flex;
+	padding: 21px 0;
+	justify-content: flex-end;
+}
+
+/* .btn-info {
+    background: transparent;
+	color: rgb(38, 83, 206) !important;
+	border-color: rgb(197, 194, 194);
+}
+  
+.btn-info:hover {
+	background: rgb(38, 83, 206) !important;
+	border-color: rgb(25, 10, 90) !important;
+    transition: 0.5s background;
+	cursor: pointer;
+	color: white !important;
+	
+} */
+
+.table{
+	text-align: left !important;
+	width: 100%;
+}
+
+table {
+	width: 100%;
+}
