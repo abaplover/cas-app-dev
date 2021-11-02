@@ -1,0 +1,17 @@
+.container88{
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.tab-icon-r {
+	margin-right: 8px;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+    min-width: 25px !important;
+    padding: 5px;
+    background-color: transparent;
+    color: rgb(110, 70, 148);
+    font-weight: 700;
+}

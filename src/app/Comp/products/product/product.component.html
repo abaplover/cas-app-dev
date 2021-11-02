@@ -1,0 +1,409 @@
+<div class="container9">
+	<div class="card bg-light mb-3 w-75" style="max-width: 100%">
+		<!-- <div class="card-header">
+			<div class="row" style="text-align:right;"> 
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
+					<h2 class="text-left">Materiales</h2>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<button class="btn btn-link" type="" (click)="moForm()">
+						<i class="fas fa-plus-square"></i> {{msj_enlace}}
+					</button>
+				</div>
+			</div>
+		</div> -->
+		<div class="card-body text-info panel panel-login" *ngIf="productService.mostrarForm">
+				<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+						<!-- TO UPDATE -->
+						<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="productService.selectedProduct.$key">
+					
+						<div class="row"> 
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">ID</mat-label>
+									<input  
+											placeholder="##-##-####" value=""
+											type="text"
+											name="idmaterial"
+											#idmaterial="ngModel"
+											[(ngModel)]="productService.selectedProduct.idmaterial"
+											maxlength="10"
+											[readonly]="productService.idFieldReadOnly"
+											required
+											class="form-control"
+									/>
+									<div *ngIf="idmaterial.invalid && (idmaterial.dirty || idmaterial.touched)" class="text-danger">
+										<div *ngIf="idmaterial.errors.required">
+											<small>Se requiere Id</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-7 col-md-7 col-lg-7 col-xl-7">
+								<mat-label style="font-size:smaller;">DESCRIPCIÓN</mat-label>
+								<div class="form-group">
+									<input
+										placeholder="" value=""
+										type="text"
+										name="descripcion"
+										#descripcion="ngModel"
+										[(ngModel)]="productService.selectedProduct.descripcion"
+										required
+										class="form-control"
+								  	/>
+									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+										<div *ngIf="descripcion.errors.required">
+											<small>Se requiere una descripción</small>
+										</div>
+									</div>
+								</div>	
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">STATUS</mat-label>
+									<select 
+										required
+										name="status" 
+										#status="ngModel" 
+										[(ngModel)]="productService.selectedProduct.status"
+										class="form-control"
+										pattern="^[A-Z]{1,1}$"
+									>	
+										<option disabled value="St@" selected>--Status--</option>
+										<option value="A" >A</option>
+										<option value="I">I</option>
+									</select>
+									<div *ngIf="status.invalid && (status.dirty || status.touched)" class="text-danger">
+										<div *ngIf="status.errors.required">
+											<small>Se requiere Status</small>
+										</div>
+										<div *ngIf="status.errors?.pattern">
+											<small>Se requiere Status</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row"> 
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">MARCA</mat-label>
+									<select 
+										required
+										name="marca"
+										#marca="ngModel"
+										[(ngModel)]="productService.selectedProduct.marca"
+										class="form-control"
+										pattern="^[a-zA-Z0-9 ]{2,35}$"
+									>
+										<option disabled value="mark@" selected>--Marca--</option>
+										<option value={{m.descripcion}} *ngFor = "let m of marcasList">
+											{{m.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="marca.invalid && (marca.dirty || marca.touched)" class="text-danger">
+										<div *ngIf="marca.errors.required">
+											<small>Se requiere una Marca</small>
+										</div>
+										<div *ngIf="marca.errors?.pattern">
+											<small>Se requiere una Marca</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">UNIDAD DE MEDIDA</mat-label>
+									<select 
+										required
+										name="unidadmedida"
+										#unidadmedida="ngModel"
+										[(ngModel)]="productService.selectedProduct.unidadmedida"
+										class="form-control"
+										pattern="^[a-zA-Z0-9 ]{2,35}$"
+									>
+										<option disabled value="unid@" selected>--Unidad de Medida--</option>
+										<option value={{um.descripcion}} *ngFor = "let um of umedidaList">
+											{{um.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="unidadmedida.invalid && (unidadmedida.dirty || unidadmedida.touched)" class="text-danger">
+										<div *ngIf="unidadmedida.errors.required">
+											<small>Se requiere Unidad de Medida</small>
+										</div>
+										<div *ngIf="unidadmedida.errors?.pattern">
+											<small>Se requiere Unidad de Medidas</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">GRUPO DE ARTÍCULOS</mat-label>
+									<select 
+										required
+										name="grupodearticulos"
+										#grupodearticulos="ngModel"
+										[(ngModel)]="productService.selectedProduct.grupodearticulos"
+										class="form-control"
+										pattern="^[a-zA-Z0-9 ]{2,35}$"
+									>
+										<option disabled value="grupo@" selected>--Grupo de Artículos--</option>
+										<option value={{ga.descripcion}} *ngFor = "let ga of garticuloList">
+											{{ga.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="grupodearticulos.invalid && (grupodearticulos.dirty || grupodearticulos.touched)" class="text-danger">
+										<div *ngIf="grupodearticulos.errors.required">
+											<small>Se requiere Grupo de Artículos</small>
+										</div>
+										<div *ngIf="grupodearticulos.errors?.pattern">
+											<small>Se requiere Grupo de Artículos</small>
+										</div>
+									</div>	
+								</div>
+							</div>
+						</div>
+						
+						<div class="row"> 
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">MÚLTIPLO DE VENTAS</mat-label>
+									<input placeholder="" value=""
+											type="number"
+											name="multiplodeventas"
+											#multiplodeventas="ngModel"
+											[(ngModel)]="productService.selectedProduct.multiplodeventas"
+											required
+											class="form-control"
+									/>
+									<div *ngIf="multiplodeventas.invalid && (multiplodeventas.dirty || multiplodeventas.touched)" class="text-danger">
+										<div *ngIf="multiplodeventas.errors.required">
+											<small>Se requiere Múltiplo de Ventas</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">CLASIFICACIÓN</mat-label>
+									<input  placeholder="" value=""
+											type="number"
+											name="clasificacion"
+											#clasificacion="ngModel"
+											[(ngModel)]="productService.selectedProduct.clasificacion"
+											required
+											class="form-control"
+									/>
+									<div *ngIf="clasificacion.invalid && (clasificacion.dirty || clasificacion.touched)" class="text-danger">
+										<div *ngIf="clasificacion.errors.required">
+											<small>Se requiere Clasificación</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">EXISTENCIA</mat-label>
+									<input 	placeholder="" value=""
+											type="number"
+											name="existencia"
+											#existencia="ngModel"
+											[(ngModel)]="productService.selectedProduct.existencia"
+											required
+											class="form-control"
+									/>
+									<div *ngIf="existencia.invalid && (existencia.dirty || existencia.touched)" class="text-danger">
+										<div *ngIf="existencia.errors.required">
+											<small>Se requiere Existencia</small>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+								<div class="form-group">
+									<div class="card" style="float: left;">
+										<img [src]="productService.selectedProduct.fotourl" class="img-fluid">
+									</div>
+									<div style="float: left; padding-left: 10px;padding-right: 10px;padding-bottom: 10px;">
+										<mat-label style="font-size:smaller;">IMAGEN</mat-label>
+										<div class="input-group mb-3">
+											<div class="custom-file" id="customFile">
+												<input class="custom-file-input" id="inputGroupFile01" aria-describedby="fileHelp" type="file" (change)="onFileSelected($event)" accept=".png, .jpg">
+												<!--<button class="btn btn-lg" type="button" (click)="onUploadImg()">upload img</button>-->
+												<label class="custom-file-label" for="inputGroupFile01">Buscar Archivo</label>
+											</div>
+										</div>
+									</div>								
+								</div>
+							</div>
+						</div>
+						
+
+						<div class="row"> 
+							<div class="col-sm-7 col-md-7 col-lg-7 col-xl-7">
+
+							</div>
+							<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+								<div class="progress" style="height: 1px;">
+									<div 
+										class="progress-bar bg-success" 
+										role="progressbar" 
+										[style.width]="(uploadPercent | async) +'%' " 
+										aria-valuenow="25" 
+										aria-valuemin="0" 
+										aria-valuemax="100">
+									</div>
+								</div>
+								<div class="progress" style="border-width: 0px; border-style: solid;">
+									<div
+										class="progress-bar  progress-bar-striped progress-bar-animated bg-success" 
+										role="progressbar"
+										[style.width]="(uploadPercent | async) +'%'	"	
+									>
+									{{percenttxt}}
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="hidden" 
+											name="fotourl" 
+											id="fotourl"
+											#name="ngModel"
+											[(ngModel)]="productService.selectedProduct.fotourl"
+									>
+								</div>
+								<div class="form-group">
+									<input type="hidden" 
+											name="path" 
+											id="path"
+											#name="ngModel"
+											[(ngModel)]="productService.selectedProduct.path"
+									>
+								</div>
+							</div>
+						</div>
+
+						<!--[value]="downloadURL | async"-->
+
+						<div class="form-group">
+							<mat-label style="font-size:smaller;">DETALLES</mat-label>	
+							<textarea 
+									style="width: 100%;"
+									placeholder=""
+									name="detalles" 
+									id="detalles"
+									#detalles="ngModel"
+									rows="3"
+									[(ngModel)]="productService.selectedProduct.detalles"
+									class="form-group"
+							></textarea>
+						</div>
+
+						<div class="row"> 
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<div style="float: left;">
+										<mat-label style="font-size:smaller;">PRECIO USD 1</mat-label>
+										<input 
+											placeholder="" value=""
+											type="number"
+											name="preciousd1"
+											#preciousd1="ngModel"
+											[(ngModel)]="productService.selectedProduct.preciousd1"
+											required
+											class="form-control"	
+										/>
+										<div *ngIf="preciousd1.invalid && (preciousd1.dirty || preciousd1.touched)" class="text-danger">
+											<div *ngIf="preciousd1.errors.required">
+												<small>Se requiere Precio</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<div style="float: left;">
+										<mat-label style="font-size:smaller;">PRECIO USD 2</mat-label>
+										<input placeholder="" value=""
+											type="number"
+											name="preciousd2"
+											#preciousd2="ngModel"
+											[(ngModel)]="productService.selectedProduct.preciousd2"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="preciousd2.invalid && (preciousd2.dirty || preciousd2.touched)" class="text-danger">
+											<div *ngIf="preciousd2.errors.required">
+												<small>Se requiere Precio</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<div style="float: left;">
+										<mat-label style="font-size:smaller;">PRECIO VEF 1</mat-label>
+										<input  
+											placeholder="" value=""
+											type="number"
+											name="preciovef1"
+											#preciovef1="ngModel"
+											[(ngModel)]="productService.selectedProduct.preciovef1"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="preciovef1.invalid && (preciovef1.dirty || preciovef1.touched)" class="text-danger">
+											<div *ngIf="preciovef1.errors.required">
+												<small>Se requiere Precio</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<div style="float: left;">
+										<mat-label style="font-size:smaller;">PRECIO VEF 2</mat-label>
+										<input 
+											placeholder="" value=""
+											type="number"
+											name="preciovef2"
+											#preciovef2="ngModel"
+											[(ngModel)]="productService.selectedProduct.preciovef2"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="preciovef2.invalid && (preciovef2.dirty || preciovef2.touched)" class="text-danger">
+											<div *ngIf="preciovef2.errors.required">
+												<small>Se requiere Precio</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="form-group" style="text-align:right;padding-top: 30px;">
+							<button *ngIf="this.productService.selectedProduct.fotourl else btndisa" class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="productForm.invalid">
+								Guardar 
+							</button>
+							<ng-template #btndisa>
+								<button type="submit" class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" disabled=true>
+									Guardar
+								</button>
+							</ng-template>
+
+							<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(productForm)">
+									<i class="fas fa-sync-alt"></i> Reset
+							</button>
+						</div>
+			</form>
+		</div>
+	</div>
+</div>

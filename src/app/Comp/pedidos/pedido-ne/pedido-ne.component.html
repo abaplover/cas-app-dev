@@ -1,0 +1,1011 @@
+<div class="container9" style="border-style: solid; border-width: 0px;">
+	<div class="card-body text-info panel panel-login" *ngIf="this.pedido_.uid" style="border-style:solid;border-width:0px;">
+	    <form #pedidoFormne="ngForm" *ngIf="this.pedido_.uid">			
+			<div class="row">
+				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="border-color: blue;border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+					<div class="card">
+															<!--T  R   B   L-->
+						<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Cliente</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.idcliente}}</mat-label>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Email</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.email}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Vendedor</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.nomvendedor}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Lista P.</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.listaprecio}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 85px;">
+										  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Status</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.status}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"  style="border-color: rgb(252, 118, 180);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+					<div class="card">
+						<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+										  <span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Condición Pago</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.condiciondepago}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento %</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.descuentoporc}}%</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 125px;">
+											<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento Valor</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.descuentovalor}}</mat-label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+					
+						<div class="card">
+							<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+								<div class="row" >
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Pedido</span>
+											</div>
+											<div class="abs-center-fecha">
+												<mat-label>{{this.pedido_.fechapedido | date: 'dd/MM/yyyy hh:mm a' }}</mat-label>
+											</div>
+										</div>	
+									</div>
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 135px;">
+													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Despacho</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.pedido_.fdespacho | date: 'dd/MM/yyyy '}}</mat-label>
+												</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-right: 2px;" >
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Factura</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedido_.ffactura | date: 'dd/MM/yyyy '}}</mat-label>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedido_.transporte}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Doc</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedido_.tipodoc}}</mat-label>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 135px;">
+													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha T-Entrega</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.pedido_.ftentrega | date: 'dd/MM/yyyy '}}</mat-label>
+												</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedido_.nrofactura}}</mat-label>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha de Entrega</span>
+											</div>
+											<input 
+												type="date"
+												style="font-size: 14px"
+												[max]="maxDate_"
+												name="fentrega"
+												id="fentrega"
+												#fentrega="ngModel"
+												[(ngModel)]="this.pedido_.fentrega"
+												required
+												class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<!-- <div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Nota de Entrega</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedido_.nrofactura}}</mat-label>
+											</div>
+										</div> -->
+									</div>
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Vencimiento</span>
+											</div>
+											<input 
+												type="date"
+												style="font-size: 14px"
+												[min]="minDate"
+												name="fpago"
+												id="fpago"
+												#fpago="ngModel"
+												[(ngModel)]="this.pedido_.fpago"
+												required
+												class="form-control"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+				</div>
+			</div>
+
+
+
+
+
+			<div class="row" style="height: 5px;"></div>
+			<div class="row" style="height: 335px;">
+				<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
+							<div class="row" style="padding-top: 2px;">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<table class="table-bordered table-striped table-sm table-responsive" style="max-height: 350px;">
+										<thead>
+											<tr>
+												<th scope="col"><mat-label style="font-size:smaller;">CÓDIGO</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">MATERIAL</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">UME</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANT</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">PRECIO</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">TOTAL</mat-label></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let ped of this.pedidoslistDet; index as i">
+												<td class="col-0">{{ped.codigodematerial}}</td>
+												<td class="col-1">{{ped.descripcionmaterial}}</td>
+												<td class="col-2">{{ped.unidaddemedida}}</td>
+												<td class="col-3" style="text-align:right;">{{ped.cantidadmaterial| currency:" ":'symbol':'2.0'}}</td>
+												<td class="col-4" style="text-align:right;">{{ped.preciomaterial | currency:" "}}</td>
+												<td class="col-5" style="text-align:right;">{{ped.totalpormaterial | currency:" "}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+					<div class="card">
+						<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">SubTotal</span>
+										</div>
+										<div class="abs-right">
+											<!-- <mat-label>{{this.tmontb | currency:" "}}</mat-label> -->
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.tmontb | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Descuento</span>
+										</div>
+										<div class="abs-right">
+											<!-- <mat-label>{{this.tmontd | currency:" "}}</mat-label> -->
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.tmontd | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Base Imponible</span>
+										</div>
+										<div class="abs-right">
+											<!-- <mat-label>{{this.tmontb - this.tmontd | currency:" "}}</mat-label> -->
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.tmontb - this.tmontd | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">IVA</span>
+										</div>
+										<div class="abs-right">
+											<!-- <mat-label>{{this.tmonti | currency:" "}}</mat-label> -->
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.tmonti | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" >
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 115px;">
+											<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Total</span>
+										</div>
+										<div class="abs-right">
+											<!-- <mat-label>{{this.tmontn | currency:" "}}</mat-label> -->
+											<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.tmontn | currency:' '}}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
+
+									<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
+										<button 
+											class="btn-space" 
+											smat-stroked-button 
+											style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
+											type="button" 
+											[disabled]="pedidoFormne.invalid"
+											(click)="onSubmitne(pedidoFormne)"
+											id="btnenviarne"
+											name="btnenviarne"
+										>
+											Actualizar Pedido
+										</button>
+										<button 
+											smat-stroked-button 
+											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+											type="button" 
+											(click)="onCancelar(pedidoFormne,0)">
+												Atrás
+											</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+			<!-- <div class="row">
+				<mat-label style="font-weight: bold;color: red;">{{mensaje01}}</mat-label>
+				<table class="table table-sm">
+					<tbody>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Número de Pedido</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.idpedido}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha de pedido</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.fechapedido | date: 'dd/MM/yyyy hh:mm a' }}</mat-label>
+						</td>
+						<th scope="row">Status</th>
+						<td>
+							<mat-label>{{this.pedido_.status}}</mat-label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Id Cliente</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.idcliente}}</mat-label>
+						</td>
+						<th scope="row"><mat-label style="font-weight: bold;">Nombre del cliente</mat-label></th>
+						<td>
+							<mat-label>{{this.pedido_.nomcliente}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Email</mat-label>
+						</th>
+						<td><mat-label>{{this.pedido_.email}}</mat-label></td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Id Vendedor</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.idvendedor}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Nombre del vendedor</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.nomvendedor}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Lista de precios</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.listaprecio}}</mat-label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Condiciones de Pago</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.condiciondepago}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Descuento porcentual</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.descuentoporc}}%</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Descuento valor</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.descuentovalor}}</mat-label>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha de Factura</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.ffactura | date: 'dd/MM/yyyy '}}</mat-label>
+						</td>
+
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Tipo</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.tipodoc}}</mat-label>
+						</td>
+
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Número</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.nrofactura}}</mat-label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha tentativa de entrega</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.ftentrega | date: 'dd/MM/yyyy '}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha de entrega</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.fentrega | date: 'dd/MM/yyyy '}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha de pago</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.fpago | date: 'dd/MM/yyyy '}}</mat-label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Fecha de despacho</mat-label>
+						</th>
+						<td>
+							<mat-label>{{this.pedido_.fdespacho | date: 'dd/MM/yyyy '}}</mat-label>
+						</td>
+						<th scope="row">
+							<mat-label style="font-weight: bold;">Transporte</mat-label>
+						</th>
+						<td colspan="2">
+							<mat-label>{{this.pedido_.transporte}}</mat-label>
+						</td>
+					</tr>
+					
+					</tbody>
+				</table>
+			</div>	 -->
+
+		<!-- <div class="row" style="padding-top: 2px;" *ngIf="this.pedido_.uid">
+			<table class="table table-striped table-hover table-sm">
+				<thead class="thead-success table-success">
+					<tr>
+						<th scope="col">Código</th>
+						<th scope="col">Material</th>
+						<th scope="col">Unidad de Medida</th>
+						<th scope="col" style="text-align:right;">Precio</th>
+						<th scope="col" style="text-align:right;">Cantidad</th>
+						<th scope="col" style="text-align:right;">Total</th>
+					  </tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let ped of this.pedidoslistDet; index as i">
+						<th scope="row">{{ped.codigodematerial}}</th>
+						<td>{{ped.descripcionmaterial}}</td>
+						<td>{{ped.unidaddemedida}}</td>
+						<td style="text-align:right;">{{ped.preciomaterial | currency:" "}}</td>
+						<td style="text-align:right;">{{ped.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
+						<td style="text-align:right;">{{ped.totalpormaterial | currency:" "}}</td>
+					</tr>
+				</tbody>
+				<thead class="thead-success table-success">
+					<tr>
+						<td scope="col"></td>
+						<td scope="col"></td>
+						<td scope="col"></td>
+						<td scope="col" style="text-align:right;">{{this.totalPri | currency:" "}}</td>
+						<td scope="col" style="text-align:right;">{{this.totalCnt | currency:" ":'symbol':'2.0'}}</td>
+						<td scope="col" style="text-align:right;">{{this.totalPed | currency:" "}}</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+		<div class="row" style="padding-top: 20px;" *ngIf="this.pedido_.uid">
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>Total Monto Bruto</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>Total Descuento</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>Monto menos descuento</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>IVA</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>Total Monto Neto</mat-label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" *ngIf="this.pedido_.uid">
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>{{this.tmontb | currency:" "}}</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>{{this.tmontd | currency:" "}}</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>{{this.tmontb - this.tmontd | currency:" "}}</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>{{this.tmonti | currency:" "}}</mat-label>
+				</div>
+			</div>
+			<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+				<div class="form-group" style="text-align:right;">
+					<mat-label>{{this.tmontn | currency:" "}}</mat-label>
+				</div>
+			</div>
+		</div> -->
+
+				<!-- + OPCIONES + -->
+
+		<!-- <form #pedidoFormnf="ngForm" *ngIf="this.pedido_.uid">
+
+			<div id="nfact" [style]="ocultarBtn" class="card border-success bg-light" *ngIf="this.opcnf">
+				<div class="row" style="padding-top:10px;">
+					<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+						<div class="form-group">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Fecha de factura</mat-label>
+								<input matInput [matDatepicker]="picker" [max]="maxDate"
+									name="ffactura"
+									id="ffactura"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.ffactura"
+									required
+								>
+								<mat-datepicker-toggle matSuffix [for]="picker">
+									<mat-icon matDatepickerToggleIcon>
+										event_note
+									</mat-icon>
+								</mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+						<div class="form-group">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Tipo de Documento</mat-label>
+								<mat-select value=selected
+									required
+									name="tipodoc"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.tipodoc"
+								>
+									<mat-option value={{td.descripcion}}  *ngFor = "let td of tipodocList">
+										{{td.descripcion}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+						<div class="form-group">
+							<mat-form-field class="campo-width">
+								<mat-label>Número de Documento</mat-label>
+								<input matInput placeholder="Número de Documento"
+									type="number"
+									name="nrofactura"
+									[(ngModel)]="this.pedido_.nrofactura"
+									required
+								>
+							</mat-form-field>
+						</div>
+					</div>
+				
+					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+						<div class="form-group" style="text-align:right;">
+							<button 
+								id="btnenviar"
+								name="btnenviar"
+								class="btn btn-primary btn-space" 
+								type="button" 
+								[disabled]="pedidoFormnf.invalid"
+								(click)="onSubmitnf(pedidoFormnf)"
+							>
+								<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
+							</button>
+							<button class="btn btn-light" type="reset" (click)="anulardoc(pedidoFormnf)">
+								<i class="fas fa-undo"></i> Anular NF
+							</button>
+							<button class="btn btn-light" type="reset" (click)="onCancelar(pedidoFormnf)">
+								<i class="fas fa-long-arrow-alt-left"></i> Cancelar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</form>
+		-->
+		<!--Form notificar factura-->
+
+		<!-- <form #pedidoFormnd="ngForm" *ngIf="this.pedido_.uid">
+
+			<div id="ndesp" [style]="ocultarBtn" class="card border-success bg-light mb-3" *ngIf="this.opcnd">
+				<div class="row" style="padding-top:10px;">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<mat-form-field appearance="legacy"  class="campo-width">
+								<mat-label>Fecha de despacho</mat-label>
+								<input matInput [matDatepicker]="picker" [max]="maxDate"
+									name="fdespacho"
+									id="fdespacho"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.fdespacho"
+									required
+								>
+								<mat-datepicker-toggle matSuffix [for]="picker">
+									<mat-icon matDatepickerToggleIcon>
+										event_note
+									</mat-icon>
+								</mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<mat-form-field appearance="legacy"  class="campo-width">
+								<mat-label>Fecha tentativa de entrega</mat-label>
+								<input matInput [matDatepicker]="picker1" [max]="maxDate"
+									name="ftentrega"
+									id="ftentrega"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.ftentrega"
+									required
+								>
+								<mat-datepicker-toggle matSuffix [for]="picker1">
+									<mat-icon matDatepickerToggleIcon>
+										event_note
+									</mat-icon>
+								</mat-datepicker-toggle>
+								<mat-datepicker #picker1></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group" style="text-align:right;">
+							<button 
+								id="btnenviarnd"
+								name="btnenviarnd"
+								class="btn btn-primary btn-space" 
+								type="button" 
+								[disabled]="pedidoFormnd.invalid"
+								(click)="onSubmitnd(pedidoFormnd)"
+								
+							>
+								<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
+							</button>
+							<button class="btn btn-light" type="reset" (click)="resetFormnd(pedidoFormnd)">
+								<i class="fas fa-sync-alt"></i> Reset
+							</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</form>
+		-->
+		<!--Form notificar factura-->
+
+
+		<!-- <form #pedidoFormne="ngForm" *ngIf="this.pedido_.uid">
+
+			<div id="ndesp" [style]="ocultarBtn" class="card border-success bg-light mb-3" *ngIf="this.opcne">
+				<div class="row" style="padding-top:10px;">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Fecha de entrega</mat-label>
+								<input matInput [matDatepicker]="picker" [min]="minDate"
+									name="fentrega"
+									id="fentrega"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.fentrega"
+									required
+								>
+								<mat-datepicker-toggle matSuffix [for]="picker">
+									<mat-icon matDatepickerToggleIcon>
+										event_note
+									</mat-icon>
+								</mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Fecha de pago</mat-label>
+								<input matInput [matDatepicker]="picker1" [min]="minDate"
+									name="fpago"
+									id="fpago"
+									#name="ngModel"
+									[(ngModel)]="this.pedido_.fpago"
+									required
+								>
+								<mat-datepicker-toggle matSuffix [for]="picker1">
+									<mat-icon matDatepickerToggleIcon>
+										event_note
+									</mat-icon>
+								</mat-datepicker-toggle>
+								<mat-datepicker #picker1></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+				
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group" style="text-align:right;">
+							<button 
+								id="btnenviarne"
+								name="btnenviarne"
+								class="btn btn-primary btn-space" 
+								type="button" 
+								[disabled]="pedidoFormne.invalid"
+								(click)="onSubmitne(pedidoFormne)"
+								
+							>
+								<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
+							</button>
+							<button class="btn btn-light" type="reset" (click)="onCancelar(pedidoFormne)">
+								<i class="fas fa-long-arrow-alt-left"></i> Cancelar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</form>
+		-->
+		<!--Form notificar factura-->
+
+
+
+
+
+
+
+
+	</div><!--class card boddy-->
+
+	<div *ngIf="!this.pedido_.uid" style="width: 100%; margin-left: 10px; padding-right: 10px;">
+		<mat-form-field>
+		  <mat-label>Buscar por</mat-label>
+		  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
+		</mat-form-field>
+		
+		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
+		
+		  <!-- Position Column -->
+		  <ng-container matColumnDef="uid">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido</th>
+			<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
+		  </ng-container>
+		
+		  <!-- Name Column -->
+		  <ng-container matColumnDef="Fecha">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+			<td mat-cell *matCellDef="let element"> {{element.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a'}} </td>
+		  </ng-container>
+	  
+		  <!-- Name Column -->
+		  <ng-container matColumnDef="Status">
+			  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+			  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+			</ng-container>
+	  
+		  <!-- Weight Column -->
+		  <ng-container matColumnDef="Cliente">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
+		  </ng-container>
+		
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="Vendedor">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
+		  </ng-container>
+
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="Subtotal">
+			<th mat-header-cell *matHeaderCellDef>Sub Total</th>
+			<td mat-cell *matCellDef="let element"> {{element.totalmontobruto | currency:" "}} </td>
+		  </ng-container>	
+
+
+			  <!-- Symbol Column 
+		  <ng-container matColumnDef="totalCnt">
+			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Cantidad </th>
+			<td mat-cell *matCellDef="let element"> {{element.totalCnt| currency:" ":'symbol':'2.0'}} </td>
+		  </ng-container>-->
+	  
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="totalmontoimpuesto">
+			  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
+			  <td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
+		  </ng-container>
+	  
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="totalmontodescuento">
+			  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Descuento </th>
+			  <td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | currency:" "}} </td>
+		  </ng-container>
+	  
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="totalmontoneto">
+			  <th mat-header-cell *matHeaderCellDef> Total</th>
+			  <td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
+		  </ng-container>
+	  
+		  <!-- Symbol Column -->
+		  <ng-container matColumnDef="Opc">
+			  <th mat-header-cell *matHeaderCellDef></th>
+			  <td mat-cell *matCellDef="let element index as i">
+				  <!--
+				  
+				  <a class="btn btn-info text-white btn-sm" (click)="mostrarOcultar($event,i)">
+					  <i class="far fa-minus-square"></i>
+				  </a>
+				  -->
+					<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
+						<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
+					</a>
+					<a class="btn btn-info" (click)="selectEventPed(element)" [disabled]="element.status != 'DESPACHADO'" data-toggle="tooltip" data-placement="top" title="Notificar entrega">
+						<i class="far fa-edit"  data-toggle="tooltip" data-placement="top" title="Notificar entrega"></i>
+					</a>
+					<a class="btn btn-info btn-sm" type="reset" (click)="anulardoc(pedidoFormnE,element,9002)" data-toggle="tooltip" data-placement="top" title="Anular notificación de despacho">
+						<i class="fas fa-undo" data-toggle="tooltip" data-placement="top" title="Anular notificación de despacho"></i> 
+					</a>
+			  </td>
+		  </ng-container>
+	  
+		  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		
+		  <!-- Row shown when there is no matching data. -->
+		  <tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda {{input.value}}</td>
+		  </tr>
+		</table>
+	  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+

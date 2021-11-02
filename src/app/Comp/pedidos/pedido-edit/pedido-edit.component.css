@@ -1,0 +1,10 @@
+.espaciado{
+    flex: 1 1 auto;
+}
+.campo-width {
+	width: 100%;
+	height: 50px;
+}
+.ng-autocomplete{
+	z-index:1 !important;
+}

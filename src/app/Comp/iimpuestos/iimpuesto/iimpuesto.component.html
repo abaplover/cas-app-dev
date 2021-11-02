@@ -1,0 +1,89 @@
+<div class="container9">
+	<div class="card bg-light mb-3 w-75" style="max-width: 100%">
+		<!-- <div class="card-header">
+			<div class="row" style="text-align:right;"> 
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
+					<h2 class="text-left">Indicador de Impuesto</h2>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<button class="btn btn-link" type="" (click)="moForm()">
+						<i class="fas fa-plus-square"></i> {{msj_enlace}}
+					</button>
+				</div>
+			</div>
+		</div> -->
+		<div class="card-body text-info panel panel-login" *ngIf="iimpuestoService.mostrarForm">
+				<form #iimpuestoForm="ngForm" (ngSubmit)="onSubmit(iimpuestoForm)">
+						<!-- TO UPDATE -->
+						<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="iimpuestoService.selectedIimpuesto.$key">
+					
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<div class="form-group">
+											<input 
+												placeholder="Id" value=""
+												type="number"
+												name="idiimpuesto"
+												#idiimpuesto="ngModel"
+												[(ngModel)]="iimpuestoService.selectedIimpuesto.idiimpuesto"
+												oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+												maxlength="2"
+												[readonly]="iimpuestoService.idFieldReadOnly"
+												required
+												class="form-control"
+											/>
+											<div *ngIf="idiimpuesto.invalid && (idiimpuesto.dirty || idiimpuesto.touched)" class="text-danger">
+												<div *ngIf="idiimpuesto.errors.required">
+													<small>Se requiere Id</small>
+												</div>
+											</div>
+									</div>
+								</div>
+								<div class="col-sm-7 col-md-7 col-lg-7 col-xl-7">
+										<input 
+											placeholder="Descripción" value=""
+											type="text"
+											name="descripcion"
+											#descripcion="ngModel"
+											[(ngModel)]="iimpuestoService.selectedIimpuesto.descripcion"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+											<div *ngIf="descripcion.errors.required">
+												<small>Se requiere una descripción</small>
+											</div>
+										</div>
+								</div>
+								<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+									<input 
+										placeholder="Porcentaje de Impuesto" value=""
+										type="number"
+										name="porcentajei"
+										#porcentajei="ngModel"
+										[(ngModel)]="iimpuestoService.selectedIimpuesto.porcentajei"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="2"
+										required
+										class="form-control"
+									>
+									<div *ngIf="porcentajei.invalid && (porcentajei.dirty || porcentajei.touched)" class="text-danger">
+										<div *ngIf="porcentajei.errors.required">
+											<small>Se requiere un Porcentaje</small>
+										</div>
+									</div>
+								</div>		
+						</div>
+						<div class="form-group" style="text-align:right;padding-top: 10px;">
+							<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="iimpuestoForm.invalid">
+								Guardar 
+							</button>
+							<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(iimpuestoForm)">
+									Reset
+							</button>
+						</div>
+				</form>
+		</div>
+	</div>
+	
+	</div>

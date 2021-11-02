@@ -1,0 +1,142 @@
+<div *ngIf="!this.pedidoService.mostrarForm">
+	<button class="btn btn-secondary btn-space" type="" (click)="moForm()">
+		<i class="fas fa-plus size:3x"></i> Crear
+	</button>
+	<mat-form-field>
+		<mat-label>Buscar por</mat-label>
+		<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
+	</mat-form-field>
+</div>
+
+<!--FORM confirmar ELIMINACION-->
+<div class="card bg-light mb-3" *ngIf="mostrardiv">
+	<div class="card-header">
+		¿Esta seguro de eliminar este pedido?
+	</div>
+	<div class="card-body" style="width: 100%">
+		<div class="row" style="width: 100%">
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Id Pedido</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{idpedidoEli}}</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Fecha</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{fechapedidoEli.toDate() | date:'short'}}</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Cliente</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{clientepedidoEli}}</div>
+		</div>
+		<form #confirmarForm="ngForm">
+				<div class="row">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding: 10px;">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Motivo de Rechazo</mat-label>
+								<mat-select value=selected
+									#motRe
+									name="motivorechazo"
+									id="motivorechazo"
+									[(ngModel)]="txtComentario"
+									required
+								>
+									<mat-option>Ninguno</mat-option>
+									  <mat-option value={{mrz.descripcion}} *ngFor = "let mrz of mrechazoList">
+										{{mrz.idmrechazo}} - {{mrz.descripcion}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+
+					</div>
+				</div>
+				<div class="row" style="width: 100%">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right; float: right;padding-right: 10%;">
+						<button type="button" class="btn btn-outline-info btn-space" (click)="onCancelar(confirmarForm)">Cancelar</button>
+						<button type="button" class="btn btn-outline-danger" (click)="onDelete($event)" [disabled]="confirmarForm.invalid">Eliminar</button>
+					</div>
+				</div>
+		</form>
+	</div>
+</div>
+
+<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.pedidoService.mostrarForm">
+	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
+		<!-- Position Column -->
+		<ng-container matColumnDef="uid">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="">Pedido </th>
+			<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
+		</ng-container>
+
+		<!-- Name Column -->
+		<ng-container matColumnDef="Fecha">
+			<th mat-header-cell *matHeaderCellDef> Fecha</th>
+			<td mat-cell *matCellDef="let element"> {{element.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}} </td>
+		</ng-container>
+
+		<!-- Name Column -->
+		<ng-container matColumnDef="Status">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;"> Status </th>
+			<td mat-cell *matCellDef="let element"> {{element.status}} </td>
+			</ng-container>
+
+		<!-- Weight Column -->
+		<ng-container matColumnDef="Cliente">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="Vendedor">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+			<ng-container matColumnDef="Subtotal">
+				<th mat-header-cell *matHeaderCellDef style="text-align: right;">Sub Total</th>
+				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto| currency:" "}} </td>
+			</ng-container>
+			<!-- Symbol Column
+		<ng-container matColumnDef="totalCnt">
+			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Cantidad </th>
+			<td mat-cell *matCellDef="let element"> {{element.totalCnt| currency:" ":'symbol':'2.0'}} </td>
+		</ng-container>-->
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="totalmontodescuento">
+			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Descuento </th>
+			<td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | currency:" "}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+			<ng-container matColumnDef="totalmontoimpuesto">
+				<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
+				<td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
+			</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="totalmontoneto">
+			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Total</th>
+			<td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="Opc">
+			<th mat-header-cell *matHeaderCellDef></th>
+			<td mat-cell *matCellDef="let element index as i">
+				<a class="btn btn-light btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
+					<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
+				</a>
+				<button class="btn btn-light btn-sm" (click)="onEdit($event,element)" [disabled]="element.status != 'ACTIVO'"  data-toggle="tooltip" data-placement="top" title="Editar pedido">
+					<i class="far fa-edit"  data-toggle="tooltip" data-placement="top" title="Editar pedido"></i>
+				</button>
+				<button class="btn btn-light btn-sm" (click)="mostrarOcultar($event,i)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar pedido">
+				<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar pedido"></i>
+				</button>
+
+			</td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+		<!-- Row shown when there is no matching data. -->
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
+		</tr>
+	</table>
+</div>

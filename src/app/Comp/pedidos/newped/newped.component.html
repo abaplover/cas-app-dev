@@ -1,0 +1,717 @@
+	<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
+		<div class="card-body text-info panel panel-login" *ngIf="pedidoService.mostrarForm" style="border-style: solid; border-width: 0px;">
+			<!--<form #pedidoForm="ngForm" (ngSubmit)="onSubmit(pedidoForm)">-->
+			<form #pedidoForm="ngForm" #pForm (ngSubmit)="agregardetalles()">
+					<!-- TO UPDATE 
+					<input type="hidden" name="name" #name="ngModel" [(ngModel)]="pedidoServices.name">
+				
+
+					 style="border-color: red;border-style: solid;border-width: 1px;"
+				-->
+
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 190px;">
+								<div class="row" style="height: 45px;">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<!-- <div class="input-group-prepend" >
+												<span class="input-group-text" id="inputGroup-sizing-sm">Cliente</span>
+										 	</div> -->
+											<div class="form-group">
+												<div class="ng-autocomplete" > 
+													<ng-autocomplete 
+														[data]="clienteList"
+														[searchKeyword]="keywordCli"
+														placeHolder="Cliente"
+														[itemTemplate]="itemTemplate"
+														[notFoundTemplate]="notFoundTemplate"
+														name="idcliente"
+														(inputChanged)='onChangeSearch($event)'
+														(selected)='selectEvent($event)'
+														(inputCleared) = 'closeautoComplete()'
+														[(ngModel)]="this.pedidoService.valorAutCli"
+														notFoundText="No existe"
+														[disabled]="this.pedidoService.readonlyField"
+														
+													>                                 
+													</ng-autocomplete>
+													<ng-template #itemTemplate let-item>
+														<a [innerHTML]="item.idesc"></a>
+													</ng-template>
+													<ng-template #notFoundTemplate let-notFound>
+														<div [innerHTML]="notFound"></div>
+													</ng-template>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Email</span>
+											</div>
+											<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+												placeholder=""
+												type="text"
+												name="email"
+												id="email"
+												#email="ngModel"
+												[(ngModel)]="this.pedidoService.pedido_.email"
+												required
+												class="form-control"
+												aria-label="Small"
+												readonly
+											/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+											  <span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Vendedor</span>
+											</div>
+											<input 
+												aria-label="Small" 
+												aria-describedby="inputGroup-sizing-sm"
+												type="text"
+												name="nomvendedor"
+												id="nomvendedor"
+												#name="ngModel"
+												[(ngModel)]="this.pedidoService.pedido_.nomvendedor"
+												required
+												class="form-control"
+												readonly
+											/>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+												<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Lista P.</span>
+										 	</div>
+											<input  
+												aria-label="Small" 
+												aria-describedby="inputGroup-sizing-sm"
+												placeholder=""
+												type="text"
+												name="listaprecio"
+												[(ngModel)]="this.pedidoService.pedido_.listaprecio"
+												required
+												class="form-control"
+												readonly
+											/>	
+										</div>
+									</div>
+									<!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 85px;">
+												<span class="input-group-text" style="width: 80px;" id="inputGroup-sizing-sm">Email</span>
+										 	</div>
+
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 190px; ">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Condición Pago</span>
+										 	</div>
+											<select 
+													value=selected
+													name="condiciondepago"
+													id="condiciondepago"
+													#condiciondepago="ngModel"
+													[(ngModel)]="this.pedidoService.pedido_.condiciondepago"
+													required
+													[disabled]="this.pedidoService.readonlyField"
+													class="form-control form-select form-select-sm" 
+													aria-label=".form-select-sm example"
+													>
+													<option value={{cpl.descripcion}} *ngFor = "let cpl of cpagoList">
+														{{cpl.descripcion}}
+													</option>
+											</select>
+											<div *ngIf="condiciondepago.invalid && (condiciondepago.dirty || condiciondepago.touched)" class="text-danger">
+												<div *ngIf="condiciondepago.errors.required">
+													<small>Campo requerido</small>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento %</span>
+										 	</div>
+											<input placeholder=""
+													aria-label="Small" 
+													aria-describedby="inputGroup-sizing-sm"
+													type="number"
+													name="descuentoporc"
+													[(ngModel)]="this.pedidoService.pedido_.descuentoporc"
+													step="1"
+													min=1
+													max=100
+													pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
+													(keyup)="txtdescpchange($event)"
+													(change)="txtdescpchange($event)"
+													#rateInput2= "ngModel"
+													class="form-control"
+											/>
+											<div *ngIf="rateInput2.errors && (rateInput2.dirty || rateInput2.touched)">
+												<div [hidden]="!rateInput2.errors.pattern" class="text-danger">
+													El % de descuento debe estar entre 0 y 100
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Descuento Valor</span>
+										 	</div>
+											 <input 
+											 	aria-label="Small" 
+												aria-describedby="inputGroup-sizing-sm"
+											 	placeholder=""
+											 	type="number"
+											 	name="descuentovalor"
+											 	[(ngModel)]="this.pedidoService.pedido_.descuentovalor"
+											 	step="1"
+											 	min=1
+											 	(keyup)="txtdescvchange($event)"
+											 	(change)="txtdescvchange($event)"
+											 	class="form-control"
+										 	/>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>	
+					</div>
+
+					<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px;  height: 190px;">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Pedido</span>
+										 	</div>
+											<input 
+												type="date"
+												[max]="maxDate"
+												name="fechapedido"
+												id="fechapedido"
+												#fechapedido="ngModel"
+												[(ngModel)]="this.pedidoService.start_time"
+												required
+												class="form-control"
+											/>
+										</div>
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Status</span>
+										 	</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoService.pedido_.status}}</mat-label>
+											</div>
+										</div>
+										<!-- <mat-form-field appearance="legacy">
+											<mat-label>Fecha de pedido</mat-label>
+											<input matInput [matDatepicker]="picker" [max]="maxDate"
+												name="fechapedido"
+												id="fechapedido"
+												#name="ngModel"
+												[(ngModel)]="this.pedidoService.pedido_.fechapedido"
+												required
+											>
+											<mat-datepicker-toggle matSuffix [for]="picker">
+												<mat-icon matDatepickerToggleIcon>
+													event_note
+												</mat-icon>
+											</mat-datepicker-toggle>
+											<mat-datepicker #picker></mat-datepicker>
+										</mat-form-field> -->
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div> <!--Fila cabecera-->
+
+				<div class="row" style="height: 5px;"></div>
+				<div class="row">
+					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
+								<div class="row">
+									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-right: 1px;">
+										<div class="row">
+											<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
+												<mat-label style="font-size:smaller; font-weight: bold;">CÓDIGO</mat-label>
+												<div class="input-group input-group-sm mb-3">
+													<select 
+													value=selected
+													name="codigodematerial"
+													#codigodematerial
+													[(ngModel)]="this.pedidoService.pedido_.codigodematerial"
+													required
+													(change)="selectedchangeCodMat(codigodematerial.value,cantidadmaterial)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+                                        			>
+														<option>Ninguno</option>
+														<option value={{pl.idmaterial}} *ngFor = "let pl of productList">
+															{{pl.idmaterial}}
+														</option>
+                                        			</select>
+												</div>
+												
+											</div>
+											<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9" style="padding-left: 1px;">
+												<mat-label style="font-size:smaller; font-weight: bold;">MATERIAL</mat-label>
+												<div class="input-group input-group-sm mb-3">
+													<select value=selected
+													name="codigodemateriald"
+													#codigodemateriald
+													[(ngModel)]="this.pedidoService.pedido_.codigodematerial"
+													required
+													(change)="selectedchangeCodMat(codigodemateriald.value,cantidadmaterial)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+													>
+														<option>Ninguno</option>
+														<option value={{pl.idmaterial}} *ngFor = "let pl of productList">
+															{{pl.descripcion}}
+														</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">UME</mat-label>
+										<div class="input-group input-group-sm mb-3">
+											<input 
+												type="text"
+												name="unidaddemedida"
+												[(ngModel)]="this.pedidoService.pedido_.unidaddemedida"
+												required
+												readonly=true
+												class="form-control"
+											/>
+											<!-- <select 
+												value=selected
+												name="unidaddemedida"
+												[(ngModel)]="this.pedidoService.pedido_.unidaddemedida"
+												required
+												class="form-control form-select form-select-sm"
+												aria-label=".form-select-sm example"
+												readonly=true
+											>
+												<option value={{uml.descripcion}} *ngFor = "let uml of umedidaList">
+													{{uml.descripcion}}
+												</option>
+											</select> -->
+										</div>
+									</div>
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">CANT</mat-label>
+										<div class="input-group input-group-sm mb-3">
+											<input placeholder=""
+												cdkFocusInitial
+												type="number"
+												name="cantidadmaterial"
+												id="cantidadmaterial"
+												[(ngModel)]="this.pedidoService.pedido_.cantidadmaterial"
+												required
+												step="1"
+												min=1
+												oninput="this.value=(parseInt(this.value))"
+												(keyup)="txtctnchange($event)"
+												(change)="txtctnchange($event)"
+												class="form-control"
+											/>
+										</div>
+									</div>
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">PRECIO</mat-label>
+										<div class="input-group input-group-sm mb-3">
+											<input
+												type="text"
+												name="preciomaterial"
+												[(ngModel)]="this.pedidoService.pedido_.preciomaterial"
+												required
+												readonly=true
+												class="form-control"
+											/>
+										</div>
+									</div>
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-left: 1px;padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">TOTAL</mat-label>
+										<div class="input-group input-group-sm mb-3">
+											<input matInput placeholder=""
+												type="text"
+												name="totalpormaterial"
+												[(ngModel)]="this.pedidoService.pedido_.totalpormaterial"
+												required
+												readonly=true
+												class="form-control"
+											>
+										</div>
+									</div>
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
+										<button 
+											type="submit" 
+											class="btn btn-link"
+											[disabled]="pedidoForm.invalid"
+										>
+										<i class="fas fa-plus fa-3x"></i>
+										</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
+
+
+
+
+
+						<div class="row" style="height: 5px;"></div>
+						<div class="row">
+							<div class="col-sm-12 col-md-12 col-lg-13 col-xl-12">
+								<div class="card">
+									<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+										<div class="row" style="padding-top: 2px;">
+											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+												<table class="table-bordered table-striped table-sm table-responsive" style="max-height: 350px;">
+													<!-- <thead>
+													  <tr>
+														<th scope="col">Código</th>
+														<th scope="col">Material</th>
+														<th scope="col">UME</th>
+														<th scope="col" style="text-align: right;">Cantidad</th>
+														<th scope="col" style="text-align: right;">Precio</th>
+														<th scope="col" style="text-align: right;">Total</th>
+														<th scope="col">-</th>
+													  </tr>
+													</thead> -->
+													<tbody class="thead-secondary table-secondary">
+													  <tr *ngFor="let ped of this.pedidoService.matrisDetPedido; index as i">
+														<td class="col-0" scope="row">{{ped.codigodematerial}}</td>
+														<td class="col-1">{{ped.descripcionmaterial}}</td>
+														<td class="col-2">{{ped.unidaddemedida}}</td>
+														<td class="col-3"style="text-align: right;">{{ped.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
+														<td class="col-4"style="text-align: right;">{{ped.preciomaterial | currency:" "}}</td>
+														<td class="col-5"style="text-align: right;">{{ped.totalpormaterial | currency:" "}}</td>
+														<th class="col-6" style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th>
+													  </tr>
+													</tbody>
+													<!-- <thead class="thead-success table-success">
+														<tr>
+														  <td scope="col"></td>
+														  <td scope="col"></td>
+														  <td scope="col"></td>
+														  <td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | currency:" "}}</td>
+														  <td scope="col" style="text-align: right;">{{this.pedidoService.totalCnt | currency:" ":'symbol':'2.0'}}</td>
+														  <td scope="col" style="text-align: right;">{{this.pedidoService.totalPed | currency:" "}}</td>
+														  <td scope="col">-</td>
+														</tr>
+													</thead> -->
+												</table>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+
+
+
+					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">SubTotal.</span>
+											</div>
+											<div class="abs-right">
+												<!-- <mat-label>{{this.pedidoService.tmontb | currency:" "}}</mat-label> -->
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.pedidoService.tmontb | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Descuento</span>
+											</div>
+											<div class="abs-right">
+												<!-- <mat-label>{{this.pedidoService.tmontd | currency:" "}}</mat-label> -->
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.pedidoService.tmontd | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Base Imponible</span>
+											</div>
+											<div class="abs-right">
+												<!-- <mat-label>{{this.pedidoService.tmontb-this.pedidoService.tmontd | currency:" "}}</mat-label> -->
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.pedidoService.tmontb-this.pedidoService.tmontd | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">IVA</span>
+											</div>
+											<div class="abs-right">
+												<!-- <mat-label>{{this.pedidoService.tmonti | currency:" "}}</mat-label> -->
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.pedidoService.tmonti | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 115px;">
+												<span class="input-group-text" style="width: 110px;" id="inputGroup-sizing-sm">Total</span>
+											</div>
+											<div class="abs-right">
+												<!-- <mat-label>{{this.pedidoService.tmontn | currency:" "}}</mat-label> -->
+												<input type="text" size="14" style="text-align: right; border: 0;" readonly=true value="{{this.pedidoService.tmontn | currency:' '}}">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left: 8px;">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<textarea 
+											rows="3"
+											cols="25" 
+											placeholder="Observación..."
+											name="Observación"
+											maxlength="185"
+											id="Observación"
+											[(ngModel)]="this.pedidoService.pedido_.observacion"
+										>
+										</textarea>
+									</div>
+								</div>
+								
+								
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
+
+										<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
+											<button 
+												class="btn-space" 
+												smat-stroked-button 
+												style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
+												type="button" 
+												[disabled]="this.pedidoService.enviar !== true"
+												(click)="generarpdf(pedidoForm)"
+												id="btnenviar"
+												name="btnenviar"
+											>
+												{{this.pedidoService.txtBtnAccion}}
+											</button>
+											<button 
+												smat-stroked-button 
+												style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+												type="button" 
+												(click)="resetForm(pedidoForm)">
+													Atrás
+												</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+				
+
+
+
+				<!-- Oculto -->
+				<div class="row" style="border-style: solid;border-width: 0px; display: none;">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<mat-form-field class="campo-width">
+								<mat-label>Descripción</mat-label>
+								<input matInput placeholder="Descripción"
+									type="text"
+									name="nomcliente"
+									id="nomcliente"
+									#name="ngModel"
+									[(ngModel)]="this.pedidoService.pedido_.nomcliente"
+									required
+									readonly=true
+								>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<div class="ng-autocomplete" style="width: 100%;"> 
+								<ng-autocomplete 
+									[data]="vendedorList"
+									[searchKeyword]="keywordVen"
+									placeHolder="ID Vendedor"
+									[itemTemplate]="itemTemplatev"
+									[notFoundTemplate]="notFoundTemplatev"
+									name="idvendedor"
+									id="idvendedor"
+									(inputChanged)='onChangeSearchVen($event)'
+									(selected)='selectEventVen($event)'
+									(inputCleared) = 'closeautoCompleteVen()'
+									#name="ngModel"
+									[(ngModel)]="this.pedidoService.valorAutVen"
+									notFoundText="No existe"
+									[disabled]="this.pedidoService.disabledFieldVen"
+								>                                 
+								</ng-autocomplete>
+								<ng-template #itemTemplatev let-item>
+									<a [innerHTML]="item.idvendedor"></a>
+								</ng-template>
+								<ng-template #notFoundTemplatev let-notFound>
+									<div [innerHTML]="notFound"></div>
+								</ng-template>
+							</div>
+						</div>		
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field class="campo-width">
+									<mat-label>Material</mat-label>
+									<input matInput placeholder="Material"
+										type="text"
+										name="descripcionmaterial"
+										[(ngModel)]="this.pedidoService.pedido_.descripcionmaterial"
+										required
+										readonly=true
+									>
+								</mat-form-field>
+							</div>	
+						</div>
+					</div>
+				</div>
+				<!-- oculto -->
+	
+					<div class="row" style="padding-top: 20px; display: none;">
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>Total Monto Bruto</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>Total Descuento</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>Monto - Descuento</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+							<mat-label>IVA</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>Total Monto Neto</mat-label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row" style="display: none;">
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>{{this.pedidoService.tmontb | currency:" "}}</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>{{this.pedidoService.tmontd | currency:" "}}</mat-label>
+							</div>
+						</div>
+
+						<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>{{this.pedidoService.tmontb-this.pedidoService.tmontd | currency:" "}}</mat-label>
+							</div>
+						</div>
+
+						<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>{{this.pedidoService.tmonti | currency:" "}}</mat-label>
+							</div>
+						</div>
+						<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+							<div class="form-group" style="text-align: right;">
+								<mat-label>{{this.pedidoService.tmontn | currency:" "}}</mat-label>
+							</div>
+						</div>
+					</div>
+<!-- Oculto -->
+
+					
+			</form>
+		</div>
+</div><!--class card-->

@@ -1,0 +1,63 @@
+<div class="container88">
+	<mat-tab-group animationDuration="0ms" [selectedIndex]="this.tabRef.selectedIndex" (selectedTabChange)="onTabChanged($event);"> 
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-cart-plus"></i></button> Nuevo pedido
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-newped></app-newped>
+					<app-newped-list></app-newped-list>
+				</div>	
+			</div>  
+		</mat-tab>
+		
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-file-alt"></i></button> Notificar factura
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-pedido-nf></app-pedido-nf>
+				</div>	
+			</div>  
+		</mat-tab>
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-fax"></i></button> Notificar despacho
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-pedido-nd></app-pedido-nd>
+				</div>	
+			</div>  
+		</mat-tab>
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-check"></i></button> Notificar entrega de mercancía
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-pedido-ne></app-pedido-ne>
+				</div>	
+			</div>  
+		</mat-tab>
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-search"></i></button>Todos los pedidos
+			</ng-template>
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-pedidos-list></app-pedidos-list>
+				</div>
+			</div>
+		</mat-tab>
+	
+	</mat-tab-group>
+</div>
+
+<!---->

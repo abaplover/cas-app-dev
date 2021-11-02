@@ -1,0 +1,299 @@
+<div class="container9">
+	<div class="card bg-light mb-3 w-75">	
+			<!-- <div class="card-header">
+				<div class="row" style="text-align:right;"> 
+					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
+						<h2 class="text-left">Clientes</h2>
+					</div>
+					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+						<button class="btn btn-link" type="" (click)="moForm()">
+							<i class="fas fa-plus-square"></i> {{msj_enlace}}
+						</button>
+					</div>
+				</div>
+			</div> -->
+			
+			<div class="card-body text-info panel panel-login" *ngIf="clientService.mostrarForm">
+				<form #clientForm="ngForm" (ngSubmit)="onSubmit(clientForm)">
+						<!-- TO UPDATE -->
+						<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="clientService.selectedClient.$key">
+					
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">ID (RIF)</mat-label>
+									<input 
+										placeholder="J#########" value=""
+										name="idcliente"
+										#idcliente="ngModel"
+										[(ngModel)]="clientService.selectedClient.idcliente"
+										maxlength="15"
+										[readonly]="clientService.idFieldReadOnly"
+										required
+										class="form-control"
+										pattern="[JVEPG]{1}[0-9]{8,9}"
+									/>
+									<div *ngIf="idcliente.invalid && (idcliente.dirty || idcliente.touched)" class="text-danger">
+										<div *ngIf="idcliente.errors.required">
+											<small>Se requiere Id</small>
+										</div>
+										<div *ngIf="idcliente.errors?.pattern">
+											<small>Formato incorrecto: J#########</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-7 col-md-7 col-lg-7 col-xl-7">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">DESCRIPCIÓN</mat-label>
+									<input
+										placeholder="" value=""
+										name="descripcion"
+										#descripcion="ngModel"
+										[(ngModel)]="clientService.selectedClient.descripcion"
+										required
+										class="form-control"
+								  	/>
+									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+										<div *ngIf="descripcion.errors.required">
+											<small>Se requiere una Descripción</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">ZONA</mat-label>
+									<select 
+										value=selected
+										required
+										name="zona"
+										#zona="ngModel"
+										[(ngModel)]="clientService.selectedClient.zona"
+										class="form-control"
+										pattern="^[a-zA-Z0-9%\u00E0-\u00FC ]{2,35}$"
+									>
+										<option selected value={{zn.descripcion}}  *ngFor = "let zn of zonasList">
+											{{zn.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="zona.invalid && (zona.dirty || zona.touched)" class="text-danger">
+										<div *ngIf="zona.errors.required">
+											<small>Se requiere una Zona</small>
+										</div>
+										<div *ngIf="zona.errors?.pattern">
+											<small>Se requiere una Zona</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							
+							<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">DIRECCIÓN</mat-label>
+									<input 
+										placeholder="" value=""
+										name="direccion"
+										#direccion="ngModel"
+										[(ngModel)]="clientService.selectedClient.direccion"
+										required
+										class="form-control"
+									/>
+									<div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)" class="text-danger">
+										<div *ngIf="direccion.errors.required">
+											<small>Se requiere una Dirección</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">LISTA DE PRECIOS</mat-label>
+									<select 
+										value=selected
+										name="listaprecio"
+										#listaprecio="ngModel"
+										[(ngModel)]="clientService.selectedClient.listaprecio"
+										required
+										class="form-control"
+										pattern="^[a-zA-Z0-9%\u00E0-\u00FC ]{2,35}$"
+									>
+										<option selected value={{lpl.descripcion}} *ngFor = "let lpl of lpreciosList">
+											{{lpl.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="listaprecio.invalid && (listaprecio.dirty || listaprecio.touched)" class="text-danger">
+										<div *ngIf="listaprecio.errors.required">
+											<small>Se requiere Lista de Precios</small>
+										</div>
+										<div *ngIf="listaprecio.errors?.pattern">
+											<small>Se requiere Lista de Precios</small>
+										</div>
+									</div>
+								</div>	
+							</div>
+							
+						</div>
+
+						<div class="row">
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">EMAIL</mat-label>
+									<input
+										value=""
+										name="email"
+										#email="ngModel"
+										[(ngModel)]="clientService.selectedClient.email"
+										placeholder="loremipsum@gmail.com"
+										required
+										email="true"
+										class="form-control"
+										pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}"
+											        
+									/>
+									<div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+										<div *ngIf="email.errors.required">
+											<small>Se requiere un email</small>
+										</div>
+										<div *ngIf="email.errors?.pattern">
+											<small>Por favor ingrese una dirección de correo válida</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">TLF CELULAR</mat-label>
+									<input
+										type="tel" 
+										placeholder="0414-1234567"
+										name="telefonom"
+										#telefonom="ngModel"
+										[(ngModel)]="clientService.selectedClient.telefonom"
+										pattern="^[0-9-]{4,5}[0-9]{7,7}$"
+										class="form-control"
+										required
+									/>
+									<div *ngIf="telefonom.invalid && (telefonom.dirty || telefonom.touched)" class="text-danger">
+										<div *ngIf="telefonom.errors.required">
+											<small>Se requiere un teléfono celular</small>
+										</div>
+										<div *ngIf="telefonom.errors?.pattern">
+											<small>Teléfono celular inválido (0414-1234567)</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">TLF FIJO</mat-label>
+									<input
+										type="tel" 
+										matInput placeholder="0212-1234567"
+										name="telefonof"
+										#telefonof="ngModel"
+										[(ngModel)]="clientService.selectedClient.telefonof"
+										pattern="^[0-9-]{4,5}[0-9]{7,7}$"
+										class="form-control"
+										required
+									/>
+									<div *ngIf="telefonof.invalid && (telefonof.dirty || telefonof.touched)" class="text-danger">
+										<div *ngIf="telefonof.errors.required">
+											<small>Se requiere un teléfono fijo</small>
+										</div>
+										<div *ngIf="telefonof.errors?.pattern">
+											<small>Teléfono fijo inválido (0212-1234567)</small>
+										</div>
+									</div>
+								</div>	
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+
+									<mat-label style="font-size:smaller;">I. DE IMPUESTO</mat-label>
+									<select 
+										value=selected  
+										required
+										name="iimpuesto"
+										#iimpuesto="ngModel"
+										[(ngModel)]="clientService.selectedClient.iimpuesto"
+										class="form-control"
+										pattern="^[a-zA-Z0-9%\u00E0-\u00FC ]{2,35}$"
+									>
+										<option selected value={{ii.descripcion}} *ngFor = "let ii of iimpuestosList">
+											{{ii.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="iimpuesto.invalid && (iimpuesto.dirty || iimpuesto.touched)" class="text-danger">
+										<div *ngIf="iimpuesto.errors.required">
+											<small>Se requiere Indicador de Impuesto</small>
+										</div>
+										<div *ngIf="iimpuesto.errors?.pattern">
+											<small>Se requiere Indicador de Impuesto</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<mat-label style="font-size:smaller;">I. RETENCIÓN</mat-label>
+									<select 
+										value=selected  
+										required
+										name="iretencion"
+										#iretencion="ngModel"
+										[(ngModel)]="clientService.selectedClient.iretencion"
+										class="form-control"
+										pattern="^[a-zA-Z0-9%\u00E0-\u00FC ]{2,35}$"
+									>
+										<option selected value={{ir.descripcion}} *ngFor = "let ir of iretencionesList">
+											{{ir.descripcion}}
+										</option>
+									</select>
+									<div *ngIf="iretencion.invalid && (iretencion.dirty || iretencion.touched)" class="text-danger">
+										<div *ngIf="iretencion.errors.required">
+											<small>Se requiere Indicador de Retemción</small>
+										</div>
+										<div *ngIf="iretencion.errors?.pattern">
+											<small>Se requiere Indicador de Retemción</small>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+							
+							
+						</div>
+						<div class="row">
+							
+						</div>
+						<!--Div para alinear 2 campos uno a lado de otro-->
+						<!--
+						<div class="row"> 
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									
+							</div>
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									
+							</div>
+						</div>
+						-->
+						<div class="form-group" style="text-align:right;padding-top: 10px;">
+							<button class="btn-space" smat-stroked-button style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="clientForm.invalid">
+								Guardar 
+							</button>
+							<button class="btn-space" smat-stroked-button style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(clientForm)">
+								Reset
+							</button>
+						</div>
+				</form>
+			</div>
+	</div>
+</div>
+

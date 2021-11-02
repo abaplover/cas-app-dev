@@ -1,0 +1,662 @@
+<div class="container9" style="border-style: solid; border-width: 0px;">
+		<div class="card bg-light mb-3" style="max-width: 100%">
+			<div >
+				<div class="row" style="text-align:left;"> 
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						<button class="btn btn-secondary btn-space" type="" (click)="moForm()">
+							<i class="fas fa-plus size:3x"></i> Crear<!--{{msj_enlace}}-->
+							<!--{{msj_enlace}}-->
+						</button>
+						<mat-form-field>
+							<mat-label>Buscar por</mat-label>
+							<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
+						</mat-form-field>
+					</div>
+
+				</div>
+			</div>
+			<!--<div class="card-body text-info" *ngIf="pedidoServices.mostrarForm">-->
+			<!--<div [@AnimacionElement]="estadoElement" class="card-body text-info" *ngIf="pedidoService.mostrarForm" style="border-style: solid; border-width: 0px;">-->
+			
+			
+			<div class="card-body text-info" *ngIf="pedidoService.mostrarForm" style="border-style: solid; border-width: 0px;">
+				<!--<form #pedidoForm="ngForm" (ngSubmit)="onSubmit(pedidoForm)">-->
+				<form #pedidoForm="ngForm" (ngSubmit)="agregardetalles()">
+						<!-- TO UPDATE 
+						<input type="hidden" name="name" #name="ngModel" [(ngModel)]="pedidoServices.name">
+					-->
+					
+						<div class="row" style="border-style: solid;border-width: 0px;"> 
+							<div class="col-sm-2 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-form-field appearance="legacy">
+										<mat-label>Fecha de pedido</mat-label>
+										<input matInput [matDatepicker]="picker" [max]="maxDate"
+											name="fechapedido"
+											id="fechapedido"
+											#name="ngModel"
+											[(ngModel)]="this.pedidoService.pedido_.fechapedido"
+											required
+										>
+										<mat-datepicker-toggle matSuffix [for]="picker">
+											<mat-icon matDatepickerToggleIcon>
+												event_note
+											</mat-icon>
+										</mat-datepicker-toggle>
+										<mat-datepicker #picker></mat-datepicker>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-10 col-md-9 col-lg-9 col-xl-9">
+								<div class="form-group">
+									<div class="ng-autocomplete" style="width: 100%;"> 
+										<ng-autocomplete 
+											[data]="clienteList"
+											[searchKeyword]="keywordCli"
+											placeHolder="ID Cliente"
+											[itemTemplate]="itemTemplate"
+											[notFoundTemplate]="notFoundTemplate"
+											name="idcliente"
+											(inputChanged)='onChangeSearch($event)'
+											(selected)='selectEvent($event)'
+											(inputCleared) = 'closeautoComplete()'
+											[(ngModel)]="this.pedidoService.valorAutCli"
+											notFoundText="No existe"
+											[disabled]="this.pedidoService.readonlyField"
+										>                                 
+										</ng-autocomplete>
+										<ng-template #itemTemplate let-item>
+											<a [innerHTML]="item.idesc"></a>
+										</ng-template>
+										<ng-template #notFoundTemplate let-notFound>
+											<div [innerHTML]="notFound"></div>
+										</ng-template>
+									</div>	
+								</div>
+							</div>
+						</div> <!--Row-->
+						
+						<div class="row" style="border-style: solid;border-width: 0px;"> 
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+									<div class="form-group">
+										<mat-form-field class="campo-width">
+											<mat-label>Descripción</mat-label>
+											<input matInput placeholder="Descripción"
+												type="text"
+												name="nomcliente"
+												id="nomcliente"
+												#name="ngModel"
+												[(ngModel)]="this.pedidoService.pedido_.nomcliente"
+												required
+												readonly=true
+											>
+										</mat-form-field>
+									</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-form-field class="campo-width">
+										<mat-label>Email</mat-label>
+										<input matInput placeholder="Email"
+											type="text"
+											name="email"
+											id="email"
+											#name="ngModel"
+											[(ngModel)]="this.pedidoService.pedido_.email"
+											required
+											readonly=true
+										>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<div class="ng-autocomplete" style="width: 100%;"> 
+										<ng-autocomplete 
+											[data]="vendedorList"
+											[searchKeyword]="keywordVen"
+											placeHolder="ID Vendedor"
+											[itemTemplate]="itemTemplatev"
+											[notFoundTemplate]="notFoundTemplatev"
+											name="idvendedor"
+											id="idvendedor"
+											(inputChanged)='onChangeSearchVen($event)'
+											(selected)='selectEventVen($event)'
+											(inputCleared) = 'closeautoCompleteVen()'
+											#name="ngModel"
+											[(ngModel)]="this.pedidoService.valorAutVen"
+											notFoundText="No existe"
+											[disabled]="this.pedidoService.disabledFieldVen"
+										>                                 
+										</ng-autocomplete>
+										<ng-template #itemTemplatev let-item>
+											<a [innerHTML]="item.idvendedor"></a>
+										</ng-template>
+										<ng-template #notFoundTemplatev let-notFound>
+											<div [innerHTML]="notFound"></div>
+										</ng-template>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+
+									<mat-form-field class="campo-width">
+										<mat-label>Nombre Vendedor</mat-label>
+										<input matInput placeholder="Nombre Vendedor"
+											type="text"
+											name="nomvendedor"
+											id="nomvendedor"
+											#name="ngModel"
+											[(ngModel)]="this.pedidoService.pedido_.nomvendedor"
+											required
+											readonly=true
+										>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group">
+									<!-- aaaa	 -->
+									<mat-form-field class="campo-width">
+										<mat-label>Lista de precios</mat-label>
+										<input matInput placeholder="Lista de precios"
+											type="text"
+											name="listaprecio"
+											[(ngModel)]="this.pedidoService.pedido_.listaprecio"
+											required
+											readonly=true
+										>
+									</mat-form-field>
+								</div>	
+							</div>
+						</div> <!--Row-->
+
+						<div class="row" style="border-style: solid;border-width: 0px;"> 
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Condiciones de Pago</mat-label>
+										<mat-select value=selected
+											name="condiciondepago"
+											id="condiciondepago"
+											#name="ngModel"
+											[(ngModel)]="this.pedidoService.pedido_.condiciondepago"
+											required
+											[disabled]="this.pedidoService.readonlyField"
+										>
+										  	<mat-option value={{cpl.descripcion}} *ngFor = "let cpl of cpagoList">
+												{{cpl.descripcion}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div>
+							<!--
+							<div class="row" *ngIf="pedidoService.mostrardesc" style="padding-top: 15px;">
+							</div>
+							-->
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-form-field class="campo-width">
+										<mat-label>Descuento porcentual</mat-label>
+										<input matInput placeholder="Descuento porcentual"
+											type="number"
+											name="descuentoporc"
+											[(ngModel)]="this.pedidoService.pedido_.descuentoporc"
+											step="1"
+											min=1
+											max=100
+											pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
+											(keyup)="txtdescpchange($event)"
+											(change)="txtdescpchange($event)"
+											#rateInput2= "ngModel"
+										>
+									</mat-form-field>
+									<div *ngIf="rateInput2.errors && (rateInput2.dirty || rateInput2.touched)">
+										<div [hidden]="!rateInput2.errors.pattern" style="color: red;">
+											El % de descuento debe estar entre 0 y 100
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-form-field class="campo-width">
+										<mat-label>Descuento valor</mat-label>
+										<input matInput placeholder="Descuento Valor"
+											type="number"
+											name="descuentovalor"
+											[(ngModel)]="this.pedidoService.pedido_.descuentovalor"
+											step="1"
+											min=1
+											(keyup)="txtdescvchange($event)"
+											(change)="txtdescvchange($event)"
+										>
+									</mat-form-field>
+								</div>
+							</div>
+						</div> <!--Row-->
+
+
+
+
+						
+
+
+
+
+
+
+						<div class="row">
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Cod Material</mat-label>
+										<mat-select value=selected
+											#codMateri
+											name="codigodematerial"
+											[(ngModel)]="this.pedidoService.pedido_.codigodematerial"
+											required
+											(selectionChange)="selectedchangeCodMat($event.value)"
+										>
+											<mat-option>Ninguno</mat-option>
+										  	<mat-option value={{pl.idmaterial}} *ngFor = "let pl of productList">
+												{{pl.idmaterial}} - {{pl.descripcion}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field class="campo-width">
+										<mat-label>Material</mat-label>
+										<input matInput placeholder="Material"
+											type="text"
+											name="descripcionmaterial"
+											[(ngModel)]="this.pedidoService.pedido_.descripcionmaterial"
+											required
+											readonly=true
+										>
+									</mat-form-field>
+								</div>	
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<mat-form-field class="campo-width">
+									<mat-label>Precio Material</mat-label>
+									<input matInput placeholder="Precio Material"
+										type="text"
+										name="preciomaterial"
+										[(ngModel)]="this.pedidoService.pedido_.preciomaterial"
+										required
+										readonly=true
+									>
+								</mat-form-field>
+							</div>
+						</div><!--Row-->
+						<div class="row">
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Unidad de medida</mat-label>
+										<mat-select value=selected
+											name="unidaddemedida"
+											[(ngModel)]="this.pedidoService.pedido_.unidaddemedida"
+											required
+											
+										>
+											  <mat-option value={{uml.descripcion}} *ngFor = "let uml of umedidaList">
+												{{uml.descripcion}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<div class="form-group">
+										<mat-form-field class="campo-width">
+											<mat-label>Cantidad</mat-label>
+											<input matInput placeholder="Cantidad"
+												type="number"
+												name="cantidadmaterial"
+												[(ngModel)]="this.pedidoService.pedido_.cantidadmaterial"
+												required
+												step="1"
+												min=1
+												
+												oninput="this.value=(parseInt(this.value))"
+												(keyup)="txtctnchange($event)"
+												(change)="txtctnchange($event)"
+											>
+										</mat-form-field>
+									</div>
+								</div>	
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field class="campo-width">
+										<mat-label>Total Material</mat-label>
+										<input matInput placeholder="Total Material"
+											type="text"
+											name="totalpormaterial"
+											[(ngModel)]="this.pedidoService.pedido_.totalpormaterial"
+											required
+											readonly=true
+										>
+									</mat-form-field>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<button 
+								type="submit" 
+								class="btn btn-primary btn-btn-sm btn-block" 
+								[disabled]="pedidoForm.invalid"
+							>
+								<i class="fas fa-arrow-alt-circle-down"></i> Agregar
+							</button>
+						</div>
+
+						
+
+						<div #detallesPed class="row" style="padding-top: 2px;">
+							<table class="table table-striped table-hover table-sm">
+								<thead class="thead-success table-success">
+								  <tr>
+									<th scope="col">Código</th>
+									<th scope="col">Material</th>
+									<th scope="col">Unidad de Medida</th>
+									<th scope="col" style="text-align: right;">Precio</th>
+									<th scope="col" style="text-align: right;">Cantidad</th>
+									<th scope="col" style="text-align: right;">Total</th>
+									<th scope="col">-</th>
+								  </tr>
+								</thead>
+								<tbody>
+								  <tr *ngFor="let ped of this.pedidoService.matrisDetPedido; index as i">
+									<th scope="row">{{ped.codigodematerial}}</th>
+									<td>{{ped.descripcionmaterial}}</td>
+									<td>{{ped.unidaddemedida}}</td>
+									<td style="text-align: right;">{{ped.preciomaterial | number}}</td>
+									<td style="text-align: right;">{{ped.cantidadmaterial}}</td>
+									<td style="text-align: right;">{{ped.totalpormaterial | number}}</td>
+									<th style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th>
+								  </tr>
+								</tbody>
+								<thead class="thead-success table-success">
+									<tr>
+									  <td scope="col"></td>
+									  <td scope="col"></td>
+									  <td scope="col"></td>
+									  <td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | number}}</td>
+									  <td scope="col" style="text-align: right;">{{this.pedidoService.totalCnt}}</td>
+									  <td scope="col" style="text-align: right;">{{this.pedidoService.totalPed | number}}</td>
+									  <td scope="col">-</td>
+									</tr>
+								  </thead>
+							</table>
+						</div>
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>Total Monto Bruto</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>Total Descuento</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>Monto - Descuento</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+								<mat-label>IVA</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>Total Monto Neto</mat-label>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>{{this.pedidoService.tmontb | number}}</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>{{this.pedidoService.tmontd | number}}</mat-label>
+								</div>
+							</div>
+
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>{{this.pedidoService.tmontb-this.pedidoService.tmontd | number}}</mat-label>
+								</div>
+							</div>
+
+							<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>{{this.pedidoService.tmonti | number}}</mat-label>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group" style="text-align: right;">
+									<mat-label>{{this.pedidoService.tmontn | number}}</mat-label>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="padding-top: 30px;">
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+								<div class="form-group" style="text-align:right">
+									<button 
+										id="btnenviar"
+										name="btnenviar"
+										class="btn btn-primary btn-space" 
+										type="button" 
+										[disabled]="this.pedidoService.enviar !== true"
+										(click)="onSubmit(pedidoForm)"										
+									>
+									<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
+									</button>
+									<button class="btn btn-light" type="reset" (click)="resetForm(pedidoForm)">
+										<i class="fas fa-long-arrow-alt-left"></i> Cancelar
+									</button>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+						</div>
+
+						
+				</form>
+			</div>
+	</div><!--class card-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--LISTADO DE PEDIDOS-->
+
+
+
+
+
+
+
+
+
+<!--FORM confirmar ELIMINACION-->
+<div class="card bg-light mb-3" *ngIf="mostrardiv">
+	<div class="card-header">
+		¿Esta seguro de eliminar este pedido?
+	</div>
+	<div class="card-body" style="width: 100%">
+		<div class="row" style="width: 100%">
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Id Pedido</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{idpedidoEli}}</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Fecha</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{fechapedidoEli.toDate() | date:'short'}}</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Cliente</div>
+			<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{clientepedidoEli}}</div>
+		</div>
+		<form #confirmarForm="ngForm">
+				<div class="row">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding: 10px;">
+							<mat-form-field appearance="legacy" class="campo-width">
+								<mat-label>Motivo de Rechazo</mat-label>
+								<mat-select value=selected
+									#motRe
+									name="motivorechazo"
+									id="motivorechazo"
+									[(ngModel)]="txtComentario"
+									required
+								>
+									<mat-option>Ninguno</mat-option>
+									  <mat-option value={{mrz.descripcion}} *ngFor = "let mrz of mrechazoList">
+										{{mrz.idmrechazo}} - {{mrz.descripcion}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						
+					</div>
+				</div>
+				<div class="row" style="width: 100%">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right; float: right;padding-right: 10%;">
+						<button type="button" class="btn btn-outline-info btn-space" (click)="onCancelar(confirmarForm)">Cancelar</button>
+						<button type="button" class="btn btn-outline-danger" (click)="onDelete($event)" [disabled]="confirmarForm.invalid">Eliminar</button>
+					</div>
+				</div>
+		</form>	
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!pedidoService.mostrarForm">
+
+	
+	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
+	
+	  <!-- Position Column -->
+	  <ng-container matColumnDef="uid">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Id Pedido </th>
+		<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
+	  </ng-container>
+	
+	  <!-- Name Column -->
+	  <ng-container matColumnDef="Fecha">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+		<td mat-cell *matCellDef="let element"> {{element.fechapedido.toDate() | date:'shortDate'}} </td>
+	  </ng-container>
+  
+	  <!-- Name Column -->
+	  <ng-container matColumnDef="Status">
+		  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+		  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+		</ng-container>
+  
+	  <!-- Weight Column -->
+	  <ng-container matColumnDef="Cliente">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+		<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
+	  </ng-container>
+	
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="Vendedor">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
+		<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
+	  </ng-container>
+  
+		  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalCnt">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad Material </th>
+		<td mat-cell *matCellDef="let element"> {{element.totalCnt}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontoimpuesto">
+		  <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Impuesto </th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | number}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontodescuento">
+		  <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Descuento </th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | number}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontoneto">
+		  <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Monto Neto </th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontoneto | number}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="Opc">
+		  <th mat-header-cell *matHeaderCellDef>  </th>
+		  <td mat-cell *matCellDef="let element index as i">
+			  
+			  <button class="btn btn-light btn-sm" (click)="onEdit($event,element)" [disabled]="element.status != 'ACTIVO'"  data-toggle="tooltip" data-placement="top" title="Editar pedido">
+				  <i class="far fa-edit"  data-toggle="tooltip" data-placement="top" title="Editar pedido"></i>
+			  </button>
+			  <button class="btn btn-light btn-sm" (click)="mostrarOcultar($event,i)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar pedido">
+				<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar pedido"></i>
+			  </button>
+
+			  
+			<!--  
+			  <a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)">
+				  <i class="far fa-file-alt"></i>
+			  </a>
+  			-->
+		  </td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+	
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda {{input.value}}</td>
+	  </tr>
+	</table>
+
+</div>

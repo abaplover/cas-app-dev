@@ -1,0 +1,15 @@
+.espaciado{
+    flex: 1 1 auto;
+}
+
+.mat-button{
+    color:white;
+}
+
+.mat-raised-button{
+    background-color: rgb(182, 119, 241);
+} 
+
+h1.nombre {
+    margin-left: 8px;
+}

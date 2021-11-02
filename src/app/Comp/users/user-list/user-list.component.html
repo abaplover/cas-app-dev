@@ -1,0 +1,19 @@
+
+
+<div class="alert alert-danger" role="alert" *ngFor="let elementos of items">
+	{{elementos.name}} - {{elementos.id}}	
+
+	<div class="float-right" (click)="eliminar(elementos)">
+		<i class="far fa-trash-alt"></i> 
+	</div>
+
+	<div class="float-right mx-3" (click)="editar(elementos)" data-toggle="modal" data-target="#venergent">
+		<i class="fas fa-pencil-alt"></i> 
+	</div>
+</div>
+
+  
+
+
+
+
