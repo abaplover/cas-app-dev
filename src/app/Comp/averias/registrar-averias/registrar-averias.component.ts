@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
-import { Averia } from 'src/app/models/Gaveria';
+import { Averia } from 'src/app/models/gaveria';
 import { Stats } from 'src/app/models/stats';
 import { AveriaDet } from 'src/app/models/gaveriaDet';
 import { GestionaveriasService } from 'src/app/services/gestionaverias.service';
