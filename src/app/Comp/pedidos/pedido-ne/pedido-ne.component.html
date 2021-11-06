@@ -909,7 +909,7 @@
 
 		<!-- Name Column -->
 		<ng-container matColumnDef="fechapedido">
-			<th mat-header-cell *matHeaderCellDef> Fecha</th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha</th>
 			<td mat-cell *matCellDef="let element"> {{element.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}} </td>
 		</ng-container>
 
