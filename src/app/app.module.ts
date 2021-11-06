@@ -176,6 +176,7 @@ import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-ave
 
 
 
+
                                        
 @NgModule({
   declarations: [
@@ -253,7 +254,8 @@ import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-ave
     ModificarAveriasComponent,
     RegAveListComponent,
     AveriaShowComponent,
-    CerrarAveriasComponent
+    CerrarAveriasComponent, 
+    
   ],
   imports: [
     BrowserModule,

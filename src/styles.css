@@ -268,3 +268,52 @@ pre {
     text-align: center;
   }
 }
+.mat-column-fechapedido {
+	width: 160px !important;
+	text-align: left;
+}
+
+.mat-column-status {
+	width: 100px !important;
+	text-align: left;
+}
+
+.mat-column-nomcliente {
+	width: 150px !important;
+	text-align: left;
+}
+
+.mat-column-nomvendedor {
+	width: 110px !important;
+	text-align: left;
+}
+
+.mat-column-totalmontobruto {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontoimpuesto {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontodescuento {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-totalmontoneto {
+	width: 100px !important;
+	text-align: right;
+}
+
+.mat-column-Opc {
+	width: 60px !important;
+	text-align: right;
+}
+.mat-column-idpedido {
+	width: 60px !important;
+	text-align: left;
+	padding-right: 8px;
+}

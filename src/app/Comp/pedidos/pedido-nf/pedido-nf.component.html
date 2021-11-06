@@ -884,68 +884,65 @@
 
 			<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
 
-			  <!-- Position Column -->
-			  <ng-container matColumnDef="idpedido">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido</th>
+			 <!-- Position Column -->
+			 <ng-container matColumnDef="idpedido">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="">Pedido </th>
 				<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
-			  </ng-container>
-
-			  <!-- Name Column -->
-			  <ng-container matColumnDef="fechapedido">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+			</ng-container>
+	
+			<!-- Name Column -->
+			<ng-container matColumnDef="fechapedido">
+				<th mat-header-cell *matHeaderCellDef> Fecha</th>
 				<td mat-cell *matCellDef="let element"> {{element.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}} </td>
-			  </ng-container>
-
-			  <!-- Name Column -->
-			  <ng-container matColumnDef="status">
-				  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-				  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+			</ng-container>
+	
+			<!-- Name Column -->
+			<ng-container matColumnDef="status">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;"> Status </th>
+				<td mat-cell *matCellDef="let element"> {{element.status}} </td>
 				</ng-container>
-
-			  <!-- Weight Column -->
-			  <ng-container matColumnDef="nomcliente">
+	
+			<!-- Weight Column -->
+			<ng-container matColumnDef="nomcliente">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
 				<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
-			  </ng-container>
-
-			  <!-- Symbol Column -->
-			  <ng-container matColumnDef="nomvendedor">
+			</ng-container>
+	
+			<!-- Symbol Column -->
+			<ng-container matColumnDef="nomvendedor">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
 				<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
-			  </ng-container>
-
-			  <!-- Symbol Column -->
-			  <ng-container matColumnDef="totalmontobruto">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Total</th>
-				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto | currency:" "}} </td>
-			  </ng-container>
-
-				  <!-- Symbol Column
-			  <ng-container matColumnDef="totalCnt">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Cantidad </th>
-				<td mat-cell *matCellDef="let element"> {{element.totalCnt| currency:" ":'symbol':'2.0'}} </td>
-			  </ng-container>-->
-
-			  <!-- Symbol Column -->
-			  <ng-container matColumnDef="totalmontodescuento">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;" mat-sort-header> Descuento </th>
-				<td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | currency:" "}} </td>
-			  </ng-container>
-
-			  <!-- Symbol Column -->
-			  <ng-container matColumnDef="totalmontoimpuesto">
-				  <th mat-header-cell *matHeaderCellDef style="text-align: right;" mat-sort-header> Impuesto </th>
-				  <td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
-			  </ng-container>
-
-
-
-			  <!-- Symbol Column -->
-			  <ng-container matColumnDef="totalmontoneto">
-				  <th mat-header-cell *matHeaderCellDef mat-sort-header> Total</th>
-				  <td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
-			  </ng-container>
-
+			</ng-container>
+	
+			<!-- Symbol Column -->
+				<ng-container matColumnDef="totalmontobruto">
+					<th mat-header-cell *matHeaderCellDef style="text-align: right;">Sub Total</th>
+					<td mat-cell *matCellDef="let element"> {{element.totalmontobruto| currency:" "}} </td>
+				</ng-container>
+  
+		  <!-- Symbol Column
+	  <ng-container matColumnDef="totalCnt">
+		<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Cantidad </th>
+		<td mat-cell *matCellDef="let element"> {{element.totalCnt}} </td>
+	  </ng-container>-->
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontoimpuesto">
+		  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontodescuento">
+		  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Descuento </th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | currency:" "}} </td>
+	  </ng-container>
+  
+	  <!-- Symbol Column -->
+	  <ng-container matColumnDef="totalmontoneto">
+		  <th mat-header-cell *matHeaderCellDef>Total</th>
+		  <td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
+	  </ng-container>
 			  <!-- Symbol Column -->
 			  <ng-container matColumnDef="Opc">
 				  <th mat-header-cell *matHeaderCellDef></th>

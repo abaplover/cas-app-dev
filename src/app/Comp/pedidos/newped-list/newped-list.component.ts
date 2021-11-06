@@ -31,7 +31,7 @@ export class NewpedListComponent implements OnInit {
   public mrechazoList: Mrechazo[]; //arreglo vacio
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['uid', 'Fecha', 'Status', 'Cliente', 'Vendedor', 'Subtotal', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
 
 
   constructor(

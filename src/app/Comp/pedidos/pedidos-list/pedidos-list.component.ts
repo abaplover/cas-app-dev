@@ -50,8 +50,7 @@ export class PedidosListComponent implements OnInit {
   //@ViewChild('nav') ngnav;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['uid', 'Fecha', 'Status', 'Cliente', 'Vendedor', 'Subtotal', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];    
- 
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc']; 
   constructor(
     public pedidoService: PedidoService, 
     private toastr: ToastrService,

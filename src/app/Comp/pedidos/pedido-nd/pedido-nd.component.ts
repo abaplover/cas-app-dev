@@ -56,7 +56,7 @@ export class PedidoNdComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['uid', 'Fecha', 'Status', 'Cliente', 'Vendedor', 'Subtotal', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto','totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
   
   pedidoVer_ = {} as Pedido;
   //PARA EL LISTADO DE PEDIDOS
