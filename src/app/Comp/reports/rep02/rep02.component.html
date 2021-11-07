@@ -94,6 +94,26 @@
 									</mat-form-field>
 								</div>
 							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Status</mat-label>
+										<mat-select value=selected
+											name="status"
+											[(ngModel)]="this.staTus"
+											
+										>
+
+											<mat-option value=""></mat-option>
+											<mat-option value="ACTIVO">ACTIVO</mat-option>
+											<mat-option value="FACTURADO">FACTURADO</mat-option>
+											<mat-option value="DESPACHADO">DESPACHADO</mat-option>
+											<mat-option value="ENTREGADO">ENTREGADO</mat-option>
+											<mat-option value="ELIMINADO">ELIMINADO</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div>
 						</div>
 		
 						<div class="row">
@@ -149,7 +169,7 @@
 				<th>Motivo de Rechazo</th>
 				<th>Sub total</th>
 				<th>Descuento</th>
-				<th>Impuesto</th>
+				<!--th>Impuesto</th-->
 				<th>Total</th>
 			  </tr>
 			</thead>
@@ -160,7 +180,7 @@
 						{{p.idpedido}}
 					</a>
 				</td>
-				<td>{{p.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a'}}</td>
+				<td>{{p.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
 				<td>{{p.idcliente}}</td>
 				<td>{{p.nomcliente}}</td>
 				<td>{{p.idvendedor}}</td>
@@ -168,7 +188,7 @@
 				<td>{{p.motivorechazo}}</td>
 				<td>{{p.totalmontobruto | currency:" "}}</td>
 				<td>{{p.totalmontodescuento | currency:" "}}</td>
-				<td>{{p.totalmontoimpuesto | currency:" "}}</td>
+				<!--<td>{{p.totalmontoimpuesto | currency:" "}}</td-->
 				<td>{{p.totalmontoneto | currency:" "}}</td>
 			  </tr>
 			</tbody>

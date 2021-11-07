@@ -131,8 +131,8 @@ export class Rep04Component implements OnInit {
           q = q.where("status", "in", this.staTus)
         }
       } 
-      if (typeof this.transporte =="undefined" || this.transporte ==null){}else{
-        q = q.where("transporte", "==", this.transporte)
+      if (typeof this.transporte =="undefined" || this.transporte =="null" || this.transporte ==null){}else{
+        q = q.where("transporte", "in", this.transporte)
       }
       if (typeof this.codCli =="undefined" || this.codCli == null){}else{
         q = q.where("idcliente", "==", this.codCli)

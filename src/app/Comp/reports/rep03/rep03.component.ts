@@ -27,7 +27,7 @@ export class Rep03Component implements OnInit {
   hasT: Date;
   staTus: any;
   codCli: string;
-  codVen: string;
+  codVen: any;
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
 
@@ -152,8 +152,8 @@ export class Rep03Component implements OnInit {
       if (typeof this.codCli =="undefined" || this.codCli == null){}else{
         q = q.where("idcliente", "==", this.codCli)
       }
-      if (typeof this.codVen =="undefined" || this.codVen == null){}else{
-        q = q.where("nomvendedor", "==", this.codVen)
+      if (typeof this.codVen =="undefined" || this.codVen =="null" || this.codVen == null){}else{
+        q = q.where("nomvendedor", "in", this.codVen)
       }   
   
       return q;

@@ -48,7 +48,7 @@ export class PedidosListComponent implements OnInit {
   dataSource: any;
 
   //@ViewChild('nav') ngnav;
-  @ViewChild('paginator') paginator: MatPaginator;
+  //@ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc']; 
   constructor(
@@ -67,7 +67,7 @@ export class PedidosListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      //this.dataSource.paginator = this.paginator;
     })
   }
 

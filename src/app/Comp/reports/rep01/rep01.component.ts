@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { CpagoService } from '../../../services/cpago.service';
@@ -16,6 +16,7 @@ import { stringify } from '@angular/compiler/src/util';
 import * as firebase from 'firebase';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
+import { DataTableDirective } from 'angular-datatables';
 //declare const $;
 
 @Component({
@@ -24,6 +25,10 @@ import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.compo
   styleUrls: ['./rep01.component.css']
 })
 export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
+
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+
   maxDated: Date;
   maxDateh: Date;
   minDateh: Date;
@@ -35,45 +40,48 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   conPag: any;
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
+  totalRegistro: number = 0;
+  totalBruto : number = 0;
+  totalDescuento: number = 0;
+  totalNeto : number = 0;
 
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
   public Ped_: Pedido[]; //arreglo vacio
-  
+
 
   //data table
   dtOptions: any = {};
   //dtOptions: DataTables.Settings = {};
-  dtTrigger= new Subject<any>();
+  dtTrigger = new Subject<any>();
   data: any;
   //-----------------------------------------------------------
 
 
 
   constructor
-  (
-    public clienteS: ClientService,
-    public vendedorS: VendedorService,
-    public cpagoS: CpagoService,
-    public pedidoS: PedidoService,
-    private http: HttpClient,
-    private dialogo: MatDialog,
-  ) 
-  {
-        //data table
-        this.dtOptions = {
-          pagingType: 'full_numbers',
-          pageLength: 30,
-          language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
-          },
-          processing: true,
-          dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        };
+    (
+      public clienteS: ClientService,
+      public vendedorS: VendedorService,
+      public cpagoS: CpagoService,
+      public pedidoS: PedidoService,
+      private http: HttpClient,
+      private dialogo: MatDialog,
+  ) {
+    //data table
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 999,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+      },
+      processing: true,
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    };
   }//constructor
 
   ngOnInit(): void {
@@ -84,23 +92,23 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.maxDateh = new Date(currentYear, currentm, currentd);
     this.minDateh = new Date(currentYear, currentm, currentd);
 
-    this.clienteS.getClients().valueChanges().subscribe(cs =>{
+    this.clienteS.getClients().valueChanges().subscribe(cs => {
       this.clienteList = cs;
     })
 
-    this.vendedorS.getVendedors().valueChanges().subscribe(vs =>{
+    this.vendedorS.getVendedors().valueChanges().subscribe(vs => {
       this.vendedorList = vs;
     })
 
-    this.cpagoS.getCpagos().valueChanges().subscribe(cp =>{
+    this.cpagoS.getCpagos().valueChanges().subscribe(cp => {
       this.cpagoList = cp;
     })
-   // this.dtTrigger.next(); 
+    // this.dtTrigger.next(); 
 
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    //this.dtTrigger.next();
+    this.dtTrigger.next();
   }
 
   ngOnDestroy(): void {
@@ -110,110 +118,128 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
 
 
   public orgValueChange(event): void {
-    if (event!=""){
+    if (event != "") {
       this.minDateh = new Date(event.value);
     }
   }//orgValueChange
-  regresar(){
+  regresar() {
     //this.Ped_ = [];
-    this.opcrep01=false;
+    this.opcrep01 = false;
+    //this.rerender(); 
   }
 
-  onBookChange(event)
-  {
-      if (event.value == ""){
-        //console.log('vacio',event.value);
-      }else
-      {
-        //console.log(event.value);
-      }
+  onBookChange(event) {
+    if (event.value == "") {
+      //console.log('vacio',event.value);
+    } else {
+      //console.log(event.value);
+    }
   }
-  onSubmitSearch(pf?: NgForm){
+  onSubmitSearch(pf?: NgForm) {
     let query: any;
     let hora = new Date().getHours();
-    hora = 24-hora;
-    this.hasT.setHours(new Date().getHours()+hora-1);
+    hora = 24 - hora;
+    this.hasT.setHours(new Date().getHours() + hora - 1);
 
-    query = (ref: CollectionReference)=>{
-       let q = ref.where("fechapedido", ">=", this.desD)
-      .where("fechapedido", "<=", this.hasT)
-      .orderBy("fechapedido", "desc")
-      .orderBy("creado", "desc")
-      .limit(5000)
+    query = (ref: CollectionReference) => {
+      let q = ref.where("fechapedido", ">=", this.desD)
+        .where("fechapedido", "<=", this.hasT)
+        .orderBy("fechapedido", "desc")
+        .orderBy("creado", "desc")
+        .limit(5000)
 
-      if (typeof this.codCli =="undefined" || this.codCli == null){}else{
+      if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
         q = q.where("idcliente", "==", this.codCli)
       }
-      if (typeof this.staTus =="undefined" || this.staTus ==null){}else{
+      if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
         q = q.where("status", "==", this.staTus)
       }
-      if (typeof this.codVen =="undefined" || this.codVen == null){}else{
+      if (typeof this.codVen == "undefined" || this.codVen == null) { } else {
         q = q.where("nomvendedor", "==", this.codVen)
-      }   
-      if (typeof this.conPag =="undefined" || this.conPag =="null" || this.conPag == null){}else{
-        if (this.conPag == ""){}else{
+      }
+      if (typeof this.conPag == "undefined" || this.conPag == "null" || this.conPag == null) { } else {
+        if (this.conPag == "") { } else {
           q = q.where("condiciondepago", "in", this.conPag)
         }
-      }   
-console.log(q)
+      }
+      console.log(q)
       return q;
     }
-
+    //$('#dtable').DataTable().destroy();
     //this.Ped_ = [];
-    this.pedidoS.getPedidosRep01(query).subscribe(ped =>{
+    this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       this.Ped_ = ped;
       this.data = this.Ped_;
-      this.dtTrigger.next();
-    })
+      //this.dtTrigger.next();
     
-    $('#dtable').DataTable().destroy();
+    this.totalRegistro = this.Ped_.length;
+    this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function(a,b)
+    {
+      return a + b;
+    });
 
-    
-    this.opcrep01=true;
-    //this.data.destroy();
-    //this.dtOptions.destroy();
-    //if(pf != null) pf.reset();
+    this.totalDescuento = this.Ped_.map(a => a.totalmontodescuento).reduce(function(a,b)
+    {
+      return a + b;
+    });
+    console.log(this.totalDescuento);
+    this.totalNeto = this.Ped_.map(a => a.totalmontoneto).reduce(function(a,b)
+    {
+      return a + b;
+    });
+    })
+
+    this.opcrep01 = true;
 
   }//onSubmitSearch
 
-  timestampConvert(fec){
-    let dateObject = new Date(fec.seconds*1000);
-    let mes_ = dateObject.getMonth()+1;
+  timestampConvert(fec) {
+    let dateObject = new Date(fec.seconds * 1000);
+    let mes_ = dateObject.getMonth() + 1;
     let ano_ = dateObject.getFullYear();
     let dia_ = dateObject.getDate();
     return dateObject;
   }//timestampConvert
 
-  verdetalles(ped){
+  verdetalles(ped) {
     const dialogConfig = new MatDialogConfig;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "100%";
-  
-    this.pedidoVer_ =  Object.assign({}, ped);
+
+    this.pedidoVer_ = Object.assign({}, ped);
     this.pedidoVer_.fechapedido = this.timestampConvert(ped.fechapedido);
-    
-    if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura); 
+
+    if (ped.ffactura !== null && typeof ped.ffactura != "undefined") {
+      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura);
     }
-    if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho); 
+    if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined") {
+      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho);
     }
-    if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago); 
+    if (ped.fpago !== null && typeof ped.fpago != "undefined") {
+      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago);
     }
-    if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega); 
+    if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined") {
+      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega);
     }
-    if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega); 
+    if (ped.fentrega !== null && typeof ped.fentrega != "undefined") {
+      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega);
     }
-  
+
     dialogConfig.data = {
       pedidoShow: Object.assign({}, this.pedidoVer_)
     };
-  
-     this.dialogo.open(PedidoShowComponent,dialogConfig);
+
+    this.dialogo.open(PedidoShowComponent, dialogConfig);
   }//verdetalles
 
+  rerender(): void {
+     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    })
+    $('#dtable').DataTable().destroy();
+    //this.dtTrigger.next();
+    
+  }
 
 }

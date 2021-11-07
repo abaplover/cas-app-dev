@@ -51,7 +51,7 @@
 											name="status"
 											[(ngModel)]="this.staTus"
 											
-										>
+										>												
 											<mat-option value="DESPACHADO">DESPACHADO</mat-option>
 											<mat-option value="ENTREGADO">ENTREGADO</mat-option>
 										</mat-select>
@@ -67,7 +67,7 @@
 
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Transporte</mat-label>
-											<mat-select value=selected 
+											<mat-select value=selected multiple
 												name="conPag"
 												[(ngModel)]="this.transporte"
 												
@@ -177,7 +177,7 @@
 				<th>Status</th>
 				<th>Sub total</th>
 				<th>Descuento</th>
-				<th>Impuesto</th>
+				<!--th>Impuesto</th-->
 				<th>Total</th>
 			  </tr>
 			</thead>
@@ -188,7 +188,7 @@
 						{{p.idpedido}}
 					</a>
 				</td>
-				<td>{{p.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a'}}</td>
+				<td>{{p.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
 				<td>{{p.idcliente}}</td>
 				<td>{{p.nomcliente}}</td>
 				<td>{{p.idvendedor}}</td>
@@ -197,7 +197,7 @@
 				<td>{{p.status}}</td>
 				<td>{{p.totalmontobruto | currency:" "}}</td>
 				<td>{{p.totalmontodescuento | currency:" "}}</td>
-				<td>{{p.totalmontoimpuesto | currency:" "}}</td>
+				<!--td>{{p.totalmontoimpuesto | currency:" "}}</td-->
 				<td>{{p.totalmontoneto | currency:" "}}</td>
 			  </tr>
 			</tbody>

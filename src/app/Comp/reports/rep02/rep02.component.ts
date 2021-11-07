@@ -135,6 +135,9 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
       }
       if (typeof this.codVen =="undefined" || this.codVen == null){}else{
         q = q.where("nomvendedor", "==", this.codVen)
+      }
+      if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
+        q = q.where("status", "==", this.staTus)
       }   
       if (typeof this.mrechazo =="undefined" || this.mrechazo =="null" || this.mrechazo == null){}else{
         if (this.mrechazo == ""){}else{
