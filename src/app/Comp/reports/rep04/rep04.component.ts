@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit,ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { TransporteService } from '../../../services/transporte.service';
@@ -14,6 +14,7 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { CollectionReference } from '@angular/fire/firestore';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
+import { DataTableDirective } from 'angular-datatables';
 //declare const $;
 
 @Component({
@@ -22,6 +23,11 @@ import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.compo
   styleUrls: ['./rep04.component.css']
 })
 export class Rep04Component implements OnInit {
+  @ViewChild(DataTableDirective, { static: true })
+  dtElement: DataTableDirective;
+
+  
+  
   maxDated: Date;
   maxDateh: Date;
   minDateh: Date;
@@ -54,7 +60,8 @@ export class Rep04Component implements OnInit {
     public transporteS: TransporteService,
     public pedidoS: PedidoService,
     private http: HttpClient,
-    private dialogo: MatDialog
+    private dialogo: MatDialog,
+    private chRes: ChangeDetectorRef
   ) 
   {
         //data table
@@ -112,6 +119,7 @@ export class Rep04Component implements OnInit {
   }//orgValueChange
   regresar(){
     this.opcrep01=false;
+    this.rerender();
   }
   onSubmitSearch(pf?: NgForm){
     let query: any;
@@ -148,10 +156,13 @@ export class Rep04Component implements OnInit {
     this.pedidoS.getPedidosRep04(query).subscribe(ped =>{
       this.Ped_ = ped;
       this.data = this.Ped_;
+
+      this.chRes.detectChanges();
+
       this.dtTrigger.next();
     })
-    
-    $('#dtable').DataTable().destroy();
+    //$('#dtable').DataTable().clear().destroy();
+    //$('#dtable').DataTable().destroy();
 
     //this.data.destroy();
     this.opcrep01=true;
@@ -199,5 +210,15 @@ export class Rep04Component implements OnInit {
   
      this.dialogo.open(PedidoShowComponent,dialogConfig);
   }//verdetalles
+
+  rerender(): void {
+   
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      console.log('Destroying');
+      dtInstance.clear().destroy();
+      console.log('Re-rendering');
+     // this.dtTrigger.next();
+    })
+  }
   
 }

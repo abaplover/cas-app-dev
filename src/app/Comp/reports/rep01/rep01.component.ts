@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { CpagoService } from '../../../services/cpago.service';
@@ -25,9 +25,9 @@ import { DataTableDirective } from 'angular-datatables';
   styleUrls: ['./rep01.component.css']
 })
 export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
-
-  @ViewChild(DataTableDirective, { static: false })
+  @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
+
 
   maxDated: Date;
   maxDateh: Date;
@@ -41,9 +41,9 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
   totalRegistro: number = 0;
-  totalBruto : number = 0;
+  totalBruto: number = 0;
   totalDescuento: number = 0;
-  totalNeto : number = 0;
+  totalNeto: number = 0;
 
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -68,11 +68,13 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       public pedidoS: PedidoService,
       private http: HttpClient,
       private dialogo: MatDialog,
+      public chRes: ChangeDetectorRef
   ) {
     //data table
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 999,
+      pageLength: 30,
+      ordering : true,
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
       },
@@ -108,7 +110,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
+    //this.dtTrigger.next();
   }
 
   ngOnDestroy(): void {
@@ -125,7 +127,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   regresar() {
     //this.Ped_ = [];
     this.opcrep01 = false;
-    //this.rerender(); 
+    this.rerender();
   }
 
   onBookChange(event) {
@@ -165,31 +167,39 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       console.log(q)
       return q;
     }
-    //$('#dtable').DataTable().destroy();
+
     //this.Ped_ = [];
+    
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       this.Ped_ = ped;
+      
       this.data = this.Ped_;
-      //this.dtTrigger.next();
-    
-    this.totalRegistro = this.Ped_.length;
-    this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function(a,b)
-    {
-      return a + b;
-    });
 
-    this.totalDescuento = this.Ped_.map(a => a.totalmontodescuento).reduce(function(a,b)
-    {
-      return a + b;
-    });
-    console.log(this.totalDescuento);
-    this.totalNeto = this.Ped_.map(a => a.totalmontoneto).reduce(function(a,b)
-    {
-      return a + b;
-    });
+      this.chRes.detectChanges();
+      //$('#dtable').DataTable().clear().destroy();
+      this.dtTrigger.next();
+      this.totalRegistro = this.Ped_.length;
+      this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function (a, b) {
+        return a + b;
+      });
+      this.totalDescuento = this.Ped_.map(a => a.totalmontodescuento).reduce(function (a, b) {
+        return a + b;
+      });
+      
+      this.totalNeto = this.Ped_.map(a => a.totalmontoneto).reduce(function (a, b) {
+        return a + b;
+      });
+      //
+      	
+      
     })
+    //$('#dtable').DataTable().destroy();
+
 
     this.opcrep01 = true;
+    //this.data.destroy();
+    //this.dtOptions.destroy();
+    //if(pf != null) pf.reset();
 
   }//onSubmitSearch
 
@@ -231,15 +241,19 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
 
     this.dialogo.open(PedidoShowComponent, dialogConfig);
   }//verdetalles
-
   rerender(): void {
-     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTrigger.next();
+   
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      console.log('Destroying');
+      dtInstance.clear().destroy();
+      console.log('Re-rendering');
+     // this.dtTrigger.next();
     })
-    $('#dtable').DataTable().destroy();
+
+    //$('#dtable').DataTable().clear().destroy();
     //this.dtTrigger.next();
-    
+
+
   }
 
 }
