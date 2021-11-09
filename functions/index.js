@@ -23,7 +23,7 @@ const transport = nodemailer.createTransport({
     port: 465,
     secure: true,
 	auth: {
-		user: "ventas@ricamar.com.ve",
+		user: "cas@ricamar.com.ve",
 		pass: "Ricamar2016#"
 	}
 	//==========================1============================

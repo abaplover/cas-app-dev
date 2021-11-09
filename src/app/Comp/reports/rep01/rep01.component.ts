@@ -86,6 +86,11 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     };
   }//constructor
 
+  roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
+
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
@@ -105,7 +110,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.cpagoS.getCpagos().valueChanges().subscribe(cp => {
       this.cpagoList = cp;
     })
-    // this.dtTrigger.next(); 
+    // this.dtTrigger.next();
 
   }//ngOnInit
 
@@ -169,10 +174,10 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
 
     //this.Ped_ = [];
-    
+
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       this.Ped_ = ped;
-      
+
       this.data = this.Ped_;
 
       this.chRes.detectChanges();
@@ -182,16 +187,19 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function (a, b) {
         return a + b;
       });
+      this.totalBruto = this.roundTo(this.totalBruto,2);
       this.totalDescuento = this.Ped_.map(a => a.totalmontodescuento).reduce(function (a, b) {
         return a + b;
       });
-      
+      this.totalDescuento = this.roundTo(this.totalDescuento,2);
+
       this.totalNeto = this.Ped_.map(a => a.totalmontoneto).reduce(function (a, b) {
         return a + b;
       });
+      this.totalNeto = this.roundTo(this.totalNeto,2);
       //
-      	
-      
+
+
     })
     //$('#dtable').DataTable().destroy();
 
@@ -242,7 +250,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.dialogo.open(PedidoShowComponent, dialogConfig);
   }//verdetalles
   rerender(): void {
-   
+
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       console.log('Destroying');
       dtInstance.clear().destroy();
