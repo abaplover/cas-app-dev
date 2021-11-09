@@ -8,7 +8,7 @@ const db = admin.firestore();
 //     if (!doc.exists) {
 //         console.log("Error leyendo documento de documento");
 //     } else {
-//         // Aquí puedes leer los documentos 
+//         // Aquí puedes leer los documentos
 //     }
 // })
 
@@ -21,9 +21,9 @@ const transport = nodemailer.createTransport({
 	//==========================1============================
 	host: 'smtpout.secureserver.net',
     port: 465,
-    secure: true, 
+    secure: true,
 	auth: {
-		user: "cas@ricamar.com.ve",
+		user: "ventas@ricamar.com.ve",
 		pass: "Ricamar2016#"
 	}
 	//==========================1============================
@@ -35,7 +35,7 @@ const transport = nodemailer.createTransport({
 
 		// host: 'smtp.gmail.com',
 		// port: 465,
-		// secure: true, 
+		// secure: true,
 		// auth: {
 		// 	user: "ricamarcloud@gmail.com",
 		// 	pass: "ouqffxswjaulvywz"
@@ -45,7 +45,7 @@ const transport = nodemailer.createTransport({
 	//==========================3============================
 	// host: 'smtp.gmail.com',
     // port: 465,
-    // secure: true, 
+    // secure: true,
 	// auth: {
 	// 	user: "yhonatandcarruido@gmail.com",
 	// 	pass: "wswgubuyeffbqasd"
@@ -105,7 +105,7 @@ exports.Pedmail = functions.firestore.document("pedidos/{id}").onCreate((snap,co
 		month[9] = "10";
 		month[10] = "11";
 		month[11] = "12";
-	
+
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
 		horas [0]  = "12:" + min_ + " PM";
@@ -137,12 +137,12 @@ exports.Pedmail = functions.firestore.document("pedidos/{id}").onCreate((snap,co
     let ano_ = dateObjectT.getFullYear();
 	let dia_ = dateObjectT.getDate();
 	let hor_ = horas[dateObjectT.getHours()];
-	
+
 	let seg_ = dateObjectT.toUTCString();
 
 	//const fped = new Date(dateObjectT).toLocaleString('es-VE');
 	const fped = dia_+'/'+mes_+'/'+ano_+' '+hor_;
-	
+
 	var mailOptions = {
 		html: 'Embedded image: <img src="cid:apollcasapp1550raf"/>',
 		attachments: [
@@ -159,7 +159,7 @@ exports.Pedmail = functions.firestore.document("pedidos/{id}").onCreate((snap,co
 
 //CUANDO SE MODIFICA UN PEDIDO
 exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((change,context)=>{
-	
+
 	let saludo_ = "Gracias por su compra.";
 	const newValue = change.after.data();
 	const email = newValue.email;
@@ -208,7 +208,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	// set getTime=milisegundos - (diferencia horarioa = 240 min) * 60 * 1000 para convertirlo en milisegundos
 	let dateObjectT = new Date(newValue.fechapedido.seconds*1000);
 	dateObjectT.setTime(dateObjectT.getTime() - 240 * 60 * 1000);
-	
+
 	var month 	 = new Array();
 		// month[0] = "Enero";
 		// month[1] = "Febrero";
@@ -234,7 +234,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		month[9]  = "10";
 		month[10] = "11";
 		month[11] = "12";
-	
+
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
 		horas [0]  = "12:" + min_ + " PM";
@@ -361,7 +361,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	}else{
 		enviar = false;
 		return false;
-	}	
+	}
 }) //PedmailUp
 
 //CUANDO SE MODIFICA UNA COBRO
@@ -381,10 +381,10 @@ exports.CobroemailUp = functions.firestore.document("cobros/{id}").onUpdate((cha
 	asunto = "Recordatorio de Pago, Pedido N° "+ idpedido_;
 	bodytxt = "Estimado " + name + ", usted presenta un pago pendiente correspondiente al pedido N° "+idpedido_ + ", con nota de entrega/factura N° " + nfactura_;
 	let enviar = false;
-	
+
 	let dateObjectT = new Date(fvto_*1000);
 	dateObjectT.setTime(dateObjectT.getTime() - 240 * 60 * 1000);
-	
+
 	var month 	  = new Array();
 		month[0]  = "01";
 		month[1]  = "02";
@@ -398,7 +398,7 @@ exports.CobroemailUp = functions.firestore.document("cobros/{id}").onUpdate((cha
 		month[9]  = "10";
 		month[10] = "11";
 		month[11] = "12";
-	
+
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
 	horas [0]  = "12:" + min_ + " PM";
@@ -454,7 +454,7 @@ exports.CobroemailUp = functions.firestore.document("cobros/{id}").onUpdate((cha
 	}else{
 		enviar = false;
 		return false;
-	}	
+	}
 }) //CobroemailUp
 
 
@@ -481,7 +481,7 @@ exports.Avemail = functions.firestore.document("averias/{id}").onCreate((snap,co
 	const idaveria_ = snap.data().idaveria;
 	let bodyFecha_="";
 	let txta = "";
-	
+
 	let txtr = ""
 	let strtxtr = ""
 	let txtc = "";
@@ -514,7 +514,7 @@ exports.Avemail = functions.firestore.document("averias/{id}").onCreate((snap,co
 		month[9] = "10";
 		month[10] = "11";
 		month[11] = "12";
-	
+
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
 		horas [0]  = "12:" + min_ + " PM";
@@ -546,12 +546,12 @@ exports.Avemail = functions.firestore.document("averias/{id}").onCreate((snap,co
     let ano_ = dateObjectT.getFullYear();
 	let dia_ = dateObjectT.getDate();
 	let hor_ = horas[dateObjectT.getHours()];
-	
+
 	let seg_ = dateObjectT.toUTCString();
 
 	//const fped = new Date(dateObjectT).toLocaleString('es-VE');
 	const fave = dia_+'/'+mes_+'/'+ano_+' '+hor_;
-	
+
 	var mailOptions = {
 		html: 'Embedded image: <img src="cid:apollcasapp1550raf"/>',
 		attachments: [
@@ -567,9 +567,9 @@ exports.Avemail = functions.firestore.document("averias/{id}").onCreate((snap,co
 });//Averiasmail
 
 
-//CUANDO SE MODIFICA UNA AVERIA 
+//CUANDO SE MODIFICA UNA AVERIA
 exports.AvemailUp = functions.firestore.document("averias/{id}").onUpdate((change,context)=>{
-	
+
 	let saludo_ = "Resolución de avería";
 	const newValue = change.after.data();
 	const email = newValue.email;
@@ -630,7 +630,7 @@ exports.AvemailUp = functions.firestore.document("averias/{id}").onUpdate((chang
 
 	let dateObjectT = new Date(newValue.fechaaveria.seconds*1000);
 	dateObjectT.setTime(dateObjectT.getTime() - 240 * 60 * 1000);
-	
+
 	var month 	 = new Array();
 		month[0]  = "01";
 		month[1]  = "02";
@@ -644,7 +644,7 @@ exports.AvemailUp = functions.firestore.document("averias/{id}").onUpdate((chang
 		month[9]  = "10";
 		month[10] = "11";
 		month[11] = "12";
-	
+
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
 		horas [0]  = "12:" + min_ + " PM";
@@ -682,7 +682,7 @@ exports.AvemailUp = functions.firestore.document("averias/{id}").onUpdate((chang
 	let fpmes_;
 	let fpano_;
 	let fpdia_;
-	
+
 	var mailOptions = {
 		html: 'Embedded image: <img src="cid:apollcasapp1550raf"/>',
 		attachments: [
@@ -711,7 +711,7 @@ exports.AvemailUp = functions.firestore.document("averias/{id}").onUpdate((chang
 	}else{
 		enviar = false;
 		return false;
-	}	
+	}
 }) //AvemailUp
 
 
@@ -738,7 +738,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto} ${idpedido_}`,
 		html: 	`
-			
+
 
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml"><head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -882,13 +882,13 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 									  <tbody>
 										  <tr>
 											  <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="left">
-											  
+
 											  </td>
 										  </tr>
-										  ${companyBkl_}  
+										  ${companyBkl_}
 									  </tbody>
 								  </table>
-								  
+
 								  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="1995753e-0c64-4075-b4ad-321980b82dfe">
 									  <tbody>
 										<tr>
@@ -937,8 +937,8 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 			</tr>
 		  </tbody>
 	  </table>
-	
-	
+
+
 	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
 		  <tbody>
 			  <tr>
@@ -1020,13 +1020,13 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-   
+
 	  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:20px 20px 0px 30px;" bgcolor="#FFFFFF">
 		  <tbody>
-		
+
 		  </tbody>
 	  </table>
-	
+
 	  <table class="module" role="module" data-type="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="f7373f10-9ba4-4ca7-9a2e-1a2ba700deb9.1">
 		  <tbody>
 			  <tr>
@@ -1035,7 +1035,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 						  <tbody>
 							  <tr>
 								  <td style="padding:0px 0px 3px 0px;" bgcolor="E7E7E7">
-								  
+
 								  </td>
 							  </tr>
 						  </tbody>
@@ -1044,7 +1044,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-	  
+
 	  <!--<table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="264ee24b-c2b0-457c-a9c1-d465879f9935.1">
 		  <tbody>
 			  <tr>
@@ -1056,7 +1056,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>-->
-	  
+
 
 	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="264ee24b-c2b0-457c-a9c1-d465879f9935.1">
 		  <tbody>
@@ -1077,7 +1077,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 										<th style="text-align:right;" scope="row">Total:</th>
 										<td style="text-align:right;width:100px;"><span style="color: #0055ff; font-size: 18px; font-family: inherit">${new Intl.NumberFormat("en-US").format(totalmontoneto_.toFixed(2))}</span></td>
 									</tr>
-							
+
 								</tbody>
 					    	</table>
 					    </div>
@@ -1085,7 +1085,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-	
+
 
 
 	  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:0px 20px 0px 20px;" bgcolor="#0055ff">
@@ -1095,7 +1095,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 		  </tr>
 	  </tbody>
   </table>
-  
+
 	</td>
 	</tr>
 	</tbody>
@@ -1130,7 +1130,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 
 
 
-		
+
 				`,
 		attachments:[
 						{
@@ -1141,18 +1141,18 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 					//,{
 					// 	filename: 'logimprmcasappydctsystem.PNG',
 					// 	path: './img/logimprmcasappydctsystem.PNG',
-					// 	cid: 'logimprmcasappydctsystem' 
+					// 	cid: 'logimprmcasappydctsystem'
 					// },
 					// {
 					// 	filename: 'logimprmcasappydctsystem2.PNG',
 					// 	path: './img/logimprmcasappydctsystem2.PNG',
-					// 	cid: 'logimprmcasappydctsystem2' 
+					// 	cid: 'logimprmcasappydctsystem2'
 					// }
-					
+
 
 				]
 
-		
+
 	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
 }//sendpedidomail
 
@@ -1165,7 +1165,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto}`,
 		html: 	`
-			
+
 
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml"><head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -1309,13 +1309,13 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 									  <tbody>
 										  <tr>
 											  <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="left">
-											  
+
 											  </td>
 										  </tr>
-										 <!--Company Blok-->  
+										 <!--Company Blok-->
 									  </tbody>
 								  </table>
-								  
+
 								  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="1995753e-0c64-4075-b4ad-321980b82dfe">
 									  <tbody></tbody>
 									  ${companyhead_}
@@ -1326,7 +1326,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 												  <td style="padding:18px 20px 20px 0px; line-height:24px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content">
 													  <div>
 														  <div style="font-family: inherit; text-align: inherit">
-															  
+
 														  </div>
 													  <div></div>
 													  </div>
@@ -1342,8 +1342,8 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 			</tr>
 		  </tbody>
 	  </table>
-	
-	
+
+
 	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
 		  <tbody>
 			  <tr>
@@ -1393,7 +1393,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 			  </tr>
 		  </tbody>
 	  </table>
-	  
+
 	<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:0px 20px 0px 20px;" bgcolor="#0055ff">
 	  <tbody>
 		  <tr role="module-content">
@@ -1401,7 +1401,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 		  </tr>
 	  </tbody>
   	</table>
-  
+
 	</td>
 	</tr>
 	</tbody>
@@ -1436,7 +1436,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 
 
 
-		
+
 				`,
 		attachments:[
 						{
@@ -1447,18 +1447,18 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 					//,{
 					// 	filename: 'logimprmcasappydctsystem.PNG',
 					// 	path: './img/logimprmcasappydctsystem.PNG',
-					// 	cid: 'logimprmcasappydctsystem' 
+					// 	cid: 'logimprmcasappydctsystem'
 					// },
 					// {
 					// 	filename: 'logimprmcasappydctsystem2.PNG',
 					// 	path: './img/logimprmcasappydctsystem2.PNG',
-					// 	cid: 'logimprmcasappydctsystem2' 
+					// 	cid: 'logimprmcasappydctsystem2'
 					// }
-					
+
 
 				]
 
-		
+
 	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
 }//sendcobromail
 
@@ -1471,7 +1471,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto} ${idaveria_}`,
 		html: 	`
-			
+
 
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml"><head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -1615,13 +1615,13 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 									  <tbody>
 										  <tr>
 											  <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="left">
-											  
+
 											  </td>
 										  </tr>
-										  ${companyBkl_}  
+										  ${companyBkl_}
 									  </tbody>
 								  </table>
-								  
+
 								  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="1995753e-0c64-4075-b4ad-321980b82dfe">
 									  <tbody>
 										<tr>
@@ -1670,8 +1670,8 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 			</tr>
 		  </tbody>
 	  </table>
-	
-	
+
+
 	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
 		  <tbody>
 			  <tr>
@@ -1765,13 +1765,13 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-   
+
 	  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:20px 20px 0px 30px;" bgcolor="#FFFFFF">
 		  <tbody>
-		
+
 		  </tbody>
 	  </table>
-	
+
 	  <table class="module" role="module" data-type="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="f7373f10-9ba4-4ca7-9a2e-1a2ba700deb9.1">
 		  <tbody>
 			  <tr>
@@ -1780,7 +1780,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 						  <tbody>
 							  <tr>
 								  <td style="padding:0px 0px 3px 0px;" bgcolor="E7E7E7">
-								  
+
 								  </td>
 							  </tr>
 						  </tbody>
@@ -1789,7 +1789,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-	  
+
 	  <!--<table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="264ee24b-c2b0-457c-a9c1-d465879f9935.1">
 		  <tbody>
 			  <tr>
@@ -1801,7 +1801,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>-->
-	  
+
 
 	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="264ee24b-c2b0-457c-a9c1-d465879f9935.1">
 		  <tbody>
@@ -1821,7 +1821,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 			  </tr>
 		  </tbody>
 	  </table>
-	
+
 
 
 	  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:0px 20px 0px 20px;" bgcolor="#0055ff">
@@ -1831,7 +1831,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 		  </tr>
 	  </tbody>
   </table>
-  
+
 	</td>
 	</tr>
 	</tbody>
@@ -1866,7 +1866,7 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 
 
 
-		
+
 				`,
 		attachments:[
 						{
@@ -1877,17 +1877,17 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 					//,{
 					// 	filename: 'logimprmcasappydctsystem.PNG',
 					// 	path: './img/logimprmcasappydctsystem.PNG',
-					// 	cid: 'logimprmcasappydctsystem' 
+					// 	cid: 'logimprmcasappydctsystem'
 					// },
 					// {
 					// 	filename: 'logimprmcasappydctsystem2.PNG',
 					// 	path: './img/logimprmcasappydctsystem2.PNG',
-					// 	cid: 'logimprmcasappydctsystem2' 
+					// 	cid: 'logimprmcasappydctsystem2'
 					// }
-					
+
 
 				]
 
-		
+
 	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
 }//sendpedidomail
