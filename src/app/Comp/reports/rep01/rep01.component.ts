@@ -44,6 +44,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   totalBruto: number = 0;
   totalDescuento: number = 0;
   totalNeto: number = 0;
+  firstTime: boolean = false;
 
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -52,13 +53,24 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
 
 
   //data table
-  dtOptions: any = {};
+  dtOptions: any = {
+    pagingType: 'full_numbers',
+    pageLength: 30,
+    ordering : true,
+    language: {
+      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+    },
+    processing: true,
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ]
+  };
   //dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
   data: any;
   //-----------------------------------------------------------
-
-
+  //data table
 
   constructor
     (
@@ -70,20 +82,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       private dialogo: MatDialog,
       public chRes: ChangeDetectorRef
   ) {
-    //data table
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 30,
-      ordering : true,
-      language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
-      },
-      processing: true,
-      dom: 'Bfrtip',
-      buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-      ]
-    };
+
   }//constructor
 
   roundTo(num: number, places: number) {
@@ -110,12 +109,14 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.cpagoS.getCpagos().valueChanges().subscribe(cp => {
       this.cpagoList = cp;
     })
+    this.firstTime = true;
     // this.dtTrigger.next();
 
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    //this.dtTrigger.next();
+    this.dtTrigger.next();
+    this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -130,9 +131,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
   }//orgValueChange
   regresar() {
-    //this.Ped_ = [];
+
     this.opcrep01 = false;
-    this.rerender();
   }
 
   onBookChange(event) {
@@ -173,16 +173,10 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       return q;
     }
 
-    //this.Ped_ = [];
-
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
+
       this.Ped_ = ped;
 
-      this.data = this.Ped_;
-
-      this.chRes.detectChanges();
-      //$('#dtable').DataTable().clear().destroy();
-      this.dtTrigger.next();
       this.totalRegistro = this.Ped_.length;
       this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function (a, b) {
         return a + b;
@@ -198,16 +192,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       });
       this.totalNeto = this.roundTo(this.totalNeto,2);
       //
-
-
+      if(!this.firstTime){
+        this.rerender();
+      }
     })
-    //$('#dtable').DataTable().destroy();
-
 
     this.opcrep01 = true;
-    //this.data.destroy();
-    //this.dtOptions.destroy();
-    //if(pf != null) pf.reset();
 
   }//onSubmitSearch
 
@@ -252,16 +242,11 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   rerender(): void {
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      console.log('Destroying');
+
       dtInstance.clear().destroy();
-      console.log('Re-rendering');
-     // this.dtTrigger.next();
+
+      this.dtTrigger.next();
     })
-
-    //$('#dtable').DataTable().clear().destroy();
-    //this.dtTrigger.next();
-
-
   }
 
 }
