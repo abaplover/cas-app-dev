@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit,ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit,ViewChild } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { TransporteService } from '../../../services/transporte.service';
@@ -26,8 +26,8 @@ export class Rep04Component implements OnInit {
   @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
 
-  
-  
+
+
   maxDated: Date;
   maxDateh: Date;
   minDateh: Date;
@@ -39,12 +39,12 @@ export class Rep04Component implements OnInit {
   transporte: any;
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
-
+  firstTime: boolean = false;
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
   public transporteList: Transporte[]; //arreglo vacio
   public Ped_: Pedido[]; //arreglo vacio
-  
+
 
   //data table
   dtOptions: any = {};
@@ -60,9 +60,8 @@ export class Rep04Component implements OnInit {
     public transporteS: TransporteService,
     public pedidoS: PedidoService,
     private http: HttpClient,
-    private dialogo: MatDialog,
-    private chRes: ChangeDetectorRef
-  ) 
+    private dialogo: MatDialog
+  )
   {
         //data table
         this.dtOptions = {
@@ -98,12 +97,13 @@ export class Rep04Component implements OnInit {
     this.transporteS.getTransportes().valueChanges().subscribe(tra =>{
       this.transporteList = tra;
     })
-   // this.dtTrigger.next(); 
+   this.firstTime = true;
 
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    //this.dtTrigger.next();
+    this.dtTrigger.next();
+    this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -127,7 +127,7 @@ export class Rep04Component implements OnInit {
     let hora = new Date().getHours();
     hora = 24-hora;
     this.hasT.setHours(new Date().getHours()+hora-1);
-    
+
     query = (ref: CollectionReference)=>{
        let q = ref.where("fechapedido", ">=", this.desD)
       .where("fechapedido", "<=", this.hasT)
@@ -138,7 +138,7 @@ export class Rep04Component implements OnInit {
         if (this.staTus == ""){}else{
           q = q.where("status", "in", this.staTus)
         }
-      } 
+      }
       if (typeof this.transporte =="undefined" || this.transporte =="null" || this.transporte ==null){}else{
         q = q.where("transporte", "in", this.transporte)
       }
@@ -147,7 +147,7 @@ export class Rep04Component implements OnInit {
       }
       if (typeof this.codVen =="undefined" || this.codVen == null){}else{
         q = q.where("nomvendedor", "==", this.codVen)
-      }   
+      }
 
       return q;
     }
@@ -157,14 +157,12 @@ export class Rep04Component implements OnInit {
       this.Ped_ = ped;
       this.data = this.Ped_;
 
-      this.chRes.detectChanges();
+      if(!this.firstTime){
+        this.rerender();
+      }
 
-      this.dtTrigger.next();
     })
-    //$('#dtable').DataTable().clear().destroy();
-    //$('#dtable').DataTable().destroy();
 
-    //this.data.destroy();
     this.opcrep01=true;
 
     //this.dtOptions.destroy();
@@ -179,46 +177,46 @@ export class Rep04Component implements OnInit {
     let dia_ = dateObject.getDate();
     return dateObject;
   }//timestampConvert
-  
+
   verdetalles(ped){
     const dialogConfig = new MatDialogConfig;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "100%";
-  
+
     this.pedidoVer_ =  Object.assign({}, ped);
     this.pedidoVer_.fechapedido = this.timestampConvert(ped.fechapedido);
-    
+
     if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura); 
+      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura);
     }
     if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho); 
+      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho);
     }
     if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago); 
+      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago);
     }
     if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega); 
+      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega);
     }
     if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega); 
+      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega);
     }
-  
+
     dialogConfig.data = {
       pedidoShow: Object.assign({}, this.pedidoVer_)
     };
-  
+
      this.dialogo.open(PedidoShowComponent,dialogConfig);
   }//verdetalles
 
   rerender(): void {
-   
+
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      console.log('Destroying');
+
       dtInstance.clear().destroy();
-      console.log('Re-rendering');
-     // this.dtTrigger.next();
+
+      this.dtTrigger.next();
     })
   }
-  
+
 }
