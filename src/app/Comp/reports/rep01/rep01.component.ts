@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ChangeDetectorRef, NgModule, InjectionToken, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { CpagoService } from '../../../services/cpago.service';
 import { PedidoService } from 'src/app/services/pedido.service';
-
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Cpago } from '../../../models/cpago';
 import { Client } from '../../../models/client';
 import { Vendedor } from '../../../models/vendedor';
@@ -17,18 +17,24 @@ import * as firebase from 'firebase';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
 import { DataTableDirective } from 'angular-datatables';
+import { AppModule } from 'src/app/app.module';
 //declare const $;
+
+// platformBrowserDynamic().bootstrapModule(AppModule, {
+//   providers: [{provide: DEFAULT_CURRENCY_CODE, useValue: 'DOP'}]
+// })
 
 @Component({
   selector: 'app-rep01',
   templateUrl: './rep01.component.html',
   styleUrls: ['./rep01.component.css']
 })
+
 export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
 
-
+  DEFAULT_CURRENCY_CODE: InjectionToken<string>;
   maxDated: Date;
   maxDateh: Date;
   minDateh: Date;
@@ -169,7 +175,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
           q = q.where("condiciondepago", "in", this.conPag)
         }
       }
-      console.log(q)
+      console.log('Query:',q)
       return q;
     }
 
@@ -178,19 +184,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       this.Ped_ = ped;
 
       this.totalRegistro = this.Ped_.length;
-      this.totalBruto = this.Ped_.map(a => a.totalmontobruto).reduce(function (a, b) {
-        return a + b;
-      });
-      this.totalBruto = this.roundTo(this.totalBruto,2);
-      this.totalDescuento = this.Ped_.map(a => a.totalmontodescuento).reduce(function (a, b) {
-        return a + b;
-      });
-      this.totalDescuento = this.roundTo(this.totalDescuento,2);
 
-      this.totalNeto = this.Ped_.map(a => a.totalmontoneto).reduce(function (a, b) {
-        return a + b;
-      });
-      this.totalNeto = this.roundTo(this.totalNeto,2);
+      this.totalBruto = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontobruto, 0),2);
+
+      this.totalDescuento = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontodescuento, 0),2);
+
+      this.totalNeto = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontoneto, 0),2);
       //
       if(!this.firstTime){
         this.rerender();
@@ -247,6 +246,10 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
 
       this.dtTrigger.next();
     })
+  }
+
+  SelectedValue(Value){
+    this.codCli = Value;
   }
 
 }

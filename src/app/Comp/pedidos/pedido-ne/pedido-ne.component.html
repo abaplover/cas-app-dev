@@ -1,6 +1,6 @@
 <div class="container9" style="border-style: solid; border-width: 0px;">
 	<div class="card-body text-info panel panel-login" *ngIf="this.pedido_.uid" style="border-style:solid;border-width:0px;">
-	    <form #pedidoFormne="ngForm" *ngIf="this.pedido_.uid">			
+	    <form #pedidoFormne="ngForm" *ngIf="this.pedido_.uid">
 			<div class="row">
 				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="border-color: blue;border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
 					<div class="card">
@@ -16,7 +16,7 @@
 										<div class="abs-center">
 											<mat-label>{{this.pedido_.idcliente}}</mat-label>
 										</div>
-										
+
 									</div>
 								</div>
 							</div>
@@ -117,7 +117,7 @@
 				</div>
 
 				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
-					
+
 						<div class="card">
 							<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
 								<div class="row" >
@@ -129,7 +129,7 @@
 											<div class="abs-center-fecha">
 												<mat-label>{{this.pedido_.fechapedido | date: 'dd/MM/yyyy hh:mm a' }}</mat-label>
 											</div>
-										</div>	
+										</div>
 									</div>
 									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 										<div class="input-group input-group-sm mb-3">
@@ -203,7 +203,7 @@
 											<div class="input-group-prepend" style="width: 135px;">
 												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha de Entrega</span>
 											</div>
-											<input 
+											<input
 												type="date"
 												style="font-size: 14px"
 												[max]="maxDate_"
@@ -233,7 +233,7 @@
 											<div class="input-group-prepend" style="width: 135px;">
 												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Vencimiento</span>
 											</div>
-											<input 
+											<input
 												type="date"
 												style="font-size: 14px"
 												[min]="minDate"
@@ -249,7 +249,7 @@
 								</div>
 							</div>
 						</div>
-					
+
 				</div>
 			</div>
 
@@ -291,8 +291,8 @@
 						</div>
 					</div>
 				</div>
-				
-				
+
+
 				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
 					<div class="card">
 						<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
@@ -370,11 +370,11 @@
 								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
 
 									<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
-										<button 
-											class="btn-space" 
-											smat-stroked-button 
-											style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
-											type="button" 
+										<button
+											class="btn-space"
+											smat-stroked-button
+											style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;"
+											type="button"
 											[disabled]="pedidoFormne.invalid"
 											(click)="onSubmitne(pedidoFormne)"
 											id="btnenviarne"
@@ -382,10 +382,10 @@
 										>
 											Actualizar Pedido
 										</button>
-										<button 
-											smat-stroked-button 
-											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
-											type="button" 
+										<button
+											smat-stroked-button
+											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;"
+											type="button"
 											(click)="onCancelar(pedidoFormne,0)">
 												Atrás
 											</button>
@@ -398,7 +398,6 @@
 			</div>
 
 		</form>
-		
 
 
 
@@ -431,7 +430,8 @@
 
 
 
-		
+
+
 			<!-- <div class="row">
 				<mat-label style="font-weight: bold;color: red;">{{mensaje01}}</mat-label>
 				<table class="table table-sm">
@@ -567,7 +567,7 @@
 							<mat-label>{{this.pedido_.transporte}}</mat-label>
 						</td>
 					</tr>
-					
+
 					</tbody>
 				</table>
 			</div>	 -->
@@ -719,14 +719,14 @@
 							</mat-form-field>
 						</div>
 					</div>
-				
+
 					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 						<div class="form-group" style="text-align:right;">
-							<button 
+							<button
 								id="btnenviar"
 								name="btnenviar"
-								class="btn btn-primary btn-space" 
-								type="button" 
+								class="btn btn-primary btn-space"
+								type="button"
 								[disabled]="pedidoFormnf.invalid"
 								(click)="onSubmitnf(pedidoFormnf)"
 							>
@@ -741,7 +741,7 @@
 						</div>
 					</div>
 				</div>
-			</div> 
+			</div>
 		</form>
 		-->
 		<!--Form notificar factura-->
@@ -792,14 +792,14 @@
 					</div>
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="form-group" style="text-align:right;">
-							<button 
+							<button
 								id="btnenviarnd"
 								name="btnenviarnd"
-								class="btn btn-primary btn-space" 
-								type="button" 
+								class="btn btn-primary btn-space"
+								type="button"
 								[disabled]="pedidoFormnd.invalid"
 								(click)="onSubmitnd(pedidoFormnd)"
-								
+
 							>
 								<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
 							</button>
@@ -809,7 +809,7 @@
 						</div>
 					</div>
 				</div>
-			</div> 
+			</div>
 		</form>
 		-->
 		<!--Form notificar factura-->
@@ -859,17 +859,17 @@
 							</mat-form-field>
 						</div>
 					</div>
-				
+
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="form-group" style="text-align:right;">
-							<button 
+							<button
 								id="btnenviarne"
 								name="btnenviarne"
-								class="btn btn-primary btn-space" 
-								type="button" 
+								class="btn btn-primary btn-space"
+								type="button"
 								[disabled]="pedidoFormne.invalid"
 								(click)="onSubmitne(pedidoFormne)"
-								
+
 							>
 								<i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
 							</button>
@@ -879,7 +879,7 @@
 						</div>
 					</div>
 				</div>
-			</div> 
+			</div>
 		</form>
 		-->
 		<!--Form notificar factura-->
@@ -898,9 +898,9 @@
 		  <mat-label>Buscar por</mat-label>
 		  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
 		</mat-form-field>
-		
+
 		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
-		
+
 		  <!-- Position Column -->
 		  <ng-container matColumnDef="idpedido">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header style="">Pedido </th>
@@ -915,9 +915,20 @@
 
 		<!-- Name Column -->
 		<ng-container matColumnDef="status">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;"> Status </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
 			<td mat-cell *matCellDef="let element"> {{element.status}} </td>
 			</ng-container>
+
+      <ng-container matColumnDef="listaprecio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex: 0 0 28% !important;"> Lista de Precio </th>
+        <td mat-cell *matCellDef="let element"> {{element.listaprecio}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+      <ng-container matColumnDef="condiciondepago">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex: 0 0 28% !important"> Condición de pago </th>
+        <td mat-cell *matCellDef="let element"> {{element.condiciondepago }} </td>
+        </ng-container>
 
 		<!-- Weight Column -->
 		<ng-container matColumnDef="nomcliente">
@@ -933,45 +944,25 @@
 
 		<!-- Symbol Column -->
 			<ng-container matColumnDef="totalmontobruto">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;">Sub Total</th>
+				<th mat-header-cell *matHeaderCellDef>Sub Total</th>
 				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto| currency:" "}} </td>
 			</ng-container>
 
-
-			  <!-- Symbol Column 
-		  <ng-container matColumnDef="totalCnt">
-			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Cantidad </th>
-			<td mat-cell *matCellDef="let element"> {{element.totalCnt| currency:" ":'symbol':'2.0'}} </td>
-		  </ng-container>-->
-	  
-		  <!-- Symbol Column -->
-		  <ng-container matColumnDef="totalmontoimpuesto">
-			  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
-			  <td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
-		  </ng-container>
-	  
-		  <!-- Symbol Column -->
 		  <ng-container matColumnDef="totalmontodescuento">
-			  <th mat-header-cell *matHeaderCellDef style="text-align: right;"> Descuento </th>
+			  <th mat-header-cell *matHeaderCellDef > Descuento </th>
 			  <td mat-cell *matCellDef="let element"> {{element.totalmontodescuento | currency:" "}} </td>
 		  </ng-container>
-	  
+
 		  <!-- Symbol Column -->
 		  <ng-container matColumnDef="totalmontoneto">
 			  <th mat-header-cell *matHeaderCellDef> Total</th>
 			  <td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
 		  </ng-container>
-	  
+
 		  <!-- Symbol Column -->
 		  <ng-container matColumnDef="Opc">
 			  <th mat-header-cell *matHeaderCellDef></th>
 			  <td mat-cell *matCellDef="let element index as i">
-				  <!--
-				  
-				  <a class="btn btn-info text-white btn-sm" (click)="mostrarOcultar($event,i)">
-					  <i class="far fa-minus-square"></i>
-				  </a>
-				  -->
 					<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
 						<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
 					</a>
@@ -979,14 +970,14 @@
 						<i class="far fa-edit"  data-toggle="tooltip" data-placement="top" title="Notificar entrega"></i>
 					</a>
 					<a class="btn btn-info btn-sm" type="reset" (click)="anulardoc(pedidoFormnE,element,9002)" data-toggle="tooltip" data-placement="top" title="Anular notificación de despacho">
-						<i class="fas fa-undo" data-toggle="tooltip" data-placement="top" title="Anular notificación de despacho"></i> 
+						<i class="fas fa-undo" data-toggle="tooltip" data-placement="top" title="Anular notificación de despacho"></i>
 					</a>
 			  </td>
 		  </ng-container>
-	  
+
 		  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 		  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-		
+
 		  <!-- Row shown when there is no matching data. -->
 		  <tr class="mat-row" *matNoDataRow>
 			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda {{input.value}}</td>

@@ -7,7 +7,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
-//  Service 
+//  Service
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { LprecioService } from '../../../services/lprecio.service';
@@ -62,7 +62,7 @@ export class PedidoEditComponent implements OnInit {
   tmontd: number=0;
   tmonti: number=0;
   tmontn: number=0;
-  
+
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -75,7 +75,7 @@ export class PedidoEditComponent implements OnInit {
 
   public keywordPed = "uid";
   public keywordsCli = ['idcliente','descripcion'];
- 
+
   maxDate: Date;
   enviar = false;
   private myempty: number;
@@ -85,7 +85,7 @@ export class PedidoEditComponent implements OnInit {
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
   constructor
-  ( 
+  (
     public pedidoService: PedidoService,
     private toastr      : ToastrService,
     public clienteS     : ClientService,
@@ -97,7 +97,7 @@ export class PedidoEditComponent implements OnInit {
     public iimpuestoS   : IimpuestoService,
     public loginS       : FirebaseloginService,
     public tipodS       : TipodService
-  ) 
+  )
   {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
@@ -105,7 +105,7 @@ export class PedidoEditComponent implements OnInit {
     this.maxDate = new Date(currentYear, currentm, currentd);
   }
 
-   
+
   ngOnInit(): void {
     this.ocultarBtn = 'padding: 10px;display:none;';
 
@@ -138,7 +138,7 @@ export class PedidoEditComponent implements OnInit {
 
     this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
       this.umedidaList = ums;
-    })    
+    })
 
     this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
       this.iimpuestoList = iis;
@@ -148,7 +148,7 @@ export class PedidoEditComponent implements OnInit {
       this.tipodocList = tid;
     })
 
-    
+
     this.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
@@ -183,7 +183,7 @@ export class PedidoEditComponent implements OnInit {
       this.pedidoService.updatePedidos(this.pedido_);
       this.toastr.success('Operación Terminada', 'Nofificacinón de entrega creada');
     }
-    
+
   }
   anulardoc(pf?: NgForm){
     if(confirm('¿Está seguro de que quiere anular la notificación de factura actual?')) {
@@ -203,15 +203,15 @@ export class PedidoEditComponent implements OnInit {
   }
   resetFormnf(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormnd(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormne(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
 
   moForm(opc?: number){
@@ -219,21 +219,21 @@ export class PedidoEditComponent implements OnInit {
       this.opcnf = true;
       this.opcnd = false;
       this.opcne = false;
-      
+
       if (this.pedido_.ffactura == null || typeof this.pedido_.ffactura === "undefined"){
         this.pedido_.ffactura =  new Date();
       }else{
         this.pedido_.ffactura = this.pedido_.ffactura;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar";     
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==2){
       this.opcnf = false;
       this.opcnd = true;
       this.opcne = false;
-      
+
       if (this.pedido_.fdespacho == null || typeof this.pedido_.fdespacho === "undefined"){
         this.pedido_.fdespacho =  new Date();
       }else{
@@ -246,8 +246,8 @@ export class PedidoEditComponent implements OnInit {
         this.pedido_.ftentrega = this.pedido_.ftentrega;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==3){
       this.opcnf = false;
@@ -266,8 +266,8 @@ export class PedidoEditComponent implements OnInit {
         this.pedido_.fpago = this.pedido_.fpago;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
   }
 
   timestampConvert(fec){
@@ -281,7 +281,7 @@ export class PedidoEditComponent implements OnInit {
   selectEventPed(elemento){
 
     this.pedido_ =  Object.assign({}, elemento);
-    
+
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';
     }
@@ -304,34 +304,34 @@ export class PedidoEditComponent implements OnInit {
     if (elemento.fpago != null || typeof elemento.fpago != "undefined"){
         this.pedido_.fpago = this.timestampConvert(elemento.fpago);
     }
-    
-    
-    
+
+
+
     this.moForm(this.pedidoService.selectedIndex);
 
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
       //Calculo del descuento en base al monto bruto
       this.tmontb = this.totalPed;
       this.tmontd = (this.totalPed*this.pedido_.descuentoporc)/100;
-        
+
       //Calculo del Impuesto en base al monto bruto
       let montoDescAux=0;
       if (this.tmontd>0){
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
@@ -397,26 +397,26 @@ export class PedidoEditComponent implements OnInit {
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
       //Calculo del descuento en base al monto bruto
       this.tmontb = this.totalPed;
       this.tmontd = (this.totalPed*this.pedido_.descuentoporc)/100;
-        
+
       //Calculo del Impuesto en base al monto bruto
       let montoDescAux=0;
       if (this.tmontd>0){
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
@@ -432,7 +432,7 @@ export class PedidoEditComponent implements OnInit {
   }
 
   closeautoCompletePed(){
- 
+
     this.MostrarPed = 'display:none;';
     this.mensaje01 = "";
     this.valorAutPed = "";

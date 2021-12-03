@@ -39,9 +39,9 @@ export class PedidosListComponent implements OnInit {
   txtComentario = "";
   pedidoslist = [];
   pedidoslistDet=[];
-  
+
   resp: boolean=false;
-  
+
   pedidoVer_ = {} as Pedido;
 
   //displayedColumns: string[];
@@ -50,20 +50,20 @@ export class PedidosListComponent implements OnInit {
   //@ViewChild('nav') ngnav;
   //@ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc']; 
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago','nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento',/*'totalmontoimpuesto',*/ 'totalmontoneto', 'Opc'];
   constructor(
-    public pedidoService: PedidoService, 
+    public pedidoService: PedidoService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private dialogo: MatDialog,
     public loginS: FirebaseloginService
   ) { }
-  
+
   ngOnInit(): void {
     this.pedidoService.getPedidos().subscribe(pedidos=>{
       //console.log(pedidos);
       this.pedidoslist = pedidos;
-      
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
@@ -141,21 +141,21 @@ export class PedidosListComponent implements OnInit {
 
     this.pedidoVer_ =  Object.assign({}, ped);
     this.timestampConvert(ped.fechapedido,1);
-    
+
     if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-      this.timestampConvert(ped.ffactura,2); 
+      this.timestampConvert(ped.ffactura,2);
     }
     if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-      this.timestampConvert(ped.fdespacho,3); 
+      this.timestampConvert(ped.fdespacho,3);
     }
     if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-      this.timestampConvert(ped.fpago,4); 
+      this.timestampConvert(ped.fpago,4);
     }
     if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-      this.timestampConvert(ped.ftentrega,5); 
+      this.timestampConvert(ped.ftentrega,5);
     }
     if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-      this.timestampConvert(ped.fentrega,6); 
+      this.timestampConvert(ped.fentrega,6);
     }
 
     dialogConfig.data = {
@@ -177,19 +177,19 @@ export class PedidosListComponent implements OnInit {
         this.pedidoService.mostrarForm = true;
         this.pedidoService.txtBtnAccion = "Actualizar Pedido";
         this.pedidoService.readonlyField = true;
-        
+
         this.pedidoService.valorAutCli = ped.idcliente;
         this.pedidoService.valorAutVen = ped.idvendedor;
         //this.pedidoService.pedido_.listaprecio = ped.listaprecio;
-        
+
         this.pedidoService.presAscList = ped.precioasociado;
         this.pedidoService.docAdd = ped.uid;
 
         this.pedidoService.indicadorImpuesto = ped.indicadorImpuestoporc;
         this.pedidoService.indicadorImpuestoDesc = ped.indicadorImpuestodesc;
-    
+
         this.pedidoService.pedido_ =  Object.assign({}, ped);
-        
+
         this.timestampConvert(ped.fechapedido);
 
         //Get Order detaills
@@ -213,7 +213,7 @@ export class PedidosListComponent implements OnInit {
             }
             this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
 
-            //Calculo Monto Neto 
+            //Calculo Monto Neto
             this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
 
 
@@ -224,7 +224,7 @@ export class PedidosListComponent implements OnInit {
             this.pedidoService.selectedIndex = 0;
             this.pedidoService.enviar=true;
             //console.log('despues: ',this.pedidoService.selectedIndex);
-        }) 
+        })
     } //Si status es Activo
 
   }//onEdit

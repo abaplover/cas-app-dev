@@ -24,7 +24,7 @@ th.mat-sort-header-sorted {
 color: black;
 }
 
-/* .mat-column-Fecha {
+.mat-column-Fecha {
 width: 160px !important;
 text-align: left;
 }
@@ -35,7 +35,7 @@ text-align: left;
 }
 
 .mat-column-Cliente {
-width: 100 !important;
+width: 150px !important;
 text-align: left;
 }
 
@@ -62,7 +62,7 @@ text-align: right;
 .mat-column-totalmontoneto {
 width: 100px !important;
 text-align: right;
-} */
+}
 
 .mat-column-Opc {
 width: 140px !important;

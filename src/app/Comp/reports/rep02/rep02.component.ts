@@ -37,6 +37,7 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
   mrechazo: any;
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
+
   firstTime: boolean = false;
 
   public clienteList: Client[]; //arreglo vacio
@@ -68,6 +69,7 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
         this.dtOptions = {
           pagingType: 'full_numbers',
           pageLength: 30,
+          ordering: true,
           language: {
             url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
           },
@@ -98,12 +100,15 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
     this.mrechazoS.getMrechazos().valueChanges().subscribe(mr =>{
       this.mrechazoList = mr;
     })
+    this.firstTime = true;
    // this.dtTrigger.next();
 
   }//ngOnInit
 
   ngAfterViewInit(): void {
     //this.dtTrigger.next();
+    this.dtTrigger.next();
+    this.firstTime = false;
   }
 
   ngOnDestroy(): void {

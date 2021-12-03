@@ -24,6 +24,12 @@ pre {
     box-shadow: none;
   }
 }
+@media print {
+  .pageBreak {
+    page-break-before: always;
+  }
+
+}
 #home,
 #help {
   font-size: 0.9rem;
@@ -268,45 +274,63 @@ pre {
     text-align: center;
   }
 }
-.mat-column-fechapedido {
-	width: 160px !important;
-	text-align: left;
+
+.w-75{
+  width: 75px;
 }
 
-.mat-column-status {
-	width: 100px !important;
-	text-align: left;
+.w-100{
+  width: 50px;
 }
 
-.mat-column-nomcliente {
-	width: 150px !important;
-	text-align: left;
+.th-center{
+  text-align: center;
 }
+.th-left{
+  text-align: left;
+}
+.th-right{
+  text-align: right;
+}
+  /* .mat-column-fechapedido {
+    width: 160px !important;
+    text-align: left;
+  }
 
-.mat-column-nomvendedor {
-	width: 110px !important;
-	text-align: left;
-}
+  .mat-column-status {
+    width: 100px !important;
+    text-align: left;
+  }
 
-.mat-column-totalmontobruto {
-	width: 100px !important;
-	text-align: right;
-}
+  .mat-column-nomcliente {
+    width: 150px !important;
+    text-align: left;
+  }
 
-.mat-column-totalmontoimpuesto {
-	width: 100px !important;
-	text-align: right;
-}
+  .mat-column-nomvendedor {
+    width: 110px !important;
+    text-align: left;
+  }
 
-.mat-column-totalmontodescuento {
-	width: 100px !important;
-	text-align: right;
-}
+  .mat-column-totalmontobruto {
+    width: 100px !important;
+    text-align: right;
+  }
 
-.mat-column-totalmontoneto {
-	width: 100px !important;
-	text-align: right;
-}
+  .mat-column-totalmontoimpuesto {
+    width: 100px !important;
+    text-align: right;
+  }
+
+  .mat-column-totalmontodescuento {
+    width: 100px !important;
+    text-align: right;
+  }
+
+  .mat-column-totalmontoneto {
+    width: 100px !important;
+    text-align: right;
+  } */
 
 .mat-column-Opc {
 	width: 60px !important;

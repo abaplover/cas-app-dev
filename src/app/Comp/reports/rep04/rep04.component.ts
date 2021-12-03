@@ -134,8 +134,11 @@ export class Rep04Component implements OnInit {
       .orderBy("fechapedido", "desc")
       .orderBy("creado", "desc")
       .limit(5000)
-      if (typeof this.staTus =="undefined" || this.staTus =="null" || this.staTus == null){}else{
+      if (typeof this.staTus =="undefined" || this.staTus =="null" || this.staTus == null){
+        q = q.where("status", "in", ['ENTREGADO', 'DESPACHADO'])
+      }else{
         if (this.staTus == ""){}else{
+          console.log(this.staTus);
           q = q.where("status", "in", this.staTus)
         }
       }

@@ -13,18 +13,18 @@
 table {
 	width: 100%;
 }
-  
+
   .mat-form-field {
 	font-size: 14px;
 	width: 100%;
   }
-  
+
 
 th.mat-sort-header-sorted {
 	color: black;
 }
 
-.mat-column-Fecha {
+/* .mat-column-Fecha {
 	width: 160px !important;
 	text-align: left;
 }
@@ -35,7 +35,7 @@ th.mat-sort-header-sorted {
 }
 
 .mat-column-Cliente {
-	width: 150px !important;
+	width: 100 !important;
 	text-align: left;
 }
 
@@ -62,7 +62,7 @@ th.mat-sort-header-sorted {
 .mat-column-totalmontoneto {
 	width: 100px !important;
 	text-align: right;
-}
+} */
 
 .mat-column-Opc {
 	width: 140px !important;
@@ -79,42 +79,42 @@ th.mat-sort-header-sorted {
 	color: rgb(39, 40, 43) !important;
 	border-color: rgb(241, 241, 241) !important;
   }
-  
+
 .btn-info:hover {
 	background: rgb(159, 163, 172) !important;
 	border-color: rgb(25, 10, 90) !important;
     transition: 0.5s background;
 	cursor: pointer;
 	color: white !important;
-	
+
   }
 
 
   td.col-0, th.col-0 {
-	width: 105px; 
+	width: 105px;
 }
 
 td.col-1, th.col-1 {
-	width: 357px; 
+	width: 357px;
 }
-  
+
 td.col-2, th.col-2 {
-	width: 80px; 
+	width: 80px;
 }
-  
+
 td.col-3, th.col-3 {
-	width: 80px; 
+	width: 80px;
 }
-  
+
 td.col-4, th.col-4 {
-	width: 82px; 
+	width: 82px;
 }
-  
+
 td.col-5, th.col-5 {
-	width: 160px; 
+	width: 160px;
 }
 td.col-6, th.col-6 {
-	width: 25px; 
+	width: 25px;
 }
 /*Centrar H y V, texto en div*/
 .abs-center {
@@ -213,7 +213,7 @@ td.col-6, th.col-6 {
 }
 
 
-.ng-autocomplete ::ng-deep .autocomplete-container { 
+.ng-autocomplete ::ng-deep .autocomplete-container {
 	/* border-color: #ccc;
 	border-style:ridge;
 	border-width: 1px;

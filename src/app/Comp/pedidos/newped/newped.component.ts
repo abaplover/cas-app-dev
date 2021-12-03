@@ -8,7 +8,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
-//  Service 
+//  Service
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { LprecioService } from '../../../services/lprecio.service';
@@ -98,7 +98,7 @@ export class NewpedComponent implements OnInit {
   zonVen='';
 
   constructor
-  ( 
+  (
     public pedidoService: PedidoService,
     private toastr      : ToastrService,
     public clienteS     : ClientService,
@@ -112,13 +112,13 @@ export class NewpedComponent implements OnInit {
     public datoempresaS : DatoempService,
     private renderer: Renderer2,
     private afStorage:AngularFireStorage
-  ) 
+  )
   {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
     //this.maxDate = new Date(currentYear, currentm, currentd);
-    
+
   }
 
   ngOnInit(): void {
@@ -151,7 +151,7 @@ export class NewpedComponent implements OnInit {
 
     this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
       this.umedidaList = ums;
-    })    
+    })
 
     this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
       this.iimpuestoList = iis;
@@ -165,7 +165,7 @@ export class NewpedComponent implements OnInit {
     this.pedidoService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
-    
+
   }//ngOnInit
 
 
@@ -189,7 +189,7 @@ export class NewpedComponent implements OnInit {
     var algo = "";
     var rows = [];
     rows.push(['', '', '', '', '']);
-    
+
     for (let i in this.pedidoService.matrisDetPedido){
       let indice:number = parseInt(i);
       rows.push([this.pedidoService.matrisDetPedido[i].codigodematerial.toString(), this.pedidoService.matrisDetPedido[i].descripcionmaterial.toString(),this.pedidoService.matrisDetPedido[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.pedidoService.matrisDetPedido[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.pedidoService.matrisDetPedido[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2})]);
@@ -198,7 +198,7 @@ export class NewpedComponent implements OnInit {
         spaceBottom=spaceBottom-20;
       }
     }
- 
+
     let ordern: any;
     var docAdd: string
 
@@ -210,7 +210,7 @@ export class NewpedComponent implements OnInit {
     if (this.pedidoService.txtBtnAccion.toString() == "Actualizar Pedido"){
       docAdd = this.pedidoService.pedido_.idpedido.toString();
     }
-    
+
     const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
     let dateObj = this.pedidoService.pedido_.fechapedido;
     let min_ = dateObj.getMinutes();
@@ -240,11 +240,11 @@ export class NewpedComponent implements OnInit {
 		horas_ [3] = "03:" + min_ + " AM";
 		horas_ [2] = "02:" + min_ + " AM";
     horas_ [1] = "01:" + min_ + " AM";
-    
+
     let month = monthNames[dateObj.getMonth()];
     let day = String(dateObj.getDate()).padStart(2, '0');
     let year = dateObj.getFullYear();
-    let momento = horas_[dateObj.getHours()]; 
+    let momento = horas_[dateObj.getHours()];
     let output = day +'/'+ month + '/' + year + ' '+ momento;
     let margin_bottom = 50;
     let y1 = 600;
@@ -263,16 +263,16 @@ export class NewpedComponent implements OnInit {
         width: 600,
         height: 760
       },
-      pageMargins: [ 25, 30, 25, margin_bottom ],  
+      pageMargins: [ 25, 30, 25, margin_bottom ],
 
-    
-      //Aqui va el footer  
-    
-    
-    
+
+      //Aqui va el footer
+
+
+
       content: [
         // if you don't need styles, you can use a simple string to define a paragraph
-        
+
         {
           columns: [
             {
@@ -286,16 +286,16 @@ export class NewpedComponent implements OnInit {
             },
             {
               width: 200,
-              table: 
+              table:
               {
                   widths: [200],
-                  body: 
+                  body:
                       [
                           [
-                              {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]}, 
-                          ],    
+                              {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]},
+                          ],
                           [
-                              {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]}, 
+                              {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]},
                           ]
                       ]
               }
@@ -306,55 +306,55 @@ export class NewpedComponent implements OnInit {
             },
             {
               width: '*',
-              table: 
+              table:
               {
                   widths: [40,'*'],
-                  body: 
+                  body:
                       [
                           [
-                              {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                              {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
                               {text: this.dempresaList[0].telefonoFijo, fontSize: 10,border: [false, false, false, false]},
-                          ],    
+                          ],
                           [
                               {text: 'Celular',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
-                              {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]}, 
-                          ],    
+                              {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]},
+                          ],
                           [
-                              {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                              {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
                               {text: this.dempresaList[0].email, fontSize: 9,border: [false, false, false, false]},
                           ]
                       ]
               }
-      
+
             }
           ],
         },
 
         { text:'Confirmación de pedido ',style: "linecentertitle",fontSize: 16},
 
-        { //dos columnas, en cada se define una tabla 
-          columns: 
+        { //dos columnas, en cada se define una tabla
+          columns:
           [
             {
               width: 285,
-              table: 
+              table:
               {
                   widths: [50, 175],
                   body: [
                     [
-                        {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]}, 
+                        {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]},
                         {text: this.pedidoService.pedido_.nomcliente, border: [false, true, true, false]}
-                    ],  
+                    ],
                     [
-                      {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]}, 
+                      {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]},
                       {text: this.pedidoService.pedido_.idcliente, border: [false, false, true, false]}
-                    ],  
+                    ],
                     [
-                        {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]}, 
+                        {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]},
                         {text: this.tlfCli, border: [false, false, true, false]}
-                    ],    
+                    ],
                     [
-                        {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]}, 
+                        {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]},
                         {text: this.dirCli, border: [false, false, true, true]}
                     ]
                   ]
@@ -362,35 +362,35 @@ export class NewpedComponent implements OnInit {
             },
             {
                 width: 180,
-                table: 
+                table:
                 {
                     widths: [90, 135],
                     body: [
                       [
-                          {text: 'N°:',style: "boldtxt", border: [true, true, false, false]}, 
+                          {text: 'N°:',style: "boldtxt", border: [true, true, false, false]},
                           {text: docAdd , border: [false, true, true, false]}
-                      ],    
+                      ],
                       [
-                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]}, 
+                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]},
                         {text: output, border: [false, false, true, false]}
                       ],
                       [
-                        {text: 'Condición de pago :',style: "boldtxt", border: [true, false, false, true]}, 
+                        {text: 'Condición de pago :',style: "boldtxt", border: [true, false, false, true]},
                         {text: this.pedidoService.pedido_.condiciondepago, border: [false, false, true, true]}
                       ]
                       ,
                       [
-                          {text: '', border: [false, false, false, false]}, 
+                          {text: '', border: [false, false, false, false]},
                           {text: '', border: [false, false, false, false]}
                       ]
-                      ,    
+                      ,
                       [
-                          {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]}, 
+                          {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]},
                           {text: this.pedidoService.pedido_.nomvendedor, border: [false, true, true, false]}
                       ]
-                      ,    
+                      ,
                       [
-                          {text: 'Zona:',style: "boldtxt", border: [true, false, false, true]}, 
+                          {text: 'Zona:',style: "boldtxt", border: [true, false, false, true]},
                           {text: this.zonVen, border: [false, false, true, true]}
                       ]
                     ]
@@ -407,28 +407,28 @@ export class NewpedComponent implements OnInit {
         //IMPRIME EL DETALLE DE LA MATRIX
         {
           width: 530,
-          table: 
+          table:
           {
             widths: [530],
-            body: 
+            body:
             [
               [
                 {
                   layout: 'lightHorizontalLines', // optional
-                  table: 
+                  table:
                       {
                       widths: [55, 250, 40, 50, 50],
-                      body: 
+                      body:
                       [
                         [
-                            {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]}, 
+                            {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]},
                             {text: 'DESCRIPCIÓN',style: "boldtxt", border: [false, true, false, true]},
                             {text: 'CTD',style: "boldtxt", border: [false, true, false, true]},
                             {text: 'PRECIO U',style: "boldtxt", border: [false, true, false, true]},
                             {text: 'TOTAL',style: "boldtxt", border: [false, true, true, true]},
                         ]
                       ]
-                      
+
                       }
                 }
               ]
@@ -447,20 +447,20 @@ export class NewpedComponent implements OnInit {
 
         },
         //IMPRIME EL DETALLE DE LA MATRIX
-        
+
 
          //solo espaciado
-        // { 
+        // {
         //   text:rows.length-1,
         //   style: "lineSpacing",
         //   fontSize: 10,
         //   pageBreak: "before"
         // },
-        
-        
+
+
         // { text:' ',style: "lineSpacing",fontSize: 10,absolutePosition:{x:25, y:590}},
 
-        { 
+        {
           text: observacion,
           id: "observacion",
           style: "lineSpacing",
@@ -473,21 +473,21 @@ export class NewpedComponent implements OnInit {
 
         //va en el pie de la pagina pero no como footer
         {
-          columns: 
+          columns:
           [
            { //columna 1
               width: 295,
-              table: 
+              table:
               {
                   dontBreakRows: true,
                   widths: [80, 145],
                   body: [
                     [
-                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]}, 
+                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]},
                         {text: totalArticulos, border: [false, true, true, false]}
-                    ],    
+                    ],
                     [
-                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]}, 
+                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]},
                         {text: this.pedidoService.totalCnt.toLocaleString('de-DE', {maximumFractionDigits: 0}), border: [false, false, true, true]}
                     ]
                   ]
@@ -495,28 +495,28 @@ export class NewpedComponent implements OnInit {
             }, //columna 2
             {
                 width: 180,
-                table: 
+                table:
                 {
-                    dontBreakRows: true,  
+                    dontBreakRows: true,
                     widths: [70, 155],
                     body: [
                       [
-                          {text: 'Sub total:',style: "boldtxt", border: [true, true, false, false]}, 
+                          {text: 'Sub total:',style: "boldtxt", border: [true, true, false, false]},
                           {text: this.pedidoService.tmontb.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left' , border: [false, true, true, false]}
-                      ],    
+                      ],
                       [
-                          {text: 'Descuento:',style: "boldtxt", border: [true, false, false, false]}, 
+                          {text: 'Descuento:',style: "boldtxt", border: [true, false, false, false]},
                           {text: this.pedidoService.tmontd.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, false, true, false]}
-                      ],    
+                      ],
                       [
-                          {text: 'Total a pagar:',style: "boldtxt", border: [true, false, false, true]}, 
+                          {text: 'Total a pagar:',style: "boldtxt", border: [true, false, false, true]},
                           {text: this.pedidoService.tmontn.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, false, true, true]}
                       ]
                     ]
                 }
             }
           ],absolutePosition:{x:25, y:y3}
-        
+
         },
 
 
@@ -568,9 +568,9 @@ export class NewpedComponent implements OnInit {
       pdfDocGenerator0.getBase64((data) => {
         var file = data;
       // });
-      
 
-    //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
+
+    //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba
     //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
     // pdfDocGenerator1.getBlob((blob) => {
     //   var file = blob;
@@ -586,12 +586,12 @@ export class NewpedComponent implements OnInit {
       const idfile = fileId +'.pdf';
       this.pedidoService.pedido_.pdfname = idfile;
       this.pedidoService.pedido_.pdfb64 = file;
-                                                                  
+
       const fileRef:AngularFireStorageReference=this.afStorage.ref("Orders").child(idfile);
       //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
       const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64
       task.snapshotChanges().pipe(
-          finalize(() => {                        
+          finalize(() => {
             this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
               fileRef.getDownloadURL().subscribe(downloadURL => {
                 this.pedidoService.pedido_.pdfurl=downloadURL;
@@ -604,12 +604,12 @@ export class NewpedComponent implements OnInit {
     });//pdfDocGenerator
 
     //>
- 
- 
- 
+
+
+
     //pdfMake.createPdf(documentDefinition).open();
 
-  
+
   }//pdf make
 
 
@@ -618,15 +618,15 @@ export class NewpedComponent implements OnInit {
   onSubmit(pf?: NgForm, url?:string,pedNro?:any){
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null)
-    { 
+    {
         //set parameter date
         //console.log('desde pedidos: ',url);
-        
-        
+
+
         //this.pedidoService.pedido_.email = "yhonatandcarruido@gmail.com";
-        
-        
-        
+
+
+
         this.pedidoService.pedido_.pdfurl = url;
 
         let ahora = new Date();
@@ -637,7 +637,7 @@ export class NewpedComponent implements OnInit {
 
         //console.log('Fecha ped: ',this.pedidoService.pedido_.fechapedido);
 
-        
+
         this.pedidoService.pedido_.creado = new Date;
         this.pedidoService.pedido_.modificado = new Date;
         this.pedidoService.pedido_.creadopor = this.loginS.getCurrentUser().email;
@@ -650,7 +650,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
         this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
-        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri; 
+        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
         this.pedidoService.pedido_.indicadorImpuestodesc = this.pedidoService.indicadorImpuestoDesc;
@@ -671,8 +671,8 @@ export class NewpedComponent implements OnInit {
           this.pedidoService.pedido_.descuentovalor = 0;
         }
 
-        
-        //crear variable con el detalle de pedidos 
+
+        //crear variable con el detalle de pedidos
         this.codeBlock = '<table style="font-family: Helvetica;font-size: 11px; width:100%">'+
                          '<tr>'+
                          '<th style="text-align:left;border: 1px solid #ddd;" scope="row">Código de material</th>'+
@@ -681,9 +681,9 @@ export class NewpedComponent implements OnInit {
                          '<th style="text-align:right;border: 1px solid #ddd;" scope="row">Cantidad</th>'+
                          '<th style="text-align:right;border: 1px solid #ddd;" scope="row">Total por material</th>'+
                          '</tr>';
-                         
+
         for (let i in this.pedidoService.matrisDetPedido){
-          this.codeBlock = this.codeBlock +  
+          this.codeBlock = this.codeBlock +
             '<tr>' +
               '<td style="border: 1px solid #ddd;">'+this.pedidoService.matrisDetPedido[i].codigodematerial.toString()+'</td>'+
               '<td style="border: 1px solid #ddd;">'+this.pedidoService.matrisDetPedido[i].descripcionmaterial.toString()+'</td>'+
@@ -693,16 +693,16 @@ export class NewpedComponent implements OnInit {
             '</tr>';
 
             //this.pedidoService.matrisDetPedido[i].idpedido.toString();
-           
+
         }
-        this.codeBlock = this.codeBlock + 
+        this.codeBlock = this.codeBlock +
           '<tr>'+
             '<th style="border: 1px solid #ddd;" scope="col" colspan=3>Total</th>'+
             '<th style="text-align:right;border: 1px solid #ddd;" scope="row">'+ this.pedidoService.totalCnt +'</th>'+
             '<th style="text-align:right;border: 1px solid #ddd;" scope="row">'+ this.pedidoService.totalPed.toFixed(2) +'</th>'+
           '</tr>'
         '</table>';
-        
+
         this.companyblk = '<tbody>'+
                                   '<tr style="font-size: 18px">'+
                                       '<td style="text-align:left" scope="row">'+ this.dempresaList[0].descripcion +'</td>'+
@@ -719,12 +719,12 @@ export class NewpedComponent implements OnInit {
                                   '<tr style="font-size: 18px">'+
                                       '<td style="text-align:left" scope="row">Email: '+ this.dempresaList[0].email +'</td>'+
                                    '</tr>'+
-                            '</tbody>';                   
+                            '</tbody>';
 
         this.pedidoService.pedido_.codeBlock = this.codeBlock;
-        this.pedidoService.pedido_.companycod = this.dempresaList[0].idempresa; 
+        this.pedidoService.pedido_.companycod = this.dempresaList[0].idempresa;
 
-        this.pedidoService.pedido_.companyblk = this.companyblk; 
+        this.pedidoService.pedido_.companyblk = this.companyblk;
 
         //GENERAR PDF
         //this.generarpdf();
@@ -740,7 +740,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         //console.log('id Insertado: ', this.pedidoService.docAdd);
-      
+
           //Add details
         if (this.pedidoService.docAdd != -1){
             //save detaills
@@ -758,7 +758,7 @@ export class NewpedComponent implements OnInit {
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
         this.pedidoService.enviar = false;
 
-    
+
     }else{ //Actualiza Pedido
         //set parameter date
         //console.log('www: ',this.pedidoService.tmonti)
@@ -771,12 +771,12 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
         this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
-        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri; 
+        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
         this.pedidoService.pedido_.indicadorImpuestodesc = this.pedidoService.indicadorImpuestoDesc;
         this.pedidoService.pedido_.indicadorImpuestoporc = this.pedidoService.indicadorImpuesto;
-        
+
         //Limpia los campos que se iran al detalle del pedido
         this.pedidoService.pedido_.codigodematerial = "";
         this.pedidoService.pedido_.descripcionmaterial = "";
@@ -791,23 +791,23 @@ export class NewpedComponent implements OnInit {
         if (this.pedidoService.pedido_.descuentovalor == null || typeof this.pedidoService.pedido_.descuentovalor === "undefined" || isNaN(this.pedidoService.pedido_.descuentovalor)){
           this.pedidoService.pedido_.descuentovalor = 0;
         }
-        
+
         //Update Orders
         this.pedidoService.updatePedidos(this.pedidoService.pedido_);
-        
+
         for (let i in this.pedidoService.matrisDetPedido){
-          //Actualiza los registros 
+          //Actualiza los registros
           if (this.pedidoService.matrisDetPedido[i].uid!=""){
               this.pedidoService.updatePedidosDet(this.pedidoService.matrisDetPedido[i]);
-              
+
 
           }else{
               //Agrega los nuevos registros
               this.pedidoService.matrisDetPedido[i].idpedido=this.pedidoService.pedido_.uid;
               this.pedidoService.addPedidosDet(this.pedidoService.matrisDetPedido[i]);
-          }      
+          }
         }
-        //Elimina los registros seleccionados 
+        //Elimina los registros seleccionados
         for (let k in this.pedidoService.elementoBorrados){
           this.pedidoService.deletePedidosDet(this.pedidoService.elementoBorrados[k])
         }
@@ -822,8 +822,8 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmontd = 0;
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
-        
-        
+
+
         this.toastr.success('Operación Terminada','Pedido Actualizado');
         this.pedidoService.enviar = false;
     }
@@ -832,30 +832,30 @@ export class NewpedComponent implements OnInit {
 
     pf.resetForm();
     this.pedidoService.readonlyField = false;
-    this.pedidoService.pedido_ = {} as Pedido;  
+    this.pedidoService.pedido_ = {} as Pedido;
     this.pedidoService.matrisDetPedido = []; // vacia la instancia
-    this.pedidoService.txtBtnAccion = "Crear Pedido"; 
+    this.pedidoService.txtBtnAccion = "Crear Pedido";
     this.pedidoService.mostrarForm = false;
   }//onSubmit
 
   @ViewChild('pedidoForm') myForm;
-  resetFormFunc(field?: number){  
+  resetFormFunc(field?: number){
     this.myForm.resetForm();
-    if (field == 2){  
+    if (field == 2){
     }
   }//resetFormfunc
 
 
   resetForm(pf?: NgForm)
   {
-   
+
     if (this.pedidoService.pedido_.nomcliente !== undefined || this.pedidoService.pedido_.condiciondepago !== undefined){
       if(confirm("¿Quieres abandonar el pedido? " )) {
         if(pf != null) pf.reset();
         this.pedidoService.matrisDetPedido = []; // vacia la instancia
         this.pedidoService.elementoBorrados = []; // vacia la instancia
         this.pedidoService.readonlyField = false;
-        this.pedidoService.pedido_ = {} as Pedido; 
+        this.pedidoService.pedido_ = {} as Pedido;
         this.pedidoService.totalPri = 0;
         this.pedidoService.totalCnt = 0;
         this.pedidoService.totalPed = 0;
@@ -863,7 +863,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmontd = 0;
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
-        this.pedidoService.txtBtnAccion = "Crear Pedido"; 
+        this.pedidoService.txtBtnAccion = "Crear Pedido";
         this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
       }
@@ -872,7 +872,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.matrisDetPedido = []; // vacia la instancia
         this.pedidoService.elementoBorrados = []; // vacia la instancia
         this.pedidoService.readonlyField = false;
-        this.pedidoService.pedido_ = {} as Pedido; 
+        this.pedidoService.pedido_ = {} as Pedido;
         this.pedidoService.totalPri = 0;
         this.pedidoService.totalCnt = 0;
         this.pedidoService.totalPed = 0;
@@ -880,11 +880,11 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmontd = 0;
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
-        this.pedidoService.txtBtnAccion = "Crear Pedido"; 
+        this.pedidoService.txtBtnAccion = "Crear Pedido";
         this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
     }
-    
+
   }//resetForm
 
   selectEvent(elemento){
@@ -893,7 +893,7 @@ export class NewpedComponent implements OnInit {
     const isLargeNumber = (element) => element.idcliente.trim() == val.trim();
     const indice = this.clienteList.findIndex(isLargeNumber);
     this.pedidoService.pedido_.nomcliente = "";
-    
+
     this.nomCli="";
     this.rifCli="";
     this.tlfCli="";
@@ -930,7 +930,7 @@ export class NewpedComponent implements OnInit {
       this.tlfCli=this.clienteList[indice].telefonof;
       this.dirCli=this.clienteList[indice].direccion;
       this.rifCli=this.clienteList[indice].rif;
-  
+
       //Buscar precio asociado a l lista de precios
       const lnum = (element) => element.descripcion.trim() == this.clienteList[indice].listaprecio.trim();
       const ind = this.lprecioList.findIndex(lnum);
@@ -953,7 +953,7 @@ export class NewpedComponent implements OnInit {
       this.zonVen = this.vendedorList[indVen].vzona;
       this.pedidoService.pedido_.idvendedor = this.vendedorList[indVen].idvendedor;
       //********************************************************************************* */
-      
+
     }
   }//selectEvent
 
@@ -972,9 +972,9 @@ export class NewpedComponent implements OnInit {
     this.nomCli="";
     this.rifCli="";
     this.tlfCli="";
-    this.dirCli="";   
+    this.dirCli="";
     this.zonVen="";
-    
+
 
     this.pedidoService.pedido_.codigodematerial = "Ninguno";
     this.pedidoService.pedido_.descripcionmaterial = "";
@@ -1090,7 +1090,7 @@ export class NewpedComponent implements OnInit {
       this.pedidoService.pedido_.preciomaterial =  precioMaterial;
       this.pedidoService.pedido_.cantidadmaterial = this.myempty;
       this.pedidoService.pedido_.totalpormaterial = this.myempty;
-      
+
 
       //this.cantidadmaterial_.focus();
       //
@@ -1098,7 +1098,7 @@ export class NewpedComponent implements OnInit {
 
     }
     this.renderer.selectRootElement('#cantidadmaterial').focus();
-  }// selectedchangeCodMat  
+  }// selectedchangeCodMat
 
   txtctnchange(cnt){
     let tmat;
@@ -1135,12 +1135,12 @@ export class NewpedComponent implements OnInit {
          aux_tmontdv=0;
     }
 
-    //Calcula el desc porcentual 
+    //Calcula el desc porcentual
     let auxDescPorce = (this.pedidoService.totalPed*this.pedidoService.pedido_.descuentoporc)/100;
 
     this.pedidoService.tmontd = auxDescPorce + parseFloat(aux_tmontdv);
-    
-    
+
+
     //let valor:number = (this.pedidoService.tmontd*100)/this.pedidoService.totalPed;
     //this.pedidoService.pedido_.descuentoporc = parseFloat(valor.toFixed(2));
 
@@ -1150,7 +1150,7 @@ export class NewpedComponent implements OnInit {
       montoDescAux = this.pedidoService.tmontd;
     }
     this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
-    
+
     //Calculo Monto Neto Anterior
     //this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
     //Calculo Monto Neto sin iva
@@ -1166,7 +1166,7 @@ export class NewpedComponent implements OnInit {
   agregardetalles(){
     //agregar fila en el array
    // console.log("indice ",this.pedidoService.matrisDetPedido.length);
-    
+
 
     this.pedidoService.matrisDetPedido = this.pedidoService.matrisDetPedido.concat({
       idpedido:null,
@@ -1182,11 +1182,11 @@ export class NewpedComponent implements OnInit {
     //this.pedidoService.matrisDetPedido.sort((a, b) => (a.codigodematerial > b.codigodematerial ? 1 : -1));
     //this.pedidoService.matrisDetPedido.sort((a, b) => a.totalpormaterial - b.totalpormaterial)
 
-    //Calcular totales para la tabla 
+    //Calcular totales para la tabla
     this.pedidoService.totalPri = this.pedidoService.totalPri + this.pedidoService.pedido_.preciomaterial;
     this.pedidoService.totalCnt = this.pedidoService.totalCnt + this.pedidoService.pedido_.cantidadmaterial;
     this.pedidoService.totalPed = this.pedidoService.totalPed + this.pedidoService.pedido_.totalpormaterial;
-  
+
     //Calculo del descuento en base al monto bruto
     this.pedidoService.tmontb = this.pedidoService.totalPed;
     if (this.pedidoService.pedido_.descuentoporc == null || typeof this.pedidoService.pedido_.descuentoporc === "undefined" || isNaN(this.pedidoService.pedido_.descuentoporc)){

@@ -1,3 +1,7 @@
-.pageBreak {
-  page-break-after: always;
+
+@media print {
+  .pageBreak {
+    page-break-before: always;
+  }
+
 }

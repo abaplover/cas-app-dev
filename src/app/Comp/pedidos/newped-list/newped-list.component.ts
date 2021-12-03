@@ -31,7 +31,7 @@ export class NewpedListComponent implements OnInit {
   public mrechazoList: Mrechazo[]; //arreglo vacio
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento',/*'totalmontoimpuesto',*/ 'totalmontoneto', 'Opc'];
 
 
   constructor(
@@ -46,7 +46,7 @@ export class NewpedListComponent implements OnInit {
 
     this.pedidoService.getPedidosA().subscribe(pedidos=>{
       this.pedidoslist = pedidos;
-      
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
@@ -94,7 +94,7 @@ export class NewpedListComponent implements OnInit {
     this.clientepedidoEli = this.pedidoslist[this.pedIndex].nomcliente;
     this.pedidoService.mostrarForm=false;
   }
-  
+
   onCancelar(pf?: NgForm){
     if(pf != null) pf.reset();
     this.idpedidoEli = "";
@@ -121,7 +121,7 @@ export class NewpedListComponent implements OnInit {
     this.pedidoService.totalCnt=0;
     this.pedidoService.totalPed=0;
     this.pedidoService.elementoBorrados = [];
-    
+
     if (ped.status.toUpperCase() == 'ACTIVO'){
         //console.log(ped);
         this.pedidoService.mostrarForm = true;
@@ -132,15 +132,15 @@ export class NewpedListComponent implements OnInit {
         this.pedidoService.start_time = this.timestamp2(ped.fechapedido).toString();
         this.pedidoService.valorAutVen = ped.idvendedor;
         //this.pedidoService.pedido_.listaprecio = ped.listaprecio;
-        
+
         this.pedidoService.presAscList = ped.precioasociado;
         this.pedidoService.docAdd = ped.uid;
 
         this.pedidoService.indicadorImpuesto = ped.indicadorImpuestoporc;
         this.pedidoService.indicadorImpuestoDesc = ped.indicadorImpuestodesc;
-    
+
         this.pedidoService.pedido_ =  Object.assign({}, ped);
-        
+
         this.timestampConvert(ped.fechapedido);
 
         //Get Order detaills
@@ -162,10 +162,10 @@ export class NewpedListComponent implements OnInit {
             if (this.pedidoService.tmontd>0){
               montoDescAux = this.pedidoService.tmontd;
             }
-            this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
+            //this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
 
-            //Calculo Monto Neto 
-            this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
+            //Calculo Monto Neto
+            this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);  //+ this.pedidoService.tmonti;
 
 
             //Muestra los campos de descuento
@@ -175,7 +175,7 @@ export class NewpedListComponent implements OnInit {
             //this.pedidoService.selectedIndex = 0;
             this.pedidoService.enviar=true;
             //console.log('despues: ',this.pedidoService.selectedIndex);
-        }) 
+        })
     } //Si status es Activo
 
   }//onEdit
@@ -193,7 +193,7 @@ export class NewpedListComponent implements OnInit {
     this.pedidoService.valorAutCli = "";
     this.pedidoService.valorAutVen = "";
     this.pedidoService.readonlyField = false;
-    this.pedidoService.pedido_ = {} as Pedido;  
+    this.pedidoService.pedido_ = {} as Pedido;
     this.pedidoService.pedido_.fechapedido = new Date;
 
     this.pedidoService.totalPri = 0;
@@ -205,7 +205,7 @@ export class NewpedListComponent implements OnInit {
     this.pedidoService.tmontn = 0;
     this.pedidoService.start_time = moment(new Date()).format('YYYY-MM-DD');
     this.pedidoService.txtBtnAccion = "Crear Pedido";
- 
+
   }//moForm
 
   verdetalles(event, ped){
@@ -215,30 +215,30 @@ export class NewpedListComponent implements OnInit {
     dialogConfig.maxWidth = "100%"
     dialogConfig.width = "95%";
     dialogConfig.height = "95%"
-    
+
     this.pedidoVer_ =  Object.assign({}, ped);
     this.timestampConvert(ped.fechapedido);
-    
+
     if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-      this.timestampConvert(ped.ffactura); 
+      this.timestampConvert(ped.ffactura);
     }
     if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-      this.timestampConvert(ped.fdespacho); 
+      this.timestampConvert(ped.fdespacho);
     }
     if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-      this.timestampConvert(ped.fpago); 
+      this.timestampConvert(ped.fpago);
     }
     if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-      this.timestampConvert(ped.ftentrega); 
+      this.timestampConvert(ped.ftentrega);
     }
     if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-      this.timestampConvert(ped.fentrega); 
+      this.timestampConvert(ped.fentrega);
     }
-  
+
     dialogConfig.data = {
       pedidoShow: Object.assign({}, this.pedidoVer_)
     };
-  
+
     this.dialogo.open(PedidoShowComponent,dialogConfig);
   }
 

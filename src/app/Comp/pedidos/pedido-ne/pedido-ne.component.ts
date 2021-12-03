@@ -7,7 +7,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
-//  Service 
+//  Service
 import { PedidoService } from 'src/app/services/pedido.service';
 import { CobrosService } from 'src/app/services/cobros.service';
 import { ClientService } from '../../../services/client.service';
@@ -47,7 +47,7 @@ export class PedidoNeComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
   //PARA EL LISTADO DE PEDIDOS
@@ -80,7 +80,7 @@ export class PedidoNeComponent implements OnInit {
   tmontd: number=0;
   tmonti: number=0;
   tmontn: number=0;
-  
+
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -93,7 +93,7 @@ export class PedidoNeComponent implements OnInit {
 
   public keywordPed = "uid";
   public keywordsCli = ['idcliente','descripcion'];
-  
+
   maxDate: Date;
   minDate = moment(new Date()).format('YYYY-MM-DD');
   maxDate_= moment(new Date()).format('YYYY-MM-DD');
@@ -105,7 +105,7 @@ export class PedidoNeComponent implements OnInit {
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
   constructor
-  ( 
+  (
     public pedidoService: PedidoService,
     public cobroService: CobrosService,
     private toastr      : ToastrService,
@@ -119,7 +119,7 @@ export class PedidoNeComponent implements OnInit {
     public loginS       : FirebaseloginService,
     public tipodS       : TipodService,
     private dialogo     : MatDialog,
-  ) 
+  )
   {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
@@ -127,7 +127,7 @@ export class PedidoNeComponent implements OnInit {
     this.maxDate = new Date(currentYear, currentm, currentd);
   }
 
-   
+
   ngOnInit(): void {
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
@@ -163,7 +163,7 @@ export class PedidoNeComponent implements OnInit {
 
     this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
       this.umedidaList = ums;
-    })    
+    })
 
     this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
       this.iimpuestoList = iis;
@@ -176,12 +176,12 @@ export class PedidoNeComponent implements OnInit {
     this.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
-  
+
   }//ngOnInit
 
 
-/** 
- * PARA EL LISTADO DE PEDIDOS 
+/**
+ * PARA EL LISTADO DE PEDIDOS
 */
 applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
@@ -224,21 +224,21 @@ verdetalles(event, ped){
 
   this.pedidoVer_ =  Object.assign({}, ped);
   this.timestampConvert(ped.fechapedido,1);
-  
+
   if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-    this.timestampConvert(ped.ffactura,2); 
+    this.timestampConvert(ped.ffactura,2);
   }
   if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-    this.timestampConvert(ped.fdespacho,3); 
+    this.timestampConvert(ped.fdespacho,3);
   }
   if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-    this.timestampConvert(ped.fpago,4); 
+    this.timestampConvert(ped.fpago,4);
   }
   if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-    this.timestampConvert(ped.ftentrega,5); 
+    this.timestampConvert(ped.ftentrega,5);
   }
   if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-    this.timestampConvert(ped.fentrega,6); 
+    this.timestampConvert(ped.fentrega,6);
   }
 
 
@@ -260,7 +260,7 @@ onCancelar(pf?: NgForm,de?:number){
         this.totalPri = 0;
         this.totalCnt = 0;
         this.totalPed = 0;
-      
+
         this.tmontb=0;
         this.tmontd=0;
         this.tmonti=0;
@@ -275,7 +275,7 @@ onCancelar(pf?: NgForm,de?:number){
       this.totalPri = 0;
       this.totalCnt = 0;
       this.totalPed = 0;
-      
+
       this.tmontb=0;
       this.tmontd=0;
       this.tmonti=0;
@@ -288,7 +288,7 @@ onCancelar(pf?: NgForm,de?:number){
     this.totalPri = 0;
     this.totalCnt = 0;
     this.totalPed = 0;
-    
+
     this.tmontb=0;
     this.tmontd=0;
     this.tmonti=0;
@@ -297,8 +297,8 @@ onCancelar(pf?: NgForm,de?:number){
   }
 }
 
-/** 
- * PARA EL LISTADO DE PEDIDOS +  
+/**
+ * PARA EL LISTADO DE PEDIDOS +
 */
 
 
@@ -379,7 +379,7 @@ onCancelar(pf?: NgForm,de?:number){
       this.pedidoService.updatePedidos(this.pedido_);
       //Crea un elemento en la coleccion cobros
       this.cobroService.addCobros(this.cobro_);
-      
+
       this.toastr.success('Operación Terminada', 'Nofificacinón de entrega creada');
     }
     this.onCancelar(pf,1);
@@ -409,15 +409,15 @@ onCancelar(pf?: NgForm,de?:number){
 
   resetFormnf(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormnd(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormne(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
 
   moForm(opc?: number){
@@ -425,21 +425,21 @@ onCancelar(pf?: NgForm,de?:number){
       this.opcnf = true;
       this.opcnd = false;
       this.opcne = false;
-      
+
       if (this.pedido_.ffactura == null || typeof this.pedido_.ffactura === "undefined"){
         this.pedido_.ffactura =  new Date();
       }else{
         this.pedido_.ffactura = this.pedido_.ffactura;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar";     
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==2){
       this.opcnf = false;
       this.opcnd = true;
       this.opcne = false;
-      
+
       if (this.pedido_.fdespacho == null || typeof this.pedido_.fdespacho === "undefined"){
         this.pedido_.fdespacho =  new Date();
       }else{
@@ -452,8 +452,8 @@ onCancelar(pf?: NgForm,de?:number){
         this.pedido_.ftentrega = this.pedido_.ftentrega;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==3){
       this.opcnf = false;
@@ -472,8 +472,8 @@ onCancelar(pf?: NgForm,de?:number){
         this.pedido_.fpago = this.pedido_.fpago;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
   }
 
   timestampConvert2(fec){
@@ -490,7 +490,7 @@ onCancelar(pf?: NgForm,de?:number){
     console.log('aaaa:',elemento);
 
     this.pedido_ =  Object.assign({}, elemento);
-    
+
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';
     }
@@ -513,20 +513,20 @@ onCancelar(pf?: NgForm,de?:number){
     if (elemento.fpago != null || typeof elemento.fpago != "undefined"){
         this.pedido_.fpago = this.timestampConvert2(elemento.fpago);
     }
-    
-    
-    
+
+
+
     this.moForm(this.pedidoService.selectedIndex);
 
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
@@ -540,7 +540,7 @@ onCancelar(pf?: NgForm,de?:number){
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
@@ -607,26 +607,26 @@ onCancelar(pf?: NgForm,de?:number){
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
       //Calculo del descuento en base al monto bruto
       this.tmontb = this.totalPed;
       this.tmontd = (this.totalPed*this.pedido_.descuentoporc)/100;
-        
+
       //Calculo del Impuesto en base al monto bruto
       let montoDescAux=0;
       if (this.tmontd>0){
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
@@ -643,7 +643,7 @@ onCancelar(pf?: NgForm,de?:number){
   }
 
   closeautoCompletePed(){
- 
+
     this.MostrarPed = 'display:none;';
     this.mensaje01 = "";
     this.valorAutPed = "";

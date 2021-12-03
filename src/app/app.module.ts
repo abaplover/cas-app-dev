@@ -171,6 +171,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { AveriaShowComponent } from './Comp/averias/averia-show/averia-show.component';
 import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-averias.component';
 import { PrintLabelComponent } from './Comp/print-label/print-label.component';
+import { PedidosLayoutComponent } from './Comp/pedidos/pedidos-layout/pedidos-layout.component';
+import { TotalesDePedidosComponent } from './Comp/totales-de-pedidos/totales-de-pedidos.component';
+import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-auto-complete.component';
 
 
 
@@ -252,6 +255,9 @@ import { PrintLabelComponent } from './Comp/print-label/print-label.component';
     AveriaShowComponent,
     CerrarAveriasComponent,
     PrintLabelComponent,
+    PedidosLayoutComponent,
+    TotalesDePedidosComponent,
+    ClientAutoCompleteComponent,
 
   ],
   imports: [

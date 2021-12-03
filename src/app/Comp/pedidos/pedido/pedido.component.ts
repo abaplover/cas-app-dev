@@ -7,7 +7,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
-//  Service 
+//  Service
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { LprecioService } from '../../../services/lprecio.service';
@@ -58,9 +58,9 @@ export class PedidoComponent implements OnInit {
   txtComentario = "";
   pedidoslistDet=[];
   // +PARA EL LISTAR PEDIDOS +
-  
-  
-  
+
+
+
   estadoElement= "estado1";
   currencyPipeVEF='VEF';
   currencyPipeUSD='USD';
@@ -78,7 +78,7 @@ export class PedidoComponent implements OnInit {
   public iimpuestoList: Iimpuesto[]; //arreglo vacio
   public mrechazoList: Iimpuesto[]; //arreglo vacio
   //pedidoService.matrisDetPedido: PedidoDet[]=[];
-  
+
   public keywordCli = "idcliente";
   public keywordsCli = ['idcliente','descripcion'];
   public keywordVen = "idvendedor";
@@ -91,7 +91,7 @@ export class PedidoComponent implements OnInit {
   public msj_enlace: string = 'Pedidos';
 
   constructor
-  ( 
+  (
     public pedidoService: PedidoService,
     private toastr      : ToastrService,
     public clienteS     : ClientService,
@@ -101,9 +101,9 @@ export class PedidoComponent implements OnInit {
     public productS     : ProductService,
     public umedidaS     : UmedidaService,
     public iimpuestoS   : IimpuestoService,
-    public mrechazoS    : MrechazoService,  
+    public mrechazoS    : MrechazoService,
     public loginS       : FirebaseloginService
-  ) 
+  )
   {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
@@ -111,7 +111,7 @@ export class PedidoComponent implements OnInit {
     this.maxDate = new Date(currentYear, currentm, currentd);
   }
 
-   
+
   ngOnInit(): void {
     //this.pedidoService.pedido_.descuentoporc = 0;
     //this.pedidoService.pedido_.descuentovalor = 0;
@@ -142,7 +142,7 @@ export class PedidoComponent implements OnInit {
 
     this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
       this.umedidaList = ums;
-    })    
+    })
 
     this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
       this.iimpuestoList = iis;
@@ -186,7 +186,7 @@ export class PedidoComponent implements OnInit {
     this.idpedidoEli = this.pedidoslist[this.pedIndex].uid;
     this.fechapedidoEli = this.pedidoslist[this.pedIndex].fechapedido;
     this.clientepedidoEli = this.pedidoslist[this.pedIndex].nomcliente;
-    
+
   }
 
   onCancelar(pf?: NgForm){
@@ -201,7 +201,7 @@ onDelete(event){
 
   if (this.txtComentario != ""){
     if (this.pedIndex!=-990){
-      /*this.pedIndex es el indice del pedido que se va a elimanr, se consigue al hacer click 
+      /*this.pedIndex es el indice del pedido que se va a elimanr, se consigue al hacer click
         en el icono de eliminar en la lista de documentos */
       this.pedidoslist[this.pedIndex].status="ELIMINADO";
       this.pedidoslist[this.pedIndex].modificado = new Date;
@@ -212,7 +212,7 @@ onDelete(event){
       this.mostrardiv=false;
     }
   }
-}  
+}
 
 timestampConvert(fec,col?:number){
   let dateObject = new Date(fec.seconds*1000);
@@ -237,19 +237,19 @@ onEdit(event, ped){
       this.pedidoService.mostrarForm = true;
       this.pedidoService.txtBtnAccion = "Actualizar Pedido";
       this.pedidoService.readonlyField = true;
-      
+
       this.pedidoService.valorAutCli = ped.idcliente;
       this.pedidoService.valorAutVen = ped.idvendedor;
       //this.pedidoService.pedido_.listaprecio = ped.listaprecio;
-      
+
       this.pedidoService.presAscList = ped.precioasociado;
       this.pedidoService.docAdd = ped.uid;
 
       this.pedidoService.indicadorImpuesto = ped.indicadorImpuestoporc;
       this.pedidoService.indicadorImpuestoDesc = ped.indicadorImpuestodesc;
-  
+
       this.pedidoService.pedido_ =  Object.assign({}, ped);
-      
+
       this.timestampConvert(ped.fechapedido);
 
       //Get Order detaills
@@ -285,15 +285,15 @@ onEdit(event, ped){
           this.pedidoService.selectedIndex = 0;
           this.pedidoService.enviar=true;
           //console.log('despues: ',this.pedidoService.selectedIndex);
-      }) 
+      })
   } //Si status es Activo
 
-      
-  
-  //this.codMat.nativeElement.focus();
- 
 
-  
+
+  //this.codMat.nativeElement.focus();
+
+
+
 }//onEdit
 
 
@@ -316,7 +316,7 @@ onEdit(event, ped){
 
   onSubmit(pf?: NgForm){
     //Nuevo Pedido
-    if(this.pedidoService.pedido_.uid == null){ 
+    if(this.pedidoService.pedido_.uid == null){
         //set parameter date
         this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.pedido_.fechapedido);
         this.pedidoService.pedido_.creado = new Date;
@@ -331,7 +331,7 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
         this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
-        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri; 
+        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
         this.pedidoService.pedido_.indicadorImpuestodesc = this.pedidoService.indicadorImpuestoDesc;
@@ -360,7 +360,7 @@ onEdit(event, ped){
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         //console.log('id Insertado: ', this.pedidoService.docAdd);
-      
+
           //Add details
         if (this.pedidoService.docAdd != -1){
             //save detaills
@@ -376,7 +376,7 @@ onEdit(event, ped){
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
         this.pedidoService.enviar = false;
-    
+
     }else{ //Actualiza Pedido
         //set parameter date
         //this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.pedido_.fechapedido);
@@ -388,12 +388,12 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
         this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
-        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri; 
+        this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
         this.pedidoService.pedido_.indicadorImpuestodesc = this.pedidoService.indicadorImpuestoDesc;
         this.pedidoService.pedido_.indicadorImpuestoporc = this.pedidoService.indicadorImpuesto;
-        
+
         //Limpia los campos que se iran al detalle del pedido
         this.pedidoService.pedido_.codigodematerial = "";
         this.pedidoService.pedido_.descripcionmaterial = "";
@@ -403,28 +403,28 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalpormaterial = 0;
 
 
-        
+
         if (this.pedidoService.pedido_.descuentoporc == null || typeof this.pedidoService.pedido_.descuentoporc === "undefined" || isNaN(this.pedidoService.pedido_.descuentoporc)){
           this.pedidoService.pedido_.descuentoporc = 0;
         }
         if (this.pedidoService.pedido_.descuentovalor == null || typeof this.pedidoService.pedido_.descuentovalor === "undefined" || isNaN(this.pedidoService.pedido_.descuentovalor)){
           this.pedidoService.pedido_.descuentovalor = 0;
         }
-        
+
         //Update Orders
         this.pedidoService.updatePedidos(this.pedidoService.pedido_);
 
         for (let i in this.pedidoService.matrisDetPedido){
-          //Actualiza los registros 
+          //Actualiza los registros
           if (this.pedidoService.matrisDetPedido[i].uid!=""){
               this.pedidoService.updatePedidosDet(this.pedidoService.matrisDetPedido[i]);
           }else{
               //Agrega los nuevos registros
               this.pedidoService.matrisDetPedido[i].idpedido=this.pedidoService.pedido_.uid;
               this.pedidoService.addPedidosDet(this.pedidoService.matrisDetPedido[i]);
-          }      
+          }
         }
-        //Elimina los registros seleccionados 
+        //Elimina los registros seleccionados
         for (let k in this.elementoBorrados){
           this.pedidoService.deletePedidosDet(this.elementoBorrados[k])
         }
@@ -439,8 +439,8 @@ onEdit(event, ped){
         this.pedidoService.tmontd = 0;
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
-        
-        
+
+
         this.toastr.success('Operación Terminada','Pedido Actualizado');
         this.pedidoService.enviar = false;
     }
@@ -450,16 +450,16 @@ onEdit(event, ped){
     pf.resetForm();
     this.pedidoService.mostrarForm = false;
     this.pedidoService.readonlyField = false;
-    this.pedidoService.pedido_ = {} as Pedido;  
+    this.pedidoService.pedido_ = {} as Pedido;
     this.pedidoService.matrisDetPedido = []; // vacia la instancia
-    this.pedidoService.txtBtnAccion = "Enviar Pedido"; 
+    this.pedidoService.txtBtnAccion = "Enviar Pedido";
   }//onSubmit
 
-  
+
   @ViewChild('pedidoForm') myForm;
-  resetFormFunc(field?: number){  
+  resetFormFunc(field?: number){
     this.myForm.resetForm();
-    if (field == 2){  
+    if (field == 2){
     }
   }//resetForm function
 
@@ -469,7 +469,7 @@ onEdit(event, ped){
     if(pf != null) pf.reset();
     this.pedidoService.matrisDetPedido = []; // vacia la instancia
     this.pedidoService.readonlyField = false;
-    this.pedidoService.pedido_ = {} as Pedido; 
+    this.pedidoService.pedido_ = {} as Pedido;
     this.pedidoService.totalPri = 0;
     this.pedidoService.totalCnt = 0;
     this.pedidoService.totalPed = 0;
@@ -477,7 +477,7 @@ onEdit(event, ped){
     this.pedidoService.tmontd = 0;
     this.pedidoService.tmonti = 0;
     this.pedidoService.tmontn = 0;
-    this.pedidoService.txtBtnAccion = "Enviar Pedido"; 
+    this.pedidoService.txtBtnAccion = "Enviar Pedido";
     this.pedidoService.enviar = false;
     this.pedidoService.mostrarForm = false;
   }
@@ -498,7 +498,7 @@ onEdit(event, ped){
     this.pedidoService.valorAutCli = "";
     this.pedidoService.valorAutVen = "";
     this.pedidoService.readonlyField = false;
-    this.pedidoService.pedido_ = {} as Pedido;  
+    this.pedidoService.pedido_ = {} as Pedido;
     this.pedidoService.pedido_.fechapedido = new Date;
 
     this.pedidoService.totalPri = 0;
@@ -508,8 +508,8 @@ onEdit(event, ped){
     this.pedidoService.tmontd = 0;
     this.pedidoService.tmonti = 0;
     this.pedidoService.tmontn = 0;
-  
-    this.pedidoService.txtBtnAccion = "Enviar Pedido"; 
+
+    this.pedidoService.txtBtnAccion = "Enviar Pedido";
   }
 
   selectEvent(elemento){
@@ -565,7 +565,7 @@ onEdit(event, ped){
       this.pedidoService.pedido_.nomvendedor = this.vendedorList[indVen].descripcion;
       this.pedidoService.pedido_.idvendedor = this.vendedorList[indVen].idvendedor;
       //********************************************************************************* */
-      
+
     }
   }
 
@@ -716,7 +716,7 @@ onEdit(event, ped){
       this.pedidoService.pedido_.preciomaterial =  precioMaterial;
       this.pedidoService.pedido_.cantidadmaterial = this.myempty;
       this.pedidoService.pedido_.totalpormaterial = this.myempty;
-      
+
     }
   }// selectedchange
 
@@ -743,7 +743,7 @@ onEdit(event, ped){
     //Calculo Monto Neto anterior
     //this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
     //Calculo Monto Neto sin iva
-    this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);    
+    this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
 
   }//txtdescpchange
 
@@ -754,12 +754,12 @@ onEdit(event, ped){
          aux_tmontdv=0;
     }
 
-    //Calcula el desc porcentual 
+    //Calcula el desc porcentual
     let auxDescPorce = (this.pedidoService.totalPed*this.pedidoService.pedido_.descuentoporc)/100;
 
     this.pedidoService.tmontd = auxDescPorce + parseFloat(aux_tmontdv);
-    
-    
+
+
     //let valor:number = (this.pedidoService.tmontd*100)/this.pedidoService.totalPed;
     //this.pedidoService.pedido_.descuentoporc = parseFloat(valor.toFixed(2));
 
@@ -769,7 +769,7 @@ onEdit(event, ped){
       montoDescAux = this.pedidoService.tmontd;
     }
     this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
-    
+
     //Calculo Monto Neto anterior
     //this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
     //Calculo Monto Neto sin iva
@@ -791,11 +791,11 @@ onEdit(event, ped){
       totalpormaterial:this.pedidoService.pedido_.totalpormaterial
     });
 
-    //Calcular totales para la tabla 
+    //Calcular totales para la tabla
     this.pedidoService.totalPri = this.pedidoService.totalPri + this.pedidoService.pedido_.preciomaterial;
     this.pedidoService.totalCnt = this.pedidoService.totalCnt + this.pedidoService.pedido_.cantidadmaterial;
     this.pedidoService.totalPed = this.pedidoService.totalPed + this.pedidoService.pedido_.totalpormaterial;
-  
+
     //Calculo del descuento en base al monto bruto
     this.pedidoService.tmontb = this.pedidoService.totalPed;
     if (this.pedidoService.pedido_.descuentoporc == null || typeof this.pedidoService.pedido_.descuentoporc === "undefined" || isNaN(this.pedidoService.pedido_.descuentoporc)){
@@ -817,7 +817,7 @@ onEdit(event, ped){
 
     this.pedidoService.tmonti = ((this.pedidoService.tmontb - montoDescAux)* this.pedidoService.indicadorImpuesto)/100;
 
-    //Calculo Monto Neto 
+    //Calculo Monto Neto
     //this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux) + this.pedidoService.tmonti;
     //Calculo Monto Neto sin iva
     this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
@@ -840,7 +840,7 @@ onEdit(event, ped){
       this.pedidoService.enviar = true;
       this.pedidoService.readonlyField = true;
     }
-    
+
 
   }//agregardetalles
 

@@ -1,0 +1,21 @@
+<div class="form-group">
+  <div class="ng-autocomplete" >
+    <ng-autocomplete
+      [data]="clienteList"
+      [searchKeyword]="keywordCli"
+      placeHolder="Cliente"
+      [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate"
+      name="idcliente"
+      (inputChanged)='onChangeSearch($event)'
+      (selected)='selectEvent($event)'
+    >
+    </ng-autocomplete>
+    <ng-template #itemTemplate let-item>
+      <a [innerHTML]="item.idesc"></a>
+    </ng-template>
+    <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+    </ng-template>
+  </div>
+</div>

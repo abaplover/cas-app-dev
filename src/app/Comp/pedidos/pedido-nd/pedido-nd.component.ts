@@ -7,7 +7,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
-//  Service 
+//  Service
 import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { LprecioService } from '../../../services/lprecio.service';
@@ -56,8 +56,8 @@ export class PedidoNdComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'nomcliente', 'nomvendedor', 'totalmontobruto','totalmontodescuento','totalmontoimpuesto', 'totalmontoneto', 'Opc'];
-  
+  displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto','totalmontodescuento','totalmontoneto', 'Opc'];
+
   pedidoVer_ = {} as Pedido;
   //PARA EL LISTADO DE PEDIDOS
 
@@ -88,7 +88,7 @@ export class PedidoNdComponent implements OnInit {
   tmontd: number=0;
   tmonti: number=0;
   tmontn: number=0;
-  
+
 
   nomCli='';
   rifCli='';
@@ -108,11 +108,11 @@ export class PedidoNdComponent implements OnInit {
   public umedidaList: Umedida[]; //arreglo vacio
   public iimpuestoList: Iimpuesto[]; //arreglo vacio
   public tipodocList: Tipod[]; //arreglo vacio
-  
-  
+
+
   public keywordPed = "uid";
   public keywordsCli = ['idcliente','descripcion'];
- 
+
   maxDate= moment(new Date()).format('YYYY-MM-DD');
   minDate = moment(new Date()).format('YYYY-MM-DD');
 
@@ -126,7 +126,7 @@ export class PedidoNdComponent implements OnInit {
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
   constructor
-  ( 
+  (
     public pedidoService: PedidoService,
     private toastr      : ToastrService,
     public clienteS     : ClientService,
@@ -142,7 +142,7 @@ export class PedidoNdComponent implements OnInit {
     private dialogo     : MatDialog,
     private afStorage:AngularFireStorage,
     public datoempresaS : DatoempService
-  ) 
+  )
   {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
@@ -150,7 +150,7 @@ export class PedidoNdComponent implements OnInit {
     //this.maxDate = new Date(currentYear, currentm, currentd);
   }
 
-   
+
   ngOnInit(): void {
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
@@ -191,7 +191,7 @@ export class PedidoNdComponent implements OnInit {
 
     this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
       this.umedidaList = ums;
-    })    
+    })
 
     this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
       this.iimpuestoList = iis;
@@ -203,16 +203,16 @@ export class PedidoNdComponent implements OnInit {
     this.datoempresaS.getDatoemps().valueChanges().subscribe(emps =>{
       this.dempresaList = emps;
     })
-    
+
     this.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
-  
+
   }//ngOnInit
 
 
-/** 
- * PARA EL LISTADO DE PEDIDOS 
+/**
+ * PARA EL LISTADO DE PEDIDOS
 */
 applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
@@ -256,21 +256,21 @@ verdetalles(event, ped){
 
   this.pedidoVer_ =  Object.assign({}, ped);
   this.timestampConvert(ped.fechapedido,1);
-  
+
   if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
-    this.timestampConvert(ped.ffactura,2); 
+    this.timestampConvert(ped.ffactura,2);
   }
   if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
-    this.timestampConvert(ped.fdespacho,3); 
+    this.timestampConvert(ped.fdespacho,3);
   }
   if (ped.fpago !== null && typeof ped.fpago != "undefined"){
-    this.timestampConvert(ped.fpago,4); 
+    this.timestampConvert(ped.fpago,4);
   }
   if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined"){
-    this.timestampConvert(ped.ftentrega,5); 
+    this.timestampConvert(ped.ftentrega,5);
   }
   if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
-    this.timestampConvert(ped.fentrega,6); 
+    this.timestampConvert(ped.fentrega,6);
   }
 
   dialogConfig.data = {
@@ -290,7 +290,7 @@ onCancelar(pf?: NgForm,de?:number){
         this.totalPri = 0;
         this.totalCnt = 0;
         this.totalPed = 0;
-  
+
         this.tmontb=0;
         this.tmontd=0;
         this.tmonti=0;
@@ -305,7 +305,7 @@ onCancelar(pf?: NgForm,de?:number){
         this.totalPri = 0;
         this.totalCnt = 0;
         this.totalPed = 0;
-  
+
         this.tmontb=0;
         this.tmontd=0;
         this.tmonti=0;
@@ -324,11 +324,11 @@ onCancelar(pf?: NgForm,de?:number){
     this.tmonti=0;
     this.tmontn=0;
     this.pedido_ = {} as Pedido;
-  }   
+  }
 }
 
-/** 
- * PARA EL LISTADO DE PEDIDOS +  
+/**
+ * PARA EL LISTADO DE PEDIDOS +
 */
 
 
@@ -375,7 +375,7 @@ generarpdf(pf?: NgForm)
 
   var rows = [];
   rows.push(['', '', '', '', '']);
-  //console.log('cccccc: ',this.pedidoslistDet);  
+  //console.log('cccccc: ',this.pedidoslistDet);
   for (let i in this.pedidoslistDet){
     let indice:number = parseInt(i);
     rows.push([this.pedidoslistDet[i].codigodematerial.toString(), this.pedidoslistDet[i].descripcionmaterial.toString(),this.pedidoslistDet[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.pedidoslistDet[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.pedidoslistDet[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2})]);
@@ -392,7 +392,7 @@ generarpdf(pf?: NgForm)
 
   //const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun","Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
-  
+
   let dateObj = this.pedido_.fechapedido;
   let min_ = dateObj.getMinutes();
 
@@ -421,11 +421,11 @@ generarpdf(pf?: NgForm)
   horas_ [3] = "03:" + min_ + " AM";
   horas_ [2] = "02:" + min_ + " AM";
   horas_ [1] = "01:" + min_ + " AM";
-  
+
   let month = monthNames[dateObj.getMonth()];
   let day = String(dateObj.getDate()).padStart(2, '0');
   let year = dateObj.getFullYear();
-  let momento = horas_[dateObj.getHours()]; 
+  let momento = horas_[dateObj.getHours()];
   let output = day +'/'+ month + '/' + year + ' '+ momento;
 
   const documentDefinition = {
@@ -433,11 +433,11 @@ generarpdf(pf?: NgForm)
       width: 600,
       height: 760
     },
-    pageMargins: [ 25, 30, 25, 120 ],  
+    pageMargins: [ 25, 30, 25, 120 ],
 
     footer: {
-      
-          columns: 
+
+          columns:
           [
             { //columna 0
               width: 25,
@@ -445,17 +445,17 @@ generarpdf(pf?: NgForm)
             },
             { //columna 1
               width: 295,
-              table: 
+              table:
               {
                   dontBreakRows: true,
                   widths: [80, 145],
                   body: [
                     [
-                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]}, 
+                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]},
                         {text: totalArticulos, border: [false, true, true, false]}
-                    ],    
+                    ],
                     [
-                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]}, 
+                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]},
                         {text: this.pedido_.totalCnt.toLocaleString('de-DE', {maximumFractionDigits: 0}), border: [false, false, true, true]}
                     ]
                   ]
@@ -463,33 +463,33 @@ generarpdf(pf?: NgForm)
             }, //columna 2
             {
                 width: 180,
-                table: 
+                table:
                 {
-                    dontBreakRows: true,  
+                    dontBreakRows: true,
                     widths: [70, 155],
                     body: [
                       [
-                          {text: 'Sub total:',style: "boldtxt", border: [true, true, false, false]}, 
+                          {text: 'Sub total:',style: "boldtxt", border: [true, true, false, false]},
                           {text: this.pedido_.totalmontobruto.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left' , border: [false, true, true, false]}
-                      ],    
+                      ],
                       [
-                          {text: 'Descuento:',style: "boldtxt", border: [true, false, false, false]}, 
+                          {text: 'Descuento:',style: "boldtxt", border: [true, false, false, false]},
                           {text: this.pedido_.totalmontodescuento.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, false, true, false]}
-                      ],    
+                      ],
                       [
-                          {text: 'Total a pagar:',style: "boldtxt", border: [true, false, false, true]}, 
+                          {text: 'Total a pagar:',style: "boldtxt", border: [true, false, false, true]},
                           {text: this.pedido_.totalmontoneto.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, false, true, true]}
                       ]
                     ]
                 }
             }
           ],
-        
+
     },
 
     content: [
       // if you don't need styles, you can use a simple string to define a paragraph
-      
+
       {
         columns: [
           {
@@ -503,16 +503,16 @@ generarpdf(pf?: NgForm)
           },
           {
             width: 200,
-            table: 
+            table:
             {
                 widths: [200],
-                body: 
+                body:
                     [
                         [
-                            {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]}, 
-                        ],    
+                            {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]},
+                        ],
                         [
-                            {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]}, 
+                            {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]},
                         ]
                     ]
             }
@@ -523,56 +523,56 @@ generarpdf(pf?: NgForm)
           },
           {
             width: '*',
-            table: 
+            table:
             {
                 widths: [40,'*'],
-                body: 
+                body:
                     [
                         [
-                            {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                            {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
                             {text: this.dempresaList[0].telefonoFijo, fontSize: 10,border: [false, false, false, false]},
-                        ],    
+                        ],
                         [
                             {text: 'Celular',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
-                            {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]}, 
-                        ],    
+                            {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]},
+                        ],
                         [
-                            {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                            {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
                             {text: this.dempresaList[0].email, fontSize: 9,border: [false, false, false, false]},
                         ]
                     ]
             }
-          
-          
+
+
           }
         ],
       },
 
       { text:'Confirmación de pedido ',style: "linecentertitle",fontSize: 16},
 
-      { //dos columnas, en cada se define una tabla 
-        columns: 
+      { //dos columnas, en cada se define una tabla
+        columns:
         [
           {
             width: 285,
-            table: 
+            table:
             {
                 widths: [50, 175],
                 body: [
                   [
-                      {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]}, 
+                      {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]},
                       {text: this.pedido_.nomcliente, border: [false, true, true, false]}
-                  ],  
+                  ],
                   [
-                    {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]}, 
+                    {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]},
                     {text: this.pedido_.idcliente, border: [false, false, true, false]}
-                  ],  
+                  ],
                   [
-                      {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]}, 
+                      {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]},
                       {text: this.tlfCli, border: [false, false, true, false]}
-                  ],    
+                  ],
                   [
-                      {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]}, 
+                      {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]},
                       {text: this.dirCli, border: [false, false, true, true]}
                   ]
                 ]
@@ -580,35 +580,35 @@ generarpdf(pf?: NgForm)
           },
           {
               width: 180,
-              table: 
+              table:
               {
                   widths: [90, 135],
                   body: [
                     [
-                        {text: 'N°:',style: "boldtxt", border: [true, true, false, false]}, 
+                        {text: 'N°:',style: "boldtxt", border: [true, true, false, false]},
                         {text: docAdd , border: [false, true, true, false]}
-                    ],    
+                    ],
                     [
-                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]}, 
+                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]},
                         {text: output, border: [false, false, true, false]}
                     ],
                     [
-                      {text: 'Condición de pago :',style: "boldtxt", border: [true, false, false, true]}, 
+                      {text: 'Condición de pago :',style: "boldtxt", border: [true, false, false, true]},
                       {text: this.pedido_.condiciondepago, border: [false, false, true, true]}
                     ]
-                    ,    
+                    ,
                     [
-                        {text: '', border: [false, false, false, false]}, 
+                        {text: '', border: [false, false, false, false]},
                         {text: '', border: [false, false, false, false]}
                     ]
-                    ,    
+                    ,
                     [
-                        {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]}, 
+                        {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]},
                         {text: this.pedido_.nomvendedor, border: [false, true, true, false]}
                     ]
-                    ,    
+                    ,
                     [
-                        {text: 'Zona:',style: "boldtxt", border: [true, false, false, true]}, 
+                        {text: 'Zona:',style: "boldtxt", border: [true, false, false, true]},
                         {text: this.zonVen, border: [false, false, true, true]}
                     ]
                   ]
@@ -625,35 +625,35 @@ generarpdf(pf?: NgForm)
       //imprime el detalle de la matrix
       {
         width: 530,
-        table: 
+        table:
         {
           widths: [530],
-          body: 
+          body:
           [
             [
               {
                 layout: 'lightHorizontalLines', // optional
-                table: 
+                table:
                     {
                     widths: [55, 200, 60, 60, 60],
-                    body: 
+                    body:
                     [
                       [
-                          {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]}, 
+                          {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]},
                           {text: 'DESCRIPCIÓN',style: "boldtxt", border: [false, true, false, true]},
                           {text: 'CTD',style: "boldtxt", border: [false, true, false, true]},
                           {text: 'PRECIO U',style: "boldtxt", border: [false, true, false, true]},
                           {text: 'TOTAL',style: "boldtxt", border: [false, true, true, true]},
                       ]
                     ]
-                    
+
                     }
               }
             ]
           ]
         }
       },
-      
+
       //TABLA SIMPLE SI RECUADRO EXTERNO. Se llena con la variable row
       {
         layout: 'headerLineOnly', // optional
@@ -699,9 +699,9 @@ generarpdf(pf?: NgForm)
     pdfDocGenerator0.getBase64((data) => {
       var file = data;
     // });
-    
 
-  //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
+
+  //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba
   //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
   // pdfDocGenerator1.getBlob((blob) => {
   //   var file = blob;
@@ -792,7 +792,7 @@ generarpdf(pf?: NgForm)
       this.pedidoService.updatePedidos(this.pedido_);
       this.toastr.success('Operación Terminada', 'Nofificacinón de entrega creada');
     }
-    
+
   }
   anulardoc(pf?: NgForm,elemento?,num?:number){
     this.pedido_= elemento;
@@ -806,7 +806,7 @@ generarpdf(pf?: NgForm)
           this.pedido_.tipodoc = "";
           this.pedido_.nrofactura = "";
           this.pedidoService.updatePedidos(this.pedido_,num);
-          
+
           if(pf != null) pf.reset();
       }
       this.toastr.warning('Operación Terminada', 'Notificación de factura, anulada');
@@ -819,15 +819,15 @@ generarpdf(pf?: NgForm)
 
   resetFormnf(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormnd(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
   resetFormne(pf?: NgForm){
     if(pf != null) pf.reset();
-    this.pedidoService.txtBtnAccion = "Guardar"; 
+    this.pedidoService.txtBtnAccion = "Guardar";
   }
 
   moForm(opc?: number){
@@ -835,21 +835,21 @@ generarpdf(pf?: NgForm)
       this.opcnf = true;
       this.opcnd = false;
       this.opcne = false;
-      
+
       if (this.pedido_.ffactura == null || typeof this.pedido_.ffactura === "undefined"){
         this.pedido_.ffactura =  new Date();
       }else{
         this.pedido_.ffactura = this.pedido_.ffactura;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar";     
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==2){
       this.opcnf = false;
       this.opcnd = true;
       this.opcne = false;
-      
+
       if (this.pedido_.fdespacho == null || typeof this.pedido_.fdespacho === "undefined"){
         //this.pedido_.fdespacho =  new Date();
       }else{
@@ -862,8 +862,8 @@ generarpdf(pf?: NgForm)
         this.pedido_.ftentrega = this.pedido_.ftentrega;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
 
     if (opc==3){
       this.opcnf = false;
@@ -882,8 +882,8 @@ generarpdf(pf?: NgForm)
         this.pedido_.fpago = this.pedido_.fpago;
       }
 
-      this.pedidoService.txtBtnAccion = "Guardar"; 
-    } 
+      this.pedidoService.txtBtnAccion = "Guardar";
+    }
   }
 
   timestampConvert2(fec){
@@ -933,20 +933,20 @@ generarpdf(pf?: NgForm)
     if (elemento.fpago != null || typeof elemento.fpago != "undefined"){
         this.pedido_.fpago = this.timestampConvert2(elemento.fpago);
     }
-    
-    
-    
+
+
+
     this.moForm(this.pedidoService.selectedIndex);
 
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
@@ -960,7 +960,7 @@ generarpdf(pf?: NgForm)
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
@@ -1026,30 +1026,30 @@ generarpdf(pf?: NgForm)
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-  
+
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
-    
+
         //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
       }
 
       //Calculo del descuento en base al monto bruto
       this.tmontb = this.totalPed;
       this.tmontd = (this.totalPed*this.pedido_.descuentoporc)/100;
-        
+
       //Calculo del Impuesto en base al monto bruto
       let montoDescAux=0;
       if (this.tmontd>0){
         montoDescAux = this.tmontd;
       }
       this.tmonti = ((this.tmontb - montoDescAux)* this.pedido_.indicadorImpuestoporc)/100;
-    
+
       //Calculo Monto Neto anterior
       //this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
       //Calculo Monto Neto sin iva
-      this.tmontn = (this.tmontb - montoDescAux);      
+      this.tmontn = (this.tmontb - montoDescAux);
     })
 
     if (this.pedido_.status == "ACTIVO"){
@@ -1061,7 +1061,7 @@ generarpdf(pf?: NgForm)
   }
 
   closeautoCompletePed(){
- 
+
     this.MostrarPed = 'display:none;';
     this.mensaje01 = "";
     this.valorAutPed = "";

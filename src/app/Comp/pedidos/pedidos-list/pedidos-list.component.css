@@ -3,14 +3,14 @@
 	color: rgb(38, 83, 206) !important;
 	border-color: rgb(197, 194, 194);
   }
-  
+
 .btn-info:hover {
 	background: rgb(38, 83, 206) !important;
 	border-color: rgb(25, 10, 90) !important;
     transition: 0.5s background;
 	cursor: pointer;
 	color: white !important;
-	
+
   }
 .table{
 	text-align: left !important;
@@ -30,55 +30,64 @@
 table {
 	width: 100%;
 }
-  
+
   .mat-form-field {
 	font-size: 14px;
 	width: 100%;
   }
-  
+
 
 th.mat-sort-header-sorted {
 	color: black;
 }
 
-.mat-column-Fecha {
-	width: 160px !important;
-	text-align: left;
+.mat-column-fechapedido {
+  width: 100px !important;
+  text-align: left;
 }
 
-.mat-column-Status {
-	width: 100px !important;
-	text-align: left;
+.mat-column-status {
+  width: 100px !important;
+  text-align: left;
+}
+.mat-column-listaprecio {
+  width: 100px !important;
+  text-align: left;
 }
 
-.mat-column-Cliente {
-	width: 150px !important;
-	text-align: left;
+.mat-column-condiciondepago {
+  width: 100px !important;
+  text-align: left;
 }
 
-.mat-column-Vendedor {
-	width: 110px !important;
-	text-align: left;
+.mat-column-nomcliente {
+  width: 120px !important;
+  text-align: left;
 }
 
-.mat-column-Subtotal {
-	width: 100px !important;
-	text-align: right;
+.mat-column-nomvendedor {
+  width: 70px !important;
+  text-align: left;
+}
+
+.mat-column-totalmontobruto {
+  width: 70px !important;
+  text-align: right;
 }
 
 .mat-column-totalmontoimpuesto {
-	width: 100px !important;
-	text-align: right;
+  width: 70px !important;
+  text-align: right;
 }
 
 .mat-column-totalmontodescuento {
-	width: 100px !important;
-	text-align: right;
+  width: 70px !important;
+  text-align: right;
 }
 
 .mat-column-totalmontoneto {
-	width: 100px !important;
-	text-align: right;
+  width: 70px !important;
+  text-align: right;
 }
 
 .mat-column-Opc {

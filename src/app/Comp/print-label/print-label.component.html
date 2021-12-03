@@ -1,16 +1,17 @@
-<p>print-label works!</p>
-
 <div id="print-section">
 
   <h1> Print Test</h1>
+
   <div>
-    <p class="pageBreak">Page 1</p>
+    <p>Page 1</p>
   </div>
-  <div >
-    <p class="pageBreak">
-      Page 2
-    </p>
+
+  <div style="break-after: page;"></div>
+
+  <div>
+    <h2> Next Page</h2>
   </div>
+
 </div>
 
 <button printSectionId="print-section" ngxPrint>
