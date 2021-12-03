@@ -222,4 +222,8 @@ export class Rep04Component implements OnInit {
     })
   }
 
+  SelectedValue(Value){
+    this.codCli = Value;
+  }
+
 }

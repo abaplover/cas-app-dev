@@ -225,4 +225,8 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
     })
   }
 
+  SelectedValue(Value){
+    this.codCli = Value;
+  }
+
 }

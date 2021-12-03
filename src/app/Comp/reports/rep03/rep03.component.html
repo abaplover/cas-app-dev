@@ -2,7 +2,7 @@
 	<form #rep01="ngForm" *ngIf="!this.opcrep01">
 		<div class="row">
 			<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
-				<div id="ndesp" class="card border-secondary bg-light mb-3" style="padding:10px;">
+				<div id="ndesp" class="card" style="padding:10px;">
 					<div class="row">
 							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
 								<div class="form-group">
@@ -43,23 +43,7 @@
 									</mat-form-field>
 								</div>
 							</div>
-							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-								<div class="form-group">
-									<mat-form-field appearance="legacy" class="campo-width">
-										<mat-label>Código de Cliente</mat-label>
-										<mat-select value=selected
-											name="Código de Cliente"
-											[(ngModel)]="this.codCli"
-
-										>
-											<mat-option value={{cdc.idcliente}} *ngFor = "let cdc of clienteList">
-												{{cdc.idesc}}
-											</mat-option>
-										</mat-select>
-									</mat-form-field>
-								</div>
-							</div>
-							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Vendedor</mat-label>
@@ -75,7 +59,29 @@
 									</mat-form-field>
 								</div>
 							</div>
+
 						</div>
+            <div>
+              <div><app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete></div>
+              <!-- <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Código de Cliente</mat-label>
+										<mat-select value=selected
+											name="Código de Cliente"
+											[(ngModel)]="this.codCli"
+
+										>
+											<mat-option value={{cdc.idcliente}} *ngFor = "let cdc of clienteList">
+												{{cdc.idesc}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div> -->
+
+
+            </div>
 
 						<div class="row">
 							<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
