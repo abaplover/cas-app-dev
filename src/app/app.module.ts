@@ -18,6 +18,10 @@ import { AppComponent } from './app.component';
 
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
+// Print modules
+
+import { NgxPrintModule } from 'ngx-print';
+
 
 //firebase
 import { AngularFireModule } from '@angular/fire';
@@ -60,7 +64,7 @@ import { DataTablesModule } from 'angular-datatables';
 import {MatDialogModule} from '@angular/material/dialog';
 
 
-//Component 
+//Component
 import { HomeComponent } from './Comp/home/home.component';
 import { ContactoComponent } from './Comp/contacto/contacto.component';
 import { AyudaComponent } from './Comp/ayuda/ayuda.component';
@@ -166,18 +170,10 @@ import { getDutchPaginatorIntl } from './Comp/matPaginatorCustom/dutch-paginator
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { AveriaShowComponent } from './Comp/averias/averia-show/averia-show.component';
 import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-averias.component';
+import { PrintLabelComponent } from './Comp/print-label/print-label.component';
 
 
 
-
-
-
-
-
-
-
-
-                                       
 @NgModule({
   declarations: [
     AppComponent,
@@ -254,8 +250,9 @@ import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-ave
     ModificarAveriasComponent,
     RegAveListComponent,
     AveriaShowComponent,
-    CerrarAveriasComponent, 
-    
+    CerrarAveriasComponent,
+    PrintLabelComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -291,7 +288,8 @@ import { CerrarAveriasComponent } from './Comp/averias/cerrar-averias/cerrar-ave
     MatPaginatorModule,
     MatDialogModule,
     DataTablesModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxPrintModule
   ],
   providers: [
     PedidoService,
