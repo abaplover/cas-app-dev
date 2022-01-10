@@ -12,7 +12,7 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { CollectionReference } from '@angular/fire/firestore';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
-import { DataTableDirective } from 'angular-datatables/src/angular-datatables.directive';
+import { DataTableDirective } from 'angular-datatables';
 //declare const $;
 
 @Component({
@@ -20,7 +20,7 @@ import { DataTableDirective } from 'angular-datatables/src/angular-datatables.di
   templateUrl: './rep03.component.html',
   styleUrls: ['./rep03.component.css']
 })
-export class Rep03Component implements OnInit {
+export class Rep03Component implements OnInit, AfterViewInit {
   @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
 
@@ -48,8 +48,6 @@ export class Rep03Component implements OnInit {
   data: any;
   //-----------------------------------------------------------
 
-
-
   constructor
   (
     public clienteS: ClientService,
@@ -63,6 +61,7 @@ export class Rep03Component implements OnInit {
         this.dtOptions = {
           pagingType: 'full_numbers',
           pageLength: 30,
+          ordering : true,
           language: {
             url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
           },
@@ -78,6 +77,7 @@ export class Rep03Component implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
+
     this.maxDated = new Date(currentYear, currentm, currentd);
     this.maxDateh = new Date(currentYear, currentm, currentd);
     this.minDateh = new Date(currentYear, currentm, currentd);
@@ -115,9 +115,6 @@ export class Rep03Component implements OnInit {
     var startDate = new Date(mesfi +'/'+ diafi +'/'+ anofi);
     var endDate = new Date(mesff +'/'+ diaff +'/'+ anoff);
 
-//console.log('Fecha pedido ', mesfi +'/'+ diafi +'/'+ anofi);
-//console.log('Fecha entrega ', mesff +'/'+ diaff +'/'+ anoff);
-
     var count = 0;
     var curDate = startDate;
     while (curDate <= endDate) {
@@ -129,7 +126,6 @@ export class Rep03Component implements OnInit {
 
     return count;
 
-    //return fi;
   }//orgValueChange
 
   public orgValueChange(event): void {
@@ -168,18 +164,13 @@ export class Rep03Component implements OnInit {
     this.pedidoS.getPedidosRep03(query).subscribe(ped =>{
       this.Ped_ = ped;
       this.data = this.Ped_;
+      
       if(!this.firstTime){
         this.rerender();
       }
     })
 
-    //$('#dtable').DataTable().destroy();
-
-    //this.data.destroy();
     this.opcrep01=true;
-
-    //this.dtOptions.destroy();
-    //if(pf != null) pf.reset();
 
   }//onSubmitSearch
 

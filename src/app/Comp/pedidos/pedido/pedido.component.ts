@@ -288,31 +288,7 @@ onEdit(event, ped){
       })
   } //Si status es Activo
 
-
-
-  //this.codMat.nativeElement.focus();
-
-
-
 }//onEdit
-
-
-
-
-
-// + FUNCIONES DEL LISTAR+
-
-
-
-
-
-
-
-
-
-
-
-
 
   onSubmit(pf?: NgForm){
     //Nuevo Pedido
@@ -412,6 +388,7 @@ onEdit(event, ped){
         }
 
         //Update Orders
+        console.log(this.pedidoService.pedido_);
         this.pedidoService.updatePedidos(this.pedidoService.pedido_);
 
         for (let i in this.pedidoService.matrisDetPedido){
@@ -440,7 +417,7 @@ onEdit(event, ped){
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
 
-
+        
         this.toastr.success('Operación Terminada','Pedido Actualizado');
         this.pedidoService.enviar = false;
     }

@@ -189,8 +189,8 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	const status_ = newValue.status;
 	const tipodoc_ = newValue.tipodoc;
 
-	let asunto = "";
-	let bodytxt = "";
+	let asunto = "Actualización de pedido, Nro ";
+	let bodytxt = "Actualización de pedido";
 	let bodyFecha_ = "";
 
 	let observ_ = newValue.observacion;

@@ -116,7 +116,6 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       this.cpagoList = cp;
     })
     this.firstTime = true;
-    // this.dtTrigger.next();
 
   }//ngOnInit
 
@@ -128,8 +127,6 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }//ngOnDestroy
-
-
 
   public orgValueChange(event): void {
     if (event != "") {

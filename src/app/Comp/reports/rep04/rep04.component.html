@@ -67,11 +67,12 @@
 
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Transporte</mat-label>
-											<mat-select value=selected multiple
-												name="conPag"
+											<mat-select value=selected
+												name="transporte"
 												[(ngModel)]="this.transporte"
 
 											>
+												<mat-option value=""></mat-option>
 												<mat-option value={{tra.descripcion}} *ngFor = "let tra of transporteList">
 													{{tra.idtransporte+" - "+tra.descripcion}}
 												</mat-option>

@@ -581,8 +581,13 @@ export class NewpedComponent implements OnInit {
         fileId = parseInt(docAdd);
       }
 
+      if (fileId != this.pedidoService.pedido_.idpedido) {
+        fileId = this.pedidoService.pedido_.idpedido;
+      }
+
       //console.log('fileId ',fileId);
       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+      console.log(fileId);
       const idfile = fileId +'.pdf';
       this.pedidoService.pedido_.pdfname = idfile;
       this.pedidoService.pedido_.pdfb64 = file;
@@ -793,6 +798,7 @@ export class NewpedComponent implements OnInit {
         }
 
         //Update Orders
+        console.log(this.pedidoService.pedido_);
         this.pedidoService.updatePedidos(this.pedidoService.pedido_);
 
         for (let i in this.pedidoService.matrisDetPedido){
