@@ -581,7 +581,7 @@ export class NewpedComponent implements OnInit {
         fileId = parseInt(docAdd);
       }
 
-      if (fileId != this.pedidoService.pedido_.idpedido) {
+      if (fileId != this.pedidoService.pedido_.idpedido && this.pedidoService.pedido_.idpedido) {
         fileId = this.pedidoService.pedido_.idpedido;
       }
 
