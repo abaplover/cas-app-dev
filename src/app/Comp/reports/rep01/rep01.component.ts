@@ -161,9 +161,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
         q = q.where("idcliente", "==", this.codCli)
       }
-      if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
-        q = q.where("status", "==", this.staTus)
-      }
+      // if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
+      //   if(this.staTus == ""){ } else {
+      //     q = q.where("status", "in", this.staTus);
+      //   }
+      //   // q = q.where("status", "==", this.staTus)
+      // }
       if (typeof this.codVen == "undefined" || this.codVen == null) { } else {
         q = q.where("nomvendedor", "==", this.codVen)
       }
@@ -177,8 +180,13 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
 
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
-
+      
       this.Ped_ = ped;
+
+      
+      if(this.staTus == ""){ } else {
+           this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
+          }
 
       this.totalRegistro = this.Ped_.length;
 

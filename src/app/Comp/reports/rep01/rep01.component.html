@@ -48,13 +48,13 @@
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Status</mat-label>
-										<mat-select value=selected
-											name="status"
+										<mat-select value=selected multiple
+											name="status" 
 											[(ngModel)]="this.staTus"
 
 										>
 
-											<mat-option value=""></mat-option>
+											<!-- <mat-option value=""></mat-option> -->
 											<mat-option value="ACTIVO">ACTIVO</mat-option>
 											<mat-option value="FACTURADO">FACTURADO</mat-option>
 											<mat-option value="DESPACHADO">DESPACHADO</mat-option>

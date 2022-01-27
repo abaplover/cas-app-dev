@@ -13,7 +13,7 @@ const db = admin.firestore();
 // })
 
 
-//user: "cas@ricamar.com.ve",
+//user: "CasRicamar@gmail.com",
 //pass: "Ricamarcas123*"
 
 const transport = nodemailer.createTransport({
@@ -24,7 +24,7 @@ const transport = nodemailer.createTransport({
     secure: true,
 	auth: {
 		user: "cas@ricamar.com.ve",
-		pass: "Ricamar2016#"
+		pass: "CasRicamar228094#*"
 	}
 	//==========================1============================
 
@@ -739,7 +739,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 		subject: `${asunto} ${idpedido_}`,
 		html: 	`
 
-
+		
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml"><head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
@@ -1160,7 +1160,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdfname_,companyhead_,fvencimiento_)
 {
 	return transport.sendMail({
-		from: "CAS-Ricamar<cas@ricamar.com.ve>",
+		from: "CAS-Ricamar<Cas@ricamar.com.ve>",
 		to: email,
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto}`,
@@ -1466,7 +1466,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,nomv,codeBlock_,companyBkl_,clientedir_,observ_,pdfurl_,pdfname_,pdfb64_,asunto,bodytxt,saludo_,idaveria_,bodyFecha_,txta,txtr,txtc,nrodocfat,strtxtr,strtxtc)
 {
 	return transport.sendMail({
-		from: "CAS-Ricamar<cas@ricamar.com.ve>",
+		from: "CAS-Ricamar<CasRicamar@gmail.com>",
 		to: email,
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto} ${idaveria_}`,
