@@ -638,10 +638,10 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.pdfurl = url;
 
   
-/*         this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.start_time);
+        this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.start_time);
         this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
         this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
-        this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes()); */
+        this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes());
 
         //console.log('Fecha ped: ',this.pedidoService.pedido_.fechapedido);
 
