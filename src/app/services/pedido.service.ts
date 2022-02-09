@@ -244,14 +244,13 @@ export class PedidoService {
     return this.pedidosE;
   }
 
-  getOrderStat2()
+  getOrderStat2()  //Obtiene el id del pedido (Cantidad de pedidos actuales + 1)
   {
     return new Promise((resolve, reject) => {
       var docRef = this.db.collection("pedidos").doc("--stats--");
       docRef.get().toPromise()
         .then(doc => {
-          const ordern = doc.data().order+1;
-          //console.log(ordern);
+          const ordern = doc.data().order+1; //Numero de pedidos + 1
           resolve(ordern);
         }).catch(function (err) {
           //console.log("Error getting document:", err);

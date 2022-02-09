@@ -720,7 +720,7 @@ generarpdf(pf?: NgForm)
               this.pedido_.pdfurl=downloadURL;
               this.URLPublica = downloadURL;
               //this.onSubmit(pf,this.URLPublica,docAdd);
-              this.onSubmitnd(pf);
+              this.onSubmitnd(pf); // Notificar Despacho
             });
       })
     ).subscribe();
