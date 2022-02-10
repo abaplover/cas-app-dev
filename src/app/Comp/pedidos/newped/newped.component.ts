@@ -621,6 +621,9 @@ export class NewpedComponent implements OnInit {
 
 
   onSubmit(pf?: NgForm, url?:string,pedNro?:any){
+    
+    let ahora = new Date();
+
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null)
     {
@@ -634,7 +637,7 @@ export class NewpedComponent implements OnInit {
 
         this.pedidoService.pedido_.pdfurl = url;
 
-        let ahora = new Date();
+  
         this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.start_time);
         this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
         this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
@@ -768,6 +771,14 @@ export class NewpedComponent implements OnInit {
         //set parameter date
         //console.log('www: ',this.pedidoService.tmonti)
         //this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.pedido_.fechapedido);
+        
+        
+        this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.start_time);
+        this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
+        this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
+        this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes());
+
+        
         this.pedidoService.pedido_.modificado = new Date;
         this.pedidoService.pedido_.modificadopor = this.loginS.getCurrentUser().email;
         this.pedidoService.pedido_.precioasociado = this.pedidoService.presAscList;
