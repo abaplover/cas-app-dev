@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "cloud-advanced-selling-dev"
-  }
+    "default": "cloud-anvanced-seliing",
+    "PRD": "cloud-anvanced-seliing"
+  },
+  "targets": {}
 }
