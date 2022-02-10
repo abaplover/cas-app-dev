@@ -17,4 +17,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOUD_ADVANCED_SELLING_DEV }}'
           channelId: live
-          projectId: cloud-advanced-selling
+          projectId: cloud-anvanced-seliing
