@@ -237,7 +237,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 
 	let min_ = dateObjectT.getMinutes();
 	var horas = new Array();
-		horas [0]  = "12:" + min_ + " PM";
+		horas [0]  = "12:" + min_ + " AM";
 		horas [23] = "11:" + min_ + " PM";
 		horas [22] = "10:" + min_ + " PM";
 		horas [21] = "09:" + min_ + " PM";
@@ -249,7 +249,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		horas [15] = "03:" + min_ + " PM";
 		horas [14] = "02:" + min_ + " PM";
 		horas [13] = "01:" + min_ + " PM";
-		horas [12] = "12:" + min_ + " AM";
+		horas [12] = "12:" + min_ + " PM";
 		horas [11] = "11:" + min_ + " AM";
 		horas [10] = "10:" + min_ + " AM";
 		horas [9]  = "09:" + min_ + " AM";
