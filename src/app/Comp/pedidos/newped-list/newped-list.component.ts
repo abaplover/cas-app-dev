@@ -12,6 +12,7 @@ import { Mrechazo } from '../../../models/mrechazo';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../pedido-show/pedido-show.component';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-newped-list',
@@ -40,6 +41,7 @@ export class NewpedListComponent implements OnInit {
     private toastr      : ToastrService,
     public mrechazoS    : MrechazoService,
     private dialogo     : MatDialog,
+    private clienteS    : ClientService
   ) { }
 
   ngOnInit(): void {
@@ -117,6 +119,13 @@ export class NewpedListComponent implements OnInit {
   }
 
   onEdit(event, ped){
+
+    //Obtiene los datos del cliente
+    this.clienteS.getSpecificClient(ped.idcliente).valueChanges().subscribe(client =>{
+      this.clienteS.clientData = client;
+    })
+
+
     this.pedidoService.totalPri=0;
     this.pedidoService.totalCnt=0;
     this.pedidoService.totalPed=0;

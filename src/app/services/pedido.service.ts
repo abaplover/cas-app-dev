@@ -44,7 +44,7 @@ export class PedidoService {
   tmontd: number=0;
   tmonti: number=0;
   tmontn: number=0;
-  start_time = moment(new Date()).format('YYYY-MM-DD');
+  start_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
 
   pedido_ = {} as Pedido;

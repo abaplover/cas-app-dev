@@ -40,6 +40,7 @@ import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import * as moment from 'moment';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 
@@ -68,6 +69,7 @@ export class NewpedComponent implements OnInit {
 
   public msj_enlace: string = 'Pedidos';
   public clienteList: Client[]; //arreglo vacio
+  //public justClient: Client[];
   public vendedorList: Vendedor[]; //arreglo vacio
   public lprecioList: Lprecio[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
@@ -88,8 +90,7 @@ export class NewpedComponent implements OnInit {
   codeBlock ='';
   companyblk ='';
   //minDate = moment(new Date()).format('YYYY-MM-DD')
-  start_time = moment(new Date()).format('YYYY-MM-DD')
-
+  start_time = moment().format('YYYY-MM-DD hh:mm:ss');
 
   nomCli='';
   rifCli='';
@@ -117,11 +118,19 @@ export class NewpedComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
-    //this.maxDate = new Date(currentYear, currentm, currentd);
+
+    // let f = this.clienteS.getSpecificClient('J12345678').valueChanges().subscribe( (data)  => {
+    //   return data;
+    //   console.log(data)
+    //   //this.tlfCli = data;justClient
+    // });
 
   }
 
+    //this.maxDate = new Date(currentYear, currentm, currentd);
+
   ngOnInit(): void {
+    
     //this.pedidoService.pedido_.descuentoporc = 0;
     //this.pedidoService.pedido_.descuentovalor = 0;
     this.pedidoService.mostrarForm = false;
@@ -168,10 +177,12 @@ export class NewpedComponent implements OnInit {
 
   }//ngOnInit
 
-
+  async OneClient(){
+    
+  }
 
   async generarpdf(pf?: NgForm){
-
+   
     var bodyData = [];
     let observacion='';
     let totalArticulos=0;
@@ -179,8 +190,6 @@ export class NewpedComponent implements OnInit {
 
     bodyData = this.pedidoService.matrisDetPedido;
     //console.log(bodyData);
-    //console.log(this.pedidoService.matrisDetPedido);
-
     if (this.pedidoService.pedido_.observacion=="" || typeof this.pedidoService.pedido_.observacion=="undefined"){
       observacion = "";
     }else{
@@ -208,15 +217,18 @@ export class NewpedComponent implements OnInit {
       docAdd = ordern.toString();
     }
     if (this.pedidoService.txtBtnAccion.toString() == "Actualizar Pedido"){
+    //Llena los datos vacios del cliente para enviarlos al pdf cuando se actualiza un pedido
+      this.tlfCli = this.clienteS.clientData[0].telefonom;
+      this.zonVen = this.clienteS.clientData[0].zona;
       docAdd = this.pedidoService.pedido_.idpedido.toString();
     }
 
     const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
-    let dateObj = this.pedidoService.pedido_.fechapedido;
-    let min_ = dateObj.getMinutes();
+    let dateObj = moment(this.pedidoService.start_time).toDate(); //Toma la fecha del formulario
+    let min_ = new Date().getMinutes();
 
 	  var horas_ = new Array();
-    horas_ [0]  = "12:" + min_ + " PM";
+    horas_ [0]  = "12:" + min_ + " AM";
     horas_ [23] = "11:" + min_ + " PM";
     horas_ [22] = "10:" + min_ + " PM";
     horas_ [21] = "09:" + min_ + " PM";
@@ -228,7 +240,7 @@ export class NewpedComponent implements OnInit {
 		horas_ [15] = "03:" + min_ + " PM";
 		horas_ [14] = "02:" + min_ + " PM";
 		horas_ [13] = "01:" + min_ + " PM";
-		horas_ [12] = "12:" + min_ + " AM";
+		horas_ [12] = "12:" + min_ + " PM";
 		horas_ [11] = "11:" + min_ + " AM";
 		horas_ [10] = "10:" + min_ + " AM";
 		horas_ [9] = "09:" + min_ + " AM";
@@ -244,7 +256,7 @@ export class NewpedComponent implements OnInit {
     let month = monthNames[dateObj.getMonth()];
     let day = String(dateObj.getDate()).padStart(2, '0');
     let year = dateObj.getFullYear();
-    let momento = horas_[dateObj.getHours()];
+    let momento = horas_[new Date().getHours()];
     let output = day +'/'+ month + '/' + year + ' '+ momento;
     let margin_bottom = 50;
     let y1 = 600;
@@ -355,7 +367,7 @@ export class NewpedComponent implements OnInit {
                     ],
                     [
                         {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]},
-                        {text: this.dirCli, border: [false, false, true, true]}
+                        {text: this.pedidoService.pedido_.clientedir, border: [false, false, true, true]}
                     ]
                   ]
               }
@@ -587,7 +599,7 @@ export class NewpedComponent implements OnInit {
 
       //console.log('fileId ',fileId);
       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-      console.log(fileId);
+
       const idfile = fileId +'.pdf';
       this.pedidoService.pedido_.pdfname = idfile;
       this.pedidoService.pedido_.pdfb64 = file;
@@ -920,7 +932,6 @@ export class NewpedComponent implements OnInit {
     this.pedidoService.pedido_.email = "";
     this.pedidoService.pedido_.listaprecio = "";
 
-
     this.pedidoService.pedido_.codigodematerial = "Ninguno";
     this.pedidoService.pedido_.descripcionmaterial = "";
     this.pedidoService.pedido_.preciomaterial = this.myempty;
@@ -1181,6 +1192,7 @@ export class NewpedComponent implements OnInit {
   // }
 
   agregardetalles(){
+
     //agregar fila en el array
    // console.log("indice ",this.pedidoService.matrisDetPedido.length);
 
