@@ -5,6 +5,7 @@
 				
 			<div class="row">
 				<br/><br/>
+				<br/><br/>
 			</div>
 			<form #pedidoFormne="ngForm" *ngIf="this.pedidoShow.uid">			
 				<div class="row">
@@ -360,25 +361,25 @@
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
 
 									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
-										<!--	<button 
+											<button 
 												class="btn-space" 
 												smat-stroked-button 
-												style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
+												style="background-color:#bcc0c252; width: 50% !important;height: 35px !important;margin-right: 15px;" 
 												type="button" 
 												[disabled]="pedidoFormne.invalid"
-												(click)="onSubmitne(pedidoFormne)"
+												(click)="downloadPdf(pedidoFormne)"
 												id="btnenviarne"
 												name="btnenviarne"
 											>
-												Actualizar Pedido
-											</button>-->
+												Descargar PDF
+											</button>
 											<button 
 												smat-stroked-button 
 												style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
 												type="reset" 
 												(click)="onClose()">
 													Atrás
-												</button>
+											</button>
 										</div>
 									</div>
 								</div>
