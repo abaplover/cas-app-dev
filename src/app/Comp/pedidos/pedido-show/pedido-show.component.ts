@@ -512,17 +512,13 @@ export class PedidoShowComponent implements OnInit {
         var file = data; */
       // });
 
+    var fileId: number;
+    fileId = parseInt(docAdd)-1;
 
     //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba
       const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
       pdfDocGenerator1.getBlob((blob) => {
       var file = blob;
-      var fileId: number;
-      if (this.pedidoService.pedido_.uid != null){
-        fileId = parseInt(docAdd)-1;
-      }else{
-        fileId = parseInt(docAdd);
-      }
 
       if (fileId != this.pedidoService.pedido_.idpedido && this.pedidoService.pedido_.idpedido) {
         fileId = this.pedidoService.pedido_.idpedido;
@@ -534,6 +530,7 @@ export class PedidoShowComponent implements OnInit {
       const idfile = fileId +'.pdf';
       this.pedidoService.pedido_.pdfname = idfile;
       this.pedidoService.pedido_.pdfb64 = file;
+      console.log("file ", file);
 
       const fileRef:AngularFireStorageReference=this.afStorage.ref("Orders").child(idfile);
       const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
@@ -553,9 +550,7 @@ export class PedidoShowComponent implements OnInit {
 
     //>
 
-
-
-    pdfMake.createPdf(documentDefinition).download();
+    pdfMake.createPdf(documentDefinition).download(`Pedido N° ${fileId}.pdf`);
 
 
   }//pdf make
