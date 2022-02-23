@@ -513,7 +513,7 @@ export class PedidoShowComponent implements OnInit {
       // });
 
     var fileId: number;
-    fileId = parseInt(docAdd)-1;
+    fileId = parseInt(docAdd);
 
     //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba
       const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
