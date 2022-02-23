@@ -1,7 +1,7 @@
 
 	<mat-dialog-content style="width: 100%;">
 		<div class="card-body text-info panel panel-login" *ngIf="this.pedidoShow.uid" style="border-style:solid;border-width:1px;">
-			<button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;</button>
+			<button type="button" class="close" data-dismiss="modal" (click)="onClose()" style="margin-inline: 5px;">&times;</button>
 				
 			<div class="row">
 				<br/><br/>
@@ -364,7 +364,7 @@
 											<button 
 												class="btn-space" 
 												smat-stroked-button 
-												style="background-color:#bcc0c252; width: 50% !important;height: 35px !important;margin-right: 15px;" 
+												style="background-color:#bcc0c252; width: 108px !important;height: 35px !important;margin-right: 4px;" 
 												type="button" 
 												[disabled]="pedidoFormne.invalid"
 												(click)="downloadPdf(pedidoFormne)"
@@ -375,7 +375,7 @@
 											</button>
 											<button 
 												smat-stroked-button 
-												style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+												style=" background-color:#bcc0c252;width: 108px !important;height: 35px !important;" 
 												type="reset" 
 												(click)="onClose()">
 													Atrás
