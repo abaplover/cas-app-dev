@@ -356,15 +356,15 @@
 						</div>
 
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body" style="width: 100%; display: flex; flex-wrap: wrap; padding-inline: 0.4vw;justify-content: center;">
 								<div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
 
-									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
+									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid; display: flex; flex-wrap: wrap;">
 											<button 
-												class="btn-space" 
+												class="btn btn-secondary btn-space" 
 												smat-stroked-button 
-												style="background-color:#bcc0c252; width: 108px !important;height: 35px !important;margin-right: 4px;" 
+												style="background-color:#bcc0c252; width: 120px !important;height: 35px !important; margin: 0.3vw 0.2vw;font-size: 1vw;" 
 												type="button" 
 												[disabled]="pedidoFormne.invalid"
 												(click)="downloadPdf(pedidoFormne)"
@@ -374,8 +374,9 @@
 												Descargar PDF
 											</button>
 											<button 
+												class="btn btn-secondary btn-space"
 												smat-stroked-button 
-												style=" background-color:#bcc0c252;width: 108px !important;height: 35px !important;" 
+												style=" background-color:#bcc0c252;width: 120px !important;height: 35px !important;margin: 0.3vw 0.2vw;font-size: 1vw;" 
 												type="reset" 
 												(click)="onClose()">
 													Atrás
