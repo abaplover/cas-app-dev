@@ -36,6 +36,9 @@ export interface Pedido {
   platform?: string;
   ffactura?: Date;
   nrofactura?: string;
+  fpreparacion?:Date; //Fecha de preparacion en el almacen
+  nombrealmacenista?:string;
+  nrobultos?:number;
   fdespacho?: Date;
   ftentrega?: Date;
   fentrega?: Date;

@@ -183,6 +183,8 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	const pdfb64_ = newValue.pdfb64;
 	const ffactura_ = newValue.ffactura;
 	const nrofactura_ = newValue.nrofactura;
+	const fpreparacion = newValue.fpreparacion;
+	const nrobultos = newValue.nrobultos;
 	const fentrega_ = newValue.fentrega;
 	const lastaction_ = newValue.lastaction;
 	const idpedido_ = newValue.idpedido;
@@ -282,6 +284,21 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		fechapago2 = fpdia_+'/'+fpmes_+'/'+fpano_;
 	}
 
+	let fpreparacionmes_;
+	let fpreparacionano_;
+	let fpreparaciondia_;
+	let fecPreparacion_ = '';
+	let fpreparacion_;
+	if (typeof newValue.fpreparacion !== "undefined"){
+		fpreparacion_ = new Date(newValue.fpreparacion.seconds*1000);
+		fpreparacion_.setTime(fpreparacion_.getTime() - 240 * 60 * 1000);
+
+		fpreparacionmes_ = month[fpreparacion_.getMonth()];
+    	fpreparacionano_ = fpreparacion_.getFullYear();
+		fpreparaciondia_ = fpreparacion_.getDate();
+		fecPreparacion_ = fpreparaciondia_+'/'+fpreparacionmes_+'/'+fpreparacionano_;
+	}
+
 	let fdespachomes_;
 	let fdespachoano_;
 	let fdespachodia_;
@@ -331,6 +348,13 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		asunto = "Confirmación de Factura, Nro ";
 		bodytxt = "Confirmación de Factura";
 		bodyFecha_ = "Documento: " + tipodoc_ + "N°: " +nrofactura_;
+		enviar = true;
+	}
+
+	if (typeof fpreparacion !== "undefined" && typeof nrobultos !== "undefined" && lastaction_ === "Crear NPrep"){
+		asunto = "Confirmación de Preparación de pedido, Nro ";
+		bodytxt = "Confirmación de Preparación de pedido";
+		bodyFecha_ = "Fecha de preparación: " + fecPreparacion_ + "<br />Fecha tentativa de entrega: " + fectentrega_;
 		enviar = true;
 	}
 
