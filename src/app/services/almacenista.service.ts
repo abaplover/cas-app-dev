@@ -27,7 +27,7 @@ export class AlmacenistaService {
 
   constructor(
     private firebase: AngularFireDatabase,
-    private afs: AngularFirestore) { }
+    private firestore: AngularFirestore) { }
 
 
   getAlmacenistas()
