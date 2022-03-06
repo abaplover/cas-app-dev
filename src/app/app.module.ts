@@ -157,6 +157,7 @@ import { MaveriaService } from './services/maveria.service';
 import { VendedorService } from './services/vendedor.service';
 import { ConexionService } from './services/conexion.service';
 import { ClientService } from './services/client.service';
+import { AlmacenistaService } from './services/almacenista.service';
 import { FirebaseloginService } from './services/firebaselogin.service';
 import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
@@ -174,6 +175,8 @@ import { PrintLabelComponent } from './Comp/print-label/print-label.component';
 import { PedidosLayoutComponent } from './Comp/pedidos/pedidos-layout/pedidos-layout.component';
 import { TotalesDePedidosComponent } from './Comp/totales-de-pedidos/totales-de-pedidos.component';
 import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-auto-complete.component';
+import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-almacen.component';
+import { Almacenista } from './models/almacenistas';
 
 
 
@@ -258,6 +261,7 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
     PedidosLayoutComponent,
     TotalesDePedidosComponent,
     ClientAutoCompleteComponent,
+    PedidoAlmacenComponent,
 
   ],
   imports: [
@@ -317,6 +321,7 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
     VendedorService,
     ConexionService,
     ClientService,
+    AlmacenistaService,
     FirebaseloginService,
     CurrencyPipe,
     DatoempService,
