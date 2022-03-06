@@ -1,0 +1,226 @@
+.espaciado{
+	flex: 1 1 auto;
+  }
+  .campo-width {
+  width: 100%;
+  height: 50px;
+  }
+  .ng-autocomplete{
+  z-index:1 !important;
+  }
+  
+  
+  table {
+  width: 100%;
+  }
+  
+  .mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  }
+  
+  
+  th.mat-sort-header-sorted {
+  color: black;
+  }
+  
+  /* .mat-column-Fecha {
+  width: 160px !important;
+  text-align: left;
+  }
+  
+  .mat-column-Status {
+  width: 90px !important;
+  text-align: left;
+  }
+  
+  .mat-column-Cliente {
+  width: 100 !important;
+  text-align: left;
+  }
+  
+  .mat-column-Vendedor {
+  width: 110px !important;
+  text-align: left;
+  }
+  
+  .mat-column-Subtotal {
+  width: 100px !important;
+  text-align: right;
+  }
+  
+  .mat-column-totalmontoimpuesto {
+  width: 100px !important;
+  text-align: right;
+  }
+  
+  .mat-column-totalmontodescuento {
+  width: 100px !important;
+  text-align: right;
+  }
+  
+  .mat-column-totalmontoneto {
+  width: 100px !important;
+  text-align: right;
+  } */
+  
+  .mat-column-Opc {
+  width: 140px !important;
+  text-align: right;
+  }
+  .mat-column-uid {
+  width: 60px !important;
+  text-align: left;
+  padding-right: 8px;
+  }
+  
+  .btn-info {
+	background: transparent;
+  color: rgb(39, 40, 43) !important;
+  border-color: rgb(241, 241, 241) !important;
+  }
+  
+  .btn-info:hover {
+  background: rgb(159, 163, 172) !important;
+  border-color: rgb(25, 10, 90) !important;
+	transition: 0.5s background;
+  cursor: pointer;
+  color: white !important;
+  
+  }
+  
+  
+  td.col-0, th.col-0 {
+  width: 105px;
+  }
+  
+  td.col-1, th.col-1 {
+  width: 357px;
+  }
+  
+  td.col-2, th.col-2 {
+  width: 80px;
+  }
+  
+  td.col-3, th.col-3 {
+  width: 80px;
+  }
+  
+  td.col-4, th.col-4 {
+  width: 82px;
+  }
+  
+  td.col-5, th.col-5 {
+  width: 160px;
+  }
+  td.col-6, th.col-6 {
+  width: 25px;
+  }
+  /*Centrar H y V, texto en div*/
+  .abs-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding-left: 5px;
+  font-size: 14px;
+  }
+  .abs-center-fecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding-left: 5px;
+  font-size: 14px;
+  }
+  .abs-right {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 115px;
+  background: transparents;
+  color: #333;
+  font-size: 12px;
+  }
+  .panel-login {
+  border-color: #ccc;
+  -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+  }
+  .panel-login>.panel-heading {
+  color: #00415d;
+  background-color: #fff;
+  border-color: #fff;
+  text-align:center;
+  }
+  .panel-login>.panel-heading a{
+  text-decoration: none;
+  color: #666;
+  font-weight: bold;
+  font-size: 15px;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  transition: all 0.1s linear;
+  }
+  .panel-login>.panel-heading a.active{
+  color: #029f5b;
+  font-size: 18px;
+  }
+  .panel-login>.panel-heading hr{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  clear: both;
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+  background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+  background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+  }
+  .panel-login input:hover,
+  .panel-login input:focus {
+  outline:none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: rgba(175, 173, 173, 0.884);
+  }
+  .panel-login select:hover,
+  .panel-login select:focus {
+  outline:none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: rgba(175, 173, 173, 0.884);
+  }
+  .panel-login textarea:hover,
+  .panel-login textarea:focus {
+  outline:none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: rgba(175, 173, 173, 0.884);
+  }
+  
+  .panel-login input:hover,
+  .panel-login input:focus {
+  outline:none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: rgba(175, 173, 173, 0.884);
+  }
+  
+  
+  .ng-autocomplete ::ng-deep .autocomplete-container {
+  /* border-color: #ccc;
+  border-style:ridge;
+  border-width: 1px;
+  height: 30px;
+  box-shadow: none;
+  cursor: pointer;  */
+  width: 307px;
+  min-width: 300px;
+  }
+  
