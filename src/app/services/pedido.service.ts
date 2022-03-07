@@ -79,6 +79,10 @@ export class PedidoService {
   pedidoDocF: AngularFirestoreDocument<Pedido>;
   pedidosColletionF: AngularFirestoreCollection<Pedido>;
 
+  pedidosPrep: Observable<Pedido[]>;
+  pedidoDocPrep: AngularFirestoreDocument<Pedido>;
+  pedidosColletionPrep: AngularFirestoreCollection<Pedido>;
+
   pedidosD: Observable<Pedido[]>;
   pedidoDocD: AngularFirestoreDocument<Pedido>;
   pedidosColletionD: AngularFirestoreCollection<Pedido>;
@@ -120,6 +124,16 @@ export class PedidoService {
     //Busca todos los pedidos con estatus FACTURADO
     this.pedidosColletionF = this.db.collection('pedidos', ref => ref.where("status", 'in', ['FACTURADO']).orderBy("creado", "desc").limit(50));
     this.pedidosF = this.pedidosColletionF.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        //data.uid = a.payload.doc.id;
+        return data;
+      })
+    }));
+
+    //Busca todos los pedidos con estatus PREPARADO
+    this.pedidosColletionPrep = this.db.collection('pedidos', ref => ref.where("status", 'in', ['PREPARADO']).orderBy("creado", "desc").limit(50));
+    this.pedidosPrep = this.pedidosColletionPrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
         //data.uid = a.payload.doc.id;
@@ -242,6 +256,10 @@ export class PedidoService {
   getPedidosE()
   {
     return this.pedidosE;
+  }
+
+  getPedidosPreparados() {
+    return this.pedidosPrep;
   }
 
   getOrderStat2() //Obtiene el id del pedido (Cantidad de pedidos actuales + 1)
