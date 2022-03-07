@@ -45,6 +45,7 @@ import { finalize } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { DatoempService } from 'src/app/services/datoemp.service';
 import * as moment from 'moment';
+import { AlmacenistaService } from 'src/app/services/almacenista.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -96,6 +97,9 @@ export class PedidoAlmacenComponent implements OnInit {
   dirCli='';
   zonVen='';
 
+  almacenistaName = ""; //Nombre del almacenista, para mostrarlo en el formulario.
+  numeroBultos = 0; //Numero de bultos del pedido
+
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -125,6 +129,7 @@ export class PedidoAlmacenComponent implements OnInit {
     public pedidoService: PedidoService,
     private toastr      : ToastrService,
     public clienteS     : ClientService,
+    public almacenistS  : AlmacenistaService,
     public vendedorS    : VendedorService,
     public lprecioS     : LprecioService,
     public cpagoS       : CpagoService,
@@ -146,6 +151,10 @@ export class PedidoAlmacenComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    //this.almacenistS.getAlmacenistas();
+    //this.almacenistS.insertAlmacenista();
+
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
 
@@ -200,8 +209,12 @@ export class PedidoAlmacenComponent implements OnInit {
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
 
+    let currentUser = JSON.parse(localStorage.getItem('user'));
 
-    console.log("Current user ",localStorage.getItem('user'));
+    this.almacenistS.getSpecificAlmacenista(currentUser.email).valueChanges().subscribe(almacenista =>{
+      this.almacenistS.almacenistaData = almacenista;
+    });
+
 
   }//ngOnInit
 
@@ -717,15 +730,17 @@ generarpdf(pf?: NgForm)
 
 onSubmitAlmacen(pf?: NgForm){
     if(this.pedido_.uid != null){
-      this.pedido_.status="FACTURADO";
+      this.pedido_.status="PREPARADO";
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
       let ahora = new Date();
-      this.pedido_.fpreparacion = new Date(this.pedido_.fpreparacion);
-      this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate()+1);
+      this.pedido_.fpreparacion = ahora;
+      this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate());
       this.pedido_.fpreparacion.setHours(ahora.getHours());
       this.pedido_.fpreparacion.setMinutes(ahora.getMinutes());
+      this.pedido_.nrobultos = this.numeroBultos;
+      this.pedido_.nombrealmacenista = this.almacenistaName;
 
       this.pedido_.lastaction = "Crear NPrep";
       //Update Pedido - Notificacion de Preparación
@@ -835,7 +850,8 @@ onSubmitAlmacen(pf?: NgForm){
   }
 
   selectEventPed(elemento){
-    console.log("Entra a selectEventPed");
+
+    this.almacenistaName = this.almacenistS.almacenistaData[0].nombre;
     this.pedido_ =  Object.assign({}, elemento);
 
     //this.pedido_.fpreparacion = new Date;
@@ -946,9 +962,13 @@ onSubmitAlmacen(pf?: NgForm){
 
   }
 
+  txtnbultoschange(nbultos){
+    this.numeroBultos = nbultos.target.value;
+
+  }//txtnbultoschange
+
   onChangeSearchPed(elemento){
 
-    console.log("Entra a onChangeSearchPed");
     this.pedido_ =  Object.assign({}, elemento);
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';

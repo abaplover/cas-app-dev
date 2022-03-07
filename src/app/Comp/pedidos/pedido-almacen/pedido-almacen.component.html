@@ -180,7 +180,7 @@
 						>
 					  </div>
 					  <div class="abs-center">
-						<mat-label>{{ this.pedido_.descuentoporc }}%</mat-label>
+						<mat-label>{{ this.almacenistaName }}</mat-label>
 					  </div>
 					</div>
 				  </div>
@@ -196,7 +196,7 @@
 						  >N° Bultos</span
 						>
 					  </div>
-					  <input placeholder=""
+					  <input placeholder="0"
 						aria-label="Small" 
 						aria-describedby="inputGroup-sizing-sm"
 						type="number"
@@ -206,8 +206,8 @@
 						min=1
 						max=100
 						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
-						(keyup)="txtdescpchange($event)"
-						(change)="txtdescpchange($event)"
+						(keyup)="txtnbultoschange($event)"
+						(change)="txtnbultoschange($event)"
 						#rateInput2= "ngModel"
 						class="form-control"
 					  />
@@ -302,25 +302,9 @@
 						  >Tipo Doc</span
 						>
 					  </div>
-  
-					  <select
-						value="selected"
-						placeholder="Vía de pago"
-						required
-						name="tipodoc"
-						#tipodoc="ngModel"
-						[(ngModel)]="this.pedido_.tipodoc"
-						class="form-control"
-					  >
-						<option
-						  value="{{ td.descripcion }}"
-						  *ngFor="let td of tipodocList"
-						>
-						  {{ td.descripcion }}
-						</option>
-  
-						<option></option>
-					  </select>
+					  <div class="abs-center">
+						<mat-label>{{ this.pedido_.tipodoc }}</mat-label>
+					  </div>
 					</div>
 				  </div>
 				</div>
@@ -335,7 +319,10 @@
 						  >N° Doc</span
 						>
 					  </div>
-					  <input
+					  <div class="abs-center">
+						<mat-label>{{ this.pedido_.nrofactura }}</mat-label>
+					  </div>
+					  <!-- <input
 						placeholder="####"
 						type="text"
 						id="nrofactura"
@@ -344,7 +331,7 @@
 						[(ngModel)]="this.pedido_.nrofactura"
 						required
 						class="form-control"
-					  />
+					  /> -->
 					</div>
 				  </div>
 				  <!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">

@@ -23,7 +23,7 @@ export class AlmacenistaService {
   almacenista: AngularFireList<any>;
 
   
-  almacenistaData:any; //Variable que se llena al solicitar los datos de un almacenista
+  almacenistaData:any; //Variable que se llena al solicitar los datos de un almacenista especifico
 
   constructor(
     private firebase: AngularFireDatabase,
@@ -37,21 +37,28 @@ export class AlmacenistaService {
 
   //Obtiene los datos de un almacenista a partir del email que se encuentra en el localStorage
   getSpecificAlmacenista(email){
-    this.almacenista = this.firebase.list("/almacenista",ref => ref.orderByChild('email').equalTo(email));
-    console.log(this.almacenista)
-    return this.almacenista;
+    return this.almacenista = this.firebase.list("/almacenista",ref => ref.orderByChild('email').equalTo(email));
   }
 
-
+  //insertAlmacenista(almacenista: Almacenista)
   insertAlmacenista()
   {
+
     this.almacenistList.push({
       rif  : '252542848',
+      nombre: 'Anyami Cornieles',
       direccion  : 'Barquisimeto',
       tlfmovil   : '122424242',
       tlffijo  : '122424242',
-      email      : 'anyami@gmail.com'
+      email      : 'anyamigcr@gmail.com'
     });
+    /* this.almacenistList.push({
+      rif  : almacenista.rif,
+      direccion  : almacenista.direccion,
+      tlfmovil   : almacenista.tlfmovil,
+      tlffijo  : almacenista.tlffijo,
+      email      : almacenista.email
+    }); */
   }
 
   updateAlmacenista(almacenista: Almacenista)
