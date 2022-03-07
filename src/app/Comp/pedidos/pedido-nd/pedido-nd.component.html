@@ -988,7 +988,7 @@
 					<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)" data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
 						<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
 					</a>
-					<a class="btn btn-info btn-sm" (click)="selectEventPed(element)" [disabled]="element.status != 'FACTURADO'" data-toggle="tooltip" data-placement="top" title="Notificar despacho">
+					<a class="btn btn-info btn-sm" (click)="selectEventPed(element)" [disabled]="element.status != 'PREPARADO'" data-toggle="tooltip" data-placement="top" title="Notificar despacho">
 						<i class="far fa-edit" data-toggle="tooltip" data-placement="top" title="Notificar despacho"></i>
 					</a>
 					<a class="btn btn-info btn-sm" type="reset" (click)="anulardoc(pedidoFormnd,element,9001)" data-toggle="tooltip" data-placement="top" title="Anular notificación de factura">

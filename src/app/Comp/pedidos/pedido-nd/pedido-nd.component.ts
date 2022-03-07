@@ -155,7 +155,7 @@ export class PedidoNdComponent implements OnInit {
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
 
-    this.pedidoService.getPedidosF().subscribe(pedidos=>{
+    this.pedidoService.getPedidosPreparados().subscribe(pedidos=>{
       this.pedidoslist = pedidos;
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
@@ -745,7 +745,7 @@ generarpdf(pf?: NgForm)
 
   onSubmitnf(pf?: NgForm){
     if(this.pedido_.uid != null){
-      this.pedido_.status="FACTURADO";
+      this.pedido_.status="PREPARADO";
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
@@ -977,7 +977,7 @@ generarpdf(pf?: NgForm)
       }
     }
     if (this.opcnd == true){
-      if (this.pedido_.status == "FACTURADO" ||  this.pedido_.status == "DESPACHADO"){
+      if (this.pedido_.status == "PREPARADO" ||  this.pedido_.status == "DESPACHADO"){
         this.ocultarBtn = "padding: 10px;display:block;";
       }else{
         this.mensaje01 = " Este pedido contiene una solicitud de despacho"
