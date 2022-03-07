@@ -42,14 +42,15 @@ export class AlmacenistaService {
     return this.almacenista;
   }
 
-  insertAlmacenista(almacenista: Almacenista)
+
+  insertAlmacenista()
   {
     this.almacenistList.push({
-      rif  : almacenista.rif,
-      direccion  : almacenista.direccion,
-      tlfmovil   : almacenista.tlfmovil,
-      tlffijo  : almacenista.tlffijo,
-      email      : almacenista.email
+      rif  : '252542848',
+      direccion  : 'Barquisimeto',
+      tlfmovil   : '122424242',
+      tlffijo  : '122424242',
+      email      : 'anyami@gmail.com'
     });
   }
 
