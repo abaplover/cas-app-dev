@@ -123,7 +123,7 @@ export class PedidoAlmacenComponent implements OnInit {
   private myempty: number;
   public msj_enlace: string = 'Pedidos';
 
-  @ViewChild('pedidoFormnf') myFormnf;
+  @ViewChild('pedidoFormnAlmacen') myFormnAlmacen;
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
   constructor
@@ -1294,7 +1294,7 @@ generarEtiquetas() {
     this.pedido_.descuentovalor = this.myempty;
     this.pedido_.descuentoporc = this.myempty;
     if (this.pedidoService.selectedIndex==1){
-      this.resetFormnotPrepa(this.myFormnf);
+      this.resetFormnotPrepa(this.myFormnAlmacen);
     }
     if (this.pedidoService.selectedIndex==2){
       this.resetFormnotPrepa(this.myFormnd);

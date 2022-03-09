@@ -4,7 +4,7 @@
 	  *ngIf="this.pedido_.uid"
 	  style="border-style: solid; border-width: 0px"
 	>
-	  <form #pedidoFormnf="ngForm" *ngIf="this.pedido_.uid">
+	  <form #pedidoFormnAlmacen="ngForm" *ngIf="this.pedido_.uid">
 		<div class="row">
 		  <div
 			class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -202,7 +202,7 @@
 						name="nrobultos"
 						[(ngModel)]="this.pedidoService.pedido_.nrobultos"
 						step="1"
-						min=1
+						min=0
 						max=100
 						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
 						(keyup)="txtnbultoschange($event)"
@@ -602,7 +602,7 @@
 						  height: 35px !important;
 						"
 						type="button"
-						[disabled]="pedidoFormnf.invalid"
+						[disabled]="pedidoFormnAlmacen.invalid"
 						(click)="onSubmitAlmacen(pedidoFormAlmacen)"
 						id="btnenviarne"
 						name="btnenviarne"
@@ -617,7 +617,7 @@
 						  height: 35px !important;
 						"
 						type="button"
-						(click)="onCancelar(pedidoFormnf, 0)"
+						(click)="onCancelar(pedidoFormnAlmacen, 0)"
 						id="btnresetne"
 						name="btnresetne"
 					  >
@@ -862,7 +862,7 @@
   
 	  <!-- + OPCIONES + -->
   
-	  <!-- <form #pedidoFormnf="ngForm" *ngIf="this.pedido_.uid">
+	  <!-- <form #pedidoFormnAlmacen="ngForm" *ngIf="this.pedido_.uid">
   
 				  <div id="nfact" [style]="ocultarBtn" class="card border-success bg-light" *ngIf="this.opcnf">
 					  <div class="row" style="padding-top:10px;">
@@ -924,13 +924,13 @@
 									  name="btnenviar"
 									  class="btn btn-primary btn-space"
 									  type="button"
-									  [disabled]="pedidoFormnf.invalid"
-									  (click)="generarpdf(pedidoFormnf)"
+									  [disabled]="pedidoFormnAlmacen.invalid"
+									  (click)="generarpdf(pedidoFormnAlmacen)"
   
 								  >
 									  <i class="fas fa-cloud-upload-alt"></i> {{this.pedidoService.txtBtnAccion}}
 								  </button>
-								  <button class="btn btn-light" type="reset" (click)="onCancelar(pedidoFormnf)">
+								  <button class="btn btn-light" type="reset" (click)="onCancelar(pedidoFormnAlmacen)">
 									  <i class="fas fa-long-arrow-alt-left"></i> Cancelar
 								  </button>
 							  </div>
