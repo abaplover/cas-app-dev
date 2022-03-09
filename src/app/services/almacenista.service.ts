@@ -45,12 +45,12 @@ export class AlmacenistaService {
   {
 
     this.almacenistList.push({
-      rif  : '252542848',
-      nombre: 'Anyami Cornieles',
-      direccion  : 'Barquisimeto',
+      rif  : '1234567',
+      nombre: 'Ricardo Arangures',
+      direccion  : 'Maracaibo',
       tlfmovil   : '122424242',
       tlffijo  : '122424242',
-      email      : 'anyamigcr@gmail.com'
+      email      : 'rarangures@gmail.com'
     });
     /* this.almacenistList.push({
       rif  : almacenista.rif,
