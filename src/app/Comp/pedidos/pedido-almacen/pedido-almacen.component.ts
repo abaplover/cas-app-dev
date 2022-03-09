@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
+import * as JsBarcode from 'jsbarcode'; //Para el codigo de barras
+
 import { Pedido } from 'src/app/models/pedido';
 import { PedidoDet } from 'src/app/models/pedidoDet';
 import { PedidoService } from 'src/app/services/pedido.service';
@@ -348,7 +350,7 @@ onCancelar(pf?: NgForm,de?: number){
 */
 
 
-
+/* 
 generarpdf(pf?: NgForm)
 {
 
@@ -725,10 +727,12 @@ generarpdf(pf?: NgForm)
   //pdfMake.createPdf(documentDefinition).open();
 
 
-}//pdf make
+}//pdf make */
 
+async onSubmitAlmacen(pf?: NgForm){
 
-onSubmitAlmacen(pf?: NgForm){
+    await this.generarEtiquetas();
+
     if(this.pedido_.uid != null){
       this.pedido_.status="PREPARADO";
       this.pedido_.modificado = new Date;
@@ -746,30 +750,250 @@ onSubmitAlmacen(pf?: NgForm){
       //Update Pedido - Notificacion de Preparación
       this.pedidoService.updatePedidos(this.pedido_);
       this.toastr.success('Operación Terminada', 'Notificación de preparación creada.');
-    }
-    this.onCancelar(pf,1);
-  }
-  onSubmitnd(pf?: NgForm){
-    if(this.pedido_.uid != null){
-      this.pedido_.status="DESPACHADO";
-      this.pedido_.modificado = new Date;
-      this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
-      //Update Pedido - Notifi Facttura
-      this.pedidoService.updatePedidos(this.pedido_);
-      this.toastr.success('Operación Terminada', 'Notificación de despacho creada');
-    }
-  }
-  onSubmitne(pf?: NgForm){
-    if(this.pedido_.uid != null){
-      this.pedido_.status="ENTREGADO";
-      this.pedido_.modificado = new Date;
-      this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
-      //Update Pedido - Notifi Facttura
-      this.pedidoService.updatePedidos(this.pedido_);
-      this.toastr.success('Operación Terminada', 'Notificación de entrega creada');
+
+
+      this.pedido_.fdespacho = null;
+      this.pedidoService.pedido_.nrobultos = 0;
     }
 
+
+    this.onCancelar(pf,1);
   }
+
+//Genera el codigo de barras en una imagen para poder colocarla en la etiqueta
+textToBase64Barcode(text){
+  var canvas = document.createElement("canvas");
+  JsBarcode(canvas, text, {
+    format: "CODE39",
+    displayValue: false,
+    lineColor: "#2f3232",
+    width:4,
+    height:20,
+    marginLeft: 60
+
+  });
+  return canvas.toDataURL("image/png");
+}
+
+
+generarEtiquetas() {
+
+  let spaceBottom=260;
+
+  let docAdd = this.pedido_.idpedido;
+  let nombreCliente = this.pedido_.nomcliente;
+  let dirCliente = this.pedido_.clientedir;
+  let numeroBultos = this.pedidoService.pedido_.nrobultos;
+  let pedidoNrofactura = "";
+
+  if (this.pedido_.nrofactura != undefined) {
+    pedidoNrofactura = this.pedido_.nrofactura;
+  } else {
+    pedidoNrofactura = "sin número"
+  }
+
+  for (let i = 1; i<=numeroBultos;i++) {
+    const ticketDefinition = {
+      pageSize: {
+        width: 432,
+        height: 288
+      },
+      pageMargins: [ 25, 30, 25, 25 ],
+  
+      footer: {
+  
+            columns:
+            [
+              { //columna 0
+                width: 25,
+                text:''
+              },
+            ],
+  
+      },
+  
+      content: [
+        // if you don't need styles, you can use a simple string to define a paragraph
+  
+        {
+          columns: [
+            {
+              width: 120,
+              image: this.dempresaList[0].imglogob64,
+              height: 20,
+            },
+          ],
+        },
+        //solo espaciado
+        { text:' ',style: "lineSpacing",fontSize: 12},
+        //Datos de la empresa
+        {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
+        {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
+  
+        {
+          columns:
+          [
+            { //Columna en blanco para alinear texto
+              width: 180,
+              text: '',
+              height: 60,
+            },
+            //Datos del cliente
+            {
+                width: 200,          
+                table:
+                {
+                    widths: [190, 135],
+                    body: [
+                      [
+                        {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
+                      ],
+                      [
+                        {text: 'Dirección: '+dirCliente, style:"righttxt", border: [false, false, false, false]},
+                      ],
+                    ]
+                  }
+            }
+          ],
+          // optional space between columns
+          columnGap: 10
+        },
+  
+        //Esta es la linea superior
+        {
+          table : {
+              headerRows : 1,
+              widths: [375],
+              body : [
+                      [''],
+                      ['']
+                      ]
+          },
+          layout : 'headerLineOnly'
+        },
+  
+        //Detalle de pedido y numero de eqitueta
+        {
+          columns:
+          [
+            {
+              width: 200,          
+              table:
+              {
+                  widths: [190, 135],
+                  body: [
+                    [
+                      {text: 'N° Pedido: '+docAdd, border: [false, false, false, false]},
+                    ],
+                    [
+                      {text: 'N° Factura/Not: '+pedidoNrofactura, border: [false, false, false, false]},
+                    ],
+                  ]
+                }
+            },
+            //Datos del cliente
+            {
+                width: 200,          
+                table:
+                {
+                    widths: [190, 135],
+                    body: [
+                      [
+                        {text: i+' / '+ numeroBultos, style:"numerosEtiquetas", border: [false, false, false, false]},
+                      ],
+                    ]
+                  }
+            }
+          ],
+          // optional space between columns
+          columnGap: 10
+        },
+
+        { text:' ',style: "lineSpacing",fontSize: 12},
+  
+        //Esta es la linea inferior
+        {
+          table : {
+              headerRows : 1,
+              widths: [375],
+              body : [
+                      [''],
+                      ['']
+                      ]
+          },
+          layout : 'headerLineOnly'
+        },
+
+        //Codigo de barras
+        {
+          image : this.textToBase64Barcode(docAdd)
+        }
+  
+      ],
+      defaultStyle: {
+        fontSize: 10
+      },
+      styles:{
+        'linecentertitle': {
+            margin:[190,30,0,30] //change number 6 to increase nspace
+        },
+        'lineSpacing': {
+          margin:[0,0,0,2] //change number 6 to increase nspace
+        },
+        'minSpacing': {
+          margin:[0,0,0,0.5] //change number 6 to increase nspace
+        },
+        'SpacingFull': {
+          margin:[0,0,0,30] //change number 6 to increase nspace
+        },
+        'SpacingFull2': {
+          margin:[0,0,0,60] //change number 6 to increase nspace
+        },
+        'SpacingFullxl': {
+          margin:[0,0,0,spaceBottom] //change number 6 to increase nspace
+        },
+        'boldtxt':{
+          bold: true
+        },
+        'numerosEtiquetas':{
+          bold: true,
+          fontSize: 34        
+        },
+        'righttxt':{
+          aligment:'right',
+          fontSize: 8
+        }
+      }
+    };
+  
+    //si se va a generar en string base64
+    const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
+      pdfDocGenerator0.getBase64((data) => {
+        var file = data;
+  
+        const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+      
+        const fileName = `Pedido N° ${docAdd}, etiqueta ${i} de ${numeroBultos}`; //No se puede usar '/' porque se crea una carpeta en firebase y dentro de ella el nombre del pdf que va despues del '/'
+
+        const idfile = fileName +'.pdf';
+        this.pedido_.pdfname = idfile;
+        this.pedido_.pdfb64 = file;
+        const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
+        const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
+      
+      task.snapshotChanges().pipe(
+          finalize(() => {
+            this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
+              fileRef.getDownloadURL().subscribe(downloadURL => {
+                this.pedido_.pdfurl=downloadURL;
+                this.URLPublica = downloadURL;
+              });
+        })
+      ).subscribe();
+  
+    });//pdfDocGenerator
+  }
+}
   resetFormnotPrepa(pf?: NgForm){
     if(pf != null) pf.reset();
     this.pedidoService.txtBtnAccion = "Guardar";
