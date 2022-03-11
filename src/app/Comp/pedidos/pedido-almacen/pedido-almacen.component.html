@@ -1202,7 +1202,7 @@
 			  ></i>
 			</a>
 			<button
-			  class="btn btn-light"
+			  class="btn btn-info btn-sm"
 			  (click)="selectEventPed(element)"
 			  [disabled]="element.status != 'FACTURADO'"
 			>
@@ -1212,6 +1212,9 @@
 				data-placement="top"
 				title="Editar pedido"
 			  ></i>
+			</button>
+			<button class="btn btn-info btn-sm" type="reset" (click)="anulardoc(pedidoFormnd,element,9001)" data-toggle="tooltip" data-placement="top" title="Anular notificación de factura">
+				<i class="fas fa-undo" data-toggle="tooltip" data-placement="top" title="Anular notificación de factura"></i>
 			</button>
 		  </td>
 		</ng-container>

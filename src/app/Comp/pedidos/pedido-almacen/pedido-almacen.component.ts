@@ -345,6 +345,29 @@ onCancelar(pf?: NgForm,de?: number){
   }
 }
 
+anulardoc(pf?: NgForm,elemento?,num?:number){
+  this.pedido_= elemento;
+  if(confirm('¿Está seguro de que quiere anular la notificación de factura actual para el pedido Nro: '+elemento.idpedido+'?')) {
+    if(this.pedido_.uid != null){
+        this.pedido_.status="ACTIVO";
+        this.pedido_.modificado = new Date;
+        this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
+        this.pedido_.lastaction = "Anular NF";
+        //this.pedido_.ffactura = null;
+        this.pedido_.tipodoc = "";
+        this.pedido_.nrofactura = "";
+        this.pedidoService.updatePedidos(this.pedido_,num);
+
+        if(pf != null) pf.reset();
+    }
+    this.toastr.warning('Operación Terminada', 'Notificación de factura, anulada');
+    this.onCancelar(pf,1);
+  }
+  else{
+    this.onCancelar(pf,1);
+  }
+}
+
 /**
  * PARA EL LISTADO DE PEDIDOS +
 */
