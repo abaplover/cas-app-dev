@@ -796,20 +796,21 @@ generarpdf(pf?: NgForm)
   }
   anulardoc(pf?: NgForm,elemento?,num?:number){
     this.pedido_= elemento;
-    if(confirm('¿Está seguro de que quiere anular la notificación de factura actual para el pedido Nro: '+elemento.idpedido+'?')) {
+    if(confirm('¿Está seguro de que quiere anular la preparación en almacén para el pedido Nro: '+elemento.idpedido+'?')) {
       if(this.pedido_.uid != null){
-          this.pedido_.status="ACTIVO";
+          this.pedido_.status="FACTURADO";
           this.pedido_.modificado = new Date;
           this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
-          this.pedido_.lastaction = "Anular NF";
+          this.pedido_.lastaction = "Anular Prep";
           //this.pedido_.ffactura = null;
-          this.pedido_.tipodoc = "";
-          this.pedido_.nrofactura = "";
+          this.pedido_.nombrealmacenista = "";
+          this.pedido_.nrobultos = null;
+          this.pedido_.fpreparacion = null;
           this.pedidoService.updatePedidos(this.pedido_,num);
 
           if(pf != null) pf.reset();
       }
-      this.toastr.warning('Operación Terminada', 'Notificación de factura, anulada');
+      this.toastr.warning('Operación Terminada', 'Preparación de almacén, anulada');
       this.onCancelar(pf,1);
     }
     else{

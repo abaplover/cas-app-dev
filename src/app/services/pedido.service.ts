@@ -342,6 +342,16 @@ export class PedidoService {
           transporte: firebase.firestore.FieldValue.delete()
       });
     }
+
+    if (anularN==9003)
+    { 
+      var cityRef = this.db.collection('pedidos').doc(pedido.uid.toString());
+      var removeCapital = cityRef.update({
+          fpreparacion: firebase.firestore.FieldValue.delete(),
+          nombrealmacenista: firebase.firestore.FieldValue.delete(),
+          nrobultos: firebase.firestore.FieldValue.delete()
+      });
+    }
   }
 
   //detalles pedido
