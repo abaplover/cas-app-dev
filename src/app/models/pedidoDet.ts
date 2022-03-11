@@ -8,4 +8,5 @@ export interface PedidoDet{
 	preciomaterial?	    : number;
 	totalpormaterial?   : number;
 	indice?             :number;
+	materialpreparado?	:boolean;
 }

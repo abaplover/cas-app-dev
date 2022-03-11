@@ -112,6 +112,7 @@ export class PedidoAlmacenComponent implements OnInit {
   public iimpuestoList: Iimpuesto[]; //arreglo vacio
   public tipodocList: Tipod[]; //arreglo vacio
   public dempresaList: Datoemp[]; //arreglo vacio
+  public elementosCheckeados: PedidoDet[]=[]; //arreglo vacio
 
   public keywordPed = "uid";
   public keywordsCli = ['idcliente','descripcion'];
@@ -300,9 +301,8 @@ verdetalles(event, ped){
 }
 
 onCancelar(pf?: NgForm,de?: number){
-  console.log("entra a onCancelar");
   if (de == 0){
-    if (this.pedido_.fpreparacion !== undefined || this.pedido_.tipodoc !== undefined || this.pedido_.nrofactura !== undefined){
+    if (this.pedido_.fpreparacion !== undefined || this.pedido_.nrobultos !== undefined){
       if(confirm("¿Quieres abandonar el pedido? " )) {
         if(pf != null) pf.reset();
         this.pedidoslistDet=[];
@@ -731,6 +731,7 @@ generarpdf(pf?: NgForm)
 
 async onSubmitAlmacen(pf?: NgForm){
 
+
     await this.generarEtiquetas();
 
     if(this.pedido_.uid != null){
@@ -746,11 +747,16 @@ async onSubmitAlmacen(pf?: NgForm){
       this.pedido_.nrobultos = this.numeroBultos;
       this.pedido_.nombrealmacenista = this.almacenistaName;
 
+      //Actualiza los materiales checkeados
+      for (let j in this.elementosCheckeados) {
+        this.pedidoService.updatePedidosDet(this.elementosCheckeados[j])
+      }
+      this.elementosCheckeados = []; // vacia la instancia
+
       this.pedido_.lastaction = "Crear NPrep";
       //Update Pedido - Notificacion de Preparación
       this.pedidoService.updatePedidos(this.pedido_);
       this.toastr.success('Operación Terminada', 'Notificación de preparación creada.');
-
 
       this.pedido_.fdespacho = null;
       this.pedidoService.pedido_.nrobultos = 0;
@@ -976,12 +982,12 @@ generarEtiquetas() {
         const fileName = `Pedido N° ${docAdd}, etiqueta ${i} de ${numeroBultos}`; //No se puede usar '/' porque se crea una carpeta en firebase y dentro de ella el nombre del pdf que va despues del '/'
 
         const idfile = fileName +'.pdf';
-        this.pedido_.pdfname = idfile;
-        this.pedido_.pdfb64 = file;
+       /*  this.pedido_.pdfname = idfile;
+        this.pedido_.pdfb64 = file; */
         const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
         const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
       
-      task.snapshotChanges().pipe(
+      /* task.snapshotChanges().pipe(
           finalize(() => {
             this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
               fileRef.getDownloadURL().subscribe(downloadURL => {
@@ -989,11 +995,18 @@ generarEtiquetas() {
                 this.URLPublica = downloadURL;
               });
         })
-      ).subscribe();
+      ).subscribe(); */
   
     });//pdfDocGenerator
   }
 }
+
+materialChecked(pedido) {
+  //Auxiliar de elementos a eliminar de la db
+  this.elementosCheckeados.push(pedido);
+}
+
+
   resetFormnotPrepa(pf?: NgForm){
     if(pf != null) pf.reset();
     this.pedidoService.txtBtnAccion = "Guardar";
