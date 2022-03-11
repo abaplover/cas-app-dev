@@ -245,10 +245,25 @@
 				</div>
 
 
-
-
-
-				<div class="row" style="height: 5px;"></div>
+				<div class="row" style="height: 50px;">
+					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					</div>
+					
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="display: flex; justify-content: right;">		
+						<button 
+							class="btn btn-secondary btn-space" 
+							smat-stroked-button 
+							style="background-color:#bcc0c252;height: 35px !important; margin: 0.4vw 1.2vw;font-size: 14px;" 
+							type="button" 
+							[disabled]="!someticket"
+							(click)="downloadEtiquetas()"
+							id="btnetiqueta"
+							name="btnetiqueta"
+						>
+							Imprimir etiquetas
+						</button>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
 						<div class="card">
@@ -260,8 +275,8 @@
 												<tr>
 													<th scope="col"><mat-label style="font-size:smaller;">CÓDIGO</mat-label></th>
 												<th scope="col"><mat-label style="font-size:smaller;">MATERIAL</mat-label></th>
-												<th scope="col"><mat-label style="font-size:smaller;">UME</mat-label></th>
-												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANT</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">U. MEDIDA</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANTIDAD</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">PRECIO</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">TOTAL</mat-label></th>
 												</tr>
