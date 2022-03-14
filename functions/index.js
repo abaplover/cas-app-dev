@@ -160,8 +160,10 @@ exports.Pedmail = functions.firestore.document("pedidos/{id}").onCreate((snap,co
 //CUANDO SE MODIFICA UN PEDIDO
 exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((change,context)=>{
 
+	console.log("Entrando");
 	let saludo_ = "Gracias por su compra.";
 	const newValue = change.after.data();
+	console.log("Entrando2 ", newValue);
 	const email = newValue.email;
 	const name = newValue.nomcliente;
 	const pedUid =  context.params.id;
