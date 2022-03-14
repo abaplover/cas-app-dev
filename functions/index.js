@@ -183,8 +183,8 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	const pdfb64_ = newValue.pdfb64;
 	const ffactura_ = newValue.ffactura;
 	const nrofactura_ = newValue.nrofactura;
-	const fpreparacion = newValue.fpreparacion;
-	const nrobultos = newValue.nrobultos;
+	const fpreparacion_ = newValue.fpreparacion;
+	const nrobultos_ = newValue.nrobultos;
 	const fentrega_ = newValue.fentrega;
 	const lastaction_ = newValue.lastaction;
 	const idpedido_ = newValue.idpedido;
@@ -351,7 +351,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		enviar = true;
 	}
 
-	if (typeof fpreparacion !== "undefined" && typeof nrobultos !== "undefined" && lastaction_ === "Crear NPrep"){
+	if (typeof fpreparacion_ !== "undefined" && typeof nrobultos_ !== "undefined" && lastaction_ === "Crear NPrep"){
 		asunto = "Confirmación de Preparación de pedido, Nro ";
 		bodytxt = "Confirmación de Preparación de pedido";
 		bodyFecha_ = "Fecha de preparación: " + fecPreparacion_ + "<br />Fecha tentativa de entrega: " + fectentrega_;
