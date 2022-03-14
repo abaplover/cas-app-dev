@@ -160,10 +160,8 @@ exports.Pedmail = functions.firestore.document("pedidos/{id}").onCreate((snap,co
 //CUANDO SE MODIFICA UN PEDIDO
 exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((change,context)=>{
 
-	console.log("Entrando");
 	let saludo_ = "Gracias por su compra.";
 	const newValue = change.after.data();
-	console.log("Entrando2 ", newValue);
 	const email = newValue.email;
 	const name = newValue.nomcliente;
 	const pedUid =  context.params.id;
@@ -185,7 +183,6 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	const pdfb64_ = newValue.pdfb64;
 	const ffactura_ = newValue.ffactura;
 	const nrofactura_ = newValue.nrofactura;
-	const fpreparacion_ = newValue.fpreparacion;
 	const nrobultos_ = newValue.nrobultos;
 	const fentrega_ = newValue.fentrega;
 	const lastaction_ = newValue.lastaction;
@@ -354,8 +351,8 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	}
 
 	if (typeof fpreparacion_ !== "undefined" && typeof nrobultos_ !== "undefined" && lastaction_ === "Crear NPrep"){
-		asunto = "Confirmación de Preparación de pedido, Nro ";
-		bodytxt = "Confirmación de Preparación de pedido";
+		asunto = "Confirmación de almacén, Nro ";
+		bodytxt = "Confirmación de almacén";
 		bodyFecha_ = "Fecha de preparación: " + fecPreparacion_ + "<br />Fecha tentativa de entrega: " + fectentrega_;
 		enviar = true;
 	}
