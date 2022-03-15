@@ -7,7 +7,7 @@
 	  <form #pedidoFormnAlmacen="ngForm" *ngIf="this.pedido_.uid">
 		<div class="row">
 		  <div
-			class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
+			class="col-sm-4 col-md-4 col-lg-4 col-xl-4"
 			style="
 			  border-color: blue;
 			  border-style: solid;
@@ -120,105 +120,7 @@
 		  </div>
   
 		  <div
-			class="col-sm-3 col-md-3 col-lg-3 col-xl-3"
-			style="
-			  border-color: rgb(252, 118, 180);
-			  border-style: solid;
-			  border-width: 0px;
-			  padding-top: 0px;
-			  padding-left: 0px;
-			  padding-bottom: 0px;
-			  padding-right: 3px;
-			"
-		  >
-			<div class="card">
-			  <div
-				class="card-body"
-				style="
-				  height: 230px;
-				  padding-top: 4px;
-				  padding-left: 3px;
-				  padding-bottom: 4px;
-				  padding-right: 0px;
-				"
-			  >
-				<div class="row">
-				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<div class="input-group input-group-sm mb-3">
-					  <div class="input-group-prepend" style="width: 130px">
-						<span
-						  class="input-group-text"
-						  style="width: 130px"
-						  id="inputGroup-sizing-sm"
-						  >Fecha Preparación</span
-						>
-					  </div>
-					  <input
-							type="date"
-							style="font-size: 14px"
-							[max]="maxDate"
-							name="fdespacho"
-							id="fdespacho"
-							#fdespacho="ngModel"
-							[(ngModel)]="this.pedido_.fdespacho"
-							required
-							class="form-control"
-						/>
-					</div>
-				  </div>
-				</div>
-				<div class="row">
-				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<div class="input-group input-group-sm mb-3">
-					  <div class="input-group-prepend" style="width: 130px">
-						<span
-						  class="input-group-text"
-						  style="width: 130px"
-						  id="inputGroup-sizing-sm"
-						  >Almacenista</span
-						>
-					  </div>
-					  <div class="abs-center">
-						<mat-label>{{ this.almacenistaName }}</mat-label>
-					  </div>
-					</div>
-				  </div>
-				</div>
-				<div class="row">
-				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<div class="input-group input-group-sm mb-3">
-					  <div class="input-group-prepend" style="width: 130px">
-						<span
-						  class="input-group-text"
-						  style="width: 130px"
-						  id="inputGroup-sizing-sm"
-						  >N° Bultos</span
-						>
-					  </div>
-					  <input placeholder="0"
-						aria-label="Small" 
-						aria-describedby="inputGroup-sizing-sm"
-						type="number"
-						name="nrobultos"
-						[(ngModel)]="this.pedidoService.pedido_.nrobultos"
-						step="1"
-						min=0
-						max=100
-						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
-						(keyup)="txtnbultoschange($event)"
-						(change)="txtnbultoschange($event)"
-						#rateInput2= "ngModel"
-						class="form-control"
-					  />
-					</div>
-				  </div>
-				</div>
-			  </div>
-			</div>
-		  </div>
-  
-		  <div
-			class="col-sm-6 col-md-6 col-lg-6 col-xl-6"
+			class="col-sm-4 col-md-4 col-lg-4 col-xl-4"
 			style="
 			  border-color: rgb(117, 240, 59);
 			  border-style: solid;
@@ -228,7 +130,7 @@
 			  padding-bottom: 0px;
 			  padding-right: 3px;
 			"
-		  >
+		>
 			<div class="card">
 			  <div
 				class="card-body"
@@ -241,7 +143,7 @@
 				"
 			  >
 				<div class="row">
-				  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 					<div class="input-group input-group-sm mb-3">
 					  <div class="input-group-prepend" style="width: 125px">
 						<span
@@ -261,7 +163,7 @@
 				  
 				</div>
 				<div class="row">
-				  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 					<div class="input-group input-group-sm mb-3">
 					  <div class="input-group-prepend" style="width: 125px">
 						<span
@@ -291,7 +193,7 @@
 				  </div>
 				</div>
 				<div class="row">
-				  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 					<div class="input-group input-group-sm mb-3">
 					  <div class="input-group-prepend" style="width: 125px">
 						<span
@@ -308,7 +210,7 @@
 				  </div>
 				</div>
 				<div class="row">
-				  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 					<div class="input-group input-group-sm mb-3">
 					  <div class="input-group-prepend" style="width: 125px">
 						<span
@@ -348,7 +250,7 @@
 				  </div> -->
 				</div>
 				<div class="row">
-				  <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 					<!-- <div class="input-group input-group-sm mb-3">
 											  <div class="input-group-prepend" style="width: 125px;">
 												  <span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Nota de Entrega</span>
@@ -371,6 +273,104 @@
 					  <div class="abs-center"></div>
 					</div>
 				  </div> -->
+				</div>
+			  </div>
+			</div>
+		  </div>
+
+		  <div
+			class="col-sm-4 col-md-4 col-lg-4 col-xl-4"
+			style="
+			  border-color: rgb(252, 118, 180);
+			  border-style: solid;
+			  border-width: 0px;
+			  padding-top: 0px;
+			  padding-left: 0px;
+			  padding-bottom: 0px;
+			  padding-right: 3px;
+			"
+		  >
+			<div class="card">
+			  <div
+				class="card-body"
+				style="
+				  height: 230px;
+				  padding-top: 4px;
+				  padding-left: 3px;
+				  padding-bottom: 4px;
+				  padding-right: 0px;
+				"
+			  >
+				<div class="row">
+				  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+					<div class="input-group input-group-sm mb-3">
+					  <div class="input-group-prepend" style="width: 130px">
+						<span
+						  class="input-group-text"
+						  style="width: 130px"
+						  id="inputGroup-sizing-sm"
+						  >Fecha Preparación</span
+						>
+					  </div>
+					  <input
+							type="date"
+							style="font-size: 14px"
+							[max]="maxDate"
+							name="fpreparacion"
+							id="fpreparacion"
+							#fpreparacion="ngModel"
+							[(ngModel)]="this.pedido_.fpreparacion"
+							required
+							class="form-control"
+						/>
+					</div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+					<div class="input-group input-group-sm mb-3">
+					  <div class="input-group-prepend" style="width: 130px">
+						<span
+						  class="input-group-text"
+						  style="width: 130px"
+						  id="inputGroup-sizing-sm"
+						  >Almacenista</span
+						>
+					  </div>
+					  <div class="abs-center">
+						<mat-label>{{ this.almacenistaName }}</mat-label>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+					<div class="input-group input-group-sm mb-3">
+					  <div class="input-group-prepend" style="width: 130px">
+						<span
+						  class="input-group-text"
+						  style="width: 130px"
+						  id="inputGroup-sizing-sm"
+						  >N° Bultos</span
+						>
+					  </div>
+					  <input placeholder="0"
+						aria-label="Small" 
+						aria-describedby="inputGroup-sizing-sm"
+						type="number"
+						name="nrobultos"
+						[(ngModel)]="this.pedidoService.pedido_.nrobultos"
+						step="1"
+						min=0
+						max=100
+						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
+						(keyup)="txtnbultoschange($event)"
+						(change)="txtnbultoschange($event)"
+						#rateInput2= "ngModel"
+						class="form-control"
+					  />
+					</div>
+				  </div>
 				</div>
 			  </div>
 			</div>

@@ -261,7 +261,6 @@ timestampConvert(fec,col?:number){
 }
 
 verdetalles(event, ped){
-  console.log("entra a verdetalles");
   const dialogConfig = new MatDialogConfig;
   //dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
@@ -272,8 +271,8 @@ verdetalles(event, ped){
   this.pedidoVer_ =  Object.assign({}, ped);
   this.timestampConvert(ped.fechapedido,1);
 
-  if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
-    this.timestampConvert(ped.fpreparacion,2);
+  if (ped.ffactura !== null && typeof ped.ffactura != "undefined"){
+    this.timestampConvert(ped.ffactura,2);
   }
   if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined"){
     this.timestampConvert(ped.fdespacho,3);
@@ -762,11 +761,15 @@ async onSubmitAlmacen(pf?: NgForm){
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
+      console.log("fpreparacion ", this.pedido_.fpreparacion);
+
       let ahora = new Date();
-      this.pedido_.fpreparacion = ahora;
-      this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate());
+
+      this.pedido_.fpreparacion = new Date(this.pedido_.fpreparacion);
+      this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate()+1);
       this.pedido_.fpreparacion.setHours(ahora.getHours());
       this.pedido_.fpreparacion.setMinutes(ahora.getMinutes());
+      console.log("fpreparacion2 ", this.pedido_.fpreparacion);
       this.pedido_.nrobultos = this.numeroBultos;
       this.pedido_.nombrealmacenista = this.almacenistaName;
 
@@ -821,8 +824,10 @@ generarEtiquetas() {
     pedidoNrofactura = "sin número"
   }
 
+  var ticketDefinition;
+
   for (let i = 1; i<=numeroBultos;i++) {
-    const ticketDefinition = {
+    ticketDefinition = {
       pageSize: {
         width: 432,
         height: 288
@@ -994,34 +999,34 @@ generarEtiquetas() {
         }
       }
     };
-  
-    //si se va a generar en string base64
-    const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
-      pdfDocGenerator0.getBase64((data) => {
-        var file = data;
-  
-        const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-      
-        const fileName = `Pedido N° ${docAdd}, etiqueta ${i} de ${numeroBultos}`; //No se puede usar '/' porque se crea una carpeta en firebase y dentro de ella el nombre del pdf que va despues del '/'
-
-        const idfile = fileName +'.pdf';
-       /*  this.pedido_.pdfname = idfile;
-        this.pedido_.pdfb64 = file; */
-        const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
-        const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
-      
-      /* task.snapshotChanges().pipe(
-          finalize(() => {
-            this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
-              fileRef.getDownloadURL().subscribe(downloadURL => {
-                this.pedido_.pdfurl=downloadURL;
-                this.URLPublica = downloadURL;
-              });
-        })
-      ).subscribe(); */
-  
-    });//pdfDocGenerator
   }
+
+   //si se va a generar en string base64
+   const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
+   pdfDocGenerator0.getBase64((data) => {
+     var file = data;
+
+     const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+   
+     const fileName = `Etiquetas pedido N° ${docAdd}`;
+
+     const idfile = fileName +'.pdf';
+    /*  this.pedido_.pdfname = idfile;
+     this.pedido_.pdfb64 = file; */
+     const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
+     const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
+   
+   /* task.snapshotChanges().pipe(
+       finalize(() => {
+         this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
+           fileRef.getDownloadURL().subscribe(downloadURL => {
+             this.pedido_.pdfurl=downloadURL;
+             this.URLPublica = downloadURL;
+           });
+     })
+   ).subscribe(); */
+
+ });//pdfDocGenerator
 }
 
 materialChecked(pedido) {
