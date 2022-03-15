@@ -243,6 +243,9 @@ timestampConvert(fec,col?:number){
   if (col==6){
     this.pedidoVer_.fentrega = dateObject;
   }
+  if (col==7){
+    this.pedidoVer_.fpreparacion = dateObject;
+  }
 }
 
 verdetalles(event, ped){
@@ -271,6 +274,9 @@ verdetalles(event, ped){
   }
   if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
     this.timestampConvert(ped.fentrega,6);
+  }
+  if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
+    this.timestampConvert(ped.fpreparacion,7);
   }
 
   dialogConfig.data = {
@@ -921,6 +927,9 @@ generarpdf(pf?: NgForm)
     }
     if (elemento.ffactura != null || typeof elemento.ffactura != "undefined"){
         this.pedido_.ffactura = this.timestampConvert2(elemento.ffactura);
+    }
+    if (elemento.fpreparacion != null || typeof elemento.fpreparacion != "undefined"){
+        this.pedido_.fpreparacion = this.timestampConvert2(elemento.fpreparacion);
     }
     if (elemento.ftentrega != null || typeof elemento.ftentrega != "undefined"){
         this.pedido_.ftentrega = this.timestampConvert2(elemento.ftentrega);

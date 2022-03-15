@@ -65,6 +65,7 @@ export class PedidoShowComponent implements OnInit {
   ) 
   {
     this.pedidoShow = data.pedidoShow;
+    console.log("thispedidoshow ", this.pedidoShow);
 
     if (this.pedidoShow.nrobultos) this.someticket = true;
 
@@ -75,6 +76,7 @@ export class PedidoShowComponent implements OnInit {
       this.totalPed=0;
       
       this.pedidoslistDet = pedidosDet;
+      console.log("pedidoslist ", this.pedidoslistDet);
 
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
@@ -104,7 +106,6 @@ export class PedidoShowComponent implements OnInit {
 
     this.clienteS.getClients().valueChanges().subscribe(cs =>{
       this.clienteList = cs;
-      console.log("clientList ",this.clienteList,", ",cs);
     })
 
     //Obtiene los datos del cliente
@@ -116,7 +117,7 @@ export class PedidoShowComponent implements OnInit {
       this.dempresaList = emps;
     })
 
-    console.log("show ", this.pedidoShow.nrobultos);
+    console.log("fecha factura1 ",this.pedidoShow.ffactura)
 
 
   }
