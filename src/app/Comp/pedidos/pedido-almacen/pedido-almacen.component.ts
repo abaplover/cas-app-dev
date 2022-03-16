@@ -294,8 +294,6 @@ verdetalles(event, ped){
     pedidoShow: Object.assign({}, this.pedidoVer_)
   };
 
-  console.log("Dialog config ", dialogConfig);
-
   this.dialogo.open(PedidoShowComponent,dialogConfig);
 }
 
@@ -759,6 +757,7 @@ onSubmitAlmacen(pf?: NgForm, url?:string){
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
+      //url de la etiqueta
       this.pedido_.ticketurl = url;
 
       let ahora = new Date();
