@@ -826,13 +826,14 @@ generarEtiquetas() {
 
   var ticketDefinition;
 
-  for (let i = 1; i<=numeroBultos;i++) {
+
+  //for (let i = 1; i<=numeroBultos;i++) {
     ticketDefinition = {
       pageSize: {
         width: 432,
         height: 288
       },
-      pageMargins: [ 25, 30, 25, 25 ],
+      pageMargins: [ 25, 30, 25, 20 ],
   
       footer: {
   
@@ -845,125 +846,7 @@ generarEtiquetas() {
             ],
   
       },
-  
-      content: [
-        // if you don't need styles, you can use a simple string to define a paragraph
-  
-        {
-          columns: [
-            {
-              width: 120,
-              image: this.dempresaList[0].imglogob64,
-              height: 20,
-            },
-          ],
-        },
-        //solo espaciado
-        { text:' ',style: "lineSpacing",fontSize: 12},
-        //Datos de la empresa
-        {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
-        {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
-  
-        {
-          columns:
-          [
-            { //Columna en blanco para alinear texto
-              width: 180,
-              text: '',
-              height: 60,
-            },
-            //Datos del cliente
-            {
-                width: 200,          
-                table:
-                {
-                    widths: [190, 135],
-                    body: [
-                      [
-                        {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
-                      ],
-                      [
-                        {text: 'Dirección: '+dirCliente, style:"righttxt", border: [false, false, false, false]},
-                      ],
-                    ]
-                  }
-            }
-          ],
-          // optional space between columns
-          columnGap: 10
-        },
-  
-        //Esta es la linea superior
-        {
-          table : {
-              headerRows : 1,
-              widths: [375],
-              body : [
-                      [''],
-                      ['']
-                      ]
-          },
-          layout : 'headerLineOnly'
-        },
-  
-        //Detalle de pedido y numero de eqitueta
-        {
-          columns:
-          [
-            {
-              width: 200,          
-              table:
-              {
-                  widths: [190, 135],
-                  body: [
-                    [
-                      {text: 'N° Pedido: '+docAdd, border: [false, false, false, false]},
-                    ],
-                    [
-                      {text: 'N° Factura/Not: '+pedidoNrofactura, border: [false, false, false, false]},
-                    ],
-                  ]
-                }
-            },
-            //Datos del cliente
-            {
-                width: 200,          
-                table:
-                {
-                    widths: [190, 135],
-                    body: [
-                      [
-                        {text: i+' / '+ numeroBultos, style:"numerosEtiquetas", border: [false, false, false, false]},
-                      ],
-                    ]
-                  }
-            }
-          ],
-          // optional space between columns
-          columnGap: 10
-        },
-
-        { text:' ',style: "lineSpacing",fontSize: 12},
-  
-        //Esta es la linea inferior
-        {
-          table : {
-              headerRows : 1,
-              widths: [375],
-              body : [
-                      [''],
-                      ['']
-                      ]
-          },
-          layout : 'headerLineOnly'
-        },
-
-        //Codigo de barras
-        {
-          image : this.textToBase64Barcode(docAdd)
-        }
-  
-      ],
+      content: [],
       defaultStyle: {
         fontSize: 10
       },
@@ -999,7 +882,131 @@ generarEtiquetas() {
         }
       }
     };
+  //}
+
+  for (let i = 1; i<=numeroBultos; i++) {
+    ticketDefinition.content.push(
+      {
+        columns: [
+          {
+            width: 120,
+            image: this.dempresaList[0].imglogob64,
+            height: 20,
+          },
+        ],
+      },
+      //solo espaciado
+      { text:' ',style: "lineSpacing",fontSize: 12},
+      //Datos de la empresa
+      {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
+      {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
+
+      {
+        columns:
+        [
+          { //Columna en blanco para alinear texto
+            width: 180,
+            text: '',
+            height: 60,
+          },
+          //Datos del cliente
+          {
+              width: 200,          
+              table:
+              {
+                  widths: [190, 135],
+                  body: [
+                    [
+                      {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
+                    ],
+                    [
+                      {text: 'Dirección: '+dirCliente, style:"righttxt", border: [false, false, false, false]},
+                    ],
+                  ]
+                }
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+
+      //Esta es la linea superior
+      {
+        table : {
+            headerRows : 1,
+            widths: [375],
+            body : [
+                    [''],
+                    ['']
+                    ]
+        },
+        layout : 'headerLineOnly'
+      },
+
+      //Detalle de pedido y numero de eqitueta
+      {
+        columns:
+        [
+          {
+            width: 200,          
+            table:
+            {
+                widths: [190, 135],
+                body: [
+                  [
+                    {text: 'N° Pedido: '+docAdd, border: [false, false, false, false]},
+                  ],
+                  [
+                    {text: 'N° Factura/Not: '+pedidoNrofactura, border: [false, false, false, false]},
+                  ],
+                ]
+              }
+          },
+          //Datos del cliente
+          {
+              width: 200,          
+              table:
+              {
+                  widths: [190, 135],
+                  body: [
+                    [
+                      {text: i+' / '+ numeroBultos, style:"numerosEtiquetas", border: [false, false, false, false]},
+                    ],
+                  ]
+                }
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+
+      { text:' ',style: "lineSpacing",fontSize: 12},
+
+      //Esta es la linea inferior
+      {
+        table : {
+            headerRows : 1,
+            widths: [375],
+            body : [
+                    [''],
+                    ['']
+                    ],
+        },
+        layout : 'headerLineOnly'
+      },
+
+      //Codigo de barras
+      {
+        image : this.textToBase64Barcode(docAdd),
+      },
+      { 
+        text: '',
+        pageBreak: 'before',
+      },
+    )
   }
+  //Elimina el ultimo salto de pagina porque deja una pagina en blanco al final
+  ticketDefinition.content.splice(ticketDefinition.content.length-1,1);
 
    //si se va a generar en string base64
    const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
