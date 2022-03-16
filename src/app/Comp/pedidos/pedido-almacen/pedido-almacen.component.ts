@@ -751,17 +751,15 @@ generarpdf(pf?: NgForm)
 
 }//pdf make */
 
-async onSubmitAlmacen(pf?: NgForm){
+onSubmitAlmacen(pf?: NgForm, url?:string){
 
-
-    await this.generarEtiquetas();
-
+    
     if(this.pedido_.uid != null){
       this.pedido_.status="PREPARADO";
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
-      console.log("fpreparacion ", this.pedido_.fpreparacion);
+      this.pedido_.ticketurl = url;
 
       let ahora = new Date();
 
@@ -769,7 +767,6 @@ async onSubmitAlmacen(pf?: NgForm){
       this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate()+1);
       this.pedido_.fpreparacion.setHours(ahora.getHours());
       this.pedido_.fpreparacion.setMinutes(ahora.getMinutes());
-      console.log("fpreparacion2 ", this.pedido_.fpreparacion);
       this.pedido_.nrobultos = this.numeroBultos;
       this.pedido_.nombrealmacenista = this.almacenistaName;
 
@@ -787,7 +784,6 @@ async onSubmitAlmacen(pf?: NgForm){
       this.pedido_.fdespacho = null;
       this.pedidoService.pedido_.nrobultos = 0;
     }
-
 
     this.onCancelar(pf,1);
   }
@@ -808,7 +804,7 @@ textToBase64Barcode(text){
 }
 
 
-generarEtiquetas() {
+async generarEtiquetas(pf?: NgForm) {
 
   let spaceBottom=260;
 
@@ -1008,12 +1004,15 @@ generarEtiquetas() {
   //Elimina el ultimo salto de pagina porque deja una pagina en blanco al final
   ticketDefinition.content.splice(ticketDefinition.content.length-1,1);
 
+    /* const pdfDocGenerator1 = pdfMake.createPdf(ticketDefinition);
+    pdfDocGenerator1.getBlob((blob) => {
+      var file = blob; */
    //si se va a generar en string base64
    const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
-   pdfDocGenerator0.getBase64((data) => {
-     var file = data;
+    pdfDocGenerator0.getBase64((data) => {
+      var file = data;
 
-     const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+     //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
    
      const fileName = `Etiquetas pedido N° ${docAdd}`;
 
@@ -1022,16 +1021,20 @@ generarEtiquetas() {
      this.pedido_.pdfb64 = file; */
      const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
      const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
-   
-   /* task.snapshotChanges().pipe(
+     //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
+
+    task.snapshotChanges().pipe(
        finalize(() => {
          this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
            fileRef.getDownloadURL().subscribe(downloadURL => {
-             this.pedido_.pdfurl=downloadURL;
+             this.pedido_.ticketurl=downloadURL;
              this.URLPublica = downloadURL;
+             this.onSubmitAlmacen(pf,this.URLPublica);
            });
+
      })
-   ).subscribe(); */
+   ).subscribe();
+
 
  });//pdfDocGenerator
 }
