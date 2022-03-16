@@ -50,6 +50,7 @@ export interface Pedido {
   companydir?: string;
   clientedir?: string;
   pdfurl?: string;
+  ticketurl?: string;
   observacion?: string;
   pdfname?: string;
   pdfb64?: string;
