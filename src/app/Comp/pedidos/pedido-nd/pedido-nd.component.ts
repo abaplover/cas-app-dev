@@ -120,7 +120,7 @@ export class PedidoNdComponent implements OnInit {
   private myempty: number;
   public msj_enlace: string = 'Pedidos';
 
-
+  someticket = false; //Variable que almacena si tiene etiquetas
 
   @ViewChild('pedidoFormnf') myFormnf;
   @ViewChild('pedidoFormnd') myFormnd;
@@ -336,28 +336,6 @@ onCancelar(pf?: NgForm,de?:number){
 /**
  * PARA EL LISTADO DE PEDIDOS +
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 generarpdf(pf?: NgForm)
@@ -739,7 +717,9 @@ generarpdf(pf?: NgForm)
 
 }//pdf make
 
-
+downloadEtiquetas() {
+  window.open(this.pedido_.ticketurl);
+}
 
 
 
@@ -903,6 +883,10 @@ generarpdf(pf?: NgForm)
 
   selectEventPed(elemento){
     this.pedido_ =  Object.assign({}, elemento);
+
+    //Verifica que el pedido haya pasado por el proceso de almacen
+    console.log("pedido_ ", this.pedido_);
+    if (this.pedido_.nrobultos) this.someticket = true;
 
     const val = elemento.idcliente;
     const isLargeNumber = (element) => element.idcliente.trim() == val.trim();

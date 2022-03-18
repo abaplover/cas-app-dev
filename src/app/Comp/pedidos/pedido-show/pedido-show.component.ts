@@ -65,8 +65,8 @@ export class PedidoShowComponent implements OnInit {
   ) 
   {
     this.pedidoShow = data.pedidoShow;
-    console.log("thispedidoshow ", this.pedidoShow);
 
+    //Verifica que el pedido haya pasado por el proceso de almacen
     if (this.pedidoShow.nrobultos) this.someticket = true;
 
     //Get Order detaills

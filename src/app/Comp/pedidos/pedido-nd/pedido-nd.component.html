@@ -442,9 +442,9 @@
 
 									<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
 										<button
-											class="btn-space"
+											class="btn btn-secondary btn-space"
 											smat-stroked-button
-											style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;"
+											style="background-color:#bcc0c252;height: 35px !important;font-size: 14px;margin-right: 4px;"
 											type="button"
 											[disabled]="pedidoFormnd.invalid"
 											(click)="onSubmitnd(pedidoFormnd)"
@@ -454,14 +454,29 @@
 											Actualizar Pedido
 										</button>
 										<button
+											class="btn btn-secondary btn-space"
 											smat-stroked-button
-											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;"
+											style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;font-size: 14px;"
 											type="button"
 											(click)="onCancelar(pedidoFormnd,0)">
 												Atrás
 											</button>
 									</div>
 								</div>
+							</div>
+							<div class="row" style="height: 50px;">					
+								<button 
+									class="btn btn-secondary btn-space" 
+									smat-stroked-button 
+									style="background-color:#bcc0c252;height: 35px !important; margin: 0 auto;font-size: 14px;" 
+									type="button" 
+									[disabled]="!someticket"
+									(click)="downloadEtiquetas()"
+									id="btnetiqueta"
+									name="btnetiqueta"
+								>
+									Imprimir etiquetas
+								</button>
 							</div>
 						</div>
 					</div>

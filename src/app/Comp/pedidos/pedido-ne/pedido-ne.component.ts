@@ -81,6 +81,8 @@ export class PedidoNeComponent implements OnInit {
   tmonti: number=0;
   tmontn: number=0;
 
+  someticket = false; //Variable que almacena si tiene etiquetas
+
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -494,10 +496,10 @@ onCancelar(pf?: NgForm,de?:number){
 
   selectEventPed(elemento){
 
-
-    console.log('aaaa:',elemento);
-
     this.pedido_ =  Object.assign({}, elemento);
+
+    //Verifica que el pedido haya pasado por el proceso de almacen
+    if (this.pedido_.nrobultos) this.someticket = true;
 
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';
@@ -694,6 +696,10 @@ onCancelar(pf?: NgForm,de?:number){
     if (this.pedidoService.selectedIndex==3){
       this.resetFormnf(this.myFormne);
     }
+  }
+
+  downloadEtiquetas() {
+    window.open(this.pedido_.ticketurl);
   }
 
 
