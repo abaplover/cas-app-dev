@@ -343,16 +343,32 @@ export class PedidoService {
       });
     }
 
+    //Si anula la preparacion de pedido
     if (anularN==9003)
-    { 
-      var cityRef = this.db.collection('pedidos').doc(pedido.uid.toString());
-      var removeCapital = cityRef.update({
+    {
+      var pedRef = this.db.collection('pedidos').doc(pedido.uid.toString());
+      var removeCapital = pedRef.update({
           fpreparacion: firebase.firestore.FieldValue.delete(),
           nombrealmacenista: firebase.firestore.FieldValue.delete(),
           nrobultos: firebase.firestore.FieldValue.delete()
       });
+
+      //Busca en la tabla/coleccion pedidosDet si hay alguno que coincida con el uid del pedido
+      var coincideDetail = this.db.collection(
+        'pedidosDet', ref => ref.where('idpedido','==',pedido.uid.toString()));
+      //Ahora que conocemos que hay uno que coincide, solicitamos el id de ese material(pedidoDet)
+      coincideDetail.valueChanges().subscribe((material:PedidoDet[]) => {
+        //Guardamos el id en una variable
+        const idDet = material[0].uid;
+        //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
+        var pedDetRef = this.db.collection('pedidosDet').doc(idDet);
+        //Cambiamos el check a false
+        pedDetRef.update({
+          materialpreparado: false
+        });
+      });
     }
-  }
+  };
 
   //detalles pedido
   getPedidosDet(uid)
@@ -405,6 +421,7 @@ export class PedidoService {
     this.pedidoDetDoc = this.db.doc(`pedidosDet/${ped.uid}`);
     this.pedidoDetDoc.update(ped);
   }
+  
 
   
 
