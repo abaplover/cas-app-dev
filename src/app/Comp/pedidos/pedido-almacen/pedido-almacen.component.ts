@@ -48,6 +48,7 @@ import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask 
 import { DatoempService } from 'src/app/services/datoemp.service';
 import * as moment from 'moment';
 import { AlmacenistaService } from 'src/app/services/almacenista.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -157,7 +158,7 @@ export class PedidoAlmacenComponent implements OnInit {
 
     //this.almacenistS.getAlmacenistas();
     //this.almacenistS.insertAlmacenista();
-
+    
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
 
@@ -1038,9 +1039,18 @@ async generarEtiquetas(pf?: NgForm) {
  });//pdfDocGenerator
 }
 
-materialChecked(pedido) {
-  //Auxiliar de elementos a eliminar de la db
-  this.elementosCheckeados.push(pedido);
+materialChecked(pedido,event) {
+  //si el check esta en true suma el elemento al array de pedidos chequeados
+  if (event.target.checked ) {
+    this.elementosCheckeados.push(pedido);
+  } else {
+    this.elementosCheckeados.splice(this.elementosCheckeados.length-1,1);
+  }
+
+  //Evalua que todos los materiales esten chequeados
+  if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
+    $("#btnenviarne").prop('disabled',true);
+  }
 }
 
 
@@ -1236,10 +1246,22 @@ materialChecked(pedido) {
 
   }
 
-  txtnbultoschange(nbultos){
+  txtnbultoschange (nbultos) {
+    //Evalua que todos los materiales esten chequeados
+    if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
+      $("#btnenviarne").prop('disabled',true);
+    }
+    
     this.numeroBultos = nbultos.target.value;
 
   }//txtnbultoschange
+
+  //Evalua que todos los materiales esten chequeados
+  fechaprepChange(event) {
+    if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
+      $("#btnenviarne").prop('disabled',true);
+    }
+  }
 
   onChangeSearchPed(elemento){
 

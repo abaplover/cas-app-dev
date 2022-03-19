@@ -765,7 +765,7 @@ downloadEtiquetas() {
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
       //Update Pedido - Notifi Facttura
       this.pedidoService.updatePedidos(this.pedido_);
-      this.toastr.success('Operación Terminada', 'Nofificacinón de despacho creada.');
+      this.toastr.success('Operación Terminada', 'Nofificación de despacho creada.');
     }
     this.onCancelar(pf,1);
   }
@@ -781,6 +781,7 @@ downloadEtiquetas() {
 
   }
   anulardoc(pf?: NgForm,elemento?,num?:number){
+    console.log("pedidosdet ",this.pedidoService.getPedidosDet);
     this.pedido_= elemento;
     if(confirm('¿Está seguro de que quiere anular la preparación en almacén para el pedido Nro: '+elemento.idpedido+'?')) {
       if(this.pedido_.uid != null){
@@ -788,10 +789,27 @@ downloadEtiquetas() {
           this.pedido_.modificado = new Date;
           this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
           this.pedido_.lastaction = "Anular Prep";
+
+          //Get Order detaills
+    this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
+      this.pedidoslistDet = pedidosDet;
+
+      for (let i in this.pedidoslistDet){
+        this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
+        this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
+        this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
+
+        //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
+      }
+    })
+          
+
           //this.pedido_.ffactura = null;
           this.pedido_.nombrealmacenista = "";
           this.pedido_.nrobultos = null;
           this.pedido_.fpreparacion = null;
+          console.log("getlist ",this.pedidoService.getPedidosDet(this.pedido_.uid));
+          //updatePedidosDet(this.elementosCheckeados[j])
           this.pedidoService.updatePedidos(this.pedido_,num);
 
           if(pf != null) pf.reset();

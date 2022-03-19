@@ -155,7 +155,7 @@
 					  </div>
 					  <div class="abs-center-fecha">
 						{{
-						  this.pedido_.fechapedido | date: "dd/MM/yyyy hh:mm a"
+						  this.pedido_.fechapedido | date: "dd/MM/yyyy"
 						}}
 					  </div>
 					</div>
@@ -175,7 +175,7 @@
 					  </div>
 					  <div class="abs-center-fecha">
 						{{
-							this.pedido_.ffactura | date: "dd/MM/yyyy hh:mm a"
+							this.pedido_.ffactura | date: "dd/MM/yyyy"
 						}}
 					  </div>
 					  <!-- <input
@@ -322,6 +322,7 @@
 							[(ngModel)]="this.pedido_.fpreparacion"
 							required
 							class="form-control"
+							(change)="fechaprepChange($event)"
 						/>
 					</div>
 				  </div>
@@ -361,12 +362,13 @@
 						name="nrobultos"
 						[(ngModel)]="this.pedidoService.pedido_.nrobultos"
 						step="1"
-						min=0
+						min=1
 						max=100
 						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
 						(keyup)="txtnbultoschange($event)"
 						(change)="txtnbultoschange($event)"
 						#rateInput2= "ngModel"
+						required
 						class="form-control"
 					  />
 					</div>
@@ -421,7 +423,7 @@
 							  >TOTAL</mat-label
 							>
 						  </th>
-						  <th scope="col" style="text-align: right">
+						  <th scope="col" style="text-align: center">
 							<mat-label style="font-size: smaller"
 							  >PREPARADO</mat-label
 							>
@@ -444,8 +446,13 @@
 						  <td class="col-5" style="text-align: right">
 							{{ ped.totalpormaterial | currency: " " }}
 						  </td>
-						  <td class="col-5" style="text-align: right">
-							<input type="checkbox" name="wasPrepared" [(ngModel)]="ped.materialpreparado" (change)="materialChecked(ped)">
+						  <td class="col-5" style="text-align: right;">
+							<input type="checkbox" name="wasPrepared" 
+							[(ngModel)]="ped.materialpreparado"
+							required
+							class="form-control"
+							(change)="materialChecked(ped,$event)"
+							style="width: 15% !important; margin: 0 auto;">
 						  </td>
 						</tr>
 					  </tbody>
