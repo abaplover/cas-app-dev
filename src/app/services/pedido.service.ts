@@ -347,7 +347,7 @@ export class PedidoService {
     if (anularN==9003)
     {
       var pedRef = this.db.collection('pedidos').doc(pedido.uid.toString());
-      var removeCapital = pedRef.update({
+      pedRef.update({
           fpreparacion: firebase.firestore.FieldValue.delete(),
           nombrealmacenista: firebase.firestore.FieldValue.delete(),
           nrobultos: firebase.firestore.FieldValue.delete()
@@ -356,16 +356,19 @@ export class PedidoService {
       //Busca en la tabla/coleccion pedidosDet si hay alguno que coincida con el uid del pedido
       var coincideDetail = this.db.collection(
         'pedidosDet', ref => ref.where('idpedido','==',pedido.uid.toString()));
-      //Ahora que conocemos que hay uno que coincide, solicitamos el id de ese material(pedidoDet)
-      coincideDetail.valueChanges().subscribe((material:PedidoDet[]) => {
-        //Guardamos el id en una variable
-        const idDet = material[0].uid;
-        //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
-        var pedDetRef = this.db.collection('pedidosDet').doc(idDet);
-        //Cambiamos el check a false
-        pedDetRef.update({
-          materialpreparado: false
-        });
+        //Ahora que conocemos que hay alguno/s que coincide, solicitamos el id de ese material(pedidoDet)
+        coincideDetail.valueChanges().subscribe((material:PedidoDet[]) => {
+        //Por cada material que coincida con el id del pedido
+        for (let i = 0; i< material.length;i++) {
+          //Guardamos el id en una variable
+          const idDet = material[i].uid;
+          //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
+          var pedDetRef = this.db.collection('pedidosDet').doc(idDet);
+          //Cambiamos el check a false
+          pedDetRef.update({
+            materialpreparado: false
+          });
+        }
       });
     }
   };
