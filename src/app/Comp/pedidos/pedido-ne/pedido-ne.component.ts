@@ -222,6 +222,8 @@ timestampConvert(fec,col?:number){
 }
 
 verdetalles(event, ped){
+  ped.fentrega = undefined;
+  ped.fpago = undefined;
   const dialogConfig = new MatDialogConfig;
   //dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;

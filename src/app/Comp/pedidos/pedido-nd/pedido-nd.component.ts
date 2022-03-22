@@ -160,6 +160,7 @@ export class PedidoNdComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+
     })
 
     this.pedido_ = {} as Pedido;
@@ -250,6 +251,8 @@ timestampConvert(fec,col?:number){
 
 verdetalles(event, ped){
 
+  ped.fdespacho = undefined;
+  ped.ftentrega = undefined;
   const dialogConfig = new MatDialogConfig;
   //dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
@@ -347,8 +350,6 @@ generarpdf(pf?: NgForm)
   let spaceBottom=260;
 
   bodyData = this.pedidoService.matrisDetPedido;
-  console.log(bodyData);
-  console.log(this.pedidoService.matrisDetPedido);
 
   if (this.pedido_.observacion=="" || typeof this.pedido_.observacion=="undefined"){
     observacion = "";
@@ -781,7 +782,6 @@ downloadEtiquetas() {
 
   }
   anulardoc(pf?: NgForm,elemento?,num?:number){
-    console.log("pedidosdet ",this.pedidoService.getPedidosDet);
     this.pedido_= elemento;
     if(confirm('¿Está seguro de que quiere anular la preparación en almacén para el pedido Nro: '+elemento.idpedido+'?')) {
       if(this.pedido_.uid != null){
@@ -808,7 +808,6 @@ downloadEtiquetas() {
           this.pedido_.nombrealmacenista = "";
           this.pedido_.nrobultos = null;
           this.pedido_.fpreparacion = null;
-          console.log("getlist ",this.pedidoService.getPedidosDet(this.pedido_.uid));
           //updatePedidosDet(this.elementosCheckeados[j])
           this.pedidoService.updatePedidos(this.pedido_,num);
 
@@ -903,7 +902,6 @@ downloadEtiquetas() {
     this.pedido_ =  Object.assign({}, elemento);
 
     //Verifica que el pedido haya pasado por el proceso de almacen
-    console.log("pedido_ ", this.pedido_);
     if (this.pedido_.nrobultos) this.someticket = true;
 
     const val = elemento.idcliente;
