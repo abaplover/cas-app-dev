@@ -313,6 +313,8 @@ onCancelar(pf?: NgForm,de?: number){
         this.tmontd=0;
         this.tmonti=0;
         this.tmontn=0;
+        this.bloquearBoton = true;
+        this.elementosCheckeados = [];
         this.pedido_ = {} as Pedido;
       }
     }else
