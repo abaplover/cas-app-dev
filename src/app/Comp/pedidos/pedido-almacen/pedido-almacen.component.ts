@@ -102,6 +102,7 @@ export class PedidoAlmacenComponent implements OnInit {
 
   almacenistaName = ""; //Nombre del almacenista, para mostrarlo en el formulario.
   numeroBultos = 0; //Numero de bultos del pedido
+  bloquearBoton = true;
 
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
@@ -1046,11 +1047,7 @@ materialChecked(pedido,event) {
   } else {
     this.elementosCheckeados.splice(this.elementosCheckeados.length-1,1);
   }
-
-  //Evalua que todos los materiales esten chequeados
-  if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
-    $("#btnenviarne").prop('disabled',true);
-  }
+  this.bloquearBtn();
 }
 
 
@@ -1247,10 +1244,8 @@ materialChecked(pedido,event) {
   }
 
   txtnbultoschange (nbultos) {
-    //Evalua que todos los materiales esten chequeados
-    if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
-      $("#btnenviarne").prop('disabled',true);
-    }
+    //Evalua que todos los materiales esten chequeados    
+    this.bloquearBtn();
     
     this.numeroBultos = nbultos.target.value;
 
@@ -1258,8 +1253,15 @@ materialChecked(pedido,event) {
 
   //Evalua que todos los materiales esten chequeados
   fechaprepChange(event) {
-    if (this.elementosCheckeados.length != this.pedidoslistDet.length) {
-      $("#btnenviarne").prop('disabled',true);
+    this.bloquearBtn();
+  }
+
+  bloquearBtn() {
+    if (this.myFormnAlmacen.status == 'VALID' && this.elementosCheckeados.length == this.pedidoslistDet.length)
+    {
+      this.bloquearBoton = false;
+    } else {
+      this.bloquearBoton = true;
     }
   }
 
@@ -1333,7 +1335,6 @@ materialChecked(pedido,event) {
   }
 
   closeautoCompletePed(){
-    console.log("Entra a closeautoCompletePed");
 
     this.MostrarPed = 'display:none;';
     this.mensaje01 = "";

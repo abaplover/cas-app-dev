@@ -322,7 +322,7 @@
 							[(ngModel)]="this.pedido_.fpreparacion"
 							required
 							class="form-control"
-							(change)="fechaprepChange($event)"
+							(change)="bloquearBtn($event)"
 						/>
 					</div>
 				  </div>
@@ -365,8 +365,8 @@
 						min=1
 						max=100
 						pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0]|[0-9]+(\.[0-9]{1,2}))?"
-						(keyup)="txtnbultoschange($event)"
-						(change)="txtnbultoschange($event)"
+						(keyup)="bloquearBtn($event)"
+						(change)="bloquearBtn($event)"
 						#rateInput2= "ngModel"
 						required
 						class="form-control"
@@ -449,7 +449,6 @@
 						  <td class="col-5" style="text-align: right;">
 							<input type="checkbox" name="wasPrepared" 
 							[(ngModel)]="ped.materialpreparado"
-							required
 							class="form-control"
 							(change)="materialChecked(ped,$event)"
 							style="width: 15% !important; margin: 0 auto;">
@@ -617,7 +616,7 @@
 						  height: 35px !important;
 						"
 						type="button"
-						[disabled]="pedidoFormnAlmacen.invalid"
+						[disabled]="bloquearBoton"
 						(click)="generarEtiquetas(pedidoFormAlmacen)"
 						id="btnenviarne"
 						name="btnenviarne"
