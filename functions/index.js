@@ -351,9 +351,9 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	}
 
 	if (typeof fpreparacion_ !== "undefined" && typeof nrobultos_ !== "undefined" && lastaction_ === "Crear NPrep"){
-		asunto = "Confirmación de almacén, Nro ";
-		bodytxt = "Confirmación de almacén";
-		bodyFecha_ = "Fecha de preparación: " + fecPreparacion_ + "<br />Fecha tentativa de entrega: " + fectentrega_;
+		asunto = "Confirmación de Almacén, Nro ";
+		bodytxt = "Confirmación de Almacén";
+		bodyFecha_ = "Fecha de preparación: " + fecPreparacion_;
 		enviar = true;
 	}
 
