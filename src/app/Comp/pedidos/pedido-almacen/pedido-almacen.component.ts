@@ -800,7 +800,7 @@ textToBase64Barcode(text){
     lineColor: "#2f3232",
     width:4.5,
     height:65,
-    marginLeft: 68
+    marginLeft: 68.5
 
   });
   return canvas.toDataURL("image/png");
