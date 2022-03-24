@@ -770,7 +770,7 @@ onSubmitAlmacen(pf?: NgForm, url?:string){
       this.pedido_.fpreparacion.setDate(this.pedido_.fpreparacion.getDate()+1);
       this.pedido_.fpreparacion.setHours(ahora.getHours());
       this.pedido_.fpreparacion.setMinutes(ahora.getMinutes());
-      this.pedido_.nrobultos = this.numeroBultos;
+      this.pedido_.nrobultos = this.pedidoService.pedido_.nrobultos;
       this.pedido_.nombrealmacenista = this.almacenistaName;
 
       //Actualiza los materiales checkeados
@@ -798,9 +798,9 @@ textToBase64Barcode(text){
     format: "CODE39",
     displayValue: false,
     lineColor: "#2f3232",
-    width:4,
-    height:20,
-    marginLeft: 60
+    width:4.5,
+    height:65,
+    marginLeft: 68
 
   });
   return canvas.toDataURL("image/png");
@@ -832,7 +832,7 @@ async generarEtiquetas(pf?: NgForm) {
         width: 432,
         height: 288
       },
-      pageMargins: [ 25, 30, 25, 20 ],
+      pageMargins: [ 20, 15, 20, 10 ],
   
       footer: {
   
@@ -853,8 +853,12 @@ async generarEtiquetas(pf?: NgForm) {
         'linecentertitle': {
             margin:[190,30,0,30] //change number 6 to increase nspace
         },
+        'centerText': {
+          margin:[20,0,20,0],
+          aligment:'center',
+        },
         'lineSpacing': {
-          margin:[0,0,0,2] //change number 6 to increase nspace
+          margin:[0,0,0,0] //change number 6 to increase nspace
         },
         'minSpacing': {
           margin:[0,0,0,0.5] //change number 6 to increase nspace
@@ -877,7 +881,7 @@ async generarEtiquetas(pf?: NgForm) {
         },
         'righttxt':{
           aligment:'right',
-          fontSize: 8
+          fontSize: 10
         }
       }
     };
@@ -890,30 +894,30 @@ async generarEtiquetas(pf?: NgForm) {
           {
             width: 120,
             image: this.dempresaList[0].imglogob64,
-            height: 20,
+            height: 15,
           },
         ],
       },
       //solo espaciado
-      { text:' ',style: "lineSpacing",fontSize: 12},
+      //{ text:' ',style: "lineSpacing",fontSize: 12},
       //Datos de la empresa
-      {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
-      {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 14,border: [false, false, false, false]},
+      {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
+      {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
 
       {
         columns:
         [
           { //Columna en blanco para alinear texto
-            width: 180,
+            width: 100,
             text: '',
-            height: 60,
+            height: 5,
           },
           //Datos del cliente
           {
-              width: 200,          
+              width: 270,
               table:
               {
-                  widths: [190, 135],
+                  widths: [270, 135],
                   body: [
                     [
                       {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
@@ -926,7 +930,7 @@ async generarEtiquetas(pf?: NgForm) {
           }
         ],
         // optional space between columns
-        columnGap: 10
+        columnGap: 5
       },
 
       //Esta es la linea superior
@@ -953,10 +957,10 @@ async generarEtiquetas(pf?: NgForm) {
                 widths: [190, 135],
                 body: [
                   [
-                    {text: 'N° Pedido: '+docAdd, border: [false, false, false, false]},
+                    {text: 'N° Pedido: '+docAdd, fontSize: 10,border: [false, false, false, false]},
                   ],
                   [
-                    {text: 'N° Factura/Not: '+pedidoNrofactura, border: [false, false, false, false]},
+                    {text: 'N° Factura/Not: '+pedidoNrofactura, fontSize: 10, border: [false, false, false, false]},
                   ],
                 ]
               }
@@ -976,10 +980,10 @@ async generarEtiquetas(pf?: NgForm) {
           }
         ],
         // optional space between columns
-        columnGap: 10
+        columnGap: 5
       },
 
-      { text:' ',style: "lineSpacing",fontSize: 12},
+      { text:'Esta etiqueta representa un precinto de seguridad. No recibir si se encuentra violentado y contactar a su asesor comercial o directamente a la empresa.',style: "centerText",fontSize: 8},
 
       //Esta es la linea inferior
       {
