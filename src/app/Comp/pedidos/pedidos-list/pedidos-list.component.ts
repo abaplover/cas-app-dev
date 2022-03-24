@@ -128,6 +128,9 @@ export class PedidosListComponent implements OnInit {
     if (col==6){
       this.pedidoVer_.fentrega = dateObject;
     }
+    if (col==7){
+      this.pedidoVer_.fpreparacion = dateObject;
+    }
   }
 
   verdetalles(event, ped){
@@ -156,6 +159,9 @@ export class PedidosListComponent implements OnInit {
     }
     if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
       this.timestampConvert(ped.fentrega,6);
+    }
+    if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
+      this.timestampConvert(ped.fpreparacion,7);
     }
 
     dialogConfig.data = {
