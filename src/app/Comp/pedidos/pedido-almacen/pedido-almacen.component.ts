@@ -797,7 +797,7 @@ textToBase64Barcode(text){
   JsBarcode(canvas, text, {
     format: "CODE39",
     displayValue: false,
-    lineColor: "#2f3232",
+    lineColor: "#090808",
     width:4.5,
     height:65,
     marginLeft: 68.5
