@@ -46,11 +46,11 @@ export class AlmacenistaService {
 
     this.almacenistList.push({
       rif  : '1234567',
-      nombre: 'Ricardo Arangures',
+      nombre: 'Leivi Tabalvera',
       direccion  : 'Maracaibo',
       tlfmovil   : '122424242',
       tlffijo  : '122424242',
-      email      : 'rarangures@gmail.com'
+      email      : 'ventas@ricamar.com.ve'
     });
     /* this.almacenistList.push({
       rif  : almacenista.rif,

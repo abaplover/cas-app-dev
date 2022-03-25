@@ -157,8 +157,8 @@ export class PedidoAlmacenComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //this.almacenistS.getAlmacenistas();
-    //this.almacenistS.insertAlmacenista();
+    this.almacenistS.getAlmacenistas();
+    this.almacenistS.insertAlmacenista();
     
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
