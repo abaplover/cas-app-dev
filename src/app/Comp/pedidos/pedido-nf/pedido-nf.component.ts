@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Pedido } from 'src/app/models/pedido';
 import { PedidoDet } from 'src/app/models/pedidoDet';
 import { PedidoService } from 'src/app/services/pedido.service';
-import { NgForm } from '@angular/forms';
+//import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 

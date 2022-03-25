@@ -159,6 +159,8 @@ export class PedidoAlmacenComponent implements OnInit {
 
     this.almacenistS.getAlmacenistas();
     this.almacenistS.insertAlmacenista();
+
+    console.log("Entra a almacenistas")
     
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
