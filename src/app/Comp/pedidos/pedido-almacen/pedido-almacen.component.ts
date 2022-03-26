@@ -396,7 +396,6 @@ generarpdf(pf?: NgForm)
 
   var rows = [];
   rows.push(['', '', '', '', '']);
-  //console.log('cccccc: ',this.pedidoslistDet);
   for (let i in this.pedidoslistDet){
     let indice:number = parseInt(i);
     rows.push([this.pedidoslistDet[i].codigodematerial.toString(), this.pedidoslistDet[i].descripcionmaterial.toString(),this.pedidoslistDet[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.pedidoslistDet[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.pedidoslistDet[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2})]);
@@ -1127,7 +1126,6 @@ materialChecked(pedido,event) {
   }
 
   timestampConvert2(fec){
-//console.log('llll ',fec)
 
     let dateObject = new Date(fec.seconds*1000);
     let mes_ = dateObject.getMonth()+1;
@@ -1162,7 +1160,6 @@ materialChecked(pedido,event) {
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';
     }
-    //console.log('fdfdf ',elemento)
     if (elemento.fechapedido != null && typeof elemento.fechapedido != "undefined"){
         this.pedido_.fechapedido = this.timestampConvert2(elemento.fechapedido);
     }
@@ -1192,8 +1189,6 @@ materialChecked(pedido,event) {
     //Get Order detaills
     this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
       this.pedidoslistDet = pedidosDet;
-
-      //console.log('ASAS: ',pedidosDet);
 
       for (let i in this.pedidoslistDet){
         this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
