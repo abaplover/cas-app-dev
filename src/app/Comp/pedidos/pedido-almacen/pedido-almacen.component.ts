@@ -157,10 +157,8 @@ export class PedidoAlmacenComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.almacenistS.getAlmacenistas();
-    this.almacenistS.insertAlmacenista();
-
-    console.log("Entra a almacenistas")
+    /* this.almacenistS.getAlmacenistas();
+    this.almacenistS.insertAlmacenista(); */
     
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
@@ -799,7 +797,7 @@ textToBase64Barcode(text){
   JsBarcode(canvas, text, {
     format: "CODE39",
     displayValue: false,
-    lineColor: "#090808",
+    lineColor: "##090808",
     width:4.5,
     height:65,
     marginLeft: 68.5
