@@ -175,14 +175,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
           q = q.where("condiciondepago", "in", this.conPag)
         }
       }
-      console.log('Query:',q)
       return q;
     }
 
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       
       this.Ped_ = ped;
-
       
       if(this.staTus == ""){ } else {
            this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
