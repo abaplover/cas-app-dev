@@ -121,6 +121,7 @@ export class PedidoAlmacenComponent implements OnInit {
 
   //maxDate: Date;
   maxDate= moment(new Date()).format('YYYY-MM-DD');
+  today = moment(new Date()).format('DD-MM-YYYY');
 
   enviar = false;
   private myempty: number;
@@ -798,8 +799,9 @@ textToBase64Barcode(text){
     displayValue: false,
     lineColor: "#090808",
     width:4.5,
-    height:65,
-    marginLeft: 68.5
+    height:40,
+    marginLeft: 70,
+    marginRight: 70
 
   });
   return canvas.toDataURL("image/png");
@@ -828,7 +830,7 @@ async generarEtiquetas(pf?: NgForm) {
   //for (let i = 1; i<=numeroBultos;i++) {
     ticketDefinition = {
       pageSize: {
-        width: 432,
+        width: 460, //Pixeles 
         height: 288
       },
       pageMargins: [ 20, 15, 20, 10 ],
@@ -853,8 +855,8 @@ async generarEtiquetas(pf?: NgForm) {
             margin:[190,30,0,30] //change number 6 to increase nspace
         },
         'centerText': {
-          margin:[20,0,20,0],
-          aligment:'center',
+          margin:[0,0,0,0],
+          alignment: "center"
         },
         'lineSpacing': {
           margin:[0,0,0,0] //change number 6 to increase nspace
@@ -879,7 +881,7 @@ async generarEtiquetas(pf?: NgForm) {
           fontSize: 34        
         },
         'righttxt':{
-          aligment:'right',
+          alignment:'right',
           fontSize: 10
         }
       }
@@ -891,10 +893,14 @@ async generarEtiquetas(pf?: NgForm) {
       {
         columns: [
           {
-            width: 120,
+            width: 100,
             image: this.dempresaList[0].imglogob64,
             height: 15,
           },
+          {
+            width: 360,
+            text: this.today,style: "boldtxt", alignment: 'left', fontSize: 10,margin:[268,0,0,0],
+          }
         ],
       },
       //solo espaciado
@@ -907,16 +913,16 @@ async generarEtiquetas(pf?: NgForm) {
         columns:
         [
           { //Columna en blanco para alinear texto
-            width: 100,
+            width: 165,
             text: '',
             height: 5,
           },
           //Datos del cliente
           {
-              width: 270,
+              width: 245,
               table:
               {
-                  widths: [270, 135],
+                  widths: [245, 135],
                   body: [
                     [
                       {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
@@ -936,7 +942,7 @@ async generarEtiquetas(pf?: NgForm) {
       {
         table : {
             headerRows : 1,
-            widths: [375],
+            widths: [420],
             body : [
                     [''],
                     ['']
@@ -950,16 +956,16 @@ async generarEtiquetas(pf?: NgForm) {
         columns:
         [
           {
-            width: 200,          
+            width: 200,
             table:
             {
-                widths: [190, 135],
+                widths: [200, 135],       
                 body: [
                   [
-                    {text: 'N° Pedido: '+docAdd, fontSize: 10,border: [false, false, false, false]},
+                    {text: 'N° Pedido: '+docAdd, fontSize: 10,border: [false, false, false, false],margin:[-6,0,0,0]},
                   ],
                   [
-                    {text: 'N° Factura/Not: '+pedidoNrofactura, fontSize: 10, border: [false, false, false, false]},
+                    {text: 'N° Factura/Not: '+pedidoNrofactura, fontSize: 10, border: [false, false, false, false],margin:[-6,0,0,0]},
                   ],
                 ]
               }
@@ -982,13 +988,13 @@ async generarEtiquetas(pf?: NgForm) {
         columnGap: 5
       },
 
-      { text:'Esta etiqueta representa un precinto de seguridad. No recibir si se encuentra violentado y contactar a su asesor comercial o directamente a la empresa.',style: "centerText",fontSize: 8},
+      { text:'Esta etiqueta representa un precinto de seguridad. No recibir si se encuentra violentado y contactar a su asesor comercial o directamente a la empresa.',style: "centerText",fontSize: 10,border: [true, false, true, false]},
 
       //Esta es la linea inferior
       {
         table : {
             headerRows : 1,
-            widths: [375],
+            widths: [420],
             body : [
                     [''],
                     ['']
@@ -999,7 +1005,7 @@ async generarEtiquetas(pf?: NgForm) {
 
       //Codigo de barras
       {
-        image : this.textToBase64Barcode(docAdd),
+        image : this.textToBase64Barcode(docAdd),alignment: "center"
       },
       { 
         text: '',
