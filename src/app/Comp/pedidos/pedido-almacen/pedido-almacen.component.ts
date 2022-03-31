@@ -856,7 +856,7 @@ async generarEtiquetas(pf?: NgForm) {
         },
         'centerText': {
           margin:[0,0,0,0],
-          alignment: "center"
+          alignment: "justify"
         },
         'lineSpacing': {
           margin:[0,0,0,0] //change number 6 to increase nspace
