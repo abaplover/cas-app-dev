@@ -903,8 +903,6 @@ async generarEtiquetas(pf?: NgForm) {
           }
         ],
       },
-      //solo espaciado
-      //{ text:' ',style: "lineSpacing",fontSize: 12},
       //Datos de la empresa
       {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
       {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
