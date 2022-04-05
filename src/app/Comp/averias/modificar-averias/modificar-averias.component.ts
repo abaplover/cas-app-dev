@@ -1063,7 +1063,6 @@ export class ModificarAveriasComponent implements OnInit {
               if (this.gestionaveriasService.matrisDetAveria[i].aprobado == false){
                 //this.checkboxState[i] = false;
               }
-              //console.log('ooo ',this.checkboxState[i])
             }
 
             this.gestionaveriasService.enviar=true;
