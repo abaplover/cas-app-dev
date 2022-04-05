@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _swal from 'sweetalert';
 import { SweetAlert } from 'sweetalert/typings/core';
 
-const swal: SweetAlert = _swal as any;
+const swalert: SweetAlert = _swal as any;
 
 @Injectable()
 export class AlertsService {
@@ -10,23 +10,23 @@ export class AlertsService {
 	constructor() { }
 
     succes(title, message) {
-        swal(title, message,'success');
+        swalert(title, message,'success');
     };
 
     error(title, message) {
-        swal(title, message,'error');
+        swalert(title, message,'error');
     };
 
     info(title, message) {
-        swal(title, message,'info');
+        swalert(title, message,'info');
     };
 
     custom(configObject) {
-        swal(configObject);
+        swalert(configObject);
     }
 
 	async warning (title, text, icon) {
-		let res = await swal({
+		let res = await swalert({
 		  title: title,
 		  text: text,
 		  icon: icon,
