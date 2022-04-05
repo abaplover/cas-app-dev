@@ -164,7 +164,6 @@ import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
 import { GestionaveriasService } from './services/gestionaverias.service';
 
-//+ mas
 import { CurrencyPipe } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
