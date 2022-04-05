@@ -55,6 +55,7 @@ import { TextAst } from '@angular/compiler';
 import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { AlertsService } from 'src/app/services/alerts.service';
 
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -123,6 +124,15 @@ export class ModificarAveriasComponent implements OnInit {
   dirCli='';
   zonVen='';
 
+  algo = "";
+  rows = [];
+  estado="";
+  reject=0;
+  bodyData = [];
+  observacion='';
+  totalArticulos=0;
+  spaceBottom=260;
+
   averiaVer_ = {} as Averia;
   txtComentario = "";
   mostrardiv:boolean=false;
@@ -154,6 +164,7 @@ export class ModificarAveriasComponent implements OnInit {
     public datoempresaS : DatoempService,
     public lpedidoS     : PedidoService,
     public maveriaS     : MaveriaService,
+    public alertsS      : AlertsService,
     private renderer: Renderer2,
     private afStorage:AngularFireStorage
   )
@@ -165,6 +176,7 @@ export class ModificarAveriasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.gestionaveriasService.getAveriasA().subscribe(averias=>{
       this.averiaslist = averias;
       
@@ -223,440 +235,457 @@ export class ModificarAveriasComponent implements OnInit {
 
   }
 
-
-
-
   async generarpdf(pf?: NgForm){
 
-    var bodyData = [];
-    let observacion='';
-    let totalArticulos=0;
-    let spaceBottom=260;
-
-    bodyData = this.gestionaveriasService.matrisDetAveria;
+    this.bodyData = this.gestionaveriasService.matrisDetAveria;
 
     if (this.gestionaveriasService.averia_.observacion=="" || typeof this.gestionaveriasService.averia_.observacion=="undefined"){
-      observacion = "";
+      this.observacion = "";
     }else{
-      observacion = "Observación: "+this.gestionaveriasService.averia_.observacion;
+      this.observacion = "Observación: "+this.gestionaveriasService.averia_.observacion;
     }
     this.tlfCli = this.gestionaveriasService.averia_.tlfcliente;
     this.dirCli = this.gestionaveriasService.averia_.clientedir;
     this.zonVen = this.gestionaveriasService.averia_.zonvendedor;
     this.gestionaveriasService.averia_.status = "PROCESADA";
 
-    var algo = "";
-    var rows = [];
-    rows.push(['', '', '', '', '', '', '']);
-    let estado="";
-    for (let i in this.gestionaveriasService.matrisDetAveria){
+    this.reject=0;
+    this.rows = [];
+
+    for (let i in this.gestionaveriasService.matrisDetAveria) {
       let indice:number = parseInt(i);
-      
+
       if (this.gestionaveriasService.matrisDetAveria[i].aprobado == true){
-        estado = "ACEPTADO"; 
-      }else{
-        estado = "RECHAZADO";
+        this.estado = "ACEPTADO";
+      } else {
+        this.estado = "RECHAZADO";
+        this.reject++;
       }
-      rows.push([this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(), this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}),this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),estado.toString()]);
-      totalArticulos = indice+1;
-      if (totalArticulos>1){
-        spaceBottom=spaceBottom-20;
+      this.rows.push([
+       this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(),
+       this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),
+       this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), 
+       this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), 
+       this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}),
+       this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),this.estado.toString()]
+      );
+      this.totalArticulos = indice+1;
+      if (this.totalArticulos>1){
+        this.spaceBottom=this.spaceBottom-20;
       }
     }
- 
-    let idAven: any;
-    var docAdd: string
 
-    if (this.gestionaveriasService.txtBtnAccion.toString() == "Crear Averia"){
-      //busca el nro de averia
-      idAven = await this.gestionaveriasService.getOrderStat2();
-      docAdd = idAven.toString();
-    }
-    if (this.gestionaveriasService.txtBtnAccion.toString().trim() == "Actualizar Averia"){
-      docAdd = this.gestionaveriasService.averia_.idaveria.toString();
-    }
-
-    const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
-    let dateObj = this.gestionaveriasService.averia_.fechaaveria;
-    let dateObj2 = this.gestionaveriasService.averia_.fechadocumento;
-    let min_ = dateObj.getMinutes();
-
-	  var horas_ = new Array();
-    horas_ [0]  = "12:" + min_ + " PM";
-    horas_ [23] = "11:" + min_ + " PM";
-    horas_ [22] = "10:" + min_ + " PM";
-    horas_ [21] = "09:" + min_ + " PM";
-		horas_ [20] = "08:" + min_ + " PM";
-		horas_ [19] = "07:" + min_ + " PM";
-		horas_ [18] = "06:" + min_ + " PM";
-		horas_ [17] = "05:" + min_ + " PM";
-		horas_ [16] = "04:" + min_ + " PM";
-		horas_ [15] = "03:" + min_ + " PM";
-		horas_ [14] = "02:" + min_ + " PM";
-		horas_ [13] = "01:" + min_ + " PM";
-		horas_ [12] = "12:" + min_ + " AM";
-		horas_ [11] = "11:" + min_ + " AM";
-		horas_ [10] = "10:" + min_ + " AM";
-		horas_ [9] = "09:" + min_ + " AM";
-		horas_ [8] = "08:" + min_ + " AM";
-		horas_ [7] = "07:" + min_ + " AM";
-		horas_ [6] = "06:" + min_ + " AM";
-		horas_ [5] = "05:" + min_ + " AM";
-		horas_ [4] = "04:" + min_ + " AM";
-		horas_ [3] = "03:" + min_ + " AM";
-		horas_ [2] = "02:" + min_ + " AM";
-    horas_ [1] = "01:" + min_ + " AM";
-    
-    let month = monthNames[dateObj.getMonth()];
-    let day = String(dateObj.getDate()).padStart(2, '0');
-    let year = dateObj.getFullYear();
-    let momento = horas_[dateObj.getHours()]; 
-    let output = day +'/'+ month + '/' + year; // + ' '+ momento;
-
-    let month2 = monthNames[dateObj2.getMonth()];
-    let day2 = String(dateObj2.getDate()).padStart(2, '0');
-    let year2 = dateObj2.getFullYear();
-    let momento2 = horas_[dateObj2.getHours()]; 
-    let output2 = day2 +'/'+ month2 + '/' + year2; // + ' '+ momento2;
-
-    let margin_bottom = 50;
-    let y1 = 600;
-    let y2 = 630;
-    let y3 = 640;
-
-    if (rows.length-1 > 17){
-      margin_bottom = 150;
-      y1 = 520;
-      y2 = 550;
-      y3 = 540;
-    }
-
-    const documentDefinition = {
-      pageSize: {
-        width: 600,
-        height: 760
-      },
-      pageMargins: [ 25, 30, 25, margin_bottom ],  
-
-    
-      //Aqui va el footer  
-    
-    
-    
-      content: [
-        // if you don't need styles, you can use a simple string to define a paragraph
-        
-        {
-          columns: [
-            {
-              width: 150,
-              image: this.dempresaList[0].imglogob64,
-              height: 37
-            },
-            {
-              width: 10,
-              text: ''
-            },
-            {
-              width: 200,
-              table: 
-              {
-                  widths: [200],
-                  body: 
-                      [
-                          [
-                              {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]}, 
-                          ],    
-                          [
-                              {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]}, 
-                          ]
-                      ]
-              }
-            },
-            {
-              width: 5,
-              text: ''
-            },
-            {
-              width: '*',
-              table: 
-              {
-                  widths: [40,'*'],
-                  body: 
-                      [
-                          [
-                              {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
-                              {text: this.dempresaList[0].telefonoFijo, fontSize: 10,border: [false, false, false, false]},
-                          ],    
-                          [
-                              {text: 'Celular',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
-                              {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]}, 
-                          ],    
-                          [
-                              {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
-                              {text: this.dempresaList[0].email, fontSize: 9,border: [false, false, false, false]},
-                          ]
-                      ]
-              }
-      
-            }
-          ],
-        },
-
-        { text:'Gestión de Avería ',style: "linecentertitle",fontSize: 16},
-
-        { //dos columnas, en cada se define una tabla 
-          columns: 
-          [
-            {
-              width: 285,
-              table: 
-              {
-                  widths: [50, 175],
-                  body: [
-                    [
-                        {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]}, 
-                        {text: this.gestionaveriasService.averia_.nomcliente, border: [false, true, true, false]}
-                    ],  
-                    [
-                      {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]}, 
-                      {text: this.gestionaveriasService.averia_.idcliente, border: [false, false, true, false]}
-                    ],  
-                    [
-                        {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]}, 
-                        {text: this.tlfCli, border: [false, false, true, false]}
-                    ],    
-                    [
-                        {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: this.dirCli, border: [false, false, true, true]}
-                    ]
-                  ]
-              }
-            },
-            {
-                width: 180,
-                table: 
-                {
-                    widths: [90, 135],
-                    body: [
-                      [
-                          {text: 'N°:',style: "boldtxt", border: [true, true, false, false]}, 
-                          {text: docAdd , border: [false, true, true, false]}
-                      ],    
-                      [
-                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]}, 
-                        {text: output, border: [false, false, true, false]}
-                      ],
-                      [
-                        {text: '',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: '', border: [false, false, true, true]}
-                      ]
-                      ,
-                      [
-                          {text: '', border: [false, false, false, false]}, 
-                          {text: '', border: [false, false, false, false]}
-                      ]
-                      ,    
-                      [
-                          {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.nomvendedor, border: [false, true, true, false]}
-                      ]
-                      ,    
-                      [
-                          {text: 'Zona:',style: "boldtxt", border: [true, false, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.zonvendedor, border: [false, false, true, false]}
-                      ],
-                      [
-                          {text: 'Doc. Ref:',style: "boldtxt", border: [true, false, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.nrodocumento, border: [false, false, true, false]}
-                      ]
-                      ,
-                      [
-                          {text: 'Fecha Documento:',style: "boldtxt", border: [true, false, false, true]}, 
-                          {text: output2, border: [false, false, true, true]}
-                      ]
-                    ]
-                  }
-            }
-          ],
-          // optional space between columns
-          columnGap: 10
-        },
-
-         //solo espaciado
-        { text:' ',style: "SpacingFull",fontSize: 14},
-
-        //IMPRIME EL DETALLE DE LA MATRIX
-        {
-          width: 530,
-          table: 
-          {
-            widths: [530],
-            body: 
-            [
-              [
-                {
-                  layout: 'lightHorizontalLines', fontSize: 7,// optional
-                  table: 
-                      {
-                      widths: [40, 175, 35, 35, 35,75,50],
-                      body: 
-                      [
-                        [
-                            {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]}, 
-                            {text: 'DESCRIPCIÓN',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'CTD',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'PREC. U',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'TOTAL',style: "boldtxt", border: [false, true, true, true]},
-                            {text: 'MOTIVO',style: "boldtxt", border: [false, true, true, true]},
-                            {text: 'RESOLUCIÓN',style: "boldtxt", border: [false, true, true, true]},
-                        ]
-                      ]
-                      
-                      }
-                }
-              ]
-            ]
-          }
-        },
-
-        //Tabla simple sin borde, se llena con la variable "rows"
-        {
-          layout: 'headerLineOnly', // optional
-          id: 'detalleTbl',fontSize: 7,
-          table: {
-            widths: [45, 175, 35, 35, 35,75,50],
-            body: rows,
-          },
-
-        },
-        //IMPRIME EL DETALLE DE LA MATRIX
-        { 
-          text: observacion,
-          id: "observacion",
-          style: "lineSpacing",
-          fontSize: 10,
-          dontBreakRows: true,
-          absolutePosition:{x:25, y:y1}
-        },
-
-        { text:' ',style: "lineSpacing",fontSize: 10,absolutePosition:{x:25, y:y2}},
-
-        //va en el pie de la pagina pero no como footer
-        {
-          columns: 
-          [
-           { //columna 1
-              width: 295,
-              table: 
-              {
-                  dontBreakRows: true,
-                  widths: [80, 145],
-                  body: [
-                    [
-                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]}, 
-                        {text: totalArticulos, border: [false, true, true, false]}
-                    ],    
-                    [
-                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: this.gestionaveriasService.totalCnt.toLocaleString('de-DE', {maximumFractionDigits: 0}), border: [false, false, true, true]}
-                    ]
-                  ]
-              }
-            }, //columna 2
-            {
-                width: 180,
-                table: 
-                {
-                    dontBreakRows: true,  
-                    widths: [70, 155],
-                    body: [
-                      [
-                          {text: 'Total Averías:',style: "boldtxt", border: [true, true, false, true]}, 
-                          {text: this.gestionaveriasService.averia_.totalaveria.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, true, true, true]}
-                      ]
-                    ]
-                }
-            }
-          ],absolutePosition:{x:25, y:y3}
-        
-        },
-
-      ],
-      defaultStyle: {
-        fontSize: 10
-      },
-      pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
-        return false;
-      }
-      ,
-
-      styles:{
-        'linecentertitle': {
-            margin:[190,30,0,30] //change number 6 to increase nspace
-        },
-        'lineSpacing': {
-          margin:[0,0,0,10] //change number 6 to increase nspace
-        },
-        'SpacingFull': {
-          margin:[0,0,0,30] //change number 6 to increase nspace
-        },
-        'SpacingFull2': {
-          margin:[0,0,0,60] //change number 6 to increase nspace
-        },
-        'SpacingFullxl': {
-          margin:[0,0,0,spaceBottom] //change number 6 to increase nspace
-        },
-        'boldtxt':{
-          bold: true
+    if (this.reject>=1) {
+      this.alertsS.warning(
+        "Existen materiales rechazados",
+        "¿Está seguro que desea rechazar los materiales?","warning"
+        ).then((res) => {
+        if (res) {
+          this.submit(pf);
+        } else {
+          return;
         }
-      }
-    }; //documentDefinition
+      });
+    } else {
 
-    //si se va a generar en string base64
-    const pdfDocGenerator0 = pdfMake.createPdf(documentDefinition);
-      pdfDocGenerator0.getBase64((data) => {
-        var file = data;
-      // });
-      
-
-    //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
-    //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
-    // pdfDocGenerator1.getBlob((blob) => {
-    //   var file = blob;
-      var fileId: number;
-      if (this.gestionaveriasService.averia_.uid != null){
-        fileId = parseInt(docAdd)-1;
-      }else{
-        fileId = parseInt(docAdd);
-      }
-
-      //console.log('fileId ',fileId);
-      //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-      const idfile = fileId +'.pdf';
-      this.gestionaveriasService.averia_.pdfname = idfile;
-      this.gestionaveriasService.averia_.pdfb64 = file;
-                                                                  
-      const fileRef:AngularFireStorageReference=this.afStorage.ref("Orders").child(idfile);
-      //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
-      const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64
-      task.snapshotChanges().pipe(
-          finalize(() => {                        
-            this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
-              fileRef.getDownloadURL().subscribe(downloadURL => {
-                this.gestionaveriasService.averia_.pdfurl=downloadURL;
-                this.URLPublica = downloadURL;
-                this.onSubmit(pf,this.URLPublica,docAdd);
-              });
-        })
-      ).subscribe();
-
-    });//pdfDocGenerator
-
+      this.submit(pf);
+    }
     //>
     //abrir el pdf en una nueva pestana
     //pdfMake.createPdf(documentDefinition).open();
   }//Generar pdf make
+
+  submit(pf?: NgForm) {
+    let idAven: any;
+          var docAdd: string
+
+          if (this.gestionaveriasService.txtBtnAccion.toString() == "Crear Averia"){
+            //busca el nro de averia
+            idAven = this.gestionaveriasService.getOrderStat2();
+            docAdd = idAven.toString();
+          }
+          if (this.gestionaveriasService.txtBtnAccion.toString().trim() == "Actualizar Averia"){
+            docAdd = this.gestionaveriasService.averia_.idaveria.toString();
+          }
+
+          const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
+          let dateObj = this.gestionaveriasService.averia_.fechaaveria;
+          let dateObj2 = this.gestionaveriasService.averia_.fechadocumento;
+          let min_ = dateObj.getMinutes();
+
+          var horas_ = new Array();
+          horas_ [0]  = "12:" + min_ + " PM";
+          horas_ [23] = "11:" + min_ + " PM";
+          horas_ [22] = "10:" + min_ + " PM";
+          horas_ [21] = "09:" + min_ + " PM";
+          horas_ [20] = "08:" + min_ + " PM";
+          horas_ [19] = "07:" + min_ + " PM";
+          horas_ [18] = "06:" + min_ + " PM";
+          horas_ [17] = "05:" + min_ + " PM";
+          horas_ [16] = "04:" + min_ + " PM";
+          horas_ [15] = "03:" + min_ + " PM";
+          horas_ [14] = "02:" + min_ + " PM";
+          horas_ [13] = "01:" + min_ + " PM";
+          horas_ [12] = "12:" + min_ + " AM";
+          horas_ [11] = "11:" + min_ + " AM";
+          horas_ [10] = "10:" + min_ + " AM";
+          horas_ [9] = "09:" + min_ + " AM";
+          horas_ [8] = "08:" + min_ + " AM";
+          horas_ [7] = "07:" + min_ + " AM";
+          horas_ [6] = "06:" + min_ + " AM";
+          horas_ [5] = "05:" + min_ + " AM";
+          horas_ [4] = "04:" + min_ + " AM";
+          horas_ [3] = "03:" + min_ + " AM";
+          horas_ [2] = "02:" + min_ + " AM";
+          horas_ [1] = "01:" + min_ + " AM";
+          
+          let month = monthNames[dateObj.getMonth()];
+          let day = String(dateObj.getDate()).padStart(2, '0');
+          let year = dateObj.getFullYear();
+          let momento = horas_[dateObj.getHours()]; 
+          let output = day +'/'+ month + '/' + year; // + ' '+ momento;
+
+          let month2 = monthNames[dateObj2.getMonth()];
+          let day2 = String(dateObj2.getDate()).padStart(2, '0');
+          let year2 = dateObj2.getFullYear();
+          let momento2 = horas_[dateObj2.getHours()]; 
+          let output2 = day2 +'/'+ month2 + '/' + year2; // + ' '+ momento2;
+
+          let margin_bottom = 50;
+          let y1 = 600;
+          let y2 = 630;
+          let y3 = 640;
+
+          if (this.rows.length-1 > 17){
+            margin_bottom = 150;
+            y1 = 520;
+            y2 = 550;
+            y3 = 540;
+          }
+
+          const documentDefinition = {
+            pageSize: {
+              width: 600,
+              height: 760
+            },
+            pageMargins: [ 25, 30, 25, margin_bottom ],  
+
+          
+            //Aqui va el footer  
+          
+          
+          
+            content: [
+              // if you don't need styles, you can use a simple string to define a paragraph
+              
+              {
+                columns: [
+                  {
+                    width: 150,
+                    image: this.dempresaList[0].imglogob64,
+                    height: 37
+                  },
+                  {
+                    width: 10,
+                    text: ''
+                  },
+                  {
+                    width: 200,
+                    table: 
+                    {
+                        widths: [200],
+                        body: 
+                            [
+                                [
+                                    {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]}, 
+                                ],    
+                                [
+                                    {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]}, 
+                                ]
+                            ]
+                    }
+                  },
+                  {
+                    width: 5,
+                    text: ''
+                  },
+                  {
+                    width: '*',
+                    table: 
+                    {
+                        widths: [40,'*'],
+                        body: 
+                            [
+                                [
+                                    {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                                    {text: this.dempresaList[0].telefonoFijo, fontSize: 10,border: [false, false, false, false]},
+                                ],    
+                                [
+                                    {text: 'Celular',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
+                                    {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]}, 
+                                ],    
+                                [
+                                    {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
+                                    {text: this.dempresaList[0].email, fontSize: 9,border: [false, false, false, false]},
+                                ]
+                            ]
+                    }
+            
+                  }
+                ],
+              },
+
+              { text:'Gestión de Avería ',style: "linecentertitle",fontSize: 16},
+
+              { //dos columnas, en cada se define una tabla 
+                columns: 
+                [
+                  {
+                    width: 285,
+                    table: 
+                    {
+                        widths: [50, 175],
+                        body: [
+                          [
+                              {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]}, 
+                              {text: this.gestionaveriasService.averia_.nomcliente, border: [false, true, true, false]}
+                          ],  
+                          [
+                            {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]}, 
+                            {text: this.gestionaveriasService.averia_.idcliente, border: [false, false, true, false]}
+                          ],  
+                          [
+                              {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]}, 
+                              {text: this.tlfCli, border: [false, false, true, false]}
+                          ],    
+                          [
+                              {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]}, 
+                              {text: this.dirCli, border: [false, false, true, true]}
+                          ]
+                        ]
+                    }
+                  },
+                  {
+                      width: 180,
+                      table: 
+                      {
+                          widths: [90, 135],
+                          body: [
+                            [
+                                {text: 'N°:',style: "boldtxt", border: [true, true, false, false]}, 
+                                {text: docAdd , border: [false, true, true, false]}
+                            ],    
+                            [
+                              {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]}, 
+                              {text: output, border: [false, false, true, false]}
+                            ],
+                            [
+                              {text: '',style: "boldtxt", border: [true, false, false, true]}, 
+                              {text: '', border: [false, false, true, true]}
+                            ]
+                            ,
+                            [
+                                {text: '', border: [false, false, false, false]}, 
+                                {text: '', border: [false, false, false, false]}
+                            ]
+                            ,    
+                            [
+                                {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]}, 
+                                {text: this.gestionaveriasService.averia_.nomvendedor, border: [false, true, true, false]}
+                            ]
+                            ,    
+                            [
+                                {text: 'Zona:',style: "boldtxt", border: [true, false, false, false]}, 
+                                {text: this.gestionaveriasService.averia_.zonvendedor, border: [false, false, true, false]}
+                            ],
+                            [
+                                {text: 'Doc. Ref:',style: "boldtxt", border: [true, false, false, false]}, 
+                                {text: this.gestionaveriasService.averia_.nrodocumento, border: [false, false, true, false]}
+                            ]
+                            ,
+                            [
+                                {text: 'Fecha Documento:',style: "boldtxt", border: [true, false, false, true]}, 
+                                {text: output2, border: [false, false, true, true]}
+                            ]
+                          ]
+                        }
+                  }
+                ],
+                // optional space between columns
+                columnGap: 10
+              },
+
+              //solo espaciado
+              { text:' ',style: "SpacingFull",fontSize: 14},
+
+              //IMPRIME EL DETALLE DE LA MATRIX
+              {
+                width: 530,
+                table: 
+                {
+                  widths: [530],
+                  body: 
+                  [
+                    [
+                      {
+                        layout: 'lightHorizontalLines', fontSize: 7,// optional
+                        table: 
+                            {
+                            widths: [40, 175, 35, 35, 35,75,50],
+                            body: 
+                            [
+                              [
+                                  {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]}, 
+                                  {text: 'DESCRIPCIÓN',style: "boldtxt", border: [false, true, false, true]},
+                                  {text: 'CTD',style: "boldtxt", border: [false, true, false, true]},
+                                  {text: 'PREC. U',style: "boldtxt", border: [false, true, false, true]},
+                                  {text: 'TOTAL',style: "boldtxt", border: [false, true, true, true]},
+                                  {text: 'MOTIVO',style: "boldtxt", border: [false, true, true, true]},
+                                  {text: 'RESOLUCIÓN',style: "boldtxt", border: [false, true, true, true]},
+                              ]
+                            ]
+                            
+                            }
+                      }
+                    ]
+                  ]
+                }
+              },
+
+              //Tabla simple sin borde, se llena con la variable "rows"
+              {
+                layout: 'headerLineOnly', // optional
+                id: 'detalleTbl',fontSize: 7,
+                table: {
+                  widths: [45, 175, 35, 35, 35,75,50],
+                  body: this.rows,
+                },
+
+              },
+              //IMPRIME EL DETALLE DE LA MATRIX
+              { 
+                text: this.observacion,
+                id: "observacion",
+                style: "lineSpacing",
+                fontSize: 10,
+                dontBreakRows: true,
+                absolutePosition:{x:25, y:y1}
+              },
+
+              { text:' ',style: "lineSpacing",fontSize: 10,absolutePosition:{x:25, y:y2}},
+
+              //va en el pie de la pagina pero no como footer
+              {
+                columns: 
+                [
+                { //columna 1
+                    width: 295,
+                    table: 
+                    {
+                        dontBreakRows: true,
+                        widths: [80, 145],
+                        body: [
+                          [
+                              {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]}, 
+                              {text: this.totalArticulos, border: [false, true, true, false]}
+                          ],    
+                          [
+                              {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]}, 
+                              {text: this.gestionaveriasService.totalCnt.toLocaleString('de-DE', {maximumFractionDigits: 0}), border: [false, false, true, true]}
+                          ]
+                        ]
+                    }
+                  }, //columna 2
+                  {
+                      width: 180,
+                      table: 
+                      {
+                          dontBreakRows: true,  
+                          widths: [70, 155],
+                          body: [
+                            [
+                                {text: 'Total Averías:',style: "boldtxt", border: [true, true, false, true]}, 
+                                {text: this.gestionaveriasService.averia_.totalaveria.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, true, true, true]}
+                            ]
+                          ]
+                      }
+                  }
+                ],absolutePosition:{x:25, y:y3}
+              
+              },
+
+            ],
+            defaultStyle: {
+              fontSize: 10
+            },
+            pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
+              return false;
+            }
+            ,
+
+            styles:{
+              'linecentertitle': {
+                  margin:[190,30,0,30] //change number 6 to increase nspace
+              },
+              'lineSpacing': {
+                margin:[0,0,0,10] //change number 6 to increase nspace
+              },
+              'SpacingFull': {
+                margin:[0,0,0,30] //change number 6 to increase nspace
+              },
+              'SpacingFull2': {
+                margin:[0,0,0,60] //change number 6 to increase nspace
+              },
+              'SpacingFullxl': {
+                margin:[0,0,0,this.spaceBottom] //change number 6 to increase nspace
+              },
+              'boldtxt':{
+                bold: true
+              }
+            }
+          }; //documentDefinition
+
+          //si se va a generar en string base64
+          const pdfDocGenerator0 = pdfMake.createPdf(documentDefinition);
+            pdfDocGenerator0.getBase64((data) => {
+              var file = data;
+            // });
+            
+
+          //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
+          //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
+          // pdfDocGenerator1.getBlob((blob) => {
+          //   var file = blob;
+            var fileId: number;
+            if (this.gestionaveriasService.averia_.uid != null){
+              fileId = parseInt(docAdd)-1;
+            }else{
+              fileId = parseInt(docAdd);
+            }
+
+            //console.log('fileId ',fileId);
+            //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+            const idfile = fileId +'.pdf';
+            this.gestionaveriasService.averia_.pdfname = idfile;
+            this.gestionaveriasService.averia_.pdfb64 = file;
+                                                                        
+            const fileRef:AngularFireStorageReference=this.afStorage.ref("Orders").child(idfile);
+            //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
+            const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64
+            task.snapshotChanges().pipe(
+                finalize(() => {                        
+                  this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
+                    fileRef.getDownloadURL().subscribe(downloadURL => {
+                      this.gestionaveriasService.averia_.pdfurl=downloadURL;
+                      this.URLPublica = downloadURL;
+                      this.onSubmit(pf,this.URLPublica,docAdd);
+                    });
+              })
+            ).subscribe();
+
+          });//pdfDocGenerator
+
+  }
 
   aceptarRechazarItems(e,ind){
     let estado_ = false;

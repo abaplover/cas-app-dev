@@ -158,6 +158,7 @@ import { VendedorService } from './services/vendedor.service';
 import { ConexionService } from './services/conexion.service';
 import { ClientService } from './services/client.service';
 import { AlmacenistaService } from './services/almacenista.service';
+import { AlertsService } from './services/alerts.service';
 import { FirebaseloginService } from './services/firebaselogin.service';
 import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
@@ -322,6 +323,7 @@ import { Almacenista } from './models/almacenistas';
     ConexionService,
     ClientService,
     AlmacenistaService,
+    AlertsService,
     FirebaseloginService,
     CurrencyPipe,
     DatoempService,

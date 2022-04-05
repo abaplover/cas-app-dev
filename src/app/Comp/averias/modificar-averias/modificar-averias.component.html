@@ -365,7 +365,7 @@
 								</div>
 
 								
-								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="border-width:0px;border-style:solid;border-color:red">
+								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
 									<mat-label style="font-size:smaller; font-weight: bold; text-align:left">MOTIVO</mat-label>
 									<!-- <div class="input-group input-group-sm mb-3">
 										<select 
@@ -383,8 +383,8 @@
 										</select>
 									</div> -->
 								</div>
-								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
-									<mat-label style="font-size:smaller; font-weight: bold;">A/R</mat-label>
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<mat-label style="font-size:smaller; font-weight: bold;">Aceptado/Rechazado</mat-label>
 								</div>	
 								<!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
 									<button 
@@ -413,9 +413,9 @@
 													<td class="col-0" scope="row">{{ave.codigodematerial}}</td>
 													<td class="col-1">{{ave.descripcionmaterial}}</td>
 													<td class="col-3" style="text-align: left;">{{ave.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
-													<td class="col-4" style="text-align: right;">{{ave.preciomaterial | currency:" "}}</td>
-													<td class="col-5" style="text-align: right;">{{ave.totalpormaterial | currency:" "}}</td>
-													<td class="col-2" style="text-align: right;">{{ave.motivoaveria}}</td>
+													<td class="col-4" style="text-align: left;">{{ave.preciomaterial | currency:" "}}</td>
+													<td class="col-5" style="text-align: left;">{{ave.totalpormaterial | currency:" "}}</td>
+													<td class="col-2" style="text-align: center;">{{ave.motivoaveria}}</td>
 													<td class="col-6">
 														<div class="custom-control custom-switch">
 															<div class="outerDivFull" >
