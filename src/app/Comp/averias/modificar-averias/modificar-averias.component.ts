@@ -280,7 +280,7 @@ export class ModificarAveriasComponent implements OnInit {
         "Existen materiales rechazados",
         "¿Está seguro que desea rechazar los materiales?","warning"
         ).then((res) => {
-        if (res) {
+        if (res.isConfirmed) {
           this.submit(pf);
         } else {
           return;

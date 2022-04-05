@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as _swal from 'sweetalert';
-import { SweetAlert } from 'sweetalert/typings/core';
+import Swal from 'sweetalert2'
 
-const swalert: SweetAlert = _swal as any;
 
 @Injectable()
 export class AlertsService {
@@ -10,28 +8,29 @@ export class AlertsService {
 	constructor() { }
 
     succes(title, message) {
-        swalert(title, message,'success');
+        Swal.fire(title, message,'success');
     };
 
     error(title, message) {
-        swalert(title, message,'error');
+        Swal.fire(title, message,'error');
     };
 
     info(title, message) {
-        swalert(title, message,'info');
+        Swal.fire(title, message,'info');
     };
 
     custom(configObject) {
-        swalert(configObject);
+        Swal.fire(configObject);
     }
 
 	async warning (title, text, icon) {
-		let res = await swalert({
+		let res = await Swal.fire({
 		  title: title,
 		  text: text,
 		  icon: icon,
-		  buttons: ['Cancelar', 'Rechazar'],
-  		  dangerMode: true,
+		  showCancelButton: true,
+		  confirmButtonText: 'Rechazar',
+		  confirmButtonColor: '#d33',
 		}).then((result) => {
 		  return result;
 		})
