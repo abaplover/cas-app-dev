@@ -225,12 +225,15 @@ export class CerrarAveriasComponent implements OnInit {
       this.dempresaList = emps;
     })
 
+    //Obtiene la lista de motivos de averias
     this.maveriaS.getMaverias().valueChanges().subscribe(mave =>{
       this.maveriaList = mave;
     })
 
+    //Obtiene la lista de soluciones de averias
     this.solaveriaS.getSoluaverias().valueChanges().subscribe(soluave =>{
       this.listaSolucionesA = soluave;
+      console.log("lista ",this.listaSolucionesA);
     })
 
     this.gestionaveriasService.enviar = false;
