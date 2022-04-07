@@ -45,6 +45,8 @@ import { Pedido } from '../../../models/pedido';
 import { PedidoDet } from '../../../models/pedidoDet';
 import { Maveria } from 'src/app/models/maveria';
 import { MatInput } from '@angular/material/input';
+import { SolucionAveria } from 'src/app/models/solucionaveria';
+
 
 // Import pdfmake and the fonts to use
 import * as pdfMake from "pdfmake/build/pdfmake";
@@ -55,6 +57,8 @@ import { TextAst } from '@angular/compiler';
 import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { solucionAveriaService } from 'src/app/services/solucionAveria.service';
+
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -89,6 +93,8 @@ export class CerrarAveriasComponent implements OnInit {
 
   public maveriaList: Maveria[];
   public motivoAve:string;
+  public listaSolucionesA: SolucionAveria[];
+  public solucionAve: string;
 
   public matrix: PedidoDet[];
   public maxCant: number;
@@ -154,6 +160,7 @@ export class CerrarAveriasComponent implements OnInit {
     public datoempresaS : DatoempService,
     public lpedidoS     : PedidoService,
     public maveriaS     : MaveriaService,
+    public solaveriaS   : solucionAveriaService,
     private renderer: Renderer2,
     private afStorage:AngularFireStorage
   )
@@ -165,6 +172,10 @@ export class CerrarAveriasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    /* this.solaveriaS.getSoluaverias();
+    this.solaveriaS.insertSolaveria(); */
+
     this.gestionaveriasService.pestana = "CA";
     this.gestionaveriasService.getAveriasF().subscribe(averias=>{
       this.averiaslist = averias;
@@ -218,6 +229,10 @@ export class CerrarAveriasComponent implements OnInit {
       this.maveriaList = mave;
     })
 
+    this.solaveriaS.getSoluaverias().valueChanges().subscribe(soluave =>{
+      this.listaSolucionesA = soluave;
+    })
+
     this.gestionaveriasService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.gestionaveriasService.disabledFieldVen = true;
@@ -251,6 +266,7 @@ export class CerrarAveriasComponent implements OnInit {
     var rows = [];
     rows.push(['', '', '', '', '', '', '']);
     let estado="";
+
     for (let i in this.gestionaveriasService.matrisDetAveria){
       let indice:number = parseInt(i);
       
@@ -259,7 +275,16 @@ export class CerrarAveriasComponent implements OnInit {
       }else{
         estado = "RECHAZADO";
       }
-      rows.push([this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(), this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}),this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),estado.toString()]);
+      rows.push([
+        this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(), 
+        this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),
+        this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), 
+        this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), 
+        this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}),
+        this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),
+        estado.toString(),
+      ]);
+
       totalArticulos = indice+1;
       if (totalArticulos>1){
         spaceBottom=spaceBottom-20;
@@ -634,7 +659,6 @@ export class CerrarAveriasComponent implements OnInit {
         fileId = parseInt(docAdd);
       }
 
-      //console.log('fileId ',fileId);
       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
       const idfile = fileId +'.pdf';
       this.gestionaveriasService.averia_.pdfname = idfile;
@@ -649,6 +673,7 @@ export class CerrarAveriasComponent implements OnInit {
               fileRef.getDownloadURL().subscribe(downloadURL => {
                 this.gestionaveriasService.averia_.pdfurl=downloadURL;
                 this.URLPublica = downloadURL;
+
                 this.onSubmit(pf,this.URLPublica,docAdd);
               });
         })
@@ -661,22 +686,7 @@ export class CerrarAveriasComponent implements OnInit {
     //pdfMake.createPdf(documentDefinition).open();
   }//Generar pdf make
 
-  aceptarRechazarItems(e,ind){
-    let estado_ = false;
-    if (e.target.checked){
-      estado_ = true;
-    }
-
-    for (let i in this.gestionaveriasService.matrisDetAveria){
-      //Actualiza los registros 
-      if (this.gestionaveriasService.matrisDetAveria[i].indice == ind){
-        this.gestionaveriasService.matrisDetAveria[i].aprobado = estado_;
-      }
-    }
-  }
-
   onSubmit(pf?: NgForm, url?:string,aveNro?:any){
-    
     //this.gestionaveriasService.averia_.email = "yhonatandcarruido@gmail.com"; 
     //this.gestionaveriasService.averia_.email = "yhonatandcarruido@gmail.com,ricardoarangures@gmail.com";
 
@@ -692,7 +702,6 @@ export class CerrarAveriasComponent implements OnInit {
         let ahora = new Date();
         this.gestionaveriasService.averia_.fechaaveria = new Date(this.gestionaveriasService.start_time);
         
-        //console.log('sssssd ',this.timeFR)
         this.gestionaveriasService.averia_.feresolucion = new Date(this.timeFR);
         this.gestionaveriasService.averia_.fecierre = new Date(this.timeFC);
 
@@ -742,6 +751,18 @@ export class CerrarAveriasComponent implements OnInit {
   }//onSubmit
 
 
+  solucionSelected(e,ind){
+    let solucionAv = "";
+    solucionAv = e.target.selectedOptions[0].value;
+
+    for (let i in this.gestionaveriasService.matrisDetAveria){
+      //Actualiza los registros 
+      if (this.gestionaveriasService.matrisDetAveria[i].indice == ind){
+        this.gestionaveriasService.matrisDetAveria[i].solucion = solucionAv;
+      }
+    }
+  }
+
   @ViewChild('avForm') myForm;
   resetFormFunc(field?: number){  
     this.myForm.resetForm();
@@ -782,6 +803,7 @@ export class CerrarAveriasComponent implements OnInit {
     this.preciomaterial = 0;
     this.totalpormaterial = 0;
     this.motivoAve = "";
+    this.solucionAve = "";
   } 
 
   selectedFactDoc(txt){
@@ -839,6 +861,7 @@ export class CerrarAveriasComponent implements OnInit {
       cantidadmaterial:this.cantidadmaterial,
       totalpormaterial:this.totalpormaterial,
       motivoaveria:this.motivoAve,
+      solucion:this.solucionAve,
       indice:this.gestionaveriasService.matrisDetAveria.length
     });
 
@@ -1040,7 +1063,6 @@ export class CerrarAveriasComponent implements OnInit {
               if (this.gestionaveriasService.matrisDetAveria[i].aprobado == false){
                 //this.checkboxState[i] = false;
               }
-              //console.log('ooo ',this.checkboxState[i])
             }
 
             this.gestionaveriasService.enviar=true;

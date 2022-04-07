@@ -9,4 +9,5 @@ export interface AveriaDet{
 	motivoaveria?		 : string;
 	indice?              : number;
 	aprobado?		     : boolean;
+	solucion?			 : string;
 }
