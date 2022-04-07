@@ -275,6 +275,7 @@ export class ModificarAveriasComponent implements OnInit {
       }
     }
 
+    //Si existe al menos un material rechazado
     if (this.reject>=1) {
       this.alertsS.warning(
         "Existen materiales rechazados",
@@ -286,7 +287,7 @@ export class ModificarAveriasComponent implements OnInit {
           return;
         }
       });
-    } else {
+    } else {  //Si todos los  materiales estan aprobados
 
       this.submit(pf);
     }
