@@ -263,9 +263,9 @@
 					<div class="card">
 						<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
 							<div class="row">
-								<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-right: 1px;">
+								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-right: 1px;">
 									<div class="row">
-										<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
+										<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-right: 1px;">
 											<mat-label style="font-size:smaller; font-weight: bold;">CÓDIGO</mat-label>
 											<!-- <div class="input-group input-group-sm mb-3">
 												<select 
@@ -285,7 +285,7 @@
 											</div> -->
 											
 										</div>
-										<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9" style="padding-left: 1px;">
+										<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8" style="padding-left: 1px;">
 											<mat-label style="font-size:smaller; font-weight: bold;">MATERIAL</mat-label>
 											<!-- <div class="input-group input-group-sm mb-3">
 												<select value=selected
@@ -386,17 +386,11 @@
 								</div>
 								<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1">
 									<mat-label style="font-size:smaller; font-weight: bold;">A/R</mat-label>
-								</div>	
-								<!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"  style="padding-left: 1px;padding-right: 1px;">
-									<button 
-										type="submit" 
-										class="btn btn-link"
-										[disabled]="avForm.invalid"
-									>
-									<i class="fas fa-plus fa-3x"></i>
-									</button>
-								</div> -->
-								
+								</div>
+
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<mat-label style="font-size:smaller; font-weight: bold;">SOLUCIÓN</mat-label>
+								</div>								
 							</div>
 						</div>
 					</div>
@@ -414,21 +408,34 @@
 													<td class="col-0" scope="row">{{ave.codigodematerial}}</td>
 													<td class="col-1">{{ave.descripcionmaterial}}</td>
 													<td class="col-3" style="text-align: left;">{{ave.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
-													<td class="col-4" style="text-align: right;">{{ave.preciomaterial | currency:" "}}</td>
-													<td class="col-5" style="text-align: right;">{{ave.totalpormaterial | currency:" "}}</td>
-													<td class="col-2" style="text-align: right;">{{ave.motivoaveria}}</td>
-													<td class="col-6">
+													<td class="col-4" style="text-align: left;">{{ave.preciomaterial | currency:" "}}</td>
+													<td class="col-5" style="text-align: left;">{{ave.totalpormaterial | currency:" "}}</td>
+													<td class="col-2" style="text-align: center;">{{ave.motivoaveria}}</td>
+													<td class="col-3">
 														<div class="custom-control custom-switch">
 															<div class="outerDivFull" >
 																<div class="switchToggle">
 																	<!--[(ngModel)] -->
 																	<div *ngIf="this.gestionaveriasService.matrisDetAveria[i].aprobado" style="color:green;">Aprobado</div>
 																	<div *ngIf="!this.gestionaveriasService.matrisDetAveria[i].aprobado" style="color:red;">Rechazado</div>
-																	<!-- <input type="checkbox" [checked]="this.gestionaveriasService.matrisDetAveria[i].aprobado" id="switch{{i}}" (change)="aceptarRechazarItems($event,i)">
-																	<label for="switch{{i}}">Toggle</label> -->
 																</div>
 															</div>
 														</div>
+													</td>
+													<td class="col-8" style="text-align: center;">
+														<select 
+															name="solucionAve"
+															id="solucionAve"
+															[ngModel]="ave.solucion"
+															(change)="solucionSelected($event,i)"
+															required
+															class="form-control form-select form-select-sm" 
+															aria-label=".form-select-sm example"
+															>
+															<option value={{soluave.descripcion}} *ngFor = "let soluave of listaSolucionesA">
+																{{soluave.descripcion}}
+															</option>
+														</select>
 													</td>
 													<!-- <th class="col-6" style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th> -->
 												  </tr>

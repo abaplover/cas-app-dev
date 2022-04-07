@@ -98,27 +98,40 @@ td.col-0, th.col-0 {
 }
 
 td.col-1, th.col-1 {
-	width: 360px; 
+	width: 250px; 
 }
   
 td.col-2, th.col-2 {
-	width: 100px; 
+	width: 120px; 
 }
   
 td.col-3, th.col-3 {
-	width: 78px; 
+	width: 65px; 
 }
   
 td.col-4, th.col-4 {
-	width: 78px; 
+	width: 65px; 
 }
   
 td.col-5, th.col-5 {
-	width: 78px; 
+	width: 65px; 
 }
 td.col-6, th.col-6 {
 	width: 5px; 
 }
+
+td.col-8, th.col-8 {
+	width: 130px; 
+}
+
+#solucionAve {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	font-size: 12px;
+}
+
 
 .abs-center {
 	display: flex;
