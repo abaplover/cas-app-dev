@@ -163,6 +163,7 @@ import { FirebaseloginService } from './services/firebaselogin.service';
 import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
 import { GestionaveriasService } from './services/gestionaverias.service';
+import { solucionAveriaService } from './services/solucionAveria.service';
 
 import { CurrencyPipe } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
@@ -176,8 +177,6 @@ import { PedidosLayoutComponent } from './Comp/pedidos/pedidos-layout/pedidos-la
 import { TotalesDePedidosComponent } from './Comp/totales-de-pedidos/totales-de-pedidos.component';
 import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-auto-complete.component';
 import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-almacen.component';
-import { Almacenista } from './models/almacenistas';
-
 
 
 @NgModule({
@@ -318,6 +317,7 @@ import { Almacenista } from './models/almacenistas';
     MrechazoService,
     VpagoService,
     MaveriaService,
+    solucionAveriaService,
     VendedorService,
     ConexionService,
     ClientService,
