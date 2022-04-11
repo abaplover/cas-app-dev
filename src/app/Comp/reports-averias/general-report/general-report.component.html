@@ -151,12 +151,12 @@
 		</button>
 		<br/><br/>
 		<div *ngIf="this.opcgenReport">
-			<app-totales-de-pedidos
-      *ngIf="Ave_"
-      [ped_]="Ave_">
-      </app-totales-de-pedidos>
+			<app-totales-de-averias
+			*ngIf="arrayAveria"
+			[aver_]="arrayAveria">
+			</app-totales-de-averias>
 		</div>
-		<table id="dtable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped table-bordered row-border hover">
+		<table id="dtableav" datatable [dtOptions]="dtOptionsAv" [dtTrigger]="dtTrigger" class="table table-striped table-bordered row-border hover">
 			<thead>
 			  <tr>
 				<th style="width: 140px;">N° de Avería</th>

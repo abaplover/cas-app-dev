@@ -51,7 +51,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   motivoAv="";
   opcgenReport = false;
   averiaVer_ = {} as Averia;
-  totalRegistro: number = 0;
+  totalRegistroAv: number = 0;
   totalBruto: number = 0;
   totalDescuento: number = 0;
   totalNeto: number = 0;
@@ -66,20 +66,21 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
 
 
   //data table
-  dtOptions: any = {
+  dtOptionsAv: any = {
     pagingType: 'full_numbers',
     pageLength: 30,
     ordering : true,
     language: {
       url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
     },
+    bInfo : false,
     processing: true,
     dom: 'Bfrtip',
     buttons: [
       'copy', 'csv', 'excel', 'pdf', 'print'
     ]
   };
-  //dtOptions: DataTables.Settings = {};
+  //dtOptionsAv: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
   data: any;
   //-----------------------------------------------------------
@@ -210,6 +211,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           }          
           
           this.arrayAveria = copyArrayAveria;
+          this.totalRegistroAv = this.arrayAveria.length;
         });
       } else if (this.motivoAv == "Defecto de fabrica") {
         this.averiasS.averiasDetRotoMotivo.subscribe(detalles => {
@@ -228,6 +230,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           }          
           
           this.arrayAveria = copyArrayAveria;
+          this.totalRegistroAv = this.arrayAveria.length;
         });
       } else {
         //Buscamos todos los materiales de la averia 
@@ -237,6 +240,9 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           //aqui va el for doble
           this.metodoFor(this.arrayAveria,this.averiasDet_);
         });
+
+
+        this.totalRegistroAv = this.arrayAveria.length;
       }
 
       if(!this.firstTime){

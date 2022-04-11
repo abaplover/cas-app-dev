@@ -179,6 +179,7 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
 import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-almacen.component';
 import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
 import { GeneralReportComponent } from './Comp/reports-averias/general-report/general-report.component';
+import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
 
 
 @NgModule({
@@ -265,6 +266,7 @@ import { GeneralReportComponent } from './Comp/reports-averias/general-report/ge
     PedidoAlmacenComponent,
     ReportsAveriasComponent,
     GeneralReportComponent,
+    TotalesDeAveriasComponent,
 
   ],
   imports: [
