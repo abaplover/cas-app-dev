@@ -15,6 +15,7 @@ import { ReportsComponent } from "./Comp/reports/reports.component";
 import { TabpedidosComponent } from "./Comp/tabpedidos/tabpedidos.component";
 import { TabcobrosComponent } from "./Comp/tabcobros/tabcobros.component";
 import { SidenavComponent } from './Comp/sidenav/sidenav.component';
+import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
 
 const routes: Routes = [
   { path:'home' ,component: HomeComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'estrucempresa', component:EstrucempresaComponent },
   { path: 'estrucdm', component:EstrucdmComponent },
   { path: 'reports', component:ReportsComponent },
+  { path: 'reports-averias', component:ReportsAveriasComponent },
   { path: '',   redirectTo: '/login', pathMatch: 'full' }
                     
 ];

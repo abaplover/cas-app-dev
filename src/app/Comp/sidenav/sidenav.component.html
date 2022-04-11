@@ -237,7 +237,7 @@
                       role="tab" 
                       aria-controls="v-pills-reportes" 
                       aria-selected="false"
-                      matTooltip="Reportes"
+                      matTooltip="Reportes de pedidos"
                       aria-label="Muetra el texto del btn al pasar el mouse"
                       matTooltipPosition="right"
                     >
@@ -249,6 +249,25 @@
                       <!-- Reportes -->
                     </a>
                     <mat-divider></mat-divider>
+                    <a mat-button 
+                      [class]="pillsreportesave" 
+                      id="pills-reportes" 
+                      data-toggle="pill" 
+                      (click)="navegar('reports-averias')" 
+                      role="tab" 
+                      aria-controls="v-pills-reportes" 
+                      aria-selected="false"
+                      matTooltip="Reportes de averías"
+                      aria-label="Muetra el texto del btn al pasar el mouse"
+                      matTooltipPosition="right"
+                    >
+                      <button mat-icon-button (click)="navegar('reports-averias')">
+                        <span style="color:tomato;">
+                          <i class="far fa-chart-bar fa-2x"></i>
+                        </span>
+                      </button>
+                      <!-- Reportes -->
+                    </a>
                   </div>
 
             </mat-sidenav>

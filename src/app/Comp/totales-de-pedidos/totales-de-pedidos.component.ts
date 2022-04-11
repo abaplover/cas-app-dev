@@ -16,7 +16,6 @@ export class TotalesDePedidosComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('Total log', this.ped_);
   }
 
   ngOnChanges() {

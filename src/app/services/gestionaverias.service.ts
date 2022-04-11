@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Averia } from '../models/gaveria';
 import { AveriaDet } from '../models/gaveriaDet';
 import * as firebase from 'firebase';
 import * as moment from 'moment';
 import { Pedido } from '../models/pedido';
+import { uniq, flatten } from "lodash";
 
 @Injectable({
   providedIn: 'root'
@@ -90,7 +92,21 @@ export class GestionaveriasService {
   averiasDet: Observable<AveriaDet[]>;
   averiaDetDoc: AngularFirestoreDocument<AveriaDet>;
   averiasDetColletion: AngularFirestoreCollection<AveriaDet>;
+
+  averiasDetRotoMotivo: Observable<AveriaDet[]>;
+  averiasDetRotoMotivoDoc: AngularFirestoreDocument<AveriaDet>;
+  averiasDetRotoColletion: AngularFirestoreCollection<AveriaDet>;
+
   db2 = firebase.firestore();
+
+  detallesA: any[] = [];
+
+
+  averiasFind: Observable<Averia[]>;
+  averiaDocFind: AngularFirestoreDocument<Averia>;
+  averiasColletionFind: AngularFirestoreCollection<Averia>;
+
+  joined$: Observable<any>;
 
   constructor(public db: AngularFirestore) 
   { 
@@ -99,6 +115,15 @@ export class GestionaveriasService {
     this.averias = this.averiasColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Averia; 
+        return data;
+      })
+    }));
+
+    //Busca todos los detalles de averias
+    this.averiasDetColletion = this.db.collection('averiasDet');
+    this.averiasDet = this.averiasDetColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as AveriaDet;
         return data;
       })
     }));
@@ -138,8 +163,6 @@ export class GestionaveriasService {
         return data;
       })
    }));
-
-   this.averiasDetColletion = this.db.collection('averiasDet');
 
   }//constructor
 
@@ -290,6 +313,18 @@ getAveriasDet(uid){
       }));
       return this.averiasDet;
 }//getAveriasDet
+
+
+
+getDetallesAverias(motivo) {
+  this.averiasDetRotoColletion = this.db.collection('averiasDet', ref => ref.where("motivoaveria","==",motivo).orderBy("indice", "desc"));
+  this.averiasDetRotoMotivo = this.averiasDetRotoColletion.snapshotChanges().pipe(map(changes => {
+  return changes.map(a => {
+      const data = a.payload.doc.data() as AveriaDet;
+      return data;
+    })
+  }));
+}
 
 addAveriasDet(ave: AveriaDet){
   this.averiasDetColletion.add(ave)

@@ -177,6 +177,8 @@ import { PedidosLayoutComponent } from './Comp/pedidos/pedidos-layout/pedidos-la
 import { TotalesDePedidosComponent } from './Comp/totales-de-pedidos/totales-de-pedidos.component';
 import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-auto-complete.component';
 import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-almacen.component';
+import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
+import { GeneralReportComponent } from './Comp/reports-averias/general-report/general-report.component';
 
 
 @NgModule({
@@ -261,6 +263,8 @@ import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-alm
     TotalesDePedidosComponent,
     ClientAutoCompleteComponent,
     PedidoAlmacenComponent,
+    ReportsAveriasComponent,
+    GeneralReportComponent,
 
   ],
   imports: [
