@@ -48,7 +48,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   staTus: any;
   codCli: string;
   codVen: string;
-  motivoAv: any;
+  motivoAv="";
   opcgenReport = false;
   averiaVer_ = {} as Averia;
   totalRegistro: number = 0;
