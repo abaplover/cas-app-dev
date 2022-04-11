@@ -26,6 +26,8 @@ export class AveriaShowComponent implements OnInit {
   tmonti: number=0;
   tmontn: number=0;
 
+  existesolucion = false;
+
   constructor(
     public averiaService: GestionaveriasService,
 
@@ -60,6 +62,9 @@ export class AveriaShowComponent implements OnInit {
         this.totalPri = this.totalPri +  this.averiaslistDet[i].preciomaterial;
         this.totalCnt = this.totalCnt +  this.averiaslistDet[i].cantidadmaterial;
         this.totalPed = this.totalPed +  this.averiaslistDet[i].totalpormaterial;
+
+        //Si existe el dato solucion (si fue cerrada la averia) muestra la columna correspondiente
+        if (this.averiaslistDet[i].solucion) this.existesolucion = true;
       }
       //Calculo del descuento en base al monto bruto
       this.tmontb = this.totalPed;
@@ -76,7 +81,6 @@ export class AveriaShowComponent implements OnInit {
       this.tmontn = (this.tmontb - montoDescAux) + this.tmonti;
 
     })
-    console.log(this.averiaService.pestana)
   }
 
   timestampConvert(fec){
@@ -99,7 +103,6 @@ export class AveriaShowComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.averiaService.pestana)
   }
 
   onClose(){
