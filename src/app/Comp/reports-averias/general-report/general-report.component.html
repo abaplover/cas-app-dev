@@ -176,11 +176,11 @@
 			<thead>
 			  <tr>
 				<th style="width: 140px;">N° de Avería</th>
-				<th>Fecha</th>
-				<th>CodCli</th>
-				<th>Cliente</th>
+				<th>Fecha de Creación</th>
+				<!-- <th>CodCli</th> -->
+				<th style="width: 140px;">Cliente</th>
 				<th>CodVen</th>
-				<th>Vendedor</th>
+				<th style="width: 140px;">Vendedor</th>
 				<th>Status</th>
 				<!-- <th>Motivo Avería</th> -->
 				<th>Monto Original</th>
@@ -197,7 +197,7 @@
 					</a>
 				</td>
 				<td>{{av.fechaaveria.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
-				<td>{{av.idcliente}}</td>
+				<!-- <td>{{av.idcliente}}</td> -->
 				<td>{{av.nomcliente}}</td>
 				<td>{{av.idvendedor}}</td>
 				<td>{{av.nomvendedor}}</td>
