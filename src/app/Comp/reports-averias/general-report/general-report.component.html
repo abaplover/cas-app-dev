@@ -66,6 +66,22 @@
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
+											<mat-label>Vendedor</mat-label>
+											<mat-select value=selected multiple
+												name="vendedor"
+												[(ngModel)]="this.vendedor"
+												(selectionChange)="onBookChange($event)"
+											>
+												<mat-option value={{vendedor.descripcion}} *ngFor = "let vendedor of vendedorList">
+													{{vendedor.descripcion}}
+												</mat-option>
+											</mat-select>
+										</mat-form-field>
+								</div>
+							</div>
+							<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Motivo</mat-label>
 											<mat-select value=selected multiple
 												name="motivoAv"
@@ -78,10 +94,10 @@
 											</mat-select>
 										</mat-form-field>
 								</div>
-							</div>
+							</div> -->
 
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Material</mat-label>
 										<mat-select value=selected
@@ -94,7 +110,7 @@
 											</mat-option>
 										</mat-select>
 									</mat-form-field>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<div>
@@ -166,10 +182,11 @@
 				<th>CodVen</th>
 				<th>Vendedor</th>
 				<th>Status</th>
-				<th>Motivo Avería</th>
+				<!-- <th>Motivo Avería</th> -->
 				<th>Monto Original</th>
 				<th>Porcentaje por reclamo</th>
 				<th>Total</th>
+				<th>Días</th>
 			  </tr>
 			</thead>
 			<tbody>
@@ -185,10 +202,11 @@
 				<td>{{av.idvendedor}}</td>
 				<td>{{av.nomvendedor}}</td>
 				<td>{{av.status}}</td>
-				<td>{{av.motivo}}</td>
+				<!-- <td>{{av.motivo}}</td> -->
 				<td>{{av.montoOriginal | currency:" "}}</td>
 				<td>{{av.porcentajeReclamo | currency:" "}}</td>
 				<td>{{av.totalaveria | currency:" "}}</td>
+				<td *ngIf="averiaCerrada">{{av.dias}}</td>
 			  </tr>
 			</tbody>
 		</table>

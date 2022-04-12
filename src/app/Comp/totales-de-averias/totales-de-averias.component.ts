@@ -11,9 +11,8 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
   @Input() aver_: Averia[] = [];
 
   totalRegistroAv: number = 0;
-  /* totalBruto: number = 0;
-  totalDescuento: number = 0;
-  totalNeto: number = 0; */
+  porcentajeReclamo: number = 0;
+  totalAveria: number = 0; 
   constructor() {}
 
   ngOnInit(): void {
@@ -25,17 +24,15 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
     /* this.totalBruto = this.roundTo(
       this.aver_.reduce((total, row) => total + row.totalmontobruto, 0),
       2
+    );*/
+
+    this.porcentajeReclamo = this.roundTo(
+      this.aver_.reduce((total, row) => total + row.porcentajeReclamo, 0),2
     );
 
-    this.totalDescuento = this.roundTo(
-      this.aver_.reduce((total, row) => total + row.totalmontodescuento, 0),
-      2
-    );
-
-    this.totalNeto = this.roundTo(
-      this.aver_.reduce((total, row) => total + row.totalmontoneto, 0),
-      2
-    ); */
+    this.totalAveria = this.roundTo(
+      this.aver_.reduce((total, row) => total + row.totalaveria, 0),2
+    ); 
   }
 
   roundTo(num: number, places: number) {

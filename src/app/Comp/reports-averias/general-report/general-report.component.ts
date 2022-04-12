@@ -24,6 +24,7 @@ import { GestionaveriasService } from 'src/app/services/gestionaverias.service';
 import { Averia } from 'src/app/models/gaveria';
 import { AveriaShowComponent } from '../../averias/averia-show/averia-show.component';
 import { AveriaDet } from 'src/app/models/gaveriaDet';
+import * as moment from 'moment';
 //declare const $;
 
 // platformBrowserDynamic().bootstrapModule(AppModule, {
@@ -46,23 +47,25 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   desD: Date;
   hasT: Date;
   staTus: any;
+  vendedor = "";
   codCli: string;
   codVen: string;
   motivoAv="";
   opcgenReport = false;
   averiaVer_ = {} as Averia;
   totalRegistroAv: number = 0;
-  totalBruto: number = 0;
-  totalDescuento: number = 0;
-  totalNeto: number = 0;
+  totalAveria: number = 0;
+  porcentajeReclamo: number = 0;
   firstTime: boolean = false;
+  averiaCerrada = false;
   arrayAveria: any[] = [];
 
   public clienteList: Client[]; //arreglo vacio
-  public materialList: Product[]; //arreglo vacio
+/*public materialList: Product[]; //arreglo vacio*/  
   public motivoList: MaveriaService[]; //arreglo vacio
+  public vendedorList: VendedorService[]; //arreglo vacio
   public Ave_: Averia[]; //arreglo vacio
-  public averiasDet_: AveriaDet[]; 
+  public averiasDet_: AveriaDet[];
 
 
   //data table
@@ -91,6 +94,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       public clienteS: ClientService,
       public productS: ProductService,
       public motivoAvS: MaveriaService,
+      public vendedorS: VendedorService,
       public averiasS: GestionaveriasService,
       private http: HttpClient,
       private dialogo: MatDialog,
@@ -116,9 +120,13 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       this.clienteList = cs;
     })
 
-    this.productS.getProducts().valueChanges().subscribe(mater => {
-      this.materialList = mater;
+    this.vendedorS.getVendedors().valueChanges().subscribe(vendedores => {
+      this.vendedorList = vendedores;
     })
+
+    /* this.productS.getProducts().valueChanges().subscribe(mater => {
+      this.materialList = mater;
+    }) */
 
     this.motivoAvS.getMaverias().valueChanges().subscribe(motiv => {
       this.motivoList = motiv;
@@ -175,11 +183,17 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
         q = q.where("idcliente", "==", this.codCli)
       }
-       if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
-         if(this.staTus == ""){ } else {
-           q = q.where("status", "in", this.staTus);
-         }
-        //q = q.where("status", "==", this.staTus)
+      if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') 
+      { } else {
+        if(this.staTus == ""){ } else {
+          q = q.where("status", "in", this.staTus);
+        }
+      }
+      if (typeof this.vendedor == "undefined" || this.vendedor == null || this.vendedor == '') 
+      { } else {
+        if(this.vendedor == ""){ } else {
+          q = q.where("nomvendedor", "in", this.vendedor);
+        }
       }
       if (typeof this.codVen == "undefined" || this.codVen == null) { } else {
         q = q.where("nomvendedor", "==", this.codVen)
@@ -193,6 +207,20 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
 
       this.Ave_ = averia;
       this.arrayAveria = this.Ave_;
+
+      for (let k = 0; k < this.arrayAveria.length; k++) {
+        let fechaCierre;
+        let diaAveria = moment.unix(this.arrayAveria[k].fechaaveria.seconds);
+
+        if (this.arrayAveria[k].fecierre != undefined) {
+          fechaCierre = moment.unix(this.arrayAveria[k].fecierre.seconds);
+          this.averiaCerrada = true;
+          let dias = moment(fechaCierre).diff(moment(diaAveria), 'days');
+          console.log("dias ",dias);
+          this.arrayAveria[k].dias = dias;
+        } else {
+        }
+      }
 
       if (this.motivoAv == "Roto en despacho") {
         this.averiasS.averiasDetRotoMotivo.subscribe(detalles => {
@@ -212,6 +240,8 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           
           this.arrayAveria = copyArrayAveria;
           this.totalRegistroAv = this.arrayAveria.length;
+          this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
+
         });
       } else if (this.motivoAv == "Defecto de fabrica") {
         this.averiasS.averiasDetRotoMotivo.subscribe(detalles => {
@@ -231,6 +261,8 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           
           this.arrayAveria = copyArrayAveria;
           this.totalRegistroAv = this.arrayAveria.length;
+          this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
+
         });
       } else {
         //Buscamos todos los materiales de la averia 
@@ -243,6 +275,8 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
 
 
         this.totalRegistroAv = this.arrayAveria.length;
+        this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
+        this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
       }
 
       if(!this.firstTime){
