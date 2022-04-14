@@ -247,7 +247,6 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
         this.averiasS.averiasDetSpecificMotivo.subscribe(detalles => {
           //metemos los valores en un array de detalles de averias
           this.averiasDet_ = detalles;
-          //aqui va el for doble
           this.metodoFor(this.arrayAveria,this.averiasDet_);
 
           //se define un array vacio para ingresar los materiales filtrados
