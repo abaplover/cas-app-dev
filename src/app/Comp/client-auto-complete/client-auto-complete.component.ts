@@ -30,7 +30,6 @@ export class ClientAutoCompleteComponent implements OnInit {
   selectEvent(elemento){
     const val = elemento.idcliente;
     this.SelectedValue.emit(val);
-        //********************************************************************************* */
 
     }
   }//selectEvent

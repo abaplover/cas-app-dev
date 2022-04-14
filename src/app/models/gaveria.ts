@@ -1,5 +1,46 @@
 export class Averia {
+	$key		           :string;
 	uid?				   :string;
+	clientedir?			   :string;
+	codeBlock?			   :string;
+	companyblk?			   :string;
+	companycod?			   :string;
+	companydir?			   :string;
+	creado?				   :Date;
+	creadopor?			   :string;
+	descripcion	           :string;
+	email?		  		   :string;
+	fechaaveria?		   :Date;
+	fechadocumento?        :Date;
+	fecierre?			   :Date;
+	feresolucion?		   :Date;
+	idaveria?	           :number; 
+	idcliente?	           :string;
+	idvendedor?	           :string;
+	lastaction?			   :string;
+	modificado?			   :Date;
+	modificadopor?         :string;
+	montoOriginal?		   :number;
+	motivoaveria?          :string;
+	motivoEli?			   :string
+	nomcliente?	           :string;
+	nomvendedor?           :string;
+	nrodocUID?             :string;
+	nrodocumento?          :string;
+	observacion?           :string;
+	pdfb64?                :string;
+	pdfname?			   :string;
+	pdfurl?				   :string;
+	porcentajeReclamo?     :number;
+	status?				   :string;
+	tipodocumento?         :string;
+	tlfcliente?			   :string;
+	totalaveria?           :number;
+	txtAveria?             :string;
+	txtCierre?             :string;
+	txtResolucion?         :string;
+	zonvendedor?		   :string;
+	/* uid?				   :string;
 	idaveria?	           :number; 
 	creado?				   :Date;
 	creadopor?			   :string;
@@ -39,5 +80,5 @@ export class Averia {
 	observacion?           :string;
 	txtAveria?             :string;
 	txtResolucion?         :string;
-	txtCierre?             :string;
+	txtCierre?             :string; */
 }

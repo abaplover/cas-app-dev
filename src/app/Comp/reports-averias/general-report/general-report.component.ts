@@ -223,7 +223,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       }
 
       if (this.motivoAv == "Roto en despacho") {
-        this.averiasS.averiasDetRotoMotivo.subscribe(detalles => {
+        this.averiasS.averiasDetSpecificMotivo.subscribe(detalles => {
           //metemos los valores en un array de detalles de averias
           this.averiasDet_ = detalles;
           //aqui va el for doble
@@ -244,7 +244,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
 
         });
       } else if (this.motivoAv == "Defecto de fabrica") {
-        this.averiasS.averiasDetRotoMotivo.subscribe(detalles => {
+        this.averiasS.averiasDetSpecificMotivo.subscribe(detalles => {
           //metemos los valores en un array de detalles de averias
           this.averiasDet_ = detalles;
           //aqui va el for doble
