@@ -342,4 +342,5 @@ import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.compone
   bootstrap: [AppComponent],
   entryComponents:[PedidoShowComponent]
 })
+
 export class AppModule { }

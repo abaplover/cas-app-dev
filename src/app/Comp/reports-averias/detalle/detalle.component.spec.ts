@@ -22,4 +22,5 @@ describe('DetalleComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  //comment
 });

@@ -331,7 +331,7 @@ getAveriasDet(uid){
       return this.averiasDet;
 }//getAveriasDet
 
-getSpecificAveria(uid){
+getSpecificAveria(uid) {
   this.specificAveriaCollection = this.db.collection('averias', ref => ref.where("uid","==",uid).orderBy("indice", "desc"));
   this.specificAveria = this.specificAveriaCollection.snapshotChanges().pipe(map(changes => {
     return changes.map(a => {
