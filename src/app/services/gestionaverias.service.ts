@@ -9,6 +9,7 @@ import * as firebase from 'firebase';
 import * as moment from 'moment';
 import { Pedido } from '../models/pedido';
 import { uniq, flatten } from "lodash";
+import { AngularFireList } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,10 @@ export class GestionaveriasService {
   averia_ = {} as Averia;
   averiaDet_ = {} as AveriaDet;
 
+  specificAveriaCollection: AngularFirestoreCollection<Averia>
+  specificAveria: Observable<Averia[]>;
+  specificAveriaDoc: AngularFirestoreDocument<Averia>;
+
   itemsCollection: AngularFirestoreCollection<AveriaDet>;
   items: Observable<AveriaDet[]>;
   itemDoc: AngularFirestoreDocument<AveriaDet>;
@@ -93,9 +98,21 @@ export class GestionaveriasService {
   averiaDetDoc: AngularFirestoreDocument<AveriaDet>;
   averiasDetColletion: AngularFirestoreCollection<AveriaDet>;
 
-  averiasDetRotoMotivo: Observable<AveriaDet[]>;
-  averiasDetRotoMotivoDoc: AngularFirestoreDocument<AveriaDet>;
+  averiasDetSpecificMotivo: Observable<AveriaDet[]>;
+  averiasDetSpecificMotivoDoc: AngularFirestoreDocument<AveriaDet>;
   averiasDetRotoColletion: AngularFirestoreCollection<AveriaDet>;
+
+  averiasDetSpecificSolucion: Observable<AveriaDet[]>;
+  averiasDetSpecificSolucionDoc: AngularFirestoreDocument<AveriaDet>;
+  averiasDetSolucionColletion: AngularFirestoreCollection<AveriaDet>;
+
+  averiasDetSpecificResolucion: Observable<AveriaDet[]>;
+  averiasDetSpecificResolucionDoc: AngularFirestoreDocument<AveriaDet>;
+  averiasDetResolucionColletion: AngularFirestoreCollection<AveriaDet>;
+
+  averiasDetSpecificMaterial: Observable<AveriaDet[]>;
+  averiasDetSpecificMaterialDoc: AngularFirestoreDocument<AveriaDet>;
+  averiasDetMaterialColletion: AngularFirestoreCollection<AveriaDet>;
 
   db2 = firebase.firestore();
 
@@ -314,11 +331,50 @@ getAveriasDet(uid){
       return this.averiasDet;
 }//getAveriasDet
 
-
+getSpecificAveria(uid){
+  this.specificAveriaCollection = this.db.collection('averias', ref => ref.where("uid","==",uid).orderBy("indice", "desc"));
+  this.specificAveria = this.specificAveriaCollection.snapshotChanges().pipe(map(changes => {
+    return changes.map(a => {
+      const data = a.payload.doc.data() as Averia;
+      data.uid = a.payload.doc.id;
+      return data;
+    })
+  }));
+}
 
 getDetallesAverias(motivo) {
   this.averiasDetRotoColletion = this.db.collection('averiasDet', ref => ref.where("motivoaveria","==",motivo).orderBy("indice", "desc"));
-  this.averiasDetRotoMotivo = this.averiasDetRotoColletion.snapshotChanges().pipe(map(changes => {
+  this.averiasDetSpecificMotivo = this.averiasDetRotoColletion.snapshotChanges().pipe(map(changes => {
+  return changes.map(a => {
+      const data = a.payload.doc.data() as AveriaDet;
+      return data;
+    })
+  }));
+}
+
+getDetallesSolucion (solucion) {
+  this.averiasDetSolucionColletion = this.db.collection('averiasDet', ref => ref.where("solucion","==",solucion).orderBy("indice", "desc"));
+  this.averiasDetSpecificSolucion = this.averiasDetSolucionColletion.snapshotChanges().pipe(map(changes => {
+  return changes.map(a => {
+      const data = a.payload.doc.data() as AveriaDet;
+      return data;
+    })
+  }));
+}
+
+getDetallesResolucion (resolucion) {
+  this.averiasDetResolucionColletion = this.db.collection('averiasDet', ref => ref.where("aprobado","==",resolucion).orderBy("indice", "desc"));
+  this.averiasDetSpecificResolucion = this.averiasDetResolucionColletion.snapshotChanges().pipe(map(changes => {
+  return changes.map(a => {
+      const data = a.payload.doc.data() as AveriaDet;
+      return data;
+    })
+  }));
+}
+
+getDetallesMaterial (material) {
+  this.averiasDetMaterialColletion = this.db.collection('averiasDet', ref => ref.where("descripcionmaterial","==",material).orderBy("indice", "desc"));
+  this.averiasDetSpecificMaterial = this.averiasDetMaterialColletion.snapshotChanges().pipe(map(changes => {
   return changes.map(a => {
       const data = a.payload.doc.data() as AveriaDet;
       return data;

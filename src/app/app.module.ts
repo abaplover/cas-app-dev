@@ -180,6 +180,7 @@ import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-alm
 import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
 import { GeneralReportComponent } from './Comp/reports-averias/general-report/general-report.component';
 import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
+import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
 
 
 @NgModule({
@@ -267,6 +268,7 @@ import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-
     ReportsAveriasComponent,
     GeneralReportComponent,
     TotalesDeAveriasComponent,
+    DetalleComponent,
 
   ],
   imports: [
