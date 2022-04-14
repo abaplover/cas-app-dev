@@ -167,7 +167,6 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
       if (event.value == "") {
         //console.log('vacio',event.value);
       } else {
-        //console.log(event.value);
       }
     }
     onSubmitSearch(pf?: NgForm) {
