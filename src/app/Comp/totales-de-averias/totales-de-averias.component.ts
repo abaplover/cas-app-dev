@@ -21,11 +21,6 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.totalRegistroAv = this.aver_.length;
 
-    /* this.totalBruto = this.roundTo(
-      this.aver_.reduce((total, row) => total + row.totalmontobruto, 0),
-      2
-    );*/
-
     this.porcentajeReclamo = this.roundTo(
       this.aver_.reduce((total, row) => total + row.porcentajeReclamo, 0),2
     );

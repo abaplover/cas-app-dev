@@ -171,6 +171,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     onSubmitSearch(pf?: NgForm) {
       let query: any;
+      let queryDet: any;
       let hora = new Date().getHours();
       hora = 24 - hora;
       this.hasT.setHours(new Date().getHours() + hora - 1);
@@ -200,7 +201,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           .orderBy("fechaaveria", "desc")
           .orderBy("creado", "desc")
           .limit(5000)
-  
+          
         if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
           q = q.where("idcliente", "==", this.codCli)
         }
@@ -219,13 +220,76 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
         }
         return q;
       }
+
+      queryDet = (ref: CollectionReference) => {
+        let qdet = ref.where("indice",">=",0)
+        .orderBy("indice", "asc")
+        .limit(5000)
+        
+        if(typeof this.motivoAv == "undefined" || this.motivoAv == null) { } else {
+          if(this.motivoAv == ""){ } else {
+            qdet = qdet.where("motivoaveria", "in", this.motivoAv)
+          }
+        }
+
+        if (typeof this.materialAv == "undefined" || this.materialAv == null || this.materialAv == '') 
+        { } else {
+          if(this.materialAv == ""){ } else {
+            qdet = qdet.where("descripcionmaterial", "==", this.materialAv)
+          }
+        }
+
+        if (typeof this.resolucionAv == "undefined" || this.resolucionAv == null || this.resolucionAv == '') 
+        { } else {
+          let booleanResolucion;
+          if(this.resolucionAv == ""){ } else {
+            if (this.resolucionAv == "true") {
+              booleanResolucion = true;
+            }else {
+              booleanResolucion = false;
+            }
+            qdet = qdet.where("aprobado", "==", booleanResolucion)
+          }
+        }
+
+        if (typeof this.solucionAv == "undefined" || this.solucionAv == null || this.solucionAv == '') 
+        { } else {
+          if(this.solucionAv == ""){ } else {
+            qdet = qdet.where("solucion", "==", this.solucionAv[0])
+          } 
+        }
+        return qdet;
+      }
   
       this.averiasS.getAveriasRep01(query).subscribe(averia => {
 
         this.Ave_ = averia;
         this.arrayAveria = this.Ave_;
 
-        if (this.materialAv.length > 0) {
+        this.averiasS.getAveriasRep02(queryDet).subscribe(averiaDet => {
+
+          this.averiasDet_ = averiaDet;
+          this.arrayMaterialesAve = this.averiasDet_;
+
+          this.metodoFor(this.arrayAveria,this.averiasDet_);
+
+          this.firstTime = true;
+
+          this.averiasDet_ = this.copyArray;
+
+          this.totalRegistroAv = this.arrayMaterialesAve.length;
+          this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
+          this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
+        
+          console.log("total ",this.totalAveria,this.porcentajeReclamo);
+
+
+
+        })
+
+        
+
+        /* if (this.materialAv.length > 0) {
           this.averiasS.averiasDetSpecificMaterial.subscribe(detalles => {
             //metemos los valores en un array de detalles de averias
             this.averiasDet_ = detalles;
@@ -310,7 +374,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
   
         /* Metodo para conseguir los motivos de averias de cada material en la averia
         para mostrarlo en la columna motivo */
-        //Busqueda de todos los detalles de todas las averias por motivo
+        /* //Busqueda de todos los detalles de todas las averias por motivo
         else if (this.motivoAv == "Roto en despacho") {
           this.averiasS.averiasDetSpecificMotivo.subscribe(detalles => {
             //metemos los valores en un array de detalles de averias
@@ -382,7 +446,8 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           this.totalRegistroAv = this.arrayMaterialesAve.length;
           //this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
           //this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
-        }
+        
+        } */ 
   
         if(!this.firstTime){
           this.rerender();

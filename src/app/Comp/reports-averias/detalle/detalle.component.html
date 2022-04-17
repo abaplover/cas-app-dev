@@ -104,11 +104,11 @@
 										<mat-label>Resolución</mat-label>
 										<mat-select value=selected
 											name="Resolucion"
-											[(ngModel)]="this.resolucion"
+											[(ngModel)]="this.resolucionAv"
 
 										>
-											<mat-option value="APROBADA">APROBADA</mat-option>
-											<mat-option value="RECHAZADA">RECHAZADA</mat-option>
+											<mat-option value=true>APROBADA</mat-option>
+											<mat-option value=false>RECHAZADA</mat-option>
 										</mat-select>
 									</mat-form-field>
 								</div> 

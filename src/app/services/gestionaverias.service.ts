@@ -70,6 +70,10 @@ export class GestionaveriasService {
   averiaDocrep: AngularFirestoreDocument<Averia>;
   averiasColletionrep: AngularFirestoreCollection<Averia>;
 
+  averiasdetrep: Observable<AveriaDet[]>;
+  averiadetDocrep: AngularFirestoreDocument<AveriaDet>;
+  averiasdetColletionrep: AngularFirestoreCollection<AveriaDet>;
+
   averias: Observable<Averia[]>;
   averiaDoc: AngularFirestoreDocument<Averia>;
   averiasColletion: AngularFirestoreCollection<Averia>;
@@ -197,16 +201,18 @@ export class GestionaveriasService {
     return this.averiasrep;
   }//getAveriasRep
 
-  getAveriasRep02(strq){
-    this.averiasColletionrep = this.db.collection('averias', strq);
-    this.averiasrep = this.averiasColletionrep.snapshotChanges().pipe(map(changes => {
+  getAveriasRep02(queryAvDet){
+    console.log("entrando");
+    this.averiasdetColletionrep = this.db.collection('averiasDet', queryAvDet);
+    this.averiasdetrep = this.averiasdetColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as Averia;
+        const data = a.payload.doc.data() as AveriaDet;
+        console.log("data ",data);
         return data;
       })
     }));
 
-    return this.averiasrep;
+    return this.averiasdetrep;
   }//getAveriasRep02
 
   getAveriasRep03(strq){
