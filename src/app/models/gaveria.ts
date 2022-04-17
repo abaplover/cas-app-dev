@@ -40,45 +40,4 @@ export class Averia {
 	txtCierre?             :string;
 	txtResolucion?         :string;
 	zonvendedor?		   :string;
-	/* uid?				   :string;
-	idaveria?	           :number; 
-	creado?				   :Date;
-	creadopor?			   :string;
-	modificado?			   :Date;
-	modificadopor?         :string;
-	codeBlock?			   :string;
-	companycod?			   :string;
-	companyblk?			   :string;
-	companydir?			   :string;
-	clientedir?			   :string;
-	pdfurl?				   :string;
-	pdfname?			   :string;
-	pdfb64?                :string;
-	lastaction?			   :string;
-	status?				   :string;
-	$key		           :string;
-	descripcion	           :string;
-	fechaaveria?		   :Date;
-	feresolucion?		   :Date;
-	fecierre?			   :Date;
-	idcliente?	           :string;
-	nomcliente?	           :string;
-	tlfcliente?			   :string;
-	idvendedor?	           :string;
-	nomvendedor?           :string;
-	zonvendedor?		   :string;
-	nrodocumento?          :string;
-	tipodocumento?         :string;
-	fechadocumento?        :Date;
-	nrodocUID?             :string;
-	email?		  		   :string;
-	motivoaveria?          :string;
-	montoOriginal?		   :number;
-	totalaveria?           :number;
-	porcentajeReclamo?     :number;
-	motivoEli?			   :string
-	observacion?           :string;
-	txtAveria?             :string;
-	txtResolucion?         :string;
-	txtCierre?             :string; */
 }
