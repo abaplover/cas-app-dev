@@ -1,5 +1,5 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';  //<<<< import it here
@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { AppComponent } from './app.component';
+
 
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
@@ -306,7 +307,8 @@ import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.compone
     MatDialogModule,
     DataTablesModule,
     MatTooltipModule,
-    NgxPrintModule
+    NgxPrintModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     PedidoService,
