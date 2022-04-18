@@ -61,6 +61,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
     arrayAveria: any[] = [];
     arrayMaterialesAve: any[] = [];
     copyArray = [];
+    showSpinner = false;
   
     public clienteList: Client[]; //arreglo vacio
     public materialList: Product[]; //arreglo vacio 
@@ -161,6 +162,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
     regresar() {
   
       this.opcgenReport = false;
+      this.showSpinner = false;
     }
   
     onBookChange(event) {
@@ -170,6 +172,8 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
       }
     }
     onSubmitSearch(pf?: NgForm) {
+
+      this.showSpinner = true;
       let query: any;
       let queryDet: any;
       let hora = new Date().getHours();
@@ -277,14 +281,22 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
 
           this.averiasDet_ = this.copyArray;
 
-          this.totalRegistroAv = this.arrayMaterialesAve.length;
-          this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
-          this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
+          this.copyArray.reduce((acc, avdet) => {
+
+            acc[avdet.idaveria] = ++acc[avdet.idaveria] || 0;
+            //acc[avdet.idaveria] = avdet.porcentajereclamo;
+            if(acc[avdet.idaveria] == 0){
+              this.porcentajeReclamo += this.roundTo(avdet.porcentajereclamo,2);
+            }
+            return acc;
+          }, {});        
+  
+          this.totalRegistroAv = this.averiasDet_.length;
+          this.totalAveria = this.roundTo(this.averiasDet_.reduce((total, row) => total + row.totalpormaterial, 0),2);
         
-          console.log("total ",this.totalAveria,this.porcentajeReclamo);
 
-
-
+          this.showSpinner = false;
+          this.opcgenReport = true;
         })
 
         
@@ -453,8 +465,6 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           this.rerender();
         }
       })
-        
-      this.opcgenReport = true;
   
     }//onSubmitSearch
   
@@ -478,6 +488,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
                 solucion: arrayMateriales[j].solucion,
                 cantidadmaterial: arrayMateriales[j].cantidadmaterial,
                 totalpormaterial: arrayMateriales[j].totalpormaterial,
+                porcentajereclamo: arrayAverias[i].porcentajeReclamo,
                 statusaveria: arrayAverias[i].status,
               }
             );

@@ -1,5 +1,10 @@
 <div class="container9" style=" padding:10px;">
-	<form #generalReport="ngForm" *ngIf="!this.opcgenReport">
+
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+
+	<form #generalReport="ngForm" *ngIf="!this.opcgenReport && !showSpinner">
 		<div class="row">
 			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 				<div id="ndesp" class="card" style="padding:10px;">
@@ -189,7 +194,7 @@
 						</div>
 
 	</form>
-	<div id="generalReport">
+	<div id="generalReport" *ngIf="this.opcgenReport && !showSpinner">
 		<button *ngIf="this.opcgenReport"
 		id="back"
 		name="back"
@@ -202,8 +207,9 @@
 		<br/><br/>
 		<div *ngIf="this.opcgenReport">
 			<app-totales-de-averias
-			*ngIf="averiasDet_"
-			[aver_]="averiasDet_">
+			*ngIf="copyArray"
+			[aver_]="averiasDet_"
+			[porcentajeReclamo] = "porcentajeReclamo">
 			</app-totales-de-averias>
 		</div>
 		<table id="dtableav" datatable [dtOptions]="dtOptionsAv" [dtTrigger]="dtTrigger" class="table table-striped table-bordered row-border hover">

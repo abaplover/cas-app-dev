@@ -202,12 +202,10 @@ export class GestionaveriasService {
   }//getAveriasRep
 
   getAveriasRep02(queryAvDet){
-    console.log("entrando");
     this.averiasdetColletionrep = this.db.collection('averiasDet', queryAvDet);
     this.averiasdetrep = this.averiasdetColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as AveriaDet;
-        console.log("data ",data);
         return data;
       })
     }));

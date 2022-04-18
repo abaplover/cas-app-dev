@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Averia } from 'src/app/models/gaveria';
+import { AveriaDet } from 'src/app/models/gaveriaDet';
 
 @Component({
   selector: 'app-totales-de-averias',
@@ -8,10 +9,11 @@ import { Averia } from 'src/app/models/gaveria';
 })
 export class TotalesDeAveriasComponent implements OnInit, OnChanges {
 
-  @Input() aver_: Averia[] = [];
+  @Input() aver_: AveriaDet[] = [];
+  @Input() porcentajeReclamo: any;
 
   totalRegistroAv: number = 0;
-  porcentajeReclamo: number = 0;
+  //porcentajeReclamo: number = 0;
   totalAveria: number = 0; 
   constructor() {}
 
@@ -21,12 +23,10 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.totalRegistroAv = this.aver_.length;
 
-    this.porcentajeReclamo = this.roundTo(
-      this.aver_.reduce((total, row) => total + row.porcentajeReclamo, 0),2
-    );
+    //this.porcentajeReclamo = porcentajeReclamo
 
     this.totalAveria = this.roundTo(
-      this.aver_.reduce((total, row) => total + row.totalaveria, 0),2
+      this.aver_.reduce((total, row) => total + row.totalpormaterial, 0),2
     ); 
   }
 
