@@ -262,7 +262,6 @@ export class GestionaveriasService {
           //console.log(idAven);
           resolve(idAven);
         }).catch(function (err) {
-          //console.log("Error getting document:", err);
           reject(err);
         });
     })

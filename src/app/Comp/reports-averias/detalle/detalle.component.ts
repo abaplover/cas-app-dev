@@ -167,7 +167,6 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
   
     onBookChange(event) {
       if (event.value == "") {
-        //console.log('vacio',event.value);
       } else {
       }
     }

@@ -13,7 +13,6 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
   @Input() porcentajeReclamo: any;
 
   totalRegistroAv: number = 0;
-  //porcentajeReclamo: number = 0;
   totalAveria: number = 0; 
   constructor() {}
 
@@ -22,8 +21,6 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.totalRegistroAv = this.aver_.length;
-
-    //this.porcentajeReclamo = porcentajeReclamo
 
     this.totalAveria = this.roundTo(
       this.aver_.reduce((total, row) => total + row.totalpormaterial, 0),2
