@@ -216,7 +216,6 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           fechaCierre = moment.unix(this.arrayAveria[k].fecierre.seconds);
           this.averiaCerrada = true;
           let dias = moment(fechaCierre).diff(moment(diaAveria), 'days');
-          console.log("dias ",dias);
           this.arrayAveria[k].dias = dias;
         } else {
         }
@@ -272,10 +271,10 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           this.metodoFor(this.arrayAveria,this.averiasDet_);
         });
 
-
+        let totalMontoOriginal = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.montoOriginal, 0),2)
         this.totalRegistroAv = this.arrayAveria.length;
         this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
-        this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
+        this.porcentajeReclamo = this.roundTo(this.totalAveria/totalMontoOriginal *100,2); 
       }
 
       if(!this.firstTime){
