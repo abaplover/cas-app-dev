@@ -4,9 +4,16 @@
 }
 .bars-spinner {
 	width: 100%;
-	height: 300px;	
+	height: 100%;
+	z-index: 5;
+	display: flex;
+	position: absolute;
+	background: #fafafa;	
 }
 mat-spinner {
-	margin: auto;
-	display: block;
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: 100px;
+	left: 45vw;
 }

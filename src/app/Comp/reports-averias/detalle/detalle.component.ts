@@ -168,6 +168,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
     onBookChange(event) {
       if (event.value == "") {
       } else {
+          //console.log(event.value);
       }
     }
     onSubmitSearch(pf?: NgForm) {
@@ -276,7 +277,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
 
           this.metodoFor(this.arrayAveria,this.averiasDet_);
 
-          this.firstTime = true;
+          //this.firstTime = true;
 
           this.averiasDet_ = this.copyArray;
 
@@ -294,10 +295,20 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           this.totalAveria = this.roundTo(this.averiasDet_.reduce((total, row) => total + row.totalpormaterial, 0),2);
         
 
+          if(!this.firstTime){
+            this.rerender();
+          }
+
           this.showSpinner = false;
           this.opcgenReport = true;
+        
+        
         })
 
+
+      })
+  
+    }//onSubmitSearch
         
 
         /* if (this.materialAv.length > 0) {
@@ -459,13 +470,6 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           //this.porcentajeReclamo = this.roundTo(this.arrayAveria.reduce((total,row) => total + row.porcentajeReclamo, 0),2);
         
         } */ 
-  
-        if(!this.firstTime){
-          this.rerender();
-        }
-      })
-  
-    }//onSubmitSearch
   
   
     metodoFor(arrayAverias:any[],arrayMateriales:any[]) {
