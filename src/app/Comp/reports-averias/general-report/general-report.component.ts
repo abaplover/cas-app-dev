@@ -131,6 +131,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
     this.motivoAvS.getMaverias().valueChanges().subscribe(motiv => {
       this.motivoList = motiv;
     })
+    
     this.firstTime = true;
 
   }//ngOnInit

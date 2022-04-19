@@ -4,7 +4,7 @@
 			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 				<div id="ndesp" class="card" style="padding:10px;">
 
-						<div class="row">
+					<div class="row">
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
@@ -60,9 +60,9 @@
 									</mat-form-field>
 								</div>
 							</div>
-						</div>
+					</div>
 
-						<div class="row">
+					<div class="row">
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
@@ -112,49 +112,44 @@
 									</mat-form-field>
 								</div> -->
 							</div>
-						</div>
-						<div>
-							<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete></div>
+					</div>
+					<div>
+						<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+					</div>
 
-									<div class="row">
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+							<div class="form-group" style="text-align:right;">
+								<button
+									smat-stroked-button
+									class="btn btn-primary"
+									style=" height: 35px !important;"
+									type="reset"
+								>
+									Limpiar
+								</button>
 
-										<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-											<div class="form-group" style="text-align:right;">
-												<button
-													smat-stroked-button
-													class="btn btn-primary"
-													style=" height: 35px !important;"
-													type="reset"
-												>
-													Limpiar
-												</button>
-
-												<button
-													smat-stroked-button
-													id="btnenviarne"
-													class="btn btn-primary"
-													name="btnenviarne"
-													style=" height: 35px !important;"
-													type="submit"
-													[disabled]="generalReport.invalid"
-													(click)="onSubmitSearch(generalReport)"
-												>
-													<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i> Buscar
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
+								<button
+									smat-stroked-button
+									id="btnenviarne"
+									class="btn btn-primary"
+									name="btnenviarne"
+									style=" height: 35px !important;"
+									type="submit"
+									[disabled]="generalReport.invalid"
+									(click)="onSubmitSearch(generalReport)"
+								>
+									<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i> Buscar
+								</button>
 							</div>
 						</div>
+					</div>
 
+				</div>
+			</div>
+		</div>
 	</form>
+
 	<div id="generalReport">
 		<button *ngIf="this.opcgenReport"
 		id="back"
@@ -211,7 +206,5 @@
 			</tbody>
 		</table>
 	</div>
-
-
 
 </div><!-- Contenedor -->
