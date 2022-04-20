@@ -192,7 +192,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       if (typeof this.vendedor == "undefined" || this.vendedor == null || this.vendedor == '') 
       { } else {
         if(this.vendedor == ""){ } else {
-          q = q.where("nomvendedor", "in", this.vendedor);
+          q = q.where("nomvendedor", "==", this.vendedor[0]);
         }
       }
       if (typeof this.codVen == "undefined" || this.codVen == null) { } else {

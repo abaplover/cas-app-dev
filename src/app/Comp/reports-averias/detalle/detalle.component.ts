@@ -219,7 +219,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
         if (typeof this.status == "undefined" || this.status == null || this.status == '') 
         { } else {
           if(this.status == ""){ } else {
-            q = q.where("status", "in", this.status);
+            q = q.where("status", "==", this.status[0]);
           }
         }
         return q;
