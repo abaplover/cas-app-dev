@@ -8,6 +8,7 @@ import { PedidoDet } from '../models/pedidoDet';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { AngularFireDatabase } from '@angular/fire/database';
 import * as firebase from 'firebase';
+import * as moment from 'moment';
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class CobrosService {
   selectedIndex = 0;
   docAdd:number = -1; //id del elemento
   mostrarForm: boolean = false;
+  today = moment().toDate();
 
   itemsCollection: AngularFirestoreCollection<CobroDet>;
   items: Observable<CobroDet[]>;
@@ -26,7 +28,7 @@ export class CobrosService {
   cobroDoc: AngularFirestoreDocument<Cobro>;
   cobrosColletion: AngularFirestoreCollection<Cobro>;
 
-  cobrosE: Observable<Cobro[]>;
+  cobrosP: Observable<Cobro[]>;
   cobroDocE: AngularFirestoreDocument<Cobro>;
   cobrosColletionE: AngularFirestoreCollection<Cobro>;
 
@@ -54,8 +56,13 @@ export class CobrosService {
     }));
 
     //Busca todos los cobros con estatus - PENDIENTE ypedido ENTREGADO
-    this.cobrosColletionE = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL']).orderBy("creado", "desc").limit(50));
-    this.cobrosE = this.cobrosColletionE.snapshotChanges().pipe(map(changes => {
+    this.cobrosColletionE = this.db.collection('cobros', ref => 
+      ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
+      .where("fpvencimiento",">",this.today)
+      .orderBy("fpvencimiento", "desc")
+      .orderBy("creado", "desc").limit(50)
+    );
+    this.cobrosP = this.cobrosColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
         //data.uid = a.payload.doc.id;
@@ -64,7 +71,7 @@ export class CobrosService {
     }));
 
 
-    //Busca todos los cobros con estatus - CERRDO
+    //Busca todos los cobros con estatus - CERRADO
     this.cobrosColletionC = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['CERRADO']).orderBy("creado", "desc").limit(50));
     this.cobrosC = this.cobrosColletionC.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -76,7 +83,7 @@ export class CobrosService {
 
     //Busca todos los cobros con estatus - VENCIDO
     let hoy = new Date();
-    this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("fechadepago", "<", hoy).where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("fechadepago", "desc").orderBy("creado", "desc").limit(50));
+    this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("fpvencimiento", "<", hoy).where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("fpvencimiento", "desc").orderBy("creado", "desc").limit(50));
     this.cobrosV = this.cobrosColletionV.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
@@ -99,8 +106,8 @@ export class CobrosService {
     this.cobrosDetColletion = this.db.collection('cobrosDet');
   } //Constructor
 
-  getCobrosE(){
-    return this.cobrosE;
+  getCobrosP(){
+    return this.cobrosP;
   }
   getCobrosC(){
     return this.cobrosC;

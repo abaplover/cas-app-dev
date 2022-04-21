@@ -56,8 +56,13 @@ export class GcobrovListComponent implements OnInit {
   ngOnInit(): void {
     this.cobro_ = {} as Cobro;
 
-    this.cobroService.getCobrosV().subscribe(cobros=>{
-      this.cobroslist = cobros;
+    this.cobroService.getCobrosV().subscribe(cobros => {
+      let cobrosArray = [];
+      cobrosArray = cobros;
+      //Filtramos en el array a mostrar los elementos que no tienen el pago completo
+      this.cobroslist = cobrosArray.filter( elemento => {
+        return elemento.montodepago < elemento.totalmontoneto
+      })
       
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
