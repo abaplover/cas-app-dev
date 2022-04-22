@@ -20,6 +20,7 @@ export interface Cobro {
 	nrofactura?            :string;
 	nroreferencia?         :string;
 	pdfb64?                :string;
+	tipodoc?			   :string;
 	tipopago?              :string;
 	totalmontobruto?	   :number;
 	totalmontodescuento?   :number;
@@ -30,7 +31,7 @@ export interface Cobro {
 	observacion?           :string;
 	sendmail?              :boolean;
 	status?				   :string;
-	statuscobro?		   :string;
+	statuscobro?		   :string; //Cerrada, Parcial, Pendiente
 /* 	uid?				   :string;
 	idpedido?	           :number; 
 	nrofactura?            :string;
