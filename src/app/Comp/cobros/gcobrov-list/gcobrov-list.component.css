@@ -21,6 +21,16 @@ th.mat-sort-header-sorted {
 	color: black;
 }
 
+
+th.mat-header-cell {
+	text-align: center;
+	margin-inline: 2px;
+}
+
+td.mat-cell {
+	text-align: center !important;
+}
+/* 
 .mat-column-totalmontoimpuesto {
 	width: 100px !important;
 	text-align: right;
@@ -91,7 +101,7 @@ th.mat-sort-header-sorted {
 	width: 100px !important;
 	text-align: right;
 }
-
+ */
 .header-align-right{
 	display: flex;
 	padding: 21px 0;

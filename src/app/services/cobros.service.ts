@@ -72,7 +72,7 @@ export class CobrosService {
 
 
     //Busca todos los cobros con estatus - CERRADO
-    this.cobrosColletionC = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['CERRADO']).orderBy("creado", "desc").limit(50));
+    this.cobrosColletionC = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['CERRADA']).orderBy("creado", "desc").limit(50));
     this.cobrosC = this.cobrosColletionC.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;

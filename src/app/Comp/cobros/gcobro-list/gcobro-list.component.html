@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-
+<!-- Parte de visualizacion -->
 	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
 		<div class="row">
 			<div class="table-responsive">
@@ -49,10 +49,10 @@
 							<td>
 								<mat-label>{{this.cobro_.condiciondepago}}</mat-label>
 							</td>
-							<th scope="row">Status Pedido</th>
+							<!-- <th scope="row">Status Pedido</th>
 							<td>
 								<mat-label>{{this.cobro_.status}}</mat-label>
-							</td>
+							</td> -->
 						</tr>
 						<tr>
 							<th scope="row">
@@ -322,25 +322,35 @@
 		
 		<!-- Position Column -->
 		<ng-container matColumnDef="Pedido">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;">Pedido </th>
+			<th mat-header-cell *matHeaderCellDef style="text-align: center;">Pedido </th>
 			<td mat-cell *matCellDef="let element">{{element.idpedido}}</td>
 		</ng-container>
 		
 		<!-- Name Column -->
 		<ng-container matColumnDef="Factura">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Factura</th>
-			<td mat-cell *matCellDef="let element"> {{element.nrofactura}} </td>
+			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> NE/FA </th>
+			<td mat-cell *matCellDef="let element">
+				<span *ngIf="element.tipodoc == 'Factura'">
+					FA{{element.nrofactura}}
+				</span>
+				<span *ngIf="element.tipodoc == 'Nota de entrega'">
+					NE{{element.nrofactura}}
+				</span>
+				<span *ngIf="!element.tipodoc">
+					{{element.nrofactura}}
+				</span>
+			</td>
 		</ng-container>
 	
 		<!-- Name Column -->
-		<ng-container matColumnDef="Status">
+		<!-- <ng-container matColumnDef="Status">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;"> Status </th>
 			<td mat-cell *matCellDef="let element"> {{element.statuscobro}} </td>
-			</ng-container>
+		</ng-container> -->
 	
 		<!-- Weight Column -->
 		<ng-container matColumnDef="Condicion">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header>Condición de Pago</th>
+			<th mat-header-cell *matHeaderCellDef>Condición de Pago</th>
 			<td mat-cell *matCellDef="let element"> {{element.condiciondepago}} </td>
 		</ng-container>
 		
@@ -352,36 +362,42 @@
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Cliente">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+			<th mat-header-cell *matHeaderCellDef> Cliente </th>
 			<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
 		</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Vendedor">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
+			<th mat-header-cell *matHeaderCellDef> Vendedor </th>
 			<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
 		</ng-container>
 	
 		<!-- Symbol Column -->
 			<ng-container matColumnDef="Subtotal">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;">Sub Total</th>
+				<th mat-header-cell *matHeaderCellDef style="text-align: center;">Sub Total</th>
 				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto-element.totalmontodescuento | currency:" "}} </td>
 			</ng-container>
 
 		<!-- Symbol Column -->
 			<ng-container matColumnDef="totalmontoimpuesto">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
+				<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Impuesto </th>
 				<td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
 			</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="totalmontoneto">
-			<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Total</th>
+			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Total</th>
 			<td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
 		</ng-container>
+
+		<ng-container matColumnDef="abono">
+			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Abono </th>
+			<td mat-cell *matCellDef="let element"><b *ngIf="element.montodepago > 0">x</b></td>
+		</ng-container>
+
 			<!-- Symbol Column -->
 		<ng-container matColumnDef="send">
-			<th mat-header-cell *matHeaderCellDef style="text-align: right;"></th>
+			<th mat-header-cell *matHeaderCellDef style="text-align: center;"></th>
 			<td mat-cell *matCellDef="let element index as i">
 				<a class="btn btn-info text-white btn-sm" (click)="sendpopup(element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
 					<i class="far fa-paper-plane" data-toggle="tooltip" data-placement="top" title="Enviar Recordatorio"></i>
@@ -390,7 +406,7 @@
 		</ng-container>
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Opc">
-			<th mat-header-cell *matHeaderCellDef></th>
+			<th mat-header-cell *matHeaderCellDef style="width: 100px !important;"></th>
 			<td mat-cell *matCellDef="let element index as i">
 
 				<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">

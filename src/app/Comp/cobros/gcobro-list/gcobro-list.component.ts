@@ -36,7 +36,7 @@ export class GcobroListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['Pedido', 'Factura', 'Status', 'Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','send', 'Opc'];
+  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','send', 'Opc'];
   cobro_ = {} as Cobro;
   cobro0_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
@@ -259,8 +259,8 @@ export class GcobroListComponent implements OnInit {
       this.cobroDet_.uid = this.cobro_.idpedido.toString();
 
       if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
-        console.log('fpgo: ',this.cobroDet_.fechadepago);
-        console.log('fvencimiento: ',this.cobro_.fpvencimiento);
+        /* console.log('fpgo: ',this.cobroDet_.fechadepago);
+        console.log('fvencimiento: ',this.cobro_.fpvencimiento); */
         this.cobro_.demora="S";
       }else{
         this.cobro_.demora="";
