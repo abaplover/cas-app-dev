@@ -20,7 +20,7 @@ export interface Cobro {
 	nrofactura?            :string;
 	nroreferencia?         :string;
 	pdfb64?                :string;
-	tipodoc?			   :string;
+	tipodoc?			   :string; //Tipo de documento de pedido
 	tipopago?              :string;
 	totalmontobruto?	   :number;
 	totalmontodescuento?   :number;
