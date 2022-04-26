@@ -184,7 +184,7 @@ import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-
 import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
 import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-list.component';
 
-
+//
 @NgModule({
   declarations: [
     AppComponent,
