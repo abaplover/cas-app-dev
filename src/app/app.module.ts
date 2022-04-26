@@ -182,6 +182,7 @@ import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.
 import { GeneralReportComponent } from './Comp/reports-averias/general-report/general-report.component';
 import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
 import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
+import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-list.component';
 
 
 @NgModule({
@@ -270,6 +271,7 @@ import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.compone
     GeneralReportComponent,
     TotalesDeAveriasComponent,
     DetalleComponent,
+    GcobroregListComponent,
 
   ],
   imports: [
