@@ -142,6 +142,7 @@ export class GcobroListComponent implements OnInit {
   }//onCancelar
 
   verdetalles($event,elemento){
+    console.log("entra a ver");
     this.ver = true;
     this.cobro_ =  Object.assign({}, elemento);
 
@@ -192,6 +193,7 @@ export class GcobroListComponent implements OnInit {
 
     if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
       this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
+      console.log("elemento ", elemento)
     } 
     if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);

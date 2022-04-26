@@ -32,7 +32,7 @@ export class GcobrovListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','demora', 'Opc'];
+  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
   cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;

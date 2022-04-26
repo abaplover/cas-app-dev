@@ -303,7 +303,17 @@
 		<!-- Name Column -->
 		<ng-container matColumnDef="Factura">
 			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> NE/FA</th>
-			<td mat-cell *matCellDef="let element"> {{element.nrofactura}} </td>
+			<td mat-cell *matCellDef="let element">
+				<span *ngIf="element.tipodoc == 'Factura'">
+					FA{{element.nrofactura}}
+				</span>
+				<span *ngIf="element.tipodoc == 'Nota de entrega'">
+					NE{{element.nrofactura}}
+				</span>
+				<span *ngIf="!element.tipodoc">
+					{{element.nrofactura}}
+				</span>
+			</td>
 		</ng-container>
 	
 		<!-- Name Column -->
@@ -359,7 +369,7 @@
 			<td mat-cell *matCellDef="let element"><b *ngIf="element.montodepago > 0">x</b></td>
 		</ng-container>
 
-		<ng-container matColumnDef="demora">
+		<!-- <ng-container matColumnDef="demora">
 			<th mat-header-cell *matHeaderCellDef></th>
 			<td mat-cell *matCellDef="let element index as i">
 				<div class="custom-control custom-switch" >
@@ -367,7 +377,7 @@
 					<label class="custom-control-label" for="sw1"></label>
 				</div>
 			</td>
-		</ng-container>
+		</ng-container> -->
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Opc">
 			<th mat-header-cell *matHeaderCellDef style="width: 100px !important;"></th>
