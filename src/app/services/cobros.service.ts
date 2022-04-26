@@ -45,7 +45,8 @@ export class CobrosService {
   cobrosDetColletion: AngularFirestoreCollection<CobroDet>;
 
   constructor(public db: AngularFirestore) { 
-    //Busca todos los pedidos
+
+    //Busca todos los cobros
     this.cobrosColletion = this.db.collection('cobros', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(50));
     this.cobros = this.cobrosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
