@@ -84,7 +84,6 @@ export class GcobrovListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
   checkValue(){
-    console.log("valor");
   }
   vpagoselected(val){
     if (val!="Efectivo"){

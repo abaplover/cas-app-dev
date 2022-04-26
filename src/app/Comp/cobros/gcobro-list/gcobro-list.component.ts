@@ -69,6 +69,7 @@ export class GcobroListComponent implements OnInit {
       this.cobroslist = cobrosArray.filter( elemento => {
         return elemento.montodepago < elemento.totalmontoneto
       })
+      
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
