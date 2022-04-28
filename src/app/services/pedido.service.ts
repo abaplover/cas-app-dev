@@ -95,6 +95,10 @@ export class PedidoService {
   pedidoDocStat: AngularFirestoreDocument<Pedido>;
   pedidosColletionStat: AngularFirestoreCollection<Pedido>;
 
+  pedidoCobro: Observable<Pedido[]>;
+  pedidoDocCobro: AngularFirestoreDocument<Pedido>;
+  pedidoColletionCobro: AngularFirestoreCollection<Pedido>;
+
   pedidosDet: Observable<PedidoDet[]>;
   pedidoDetDoc: AngularFirestoreDocument<PedidoDet>;
   pedidosDetColletion: AngularFirestoreCollection<PedidoDet>;
@@ -166,11 +170,20 @@ export class PedidoService {
 
   }//constructor
 
+  getSpecificPedido(idpedido) {
+    this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido","==",idpedido));
+    return this.pedidoColletionCobro.snapshotChanges().pipe( map (changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        return data;
+      });
+    }));
+
+  }
+
 
   getPedidosRep01(strq)
-  {
-    //this.pedidosColletionrep = this.db.collection("pedidos", ref => ref.where("fechapedido", ">=", desde).where("fechapedido", "<=", hasta).where("idcliente", "==", codCliente).where("status", "==", status).where("nomvendedor", "==", vendedor).where("condiciondepago", "in", conPago).orderBy("fechapedido", "desc").orderBy("creado", "desc").limit(5000));
-  
+  {  
     this.pedidosColletionrep = this.db.collection("pedidos", strq);
     this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -372,6 +385,7 @@ export class PedidoService {
       });
     }
   };
+
 
   //detalles pedido
   getPedidosDet(uid)
