@@ -24,269 +24,403 @@
 		</div>
 	</div>
 
-<!-- Parte de visualizacion -->
-	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
-		<div class="row">
-			<div class="table-responsive">
-				<table class="table table-sm">
-					<tbody>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Número de Pedido</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.idpedido}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Número de Factura</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nrofactura}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Condición de Pago</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.condiciondepago}}</mat-label>
-							</td>
-							<!-- <th scope="row">Status Pedido</th>
-							<td>
-								<mat-label>{{this.cobro_.status}}</mat-label>
-							</td> -->
-						</tr>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Fecha de Vencimiento</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.fpvencimiento | date: 'dd/MM/yyyy'}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Cliente</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nomcliente}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Vendedor</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nomvendedor}}</mat-label>
-							</td>
-							<th scope="row">Status Cobro</th>
-							<td>
-								<mat-label>{{this.cobro_.statuscobro}}</mat-label>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Sub Total</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontobruto-this.cobro_.totalmontodescuento | currency:" "}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Impuesto</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontoimpuesto | currency:" "}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Total</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontoneto | currency:" "}}</mat-label>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	
-		<div class="row" style="border-style: solid; border-width: 0px;">
-			
-				<div *ngIf="!this.ver" id="gped" class="card border-secondary bg-light w-100" style="padding: 10px;">
-					<form #cobroForm="ngForm">
-					<div class="row" style="padding-top:10px;">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Tipo de Pago</mat-label>
-									<mat-select 
-										value=selected
-										name="tipopago"
-										aria-placeholder="Tipo de Pago"
-										#name="ngModel"
-										[(ngModel)]="this.cobro_.tipopago"
-										(selectionChange)="tpagoselected($event.value)"
-										required
-									>
-										<mat-option value="Pago Total" >
-											Pago Total
-										</mat-option>
-										<mat-option value="Pago Parcial">
-											Pago Parcial
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
+<!-- Parte de edición -->
+
+
+	<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
+		<div class="card-body text-info panel panel-login" *ngIf="this.cobro_.uid" style="border-style: solid; border-width: 0px;">
+			<form #cobroForm="ngForm" (ngSubmit)="agregardetalles()">
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px;height: 250px;">
+								
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Pedido</span>
+											</div>
+
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].idpedido}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fec. Vencimiento</span>
+											</div>
+
+											<div class="abs-center">
+												<mat-label>{{this.cobro_.fpvencimiento | date: 'dd/MM/yyyy'}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cond. de Pago</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].condiciondepago}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Factura</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].nrofactura}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Documento</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].tipodoc}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Fecha de Pago</mat-label>
-									<input matInput [matDatepicker]="picker"
-										name="fechadepago"
-										id="fechadepago"
-										#name="ngModel"
-										[(ngModel)]="this.cobro_.fechadepago"
-										required
-									>
-									<mat-datepicker-toggle matSuffix [for]="picker">
-										<mat-icon matDatepickerToggleIcon>
-											event_note
-										</mat-icon>
-									</mat-datepicker-toggle>
-									<mat-datepicker #picker></mat-datepicker>
-								</mat-form-field>
+					</div>
+
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px; ">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cliente</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].nomcliente}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Vendedor</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoCobro[0].nomvendedor}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Zona</span>
+											</div>
+											<div class="abs-center">
+												<!-- <mat-label>{{this.pedidoCobro[0].zona}}</mat-label> -->
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe OR</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.cobro_.totalmontoneto}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe RE</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.cobro_.totalmontoneto - this.cobro_.montodepago}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>	
 					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Vía de pago</mat-label>
-									<mat-select value=selected
-										aria-placeholder="Vía de Pago"
-										required
-										name="viadepgo"
-										#name="ngModel"
-										[(ngModel)]="this.cobro_.viadepago"
-										(selectionChange)="vpagoselected($event.value)"
-									>
-										<mat-option value={{vp.descripcion}}  *ngFor = "let vp of vpagoList">
-											{{vp.descripcion}}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
+
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px;">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Pago</span>
+											 </div>
+											<input 
+												type="date"
+												[max]="maxDate"
+												name="fechadepago"
+												id="fechadepago"
+												#fechadepago="ngModel"
+												[(ngModel)]="this.cobroDet_.fechadepago"
+												required
+												class="form-control"
+											/>
+										</div>										
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div> <!--Fila cabecera-->
+
+
+				<div class="row" style="height: 5px;"></div>
+				<div class="row">
+					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+						<div class="card">
+							<div class="card-body" style="padding-right:8px; padding-left:8px; ">
+								<div class="row">
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Tipo Documento</mat-label>											
+										<div class="form-group input-group input-group-sm mb-3">
+											<input 
+												type="text"
+												name="tipodoc"
+												[(ngModel)]="this.cobroDet_.tipodoc"
+												class="form-control"
+											/>
+										</div>
+									</div>
+
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-left: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Tipo de Pago</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+											name="tipopago"
+											[(ngModel)]="this.cobroDet_.tipopago"
+											required
+											(change)="tpagoselected($event.value)"
+											class="form-control form-select form-select-sm"
+											aria-label=".form-select-sm example"
+											required
+											>
+												<option value="TOTAL" >
+													TOTAL
+												</option>
+												<option value="PARCIAL">
+													PARCIAL
+												</option>
+											</select>
+										</div>	
+									</div>
+
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Vía Pago</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													required
+													name="viadepago"
+													[(ngModel)]="this.cobroDet_.viadepago"
+													(change)="vpagoselected($event.target.value)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+												>
+													<option value={{vp.descripcion}}  *ngFor = "let vp of vpagoList">
+														{{vp.descripcion}}
+													</option>
+												</select>
+										</div>
+									</div>
+
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Banco</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													required
+													name="banco"
+													[(ngModel)]="this.cobroDet_.banco"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+													[disabled]="this.vp_efectivo"
+												>
+													<option value={{bc.descripcion}}  *ngFor = "let bc of bancoList">
+														{{bc.descripcion}}
+													</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													required
+													name="moneda"
+													[(ngModel)]="this.cobroDet_.moneda"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+												>
+													<option value="USD">USD</option>
+													<option value="BSF">BSF</option>
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
+										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<input 
+												type="text"
+												name="montodepago"
+												[(ngModel)]="this.montodepago"
+												class="form-control"
+											/>
+										</div>
+									</div>
+									
+									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="border-width:0px;border-style:solid;border-color:red">
+										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto BsF</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<input 
+												type="text"
+												name="montobsf"
+												[(ngModel)]="this.cobroDet_.montobsf"
+												class="form-control"
+											/>
+										</div>
+									</div>								
+								</div>
 							</div>
 						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Banco</mat-label>
-									<mat-select value=selected
-										aria-placeholder="Banco"
-										required
-										name="banco"
-										#name="ngModel"
-										[(ngModel)]="this.cobro_.banco"
-										[disabled]="this.vp_efectivo"
-									>
-										<mat-option value={{bc.descripcion}}  *ngFor = "let bc of bancoList">
-											{{bc.descripcion}}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
+
+						<div class="row" style="height: 5px;"></div>
+						<!-- <div class="row" style="font-size:12px;">
+							<div class="col-sm-12 col-md-12 col-lg-13 col-xl-12">
+								<div class="card">
+									<div class="card-body" style="padding-right: 8px;padding-left:  8px;">
+										<div class="row" style="padding-top: 2px;">
+											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+												<table class="table-bordered table-striped table-sm table-responsive" style="max-height: 350px;">
+													<tbody class="thead-secondary table-secondary">
+													<tr *ngFor="let ave of this.cobro_; index as i">
+														<td class="col-0" scope="row">{{ave.codigodematerial}}</td>
+														<td class="col-1">{{ave.descripcionmaterial}}</td>
+														<td class="col-3" style="text-align: left;">{{ave.cantidadmaterial | currency:" ":'symbol':'2.0'}}</td>
+														<td class="col-4" style="text-align: left;">{{ave.preciomaterial | currency:" "}}</td>
+														<td class="col-5" style="text-align: left;">{{ave.totalpormaterial | currency:" "}}</td>
+														<td class="col-2" style="text-align: center;">{{ave.motivoaveria}}</td>
+														<td class="col-6">
+															<div class="custom-control custom-switch">
+																<div class="outerDivFull" >
+																	<div class="switchToggle">
+																		<!--[(ngModel)] ->
+																		<input type="checkbox" [checked]="this.gestionaveriasService.matrisDetAveria[i].aprobado" id="switch{{i}}" (change)="aceptarRechazarItems($event,i)">
+																		<label for="switch{{i}}">Toggle</label>
+																	</div>
+																</div>
+															</div>
+														</td>
+														<!-- <th class="col-6" style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th> ->
+													</tr>
+													</tbody>
+												</table>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="form-group" style="text-align:right;">
+											<button 
+												id="btnenviar"
+												name="btnenviar"
+												class="btn btn-primary btn-space" 
+												type="button" 
+												[disabled]="cobroForm.invalid"
+												(click)="onSubmit(cobroForm)"
+											>
+												<i class="fas fa-cloud-upload-alt"></i> Guardar
+											</button>
+											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
+												<i class="fas fa-sync-alt"></i> Cancelar
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field class="campo-width">
-									<mat-label>Referencia</mat-label>
-									<input matInput placeholder="Referencia."
-										type="text"
-										maxlength="20"
-										name="nroreferencia"
-										[(ngModel)]="this.cobro_.nroreferencia"
-										[disabled]="this.vp_efectivo"
-										required
-									>
-								</mat-form-field>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field class="campo-width">
-									<mat-label>Monto de Pago</mat-label>
-									<input matInput placeholder="Monto de Pago"
-										type="number"
-										name="montodepago"
-										[(ngModel)]="this.cobro_.montodepago"
-										[disabled]="this.pagototal"
-										required
-									>
-								</mat-form-field>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<div class="form-group">
-								<mat-form-field class="example-full-width"> 
-									<mat-label>Observación</mat-label>
-									<textarea rows="3" cols="40" matInput placeholder="Observación"
-										name="Observación"
-										maxlength="200"
-										id="Observación"
-										[(ngModel)]="this.cobro_.observacion"
-									></textarea>
-								</mat-form-field>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<div class="form-group" style="text-align:right;">
-								<button 
-									id="btnenviar"
-									name="btnenviar"
-									class="btn btn-primary btn-space" 
-									type="button" 
-									[disabled]="cobroForm.invalid"
-									(click)="onSubmit(cobroForm)"
-								>
-									<i class="fas fa-cloud-upload-alt"></i> Guardar
-								</button>
-								<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
-									<i class="fas fa-sync-alt"></i> Cancelar
-								</button>
-							</div>
-						</div>
-					</div>
-					</form> <!--Form notificar factura-->
 				</div>
-			
+				
+			</form>
+		</div>
+	</div><!--class card-->
+
+
+
+	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
+	
+		<div class="row" style="border-style: solid; border-width: 0px;">	
 				<div id="gped" class="card border-light bg-light w-100" style="padding: 15px;">
-					Detalles de Pagos
-					<div class="table-responsive">
+<!-- 					Detalles de Pagos
+ -->				<div class="table-responsive">
 						<table class="table table-striped table-hover table-sm">
 							<thead class="thead-success table-success">
 								<tr>
 									<th scope="col">Fecha</th>
+									<th scope="col">Tipo Documento</th>
+									<th scope="col">Tipo Pago</th>
 									<th scope="col">Vía de pago</th>
 									<th scope="col">Banco</th>
-									<th scope="col">Referencia</th>
+									<th scope="col">Moneda</th>
+									<!-- <th scope="col">Referencia</th> -->
 									<th scope="col" style="text-align: right;">Monto</th>
-									<!-- <th scope="col">-</th> -->
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let cobr of this.matrisDetCobro; index as i">
 									<th scope="row">{{cobr.fechadepago | date: 'dd/MM/yyyy'}}</th>
+									<td>{{cobr.tipodoc}}</td>
+									<td>{{cobr.tipopago}}</td>
 									<td>{{cobr.viadepago}}</td>
 									<td>{{cobr.banco}}</td>
-									<td style="text-align: right;">{{cobr.nroreferencia}}</td>
+									<td>{{cobr.moneda}}</td>
+									<!-- <td style="text-align: right;">{{cobr.nroreferencia}}</td> -->
 									<td style="text-align: right;">{{cobr.montodepago | currency:" "}}</td>
-									<!-- <th style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th> -->
 								</tr>
 							</tbody>
 							<thead class="thead-success table-success">
 								<tr>
-									<td scope="col" colspan="4">Total</td>
+									<td scope="col" colspan="6">Total</td>
 									<td scope="col" style="text-align: right;">{{this.pagoparcialpagado | currency:" "}}</td>
 									<!-- <td scope="col"></td>
 									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | currency:" "}}</td>
@@ -312,6 +446,7 @@
 
 	</div>
 
+<!-- Tabla de detalles -->
 	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.cobro_.uid">
 		<mat-form-field>
 			<mat-label>Buscar por</mat-label>
