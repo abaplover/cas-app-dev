@@ -190,7 +190,7 @@ import { MonedaListComponent } from './Comp/monedas/moneda-list/moneda-list.comp
 import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-cobros.component';
 import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
 
-
+//
 @NgModule({
   declarations: [
     AppComponent,
