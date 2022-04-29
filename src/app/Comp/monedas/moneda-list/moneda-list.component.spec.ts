@@ -12,6 +12,7 @@ describe('MonedaListComponent', () => {
     })
     .compileComponents();
   }));
+  
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MonedaListComponent);

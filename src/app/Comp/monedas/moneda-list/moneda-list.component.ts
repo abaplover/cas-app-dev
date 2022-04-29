@@ -10,6 +10,7 @@ export class MonedaListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

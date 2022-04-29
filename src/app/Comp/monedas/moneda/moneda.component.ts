@@ -10,6 +10,7 @@ export class MonedaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }
