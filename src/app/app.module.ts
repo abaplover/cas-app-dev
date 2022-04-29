@@ -163,6 +163,7 @@ import { AlertsService } from './services/alerts.service';
 import { FirebaseloginService } from './services/firebaselogin.service';
 import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
+import { TipodcobrosService  } from './services/tipodcobros.service';
 import { GestionaveriasService } from './services/gestionaverias.service';
 import { solucionAveriaService } from './services/solucionAveria.service';
 
@@ -183,6 +184,10 @@ import { GeneralReportComponent } from './Comp/reports-averias/general-report/ge
 import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
 import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
 import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-list.component';
+import { MonedaComponent } from './Comp/monedas/moneda/moneda.component';
+import { MonedaListComponent } from './Comp/monedas/moneda-list/moneda-list.component';
+import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-cobros.component';
+import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
 
 //
 @NgModule({
@@ -272,6 +277,10 @@ import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-l
     TotalesDeAveriasComponent,
     DetalleComponent,
     GcobroregListComponent,
+    MonedaComponent,
+    MonedaListComponent,
+    TipodCobrosComponent,
+    TipodcobrosListComponent,
 
   ],
   imports: [
@@ -339,6 +348,7 @@ import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-l
     CurrencyPipe,
     DatoempService,
     TipodService,
+    TipodcobrosService,
     GestionaveriasService,
     {provide: LOCALE_ID, useValue: 'es-VE'},
     { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() }
