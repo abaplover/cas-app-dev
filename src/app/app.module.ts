@@ -184,12 +184,13 @@ import { GeneralReportComponent } from './Comp/reports-averias/general-report/ge
 import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
 import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
 import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-list.component';
+
 import { MonedaComponent } from './Comp/monedas/moneda/moneda.component';
 import { MonedaListComponent } from './Comp/monedas/moneda-list/moneda-list.component';
 import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-cobros.component';
 import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
 
-//
+
 @NgModule({
   declarations: [
     AppComponent,
