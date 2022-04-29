@@ -380,6 +380,7 @@ onCancelar(pf?: NgForm,de?:number){
       this.cobro_.totalmontodescuento = this.pedido_.totalmontodescuento;
       this.cobro_.totalmontoimpuesto = this.pedido_.totalmontoimpuesto;
       this.cobro_.totalmontoneto = this.pedido_.totalmontoneto;
+      this.cobro_.montodepago = 0;
       this.cobro_.pdfb64 = this.pedido_.pdfb64;
       this.cobro_.observacion = this.pedido_.observacion;
       this.cobro_.status = this.pedido_.status;

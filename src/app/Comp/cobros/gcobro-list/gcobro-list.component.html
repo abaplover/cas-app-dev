@@ -135,8 +135,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Zona</span>
 											</div>
 											<div class="abs-center">
-												<!-- <mat-label>{{this.pedidoCobro[0].zona}}</mat-label> -->
-											</div>
+												<mat-label>{{this.pedidoCobro[0].listaprecio}}</mat-label>											</div>
 										</div>
 									</div>
 								</div>
@@ -159,7 +158,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe RE</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.cobro_.totalmontoneto - this.cobro_.montodepago}}</mat-label>
+												<mat-label>{{this.importeremanente}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -205,12 +204,17 @@
 									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-right: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Tipo Documento</mat-label>											
 										<div class="form-group input-group input-group-sm mb-3">
-											<input 
-												type="text"
-												name="tipodoc"
-												[(ngModel)]="this.cobroDet_.tipodoc"
-												class="form-control"
-											/>
+											<select value=selected
+													required
+													name="tipodoc"
+													[(ngModel)]="this.cobroDet_.tipodoc"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+												>
+													<option value={{tipod.nombre}}  *ngFor = "let tipod of tipodocList">
+														{{tipod.nombre}}
+													</option>
+												</select>
 										</div>
 									</div>
 
@@ -221,7 +225,7 @@
 											name="tipopago"
 											[(ngModel)]="this.cobroDet_.tipopago"
 											required
-											(change)="tpagoselected($event.value)"
+											(change)="tpagoselected($event.target.value)"
 											class="form-control form-select form-select-sm"
 											aria-label=".form-select-sm example"
 											required
@@ -247,8 +251,8 @@
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
 												>
-													<option value={{vp.descripcion}}  *ngFor = "let vp of vpagoList">
-														{{vp.descripcion}}
+													<option value={{vp.nombre}}  *ngFor = "let vp of vpagoList">
+														{{vp.nombre}}
 													</option>
 												</select>
 										</div>
@@ -261,12 +265,13 @@
 													required
 													name="banco"
 													[(ngModel)]="this.cobroDet_.banco"
+													(change)="bancoselected($event.target.value)"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
 													[disabled]="this.vp_efectivo"
 												>
-													<option value={{bc.descripcion}}  *ngFor = "let bc of bancoList">
-														{{bc.descripcion}}
+													<option value={{bc.nombre}}  *ngFor = "let bc of bancoList">
+														{{bc.nombre}}
 													</option>
 											</select>
 										</div>
@@ -275,16 +280,13 @@
 									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
-											<select value=selected
-													required
-													name="moneda"
-													[(ngModel)]="this.cobroDet_.moneda"
-													class="form-control form-select form-select-sm"
-													aria-label=".form-select-sm example"
-												>
-													<option value="USD">USD</option>
-													<option value="BSF">BSF</option>
-											</select>
+											<input 
+												type="text"
+												name="moneda"
+												readonly = true
+												[(ngModel)]="this.cobroDet_.moneda"
+												class="form-control"
+											/>
 										</div>
 									</div>
 									
@@ -295,6 +297,7 @@
 												type="text"
 												name="montodepago"
 												[(ngModel)]="this.montodepago"
+												[disabled]="this.cobroDet_.tipopago=='TOTAL'"
 												class="form-control"
 											/>
 										</div>
@@ -307,6 +310,7 @@
 												type="text"
 												name="montobsf"
 												[(ngModel)]="this.cobroDet_.montobsf"
+												[disabled]="this.disableBSF"
 												class="form-control"
 											/>
 										</div>

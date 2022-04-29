@@ -16,6 +16,8 @@ import { BancoService } from '../../../services/banco.service';
 import { Vpago } from '../../../models/vpago';
 import { Banco } from '../../../models/banco';
 import { PedidoService } from 'src/app/services/pedido.service';
+import { TipodocCobros } from 'src/app/models/tipodoc-cobros';
+import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 
 
 
@@ -32,6 +34,7 @@ export class GcobroListComponent implements OnInit {
   fechapedidoEli: Date;
   clientepedidoEli: string="";
   montodepago = 0;
+  disableBSF =  false;
 
 
   //var
@@ -47,17 +50,20 @@ export class GcobroListComponent implements OnInit {
   pagoparcialpagado:number;
   ver:boolean;
   public vpagoList: Vpago[]; //arreglo vacio
+  public tipodocList: TipodocCobros[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
   matrisDetCobro: CobroDet[]=[];
   pedidoCobro: Pedido[];
   sendemail=false;
+  importeremanente = 0;
 
   constructor(
     public cobroService: CobrosService,
     public loginS      : FirebaseloginService,
     private toastr     : ToastrService,
     public vpagoS      : VpagoService,
+    public tipodcobroS : TipodcobrosService,
     public bancoS      : BancoService,
     public pedidoS     : PedidoService,
   ) { }
@@ -68,9 +74,14 @@ export class GcobroListComponent implements OnInit {
     this.cobroService.getCobrosP().subscribe(cobros=>{
       let cobrosArray = [];
       cobrosArray = cobros;
+
       //Filtramos en el array a mostrar los elementos que no tienen el pago completo
       this.cobroslist = cobrosArray.filter( elemento => {
-        return elemento.montodepago < elemento.totalmontoneto
+        if (elemento.montodepago) {
+          return elemento.montodepago < elemento.totalmontoneto
+        } else {
+          return elemento;
+        }
       })
       
       //ELEMENT_DATA
@@ -81,6 +92,10 @@ export class GcobroListComponent implements OnInit {
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
       this.vpagoList = vps;
     })
+
+    this.tipodcobroS.getTipods().valueChanges().subscribe(tipdoc => {
+      this.tipodocList = tipdoc;
+    });
 
     this.bancoS.getBancos().valueChanges().subscribe(bc =>{
       this.bancoList = bc;
@@ -94,8 +109,7 @@ export class GcobroListComponent implements OnInit {
   }//applyFilter
 
   vpagoselected(val){
-    console.log("val ",val)
-    if (val!="Efectivo"){
+    if (val.substr(0,3)!="EFE"){
       this.vp_efectivo=false;
     }else{
       this.cobro_.banco = "";
@@ -104,22 +118,35 @@ export class GcobroListComponent implements OnInit {
     }
   }//vpagoselected
 
+  bancoselected(val) {
+    //Buscamos en la lista de bancos el que coincida con el nombre del banco seleccionado y determinamos su moneda
+    let bancoSelected = this.bancoList.find( banco => banco.nombre == val);
+    this.cobroDet_.moneda = bancoSelected.moneda;
+
+    if ( this.cobroDet_.moneda !== "BSF") this.disableBSF = true;
+    else this.disableBSF = false;
+    
+  }
+
   tpagoselected(val){
   
     if (val == "TOTAL"){
       let mp:number=0;
       for (let i in this.matrisDetCobro){
-        mp = mp + this.matrisDetCobro[i].montodepago;
-        //this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        mp = mp + Number(this.matrisDetCobro[i].montodepago);
       }
+
       this.cobroDet_.montodepago = parseFloat((this.cobro_.totalmontoneto-mp).toFixed(2));
+      this.montodepago =  this.cobroDet_.montodepago;
       this.pagototal = true;
+      this.disableBSF = true;
     }
 
-    if (val == "PARCIAL"){
-      let aux:number=0;
-      this.cobroDet_.montodepago = aux;
+    if (val == "PARCIAL") {
+      this.montodepago = 0;
+      this.cobroDet_.montodepago = Number(this.montodepago);
       this.pagototal = false;
+      this.disableBSF = false;
     }
   }
 
@@ -147,7 +174,6 @@ export class GcobroListComponent implements OnInit {
   }//onCancelar
 
   verdetalles($event,elemento){
-    console.log("entra a ver");
     this.ver = true;
     this.cobro_ =  Object.assign({}, elemento);
 
@@ -191,19 +217,20 @@ export class GcobroListComponent implements OnInit {
 
   selectEventCob(elemento){
     this.cobro_ =  Object.assign({}, elemento);
-
-    console.log("entra")
-
     let id = this.cobro_.idpedido.toString();
 
     this.pedidoS.getSpecificPedido(id).subscribe(ped => {
       let pedido:any[] = ped ;
       this.pedidoCobro = ped;
-      console.log("pedidoc ", this.pedidoCobro)
-
     });
 
+    if ( this.cobro_.montodepago ) {
+      this.importeremanente = this.cobro_.totalmontoneto - this.cobro_.montodepago
+    } else {
+      this.importeremanente = 0;
+    }
 
+    
     if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
       this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
     }
@@ -227,7 +254,7 @@ export class GcobroListComponent implements OnInit {
 
     //Get Order detaills
     this.pagoparcialpagado = 0;
-    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet=>{
+    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
 
@@ -260,7 +287,6 @@ export class GcobroListComponent implements OnInit {
 
   onSubmit(pf?: NgForm){
     if(this.cobro_.uid != null) {
-      console.log("montodinicial ", this.cobro_.montodepago);
       
       if (this.cobroDet_.tipopago == "TOTAL") {
         this.cobro_.montodepago = this.cobro_.totalmontoneto;
@@ -272,15 +298,15 @@ export class GcobroListComponent implements OnInit {
         this.cobro_.montodepago += Number(this.montodepago);
 
         if (this.cobro_.totalmontoneto.toFixed(2) ==  this.cobro_.montodepago.toFixed(2)){
-          console.log("es igual")
           this.cobro_.statuscobro="CERRADA";
         }
       }
     
       this.cobro_.modificado = new Date;
+      console.log("fecha ",this.cobroDet_.fechadepago);
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobroDet_.uid = this.cobro_.idpedido.toString();
-      this.cobroDet_.montodepago = this.montodepago;
+      this.cobroDet_.montodepago = Number(this.montodepago);
 
       /* if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
         /* console.log('fpgo: ',this.cobroDet_.fechadepago);
@@ -291,6 +317,7 @@ export class GcobroListComponent implements OnInit {
       } */
       //---------------------------------------------------------
       //Update Cobro - 
+      console.log("cobro ", this.cobro_);
       this.cobroService.updatecobros(this.cobro_);
       //Add detalles de cobro
       this.cobroService.addCobrosDet(this.cobroDet_);
