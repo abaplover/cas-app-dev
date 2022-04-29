@@ -38,7 +38,7 @@ export class BancoListComponent implements OnInit {
           this.bancoList.push(x as Banco);
         });
 
-        //ELEMENT_DATA
+        //
         this.dataSource = new MatTableDataSource(this.bancoList);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

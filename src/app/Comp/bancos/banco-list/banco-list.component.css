@@ -80,6 +80,7 @@ th.mat-sort-header-sorted {
 th.mat-header-cell {
 	size: 20px;
 }
+
 .mat-column-nombre {
 	width: 300px !important;
 	text-align: left;
