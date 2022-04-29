@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './tipod-cobros.component.html',
   styleUrls: ['./tipod-cobros.component.css']
 })
+
 export class TipodCobrosComponent implements OnInit {
 
   public get tipodcobroService(): TipodcobrosService {

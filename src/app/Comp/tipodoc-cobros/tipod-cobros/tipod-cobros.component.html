@@ -1,17 +1,5 @@
 <div class="container9">
 	<div class="card bg-light mb-3 w-75">
-			<!-- <div class="card-header">
-				<div class="row" style="text-align:right;"> 
-					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
-						<h2 class="text-left">Tipos de documentos</h2>
-					</div>
-					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-						<button class="btn btn-link" type="" (click)="moForm()">
-							<i class="fas fa-plus-square"></i> {{msj_enlace}}
-						</button>
-					</div>
-				</div>
-			</div> -->
 			<div class="card-body text-info panel panel-login" *ngIf="tipodcobroService.mostrarForm">
 					<form #tipodcobroForm="ngForm" (ngSubmit)="onSubmit(tipodcobroForm)">
 							<!-- TO UPDATE -->
@@ -62,7 +50,6 @@
 								</div>
 								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 									<div class="form-group">
-										<!-- <mat-label>Descripción</mat-label> -->
 										<input
 											placeholder="Descripción" 
 											value=""

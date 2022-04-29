@@ -22,4 +22,5 @@ describe('TipodcobrosListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

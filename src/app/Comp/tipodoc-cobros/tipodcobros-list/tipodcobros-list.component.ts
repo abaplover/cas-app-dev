@@ -28,6 +28,7 @@ export class TipodcobrosListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    
     return this.tipodcobrosService.getTipods()
       .snapshotChanges().subscribe(item => {
         this.tipodList = [];
