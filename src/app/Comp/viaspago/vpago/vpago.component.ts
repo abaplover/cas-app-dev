@@ -43,7 +43,7 @@ export class VpagoComponent implements OnInit {
       this.vpagoService.updateVpago(vpagoForm.value);
     
     this.resetForm(vpagoForm);
-    this.toastr.success('Operación Terminada', 'Vpago Registrada');
+    this.toastr.success('Operación Terminada', 'Vía de pago Registrada');
 
    //oculta el formulario
    this.vpagoService.mostrarForm = false;

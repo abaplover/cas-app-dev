@@ -1,7 +1,6 @@
-export class Banco {
+export class TipodocCobros {
 	$key		: string;
-	idbanco		: string;
+	id			: string;
 	nombre		: string;
 	descripcion	: string;
-	moneda		: string;
 }

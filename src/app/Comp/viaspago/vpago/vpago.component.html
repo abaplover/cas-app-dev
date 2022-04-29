@@ -39,7 +39,25 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+
+							<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+								<input 
+									placeholder="Nombre" value=""
+									type="text"
+									name="nombre"
+									#nombre="ngModel"
+									[(ngModel)]="vpagoService.selectedVpago.nombre"
+									required
+									class="form-control"
+								/>
+								<div *ngIf="nombre.invalid && (descripcion.dirty || nombre.touched)" class="text-danger">
+									<div *ngIf="nombre.errors.required">
+										<small>Se requiere un nombre</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
 								<input 
 									placeholder="Descripción" value=""
 									type="text"

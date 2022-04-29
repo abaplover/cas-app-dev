@@ -83,6 +83,10 @@ th.mat-header-cell {
 	width: 300px !important;
 	text-align: left;
 }
+.mat-column-nombre {
+	width: 300px !important;
+	text-align: left;
+}
 .mat-column-Opc {
 	width: 100px !important;
 	text-align: right;
