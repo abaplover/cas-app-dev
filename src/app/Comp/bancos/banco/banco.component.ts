@@ -58,7 +58,6 @@ export class BancoComponent implements OnInit {
       this.bancoService.idFieldReadOnly = false;
   }
 
-  //mostrar: boolean = false;
   public msj_enlace: string = 'Bancos';
 
   moForm(){
