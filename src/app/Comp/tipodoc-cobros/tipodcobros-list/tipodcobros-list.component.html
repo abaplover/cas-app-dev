@@ -12,8 +12,8 @@
 				</div>
 			</div>
 			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-				<span *ngIf="!this.bancoService.mostrarForm" class="btn btn-link" (click)="moForm()"><i class="fas fa-plus fa-lg"></i> Nuevo</span>
-				<span *ngIf="this.bancoService.mostrarForm" class="btn btn-link" (click)="moForm()"><i class="fas fa-minus fa-lg"></i></span>
+				<span *ngIf="!this.tipodcobrosService.mostrarForm" class="btn btn-link" (click)="moForm()"><i class="fas fa-plus fa-lg"></i> Nuevo</span>
+				<span *ngIf="this.tipodcobrosService.mostrarForm" class="btn btn-link" (click)="moForm()"><i class="fas fa-minus fa-lg"></i></span>
 			</div>
 		</div>
 	</div>
@@ -21,14 +21,14 @@
 	<div style="width: 100%; margin-left: 10px; padding-right: 10px; padding-top:5px; padding-bottom: 50px;">
 		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>	
 			<!-- Position Column -->
-			<ng-container matColumnDef="idbanco">
+			<ng-container matColumnDef="id">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;">ID </th>
-				<td mat-cell *matCellDef="let element"> {{element.idbanco}} </td>
+				<td mat-cell *matCellDef="let element"> {{element.id}} </td>
 			</ng-container>
-
+		
 			<!-- Name Column -->
 			<ng-container matColumnDef="nombre">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-weight: bold;"> NOMBRE </th>
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;"> NOMBRE </th>
 				<td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
 			</ng-container>
 		
@@ -36,12 +36,6 @@
 			<ng-container matColumnDef="descripcion">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;"> DESCRIPCIÓN </th>
 				<td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
-			</ng-container>
-
-			<!-- Name Column -->
-			<ng-container matColumnDef="moneda">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;"> MONEDA </th>
-				<td mat-cell *matCellDef="let element"> {{element.moneda}} </td>
 			</ng-container>
 		
 			<!-- Symbol Column -->
@@ -67,8 +61,8 @@
 		</table>
 		<mat-paginator 
 			#paginator 
-			[pageSizeOptions]="[15, 30,30, 50]" 
+			[pageSizeOptions]="[15, 30, 50]" 
 			showFirstLastButtons
 		></mat-paginator>
-	</div>	
+	</div>
 </div>

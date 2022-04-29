@@ -39,7 +39,23 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+									<input 
+										placeholder="Nombre" value=""
+										type="text"
+										name="nombre"
+										#nombre="ngModel"
+										[(ngModel)]="bancoService.selectedBanco.nombre"
+										required
+										class="form-control"
+									/>
+									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+										<div *ngIf="nombre.errors.required">
+											<small>Se requiere un nombre</small>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 									<input 
 										placeholder="Descripción" value=""
 										type="text"
@@ -52,6 +68,22 @@
 									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
 										<div *ngIf="descripcion.errors.required">
 											<small>Se requiere una descripción</small>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<input 
+										placeholder="Moneda" value=""
+										type="text"
+										name="moneda"
+										#moneda="ngModel"
+										[(ngModel)]="bancoService.selectedBanco.moneda"
+										required
+										class="form-control"
+									/>
+									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+										<div *ngIf="descripcion.errors.required">
+											<small>Se requiere un tipo de moneda</small>
 										</div>
 									</div>
 								</div>

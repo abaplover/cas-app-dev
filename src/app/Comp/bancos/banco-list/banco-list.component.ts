@@ -21,7 +21,7 @@ export class BancoListComponent implements OnInit {
   dataSource: MatTableDataSource<Banco>;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idbanco', 'descripcion', 'Opc'];
+  displayedColumns: string[] = ['idbanco','nombre', 'descripcion','moneda', 'Opc'];
 
   constructor(
     public bancoService: BancoService,
