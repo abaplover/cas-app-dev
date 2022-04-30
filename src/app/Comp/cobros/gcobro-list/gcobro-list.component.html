@@ -183,6 +183,7 @@
 												id="fechadepago"
 												#fechadepago="ngModel"
 												[(ngModel)]="this.cobroDet_.fechadepago"
+												[disabled] = "this.visual"
 												required
 												class="form-control"
 											/>
@@ -196,7 +197,7 @@
 
 
 				<div class="row" style="height: 5px;"></div>
-				<div class="row">
+				<div class="row" *ngIf="!this.visual">
 					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
 						<div class="card">
 							<div class="card-body" style="padding-right:8px; padding-left:8px; ">

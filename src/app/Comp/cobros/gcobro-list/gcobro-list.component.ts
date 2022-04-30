@@ -57,6 +57,8 @@ export class GcobroListComponent implements OnInit {
   pedidoCobro: Pedido[];
   sendemail=false;
   importeremanente = 0;
+  visual = false;
+
 
   constructor(
     public cobroService: CobrosService,
@@ -175,7 +177,16 @@ export class GcobroListComponent implements OnInit {
 
   verdetalles($event,elemento){
     this.ver = true;
+    this.visual = true;
+
     this.cobro_ =  Object.assign({}, elemento);
+
+    let id = this.cobro_.idpedido.toString();
+
+    this.pedidoS.getSpecificPedido(id).subscribe(ped => {
+      let pedido:any[] = ped ;
+      this.pedidoCobro = ped;
+    });
 
     if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
       this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
@@ -188,14 +199,14 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
     } 
 
-    //Valida la via de pago 
-    if (this.cobro_.viadepago != "Efectivo"){
+    /* //Valida la via de pago 
+    if (this.cobro_.viadepago.substr(0,3)!="EFE") {
       this.vp_efectivo=false;
-    }else{
+    } else {
       this.cobro_.banco = "";
       this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
-    }
+    } */
 
 
     //Get Order detaills
@@ -203,9 +214,18 @@ export class GcobroListComponent implements OnInit {
     this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet=>{
       //this.cobroslistDet = cobrosDet;
       this.matrisDetCobro = cobrosDet;
-      for (let i in this.matrisDetCobro){
+
+      for (let i in this.matrisDetCobro) {
         this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         this.pagoparcialpagado = (this.pagoparcialpagado + this.matrisDetCobro[i].montodepago);
+      }
+      this.cobro_.montodepago = this.pagoparcialpagado;
+
+
+      if ( this.cobro_.montodepago ) {
+        this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2)
+      } else {
+        this.importeremanente = 0;
       }
               
     }) 
@@ -216,6 +236,9 @@ export class GcobroListComponent implements OnInit {
   }//verdetalles
 
   selectEventCob(elemento){
+
+    this.visual = false;
+
     this.cobro_ =  Object.assign({}, elemento);
     let id = this.cobro_.idpedido.toString();
 
@@ -242,14 +265,14 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
     } 
     
-    //Valida la via de pago 
-    if (this.cobroDet_.viadepago != "Efectivo") {
+    /* //Valida la via de pago 
+    if (this.cobro_.viadepago.substr(0,3)!="EFE") {
       this.vp_efectivo=false;
     } else {
       this.cobroDet_.banco = "";
       //this.cobroDet_.nroreferencia="";
       this.vp_efectivo=true;
-    }
+    } */
 
 
     //Get Order detaills
@@ -261,6 +284,15 @@ export class GcobroListComponent implements OnInit {
       for (let i in this.matrisDetCobro) {
         this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         this.pagoparcialpagado = this.pagoparcialpagado + Number(this.matrisDetCobro[i].montodepago);
+      }
+
+      this.cobro_.montodepago = this.pagoparcialpagado
+
+
+      if ( this.cobro_.montodepago ) {
+        this.importeremanente = this.cobro_.totalmontoneto - this.cobro_.montodepago
+      } else {
+        this.importeremanente = 0;
       }
               
     }) 
@@ -287,6 +319,8 @@ export class GcobroListComponent implements OnInit {
 
   onSubmit(pf?: NgForm){
     if(this.cobro_.uid != null) {
+
+      this.cobroDet_.fechadepago =  new Date(this.cobroDet_.fechadepago);
       
       if (this.cobroDet_.tipopago == "TOTAL") {
         this.cobro_.montodepago = this.cobro_.totalmontoneto;
@@ -303,7 +337,6 @@ export class GcobroListComponent implements OnInit {
       }
     
       this.cobro_.modificado = new Date;
-      console.log("fecha ",this.cobroDet_.fechadepago);
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobroDet_.uid = this.cobro_.idpedido.toString();
       this.cobroDet_.montodepago = Number(this.montodepago);
@@ -317,7 +350,6 @@ export class GcobroListComponent implements OnInit {
       } */
       //---------------------------------------------------------
       //Update Cobro - 
-      console.log("cobro ", this.cobro_);
       this.cobroService.updatecobros(this.cobro_);
       //Add detalles de cobro
       this.cobroService.addCobrosDet(this.cobroDet_);
@@ -341,4 +373,10 @@ export class GcobroListComponent implements OnInit {
     this.cancelNotifi();
     this.toastr.success('Operación Terminada', 'Se ha enviado una notificación de cobro');
   }
+
+
+  roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
 }
