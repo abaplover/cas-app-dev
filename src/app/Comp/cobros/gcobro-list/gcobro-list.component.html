@@ -297,9 +297,11 @@
 											<input 
 												type="text"
 												name="montodepago"
+												#monto
 												[(ngModel)]="this.montodepago"
 												[disabled]="this.cobroDet_.tipopago=='TOTAL'"
 												class="form-control"
+												(input) ="montoChanged(monto.value)"
 											/>
 										</div>
 									</div>

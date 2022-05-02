@@ -152,6 +152,13 @@ export class GcobroListComponent implements OnInit {
     }
   }
 
+  montoChanged(monto) {
+    let montostring = monto;
+    if (Number(montostring) > (this.cobro_.totalmontoneto - this.cobro_.montodepago)) {
+      this.montodepago = null;
+    }
+  }
+
   timestampConvert(fec){
     let dateObject = new Date(fec.seconds*1000);
     let mes_ = dateObject.getMonth()+1;

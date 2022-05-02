@@ -126,7 +126,7 @@ export class GcobrovListComponent implements OnInit {
     
   }
 
-  tpagoselected(val){
+  tpagoselected(val) {
   
     if (val == "TOTAL"){
       let mp:number=0;
@@ -155,6 +155,13 @@ export class GcobrovListComponent implements OnInit {
     let dia_ = dateObject.getDate();
     return dateObject;
   }//timestampConvert
+
+  montoChanged(monto) {
+    let montostring = monto;
+    if (Number(montostring) > (this.cobro_.totalmontoneto - this.cobro_.montodepago)) {
+      this.montodepago = 0;
+    }
+  }
 
   onCancelar(pf?: NgForm){
     if(pf != null) pf.reset();
