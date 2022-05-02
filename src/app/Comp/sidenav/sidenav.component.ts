@@ -52,6 +52,7 @@ export class SidenavComponent implements OnInit {
   pillsestrustm      = "nav-link";
   pillsreportes      = "nav-link";
   pillsreportesave   = "nav-link";
+  pillsreportescobros   = "nav-link";
 
   allowNewCounter = false;
   constructor(
@@ -127,6 +128,10 @@ export class SidenavComponent implements OnInit {
     if (btn=='reports-averias'){
       this.pillsreportesave = "nav-link active";
       this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = "nav-link";
+    }
+    if (btn=='reports-cobros'){
+      this.pillsreportescobros = "nav-link active";
+      this.pillsreportesave = this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = "nav-link";
     }
   }
 
