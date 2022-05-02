@@ -312,19 +312,27 @@ export class GcobrovListComponent implements OnInit {
     if(this.cobro_.uid != null){
 
       this.cobroDet_.fechadepago =  new Date(this.cobroDet_.fechadepago);
+      this.cobro_.fechadepago = new Date(this.cobroDet_.fechadepago);
 
       if (this.cobroDet_.tipopago == "TOTAL") {
         this.cobro_.montodepago = this.cobro_.totalmontoneto;
+        if(this.cobroDet_.montobsf) { this.cobro_.montobsf = this.cobroDet_.montobsf }
         this.cobro_.statuscobro="CERRADA";
       }
 
       if (this.cobroDet_.tipopago == "PARCIAL") {
         this.cobro_.statuscobro="PARCIAL";
         this.cobro_.montodepago += Number(this.montodepago);
+        if(this.cobroDet_.montobsf) { this.cobro_.montobsf = this.cobroDet_.montobsf }
+
         if (this.cobro_.totalmontoneto.toFixed(2) ==  this.cobro_.montodepago.toFixed(2)){
           this.cobro_.statuscobro="CERRADA";
         }
       }
+
+      this.cobro_.viadepago = this.cobroDet_.viadepago;
+      this.cobro_.banco = this.cobroDet_.banco;
+      this.cobro_.tipopago = this.cobroDet_.tipopago;
     
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;

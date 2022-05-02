@@ -74,9 +74,8 @@ export class GcobroregListComponent implements OnInit {
         let days:any = moment(now).diff(moment(other), 'days');
 
         return days <= 14;
-
       })
-    
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
@@ -266,13 +265,13 @@ export class GcobroregListComponent implements OnInit {
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobroDet_.uid = this.cobro_.idpedido.toString();
 
-      if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
+      /* if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
         /* console.log('fpgo: ',this.cobroDet_.fechadepago);
-        console.log('fvencimiento: ',this.cobro_.fpvencimiento); */
+        console.log('fvencimiento: ',this.cobro_.fpvencimiento); 
         this.cobro_.demora="S";
       }else{
         this.cobro_.demora="";
-      }
+      } */
       //---------------------------------------------------------
       //Update Cobro - 
       this.cobroService.updatecobros(this.cobro_);

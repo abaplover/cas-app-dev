@@ -15,6 +15,7 @@ export interface Cobro {
 	modificado?			   :Date;
 	modificadopor?         :string;
 	montodepago?           :number;
+	montobsf?			   :number;
 	nomcliente?	           :string;
 	nomvendedor?	       :string;
 	nrofactura?            :string;
