@@ -255,7 +255,7 @@ export class GcobroListComponent implements OnInit {
     });
 
     if ( this.cobro_.montodepago ) {
-      this.importeremanente = this.cobro_.totalmontoneto - this.cobro_.montodepago
+      this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2);
     } else {
       this.importeremanente = 0;
     }
@@ -297,7 +297,7 @@ export class GcobroListComponent implements OnInit {
 
 
       if ( this.cobro_.montodepago ) {
-        this.importeremanente = this.cobro_.totalmontoneto - this.cobro_.montodepago
+        this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2);
       } else {
         this.importeremanente = 0;
       }
