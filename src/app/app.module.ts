@@ -189,6 +189,7 @@ import { MonedaComponent } from './Comp/monedas/moneda/moneda.component';
 import { MonedaListComponent } from './Comp/monedas/moneda-list/moneda-list.component';
 import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-cobros.component';
 import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
+import { ReportsCobrosComponent } from './Comp/reports-cobros/reports-cobros.component';
 
 //
 @NgModule({
@@ -282,6 +283,7 @@ import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list
     MonedaListComponent,
     TipodCobrosComponent,
     TipodcobrosListComponent,
+    ReportsCobrosComponent,
 
   ],
   imports: [
