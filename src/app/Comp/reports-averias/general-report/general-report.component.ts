@@ -169,6 +169,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
 
     this.averiasDet_ = [];
 
+    //Retorna el detalle de averias por motivo
     if (this.motivoAv.length > 0){
       this.averiasS.getDetallesAverias(this.motivoAv[0]);
     }
