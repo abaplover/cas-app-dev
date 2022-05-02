@@ -44,6 +44,14 @@ export class CobrosService {
   cobroDetDoc: AngularFirestoreDocument<CobroDet>;
   cobrosDetColletion: AngularFirestoreCollection<CobroDet>;
 
+  cobrosrep: Observable<Cobro[]>;
+  cobroDocrep: AngularFirestoreDocument<Cobro>;
+  cobrosColletionrep: AngularFirestoreCollection<Cobro>;
+
+  cobrosdetrep: Observable<CobroDet[]>;
+  cobrosdetDocrep: AngularFirestoreDocument<CobroDet>;
+  cobrosdetColletionrep: AngularFirestoreCollection<CobroDet>;
+
   constructor(public db: AngularFirestore) { 
 
     //Busca todos los cobros
@@ -195,5 +203,28 @@ export class CobrosService {
     }));
     return this.cobrosDet;
   }//getPedidosDet
+
+  getCobrosRep01(strq){
+    this.cobrosColletionrep = this.db.collection("cobros", strq);
+    this.cobrosrep = this.cobrosColletionrep.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
+        return data;
+      })
+    }));
+    return this.cobrosrep;
+  }//getCobrosRep
+
+  getCobrosRep02(queryCobrosDet){
+    this.cobrosdetColletionrep = this.db.collection('cobrosDet', queryCobrosDet);
+    this.cobrosdetrep = this.cobrosdetColletionrep.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as CobroDet;
+        return data;
+      })
+    }));
+
+    return this.cobrosdetrep;
+  }//getAveriasRep02
 
 }

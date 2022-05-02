@@ -159,6 +159,8 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
         this.minDateh = new Date(event.value);
       }
     }//orgValueChange
+
+    
     regresar() {
   
       this.opcgenReport = false;

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
 
 @Component({
   selector: 'app-reports-cobros',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportsCobrosComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor(public FBlogs: FirebaseloginService,private router:Router) {}
+    
+    ngOnInit(): void {
+      if (!this.FBlogs.getcurrentusrtrueorfalse()){
+        this.router.navigate(['login']);
+      }
+    }
 
 }
