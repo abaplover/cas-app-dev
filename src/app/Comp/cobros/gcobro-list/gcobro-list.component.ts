@@ -18,6 +18,8 @@ import { Banco } from '../../../models/banco';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { TipodocCobros } from 'src/app/models/tipodoc-cobros';
 import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
+import * as moment from 'moment';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -41,13 +43,14 @@ export class GcobroListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','send', 'Opc'];
-  cobro_ = {} as Cobro;
+  pedidoPend_ = {} as Pedido;
   cobro0_ = {} as Cobro;
+  cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;
   vp_efectivo=true;
   pagototal=true;
-  pagoparcialpagado:number;
+  pagoparcialpagado:number = 0;
   ver:boolean;
   public vpagoList: Vpago[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
@@ -55,6 +58,7 @@ export class GcobroListComponent implements OnInit {
   cobroslist = [];
   matrisDetCobro: CobroDet[]=[];
   pedidoCobro: Pedido[];
+  pedido: Pedido[];
   sendemail=false;
   importeremanente = 0;
   visual = false;
@@ -71,11 +75,29 @@ export class GcobroListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cobro_ = {} as Cobro;
+    this.pedidoPend_ = {} as Pedido;
 
-    this.cobroService.getCobrosP().subscribe(cobros=>{
+   /*  this.cobroService.getCobrosP().subscribe(cobros=>{
       let cobrosArray = [];
       cobrosArray = cobros;
+
+      //Filtramos en el array a mostrar los elementos que no tienen el pago completo
+      this.cobroslist = cobrosArray.filter( elemento => {
+        if (elemento.montodepago) {
+          return elemento.montodepago < elemento.totalmontoneto
+        } else {
+          return elemento;
+        }
+      })
+      
+      //ELEMENT_DATA
+      this.dataSource = new MatTableDataSource(this.cobroslist);
+      this.dataSource.sort = this.sort;
+    }) */
+
+    this.pedidoS.getPedidosPendientes().subscribe( pedidosP =>{
+      let cobrosArray = [];
+      cobrosArray = pedidosP;
 
       //Filtramos en el array a mostrar los elementos que no tienen el pago completo
       this.cobroslist = cobrosArray.filter( elemento => {
@@ -110,101 +132,29 @@ export class GcobroListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
 
-  vpagoselected(val){
-    if (val.substr(0,3)!="EFE"){
-      this.vp_efectivo=false;
-    }else{
-      this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
-    }
-  }//vpagoselected
-
-  bancoselected(val) {
-    //Buscamos en la lista de bancos el que coincida con el nombre del banco seleccionado y determinamos su moneda
-    let bancoSelected = this.bancoList.find( banco => banco.nombre == val);
-    this.cobroDet_.moneda = bancoSelected.moneda;
-
-    if ( this.cobroDet_.moneda !== "BSF") this.disableBSF = true;
-    else this.disableBSF = false;
-    
-  }
-
-  tpagoselected(val){
-  
-    if (val == "TOTAL"){
-      let mp:number=0;
-      for (let i in this.matrisDetCobro){
-        mp = mp + Number(this.matrisDetCobro[i].montodepago);
-      }
-
-      this.cobroDet_.montodepago = parseFloat((this.cobro_.totalmontoneto-mp).toFixed(2));
-      this.montodepago =  this.cobroDet_.montodepago;
-      this.pagototal = true;
-      this.disableBSF = true;
-    }
-
-    if (val == "PARCIAL") {
-      this.montodepago = 0;
-      this.cobroDet_.montodepago = Number(this.montodepago);
-      this.pagototal = false;
-      this.disableBSF = false;
-    }
-  }
-
-  montoChanged(monto) {
-    let montostring = monto;
-    if (Number(montostring) > (this.cobro_.totalmontoneto - this.cobro_.montodepago)) {
-      this.montodepago = null;
-    }
-  }
-
-  timestampConvert(fec){
-    let dateObject = new Date(fec.seconds*1000);
-    let mes_ = dateObject.getMonth()+1;
-    let ano_ = dateObject.getFullYear();
-    let dia_ = dateObject.getDate();
-    return dateObject;
-  }//timestampConvert
-
-  onCancelar(pf?: NgForm){
-    if(pf != null) pf.reset();
-    this.cobroslist=[];
-    this.cobro_ = {} as Cobro;
-    this.cobroDet_ = {} as CobroDet;
-    this.MostrarCob = 'display:none;';
-    this.pagoparcialpagado=0;
-    this.ver=false;
-  }//onCancelar
-
-  cancelNotifi(){
-    this.cobro0_ = {} as Cobro;
-    this.sendemail = false;
-  }//onCancelar
-
   verdetalles($event,elemento){
     this.ver = true;
     this.visual = true;
 
-    this.cobro_ =  Object.assign({}, elemento);
+    this.pedidoPend_ =  Object.assign({}, elemento);
 
-    let id = this.cobro_.idpedido.toString();
+    let idpedido = this.pedidoPend_.idpedido.toString();
 
-    this.pedidoS.getSpecificPedido(id).subscribe(ped => {
+    /* this.pedidoS.getSpecificPedido(id).subscribe(ped => {
       let pedido:any[] = ped ;
       this.pedidoCobro = ped;
-    });
+    }); */
 
-    if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
-      this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
-    }
+    /* if (this.cobro_.fechadepago == null || typeof this.cobro_.fechadepago === "undefined"){
+      this.cobro_.fechadepago =  new Date(); //propone la fecha actual
+    } */
 
-    if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
+    if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
+      this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
     } 
-    if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
+    /* if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
-    } 
+    } */
 
     /* //Valida la via de pago 
     if (this.cobro_.viadepago.substr(0,3)!="EFE") {
@@ -218,93 +168,69 @@ export class GcobroListComponent implements OnInit {
 
     //Get Order detaills
     this.pagoparcialpagado = 0;
-    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet=>{
+
+    this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet=>{
       //this.cobroslistDet = cobrosDet;
       this.matrisDetCobro = cobrosDet;
 
       for (let i in this.matrisDetCobro) {
-        this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado = (this.pagoparcialpagado + this.matrisDetCobro[i].montodepago);
+        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        
+        this.pagoparcialpagado += this.matrisDetCobro[i].montodepago;
       }
-      this.cobro_.montodepago = this.pagoparcialpagado;
+      this.pedidoPend_.montodepago = this.pagoparcialpagado;
 
+      if (this.pedidoPend_.montodepago == this.pagoparcialpagado) { 
+        this.pedidoPend_.statuscobro = "CERRADA";
+        this.MostrarCob = 'display:none;';
+      }
 
-      if ( this.cobro_.montodepago ) {
-        this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2)
+      if ( this.pedidoPend_.montodepago ) {
+        this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
       } else {
-        this.importeremanente = 0;
+        this.importeremanente = this.pedidoPend_.montodepago;
       }
               
     }) 
     
-    if (this.cobro_.uid){
+    if (this.pedidoPend_.idpedido){
       this.MostrarCob = 'display:block;';
     }
   }//verdetalles
 
-  selectEventCob(elemento){
+  selectEventCob(elemento) {
 
-    this.visual = false;
+    this.montodepago = null;
+    this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
+    this.visual = false; //No es la parte de visualizacion
 
-    this.cobro_ =  Object.assign({}, elemento);
-    let id = this.cobro_.idpedido.toString();
+    this.pedidoPend_ =  Object.assign({}, elemento);
+    let idpedido = this.pedidoPend_.idpedido.toString();
 
-    this.pedidoS.getSpecificPedido(id).subscribe(ped => {
-      let pedido:any[] = ped ;
-      this.pedidoCobro = ped;
-    });
-
-    if ( this.cobro_.montodepago ) {
-      this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2);
-    } else {
-      this.importeremanente = 0;
+    if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
+      this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
     }
-
-    
-    if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
-      this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
-    }
-
-    if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
-    } 
-    if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
-      this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
-    } 
-    
-    /* //Valida la via de pago 
-    if (this.cobro_.viadepago.substr(0,3)!="EFE") {
-      this.vp_efectivo=false;
-    } else {
-      this.cobroDet_.banco = "";
-      //this.cobroDet_.nroreferencia="";
-      this.vp_efectivo=true;
-    } */
-
 
     //Get Order detaills
-    this.pagoparcialpagado = 0;
-    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet => {
+    this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
 
+      //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
-        this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado = this.pagoparcialpagado + Number(this.matrisDetCobro[i].montodepago);
+        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
       }
 
-      this.cobro_.montodepago = this.pagoparcialpagado
-
-
-      if ( this.cobro_.montodepago ) {
-        this.importeremanente = this.roundTo(this.cobro_.totalmontoneto - this.cobro_.montodepago,2);
+      if ( this.pagoparcialpagado > 0 ) {
+        this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
       } else {
-        this.importeremanente = 0;
+        this.importeremanente = this.pedidoPend_.totalmontoneto;
       }
               
     }) 
     
-    if (this.cobro_.uid){
+    if (this.pedidoPend_.idpedido){
       this.MostrarCob = 'display:block;';
     }
 
@@ -324,54 +250,111 @@ export class GcobroListComponent implements OnInit {
 
   }//moForm
 
-  onSubmit(pf?: NgForm){
-    if(this.cobro_.uid != null) {
+  onSubmit(pf?: NgForm) {
+    if(this.pedidoPend_.idpedido != null) {
 
-      this.cobroDet_.fechadepago =  new Date(this.cobroDet_.fechadepago);
-      this.cobro_.fechadepago = new Date(this.cobroDet_.fechadepago);
-      
-      if (this.cobroDet_.tipopago == "TOTAL") {
-        this.cobro_.montodepago = this.cobro_.totalmontoneto;
-        if(this.cobroDet_.montobsf) { this.cobro_.montobsf = this.cobroDet_.montobsf }
-        this.cobro_.statuscobro="CERRADA";
-      }
+      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).toDate();
 
-      if (this.cobroDet_.tipopago == "PARCIAL") {
-        this.cobro_.statuscobro="PARCIAL";
-        this.cobro_.montodepago += Number(this.montodepago);
-        if(this.cobroDet_.montobsf) { this.cobro_.montobsf = this.cobroDet_.montobsf }
-
-        if (this.cobro_.totalmontoneto.toFixed(2) ==  this.cobro_.montodepago.toFixed(2)){
-          this.cobro_.statuscobro="CERRADA";
-        }
-      }
-
-      this.cobro_.viadepago = this.cobroDet_.viadepago;
-      this.cobro_.banco = this.cobroDet_.banco;
-      this.cobro_.tipopago = this.cobroDet_.tipopago;
-    
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
-      this.cobroDet_.uid = this.cobro_.idpedido.toString();
-      this.cobroDet_.montodepago = Number(this.montodepago);
+      this.cobro_.idpedido = this.pedidoPend_.idpedido;
 
-      /* if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
-        /* console.log('fpgo: ',this.cobroDet_.fechadepago);
-        console.log('fvencimiento: ',this.cobro_.fpvencimiento); *
-        this.cobro_.demora="S";
-      }else{
-        this.cobro_.demora="";
-      } */
-      //---------------------------------------------------------
-      //Update Cobro - 
-      this.cobroService.updatecobros(this.cobro_);
-      //Add detalles de cobro
-      this.cobroService.addCobrosDet(this.cobroDet_);
+      this.cobro_.montodepago = Number(this.montodepago);
+
+      if (this.pedidoPend_.totalmontoneto.toFixed(2) ==  this.pagoparcialpagado + this.cobro_.montodepago.toFixed(2)) {
+        this.pedidoPend_.statuscobro="CERRADA";
+      }
+  
+
+      //Actualiza el pedido
+      this.pedidoS.updatePedidos(this.pedidoPend_);
+      //Registra el cobro/pago
+      this.cobroService.addCobros(this.cobro_);
 
       this.toastr.success('Operación Terminada', 'Registro Actualizado');
+      this.onCancelar(pf);
     }
-    this.onCancelar(pf);
+    
   }
+
+  //select via de pago
+  vpagoselected(val) {
+    //si no es efectivo
+    if (val.substr(0,3)!="EFE"){
+      this.vp_efectivo=false;
+    } else {
+      this.cobro_.banco = "";
+      //this.cobro_.nroreferencia="";
+      this.vp_efectivo=true;
+    }
+  }//vpagoselected
+
+  //Select bancos
+  bancoselected(val) {
+    //Buscamos en la lista de bancos el que coincida con el nombre del banco seleccionado
+    // y determinamos su moneda
+    let bancoSelected = this.bancoList.find( banco => banco.nombre == val);
+    this.cobro_.moneda = bancoSelected.moneda;
+
+    if ( this.cobro_.moneda !== "BSF") this.disableBSF = true;
+    else this.disableBSF = false;
+    
+  }
+
+  monedaSelected(tipomoneda) {
+    if (tipomoneda != "BSF") this.disableBSF = true;
+    else this.disableBSF = false;
+  }
+
+  //Select tipo de pago
+  tpagoselected(val) {
+  
+    if (val == "TOTAL") {
+
+      this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto-this.pagoparcialpagado).toFixed(2));
+      this.montodepago =  this.cobro_.montodepago;
+      this.pedidoPend_.statuscobro = "CERRADA"
+      this.pagototal = true;
+    }
+    else if (val == "PARCIAL") {
+      this.montodepago = 0;
+      this.pedidoPend_.statuscobro = "PARCIAL"
+      this.pagototal = false;
+    }
+  }
+
+  //Se ejecuta cuando ingresan un monto
+  montoChanged(monto) {
+    let montostring = monto;
+    if (Number(montostring) > (this.importeremanente)) {
+      this.montodepago = null;
+    }
+  }
+
+  timestampConvert(fec) {
+    let dateObject = new Date(fec.seconds*1000);
+    
+    console.log("dateobject ", dateObject);
+    let mes_ = dateObject.getMonth()+1;
+    let ano_ = dateObject.getFullYear();
+    let dia_ = dateObject.getDate();
+    return dateObject;
+  }//timestampConvert
+
+  onCancelar(pf?: NgForm ){
+    if(pf != null) pf.reset();
+    this.cobroslist=[];
+    this.cobro_ = {} as Cobro;
+    this.pedidoPend_ = {} as Pedido;
+    this.MostrarCob = 'display:none;';
+    this.pagoparcialpagado = 0;
+    this.ver=false;
+  }//onCancelar
+
+  cancelNotifi(){
+    this.cobro0_ = {} as Cobro;
+    this.sendemail = false;
+  }//onCancelar
 
 
   sendpopup(e){

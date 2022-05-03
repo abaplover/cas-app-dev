@@ -1,6 +1,6 @@
 <div class="container9" style="border-style: solid; border-width: 0px;">
 
-	<div class="card bg-light mb-3" *ngIf="sendemail">
+	<!-- <div class="card bg-light mb-3" *ngIf="sendemail">
 		<div class="card-header">
 			¿Confirma que desea enviar una notificación de cobro?
 		</div>
@@ -22,13 +22,13 @@
 			</div>
 		
 		</div>
-	</div>
+	</div> -->
 
 <!-- Parte de edición -->
 
 
 	<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
-		<div class="card-body text-info panel panel-login" *ngIf="this.cobro_.uid" style="border-style: solid; border-width: 0px;">
+		<div class="card-body text-info panel panel-login" *ngIf="this.pedidoPend_.idpedido" style="border-style: solid; border-width: 0px;">
 			<form #cobroForm="ngForm" (ngSubmit)="agregardetalles()">
 				<div class="row">
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -43,7 +43,7 @@
 											</div>
 
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].idpedido}}</mat-label>
+												<mat-label>{{this.pedidoPend_.idpedido}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -56,7 +56,7 @@
 											</div>
 
 											<div class="abs-center">
-												<mat-label>{{this.cobro_.fpvencimiento | date: 'dd/MM/yyyy'}}</mat-label>
+												<mat-label>{{this.pedidoPend_.fpago | date: 'dd/MM/yyyy'}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -68,7 +68,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cond. de Pago</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].condiciondepago}}</mat-label>
+												<mat-label>{{this.pedidoPend_.condiciondepago}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -80,7 +80,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Factura</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].nrofactura}}</mat-label>
+												<mat-label>{{this.pedidoPend_.nrofactura}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -92,7 +92,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Documento</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].tipodoc}}</mat-label>
+												<mat-label>{{this.pedidoPend_.tipodoc}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -111,7 +111,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cliente</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].nomcliente}}</mat-label>
+												<mat-label>{{this.pedidoPend_.nomcliente}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -123,7 +123,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Vendedor</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].nomvendedor}}</mat-label>
+												<mat-label>{{this.pedidoPend_.nomvendedor}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -134,8 +134,8 @@
 											<div class="input-group-prepend" style="width: 125px;">
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Zona</span>
 											</div>
-											<div class="abs-center">
-												<mat-label>{{this.pedidoCobro[0].listaprecio}}</mat-label>											</div>
+											<div class="abs-center"><!-- ZONA -->
+												<mat-label>{{this.pedidoPend_.listaprecio}}</mat-label>											</div>
 										</div>
 									</div>
 								</div>
@@ -146,7 +146,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe OR</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.cobro_.totalmontoneto}}</mat-label>
+												<mat-label>{{this.pedidoPend_.totalmontoneto}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -182,7 +182,7 @@
 												name="fechadepago"
 												id="fechadepago"
 												#fechadepago="ngModel"
-												[(ngModel)]="this.cobroDet_.fechadepago"
+												[(ngModel)]="this.cobro_.fechadepago"
 												[disabled] = "this.visual"
 												required
 												class="form-control"
@@ -208,7 +208,7 @@
 											<select value=selected
 													required
 													name="tipodoc"
-													[(ngModel)]="this.cobroDet_.tipodoc"
+													[(ngModel)]="this.cobro_.tipodoc"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
 												>
@@ -224,12 +224,11 @@
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
 											name="tipopago"
-											[(ngModel)]="this.cobroDet_.tipopago"
+											[(ngModel)]="this.cobro_.tipopago"
 											required
 											(change)="tpagoselected($event.target.value)"
 											class="form-control form-select form-select-sm"
 											aria-label=".form-select-sm example"
-											required
 											>
 												<option value="TOTAL" >
 													TOTAL
@@ -247,7 +246,7 @@
 											<select value=selected
 													required
 													name="viadepago"
-													[(ngModel)]="this.cobroDet_.viadepago"
+													[(ngModel)]="this.cobro_.viadepago"
 													(change)="vpagoselected($event.target.value)"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
@@ -263,9 +262,8 @@
 										<mat-label style="font-size:smaller; font-weight: bold;">Banco</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
-													required
 													name="banco"
-													[(ngModel)]="this.cobroDet_.banco"
+													[(ngModel)]="this.cobro_.banco"
 													(change)="bancoselected($event.target.value)"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
@@ -281,13 +279,24 @@
 									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
-											<input 
-												type="text"
+											<select 
+												value = selected
 												name="moneda"
-												readonly = true
-												[(ngModel)]="this.cobroDet_.moneda"
-												class="form-control"
-											/>
+												required
+												#moneda
+												(change) = "monedaSelected($event.target.value)"
+												[(ngModel)]="this.cobro_.moneda"
+												class="form-control form-select form-select-sm"
+												aria-label=".form-select-sm example"
+												[disabled]="!this.vp_efectivo"
+											>
+												<option value="USD" >
+													USD
+												</option>
+												<option value="BSF">
+													BSF
+												</option>
+											</select>
 										</div>
 									</div>
 									
@@ -299,7 +308,7 @@
 												name="montodepago"
 												#monto
 												[(ngModel)]="this.montodepago"
-												[disabled]="this.cobroDet_.tipopago=='TOTAL'"
+												[disabled]="this.cobro_.tipopago=='TOTAL'"
 												class="form-control"
 												(input) ="montoChanged(monto.value)"
 											/>
@@ -312,7 +321,8 @@
 											<input 
 												type="text"
 												name="montobsf"
-												[(ngModel)]="this.cobroDet_.montobsf"
+												required
+												[(ngModel)]="this.cobro_.montobsf"
 												[disabled]="this.disableBSF"
 												class="form-control"
 											/>
@@ -394,7 +404,7 @@
 
 
 
-	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
+	<div class="card-body text-info" *ngIf="this.pedidoPend_.idpedido" style="border-style:solid;border-width:0px;">
 	
 		<div class="row" style="border-style: solid; border-width: 0px;">	
 				<div id="gped" class="card border-light bg-light w-100" style="padding: 15px;">
@@ -429,11 +439,6 @@
 								<tr>
 									<td scope="col" colspan="6">Total</td>
 									<td scope="col" style="text-align: right;">{{this.pagoparcialpagado | currency:" "}}</td>
-									<!-- <td scope="col"></td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | currency:" "}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalCnt | currency:" ":'symbol':'2.0'}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPed | currency:" "}}</td>
-									<td scope="col">-</td> -->
 								</tr>
 							</thead>
 							<tr>
@@ -453,8 +458,8 @@
 
 	</div>
 
-<!-- Tabla de detalles -->
-	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.cobro_.uid">
+<!-- Tabla principal -->
+	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.pedidoPend_.idpedido">
 		<mat-form-field>
 			<mat-label>Buscar por</mat-label>
 			<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
@@ -499,7 +504,7 @@
 		<!-- Symbol Column .toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a' -->
 		<ng-container matColumnDef="Fecha">
 			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Fecha Vencimiento </th>
-			<td mat-cell *matCellDef="let element"> {{element.fpvencimiento.toDate() | date: 'dd/MM/yyyy'}} </td>
+			<td mat-cell *matCellDef="let element"> {{element.fpago.toDate() | date: 'dd/MM/yyyy'}} </td>
 		</ng-container>
 
 		<!-- Symbol Column -->
@@ -534,18 +539,18 @@
 
 		<ng-container matColumnDef="abono">
 			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Abono </th>
-			<td mat-cell *matCellDef="let element"><b *ngIf="element.montodepago > 0">x</b></td>
+			<td mat-cell *matCellDef="let element"><b *ngIf="element.statuscobro == 'PARCIAL'">x</b></td>
 		</ng-container>
 
 			<!-- Symbol Column -->
-		<ng-container matColumnDef="send">
+		<!-- <ng-container matColumnDef="send">
 			<th mat-header-cell *matHeaderCellDef style="text-align: center;"></th>
 			<td mat-cell *matCellDef="let element index as i">
 				<a class="btn btn-info text-white btn-sm" (click)="sendpopup(element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
 					<i class="far fa-paper-plane" data-toggle="tooltip" data-placement="top" title="Enviar Recordatorio"></i>
 				</a>
 			</td>
-		</ng-container>
+		</ng-container> -->
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Opc">
 			<th mat-header-cell *matHeaderCellDef style="width: 100px !important;"></th>
