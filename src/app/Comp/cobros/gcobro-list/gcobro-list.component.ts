@@ -334,7 +334,6 @@ export class GcobroListComponent implements OnInit {
   timestampConvert(fec) {
     let dateObject = new Date(fec.seconds*1000);
     
-    console.log("dateobject ", dateObject);
     let mes_ = dateObject.getMonth()+1;
     let ano_ = dateObject.getFullYear();
     let dia_ = dateObject.getDate();

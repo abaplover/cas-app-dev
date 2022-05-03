@@ -45,6 +45,7 @@ export class PedidoService {
   tmonti: number=0;
   tmontn: number=0;
   start_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  today = moment().toDate();
 
 
   pedido_ = {} as Pedido;
@@ -102,6 +103,11 @@ export class PedidoService {
   pedidosDet: Observable<PedidoDet[]>;
   pedidoDetDoc: AngularFirestoreDocument<PedidoDet>;
   pedidosDetColletion: AngularFirestoreCollection<PedidoDet>;
+
+  pedidosPendientes: Observable<Pedido[]>;
+  pedidosPendientesDocE: AngularFirestoreDocument<Pedido>;
+  pedidosPendientesColletionE: AngularFirestoreCollection<Pedido>;
+
   db2 = firebase.firestore();
 
   constructor(public db: AngularFirestore) 
@@ -165,10 +171,29 @@ export class PedidoService {
       })
     }));
 
-    // //Busca todos los detalles de pedidos
+
+     // //Busca todos los detalles de pedidos
      this.pedidosDetColletion = this.db.collection('pedidosDet');
 
   }//constructor
+
+  getPedidosPendientes() {
+    //Busca todos los pedidos pendientes por pagar
+    this.pedidosPendientesColletionE = this.db.collection('pedidos', ref => 
+      ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
+      .where("fpago",">",this.today) //Fecha de vencimiento
+      .orderBy("fpago", "desc")
+      .orderBy("creado", "desc").limit(50)
+    );
+    this.pedidosPendientes = this.pedidosPendientesColletionE.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        return data;
+      })
+    }));
+
+    return this.pedidosPendientes;
+  }
 
   getSpecificPedido(idpedido) {
     this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido","==",idpedido));

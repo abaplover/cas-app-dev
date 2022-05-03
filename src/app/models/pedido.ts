@@ -25,17 +25,18 @@ export interface Pedido {
   idcliente?: string;
   idpedido?: number; //
   idvendedor?: string;
-  indicadorImpuestodesc?: string;
-  indicadorImpuestoporc?: number;
-  lastaction?: string;
-  listaprecio?: string;
-  modificado?: Date;
-  modificadopor?: string;
-  motivorechazo?: string;
-  nombrealmacenista?:string;
-  nomcliente?: string;
-  nomvendedor?: string;
-  nrobultos?:number;
+  indicadorImpuestodesc?  : string;
+  indicadorImpuestoporc?  : number;
+  lastaction?             : string;
+  listaprecio?            : string;
+  modificado?             : Date;
+  modificadopor?          : string;
+  montodepago?            :number; //Monto pagado
+  motivorechazo?          : string;
+  nombrealmacenista?      :string;
+  nomcliente?             : string;
+  nomvendedor?            : string;
+  nrobultos?              :number;
   nrofactura?: string;
   observacion?: string;
   pdfb64?: string;
@@ -45,6 +46,7 @@ export interface Pedido {
   precioasociado?: string;
   preciomaterial?: number;
   status?: string;
+  statuscobro?    : string;
   ticketurl?: string;
   tipodoc?: string;
   totalCnt?: number;
@@ -57,60 +59,4 @@ export interface Pedido {
   totalPri?: number;
   transporte?: string;
   unidaddemedida?: string;
-  /* idpedido?: number; //
-  fechapedido?: Date;
-  idcliente?: string;
-  nomcliente?: string;
-  idvendedor?: string;
-  nomvendedor?: string;
-  listaprecio?: string;
-  condiciondepago?: string;
-  email?: string;
-  codigodematerial?: string;
-  descripcionmaterial?: string;
-  cantidadmaterial?: number;
-  unidaddemedida?: string;
-  preciomaterial?: number;
-  totalpormaterial?: number;
-  creado?: Date;
-  creadopor?: string;
-  modificado?: Date;
-  modificadopor?: string;
-  descuentoporc?: number;
-  descuentovalor?: number;
-  totalmontobruto?: number;
-  totalmontodescuento?: number;
-  totalmontoimpuesto?: number;
-  totalmontoneto?: number;
-  precioasociado?: string;
-  totalPri?: number;
-  totalCnt?: number;
-  totalPed?: number;
-  indicadorImpuestodesc?: string;
-  indicadorImpuestoporc?: number;
-  motivorechazo?: string;
-  platform?: string;
-  ffactura?: Date;
-  nrofactura?: string;
-  fpreparacion?:Date; //Fecha de preparacion en el almacen
-  nombrealmacenista?:string;
-  nrobultos?:number;
-  fdespacho?: Date;
-  ftentrega?: Date;
-  fentrega?: Date;
-  fpago?: Date;
-  tipodoc?: string;
-  codeBlock?: string;
-  companycod?: string;
-  companyblk?: string;
-  companydir?: string;
-  clientedir?: string;
-  pdfurl?: string;
-  ticketurl?: string;
-  observacion?: string;
-  pdfname?: string;
-  pdfb64?: string;
-  lastaction?: string;
-  transporte?: string;
-  status?: string; */
 }
