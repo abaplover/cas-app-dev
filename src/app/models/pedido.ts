@@ -23,7 +23,7 @@ export interface Pedido {
   fpreparacion?:Date;
   ftentrega?: Date;
   idcliente?: string;
-  idpedido?: number; //
+  idpedido?: number;
   idvendedor?: string;
   indicadorImpuestodesc?  : string;
   indicadorImpuestoporc?  : number;

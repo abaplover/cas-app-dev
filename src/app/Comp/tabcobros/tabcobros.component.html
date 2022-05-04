@@ -1,18 +1,6 @@
 <div class="container88">
 	<mat-tab-group animationDuration="0ms" [selectedIndex]="this.tabRef.selectedIndex" (selectedTabChange)="onTabChanged($event);"> 
 
-
-		<mat-tab>
-			<ng-template mat-tab-label>
-				<button mat-menu-item><i class="fa fa-bars"></i></button> Cobros registrados
-			</ng-template>
-			<div>
-				<div class="col-md-12"> 
-					<app-gcobroreg-list></app-gcobroreg-list>
-				</div>	
-			</div>  
-		</mat-tab>
-
 		<mat-tab>
 			<ng-template mat-tab-label>
 				<button mat-menu-item><i class="far fa-file-alt"></i></button> Cobros Pendientes
@@ -42,6 +30,17 @@
 
 		<mat-tab>
 			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fa fa-bars"></i></button> Cobros registrados
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-gcobroreg-list></app-gcobroreg-list>
+				</div>	
+			</div>  
+		</mat-tab>
+
+		<!-- <mat-tab>
+			<ng-template mat-tab-label>
 				<button mat-menu-item><i class="far fa-window-close"></i></button> Cobros cerrados
 			</ng-template>
 			<div>
@@ -49,7 +48,7 @@
 					<app-gcobroc-list></app-gcobroc-list>
 				</div>	
 			</div>  
-		</mat-tab>
+		</mat-tab> -->
 	</mat-tab-group>
 </div>
 

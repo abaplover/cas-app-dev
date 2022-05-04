@@ -16,6 +16,7 @@ import { BancoService } from '../../../services/banco.service';
 import { Vpago } from '../../../models/vpago';
 import { Banco } from '../../../models/banco';
 import * as moment from 'moment';
+import { PedidoService } from 'src/app/services/pedido.service';
 @Component({
   selector: 'app-gcobroreg-list',
   templateUrl: './gcobroreg-list.component.html',
@@ -48,6 +49,7 @@ export class GcobroregListComponent implements OnInit {
   public vpagoList: Vpago[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
+  pedidos = [];
   matrisDetCobro: CobroDet[]=[];
   sendemail=false;
 
@@ -56,18 +58,22 @@ export class GcobroregListComponent implements OnInit {
     public loginS      : FirebaseloginService,
     private toastr     : ToastrService,
     public vpagoS      : VpagoService,
-    public bancoS      : BancoService
+    public bancoS      : BancoService,
+    public pedidoS     : PedidoService
   ) { }
 
   ngOnInit(): void {
     this.cobro_ = {} as Cobro;
 
-    this.cobroService.cobros.subscribe(cobros => {
-      let allCobros = cobros;
-
+    this.cobroService.cobrosPagados.subscribe(cobros => {
+      //Filtramos solo los cobros que tienen fecha de pago, es decir, que estan pagados
+      //ya sea parcial o total
+      let filter1 = cobros.filter( cobro => {
+        return cobro.fechadepago;
+      })
       //Filtramos solo los cobros de las ultimas dos semanas a la fecha del dia
-      this.cobroslist = cobros.filter( cobro => {
-        let c: any = cobro.creado;
+      let filterTwoWeeks = filter1.filter( cobro => {
+        let c: any = cobro.fechadepago;
         let now = moment();
         let other:any = moment.unix(c.seconds);
 
@@ -76,9 +82,38 @@ export class GcobroregListComponent implements OnInit {
         return days <= 14;
       })
 
-      //ELEMENT_DATA
+      //Obtenemos la lista de todos los pedidos
+      this.pedidoS.pedidos.subscribe(pedidos => {
+        this.pedidos = pedidos;
+
+        //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
+        for(let i = 0; i<filterTwoWeeks.length;i++) {  
+          for(let j = 0; j<this.pedidos.length;j++) {
+            if (this.pedidos[j].idpedido == filterTwoWeeks[i].idpedido) {
+              this.cobroslist.push(
+                {
+                  idpedido: filterTwoWeeks[i].idpedido,
+                  fechadepago: filterTwoWeeks[i].fechadepago,
+                  nrofactura: this.pedidos[j].nrofactura,
+                  nomcliente: this.pedidos[j].nomcliente,
+                  nomvendedor: this.pedidos[j].nomvendedor,
+                  tipopago: filterTwoWeeks[i].tipopago,
+                  viadepago: filterTwoWeeks[i].viadepago,
+                  banco: filterTwoWeeks[i].banco,
+                  montodepago: filterTwoWeeks[i].montodepago,
+                  montobsf: filterTwoWeeks[i].montobsf
+                }
+              );
+              //Sale del for porque ya encontro la coincidencia */
+            }
+          }
+        }
+
+      // Asignamos los datos a la tabla del html
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
+
+      });
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
@@ -96,35 +131,6 @@ export class GcobroregListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
 
-  vpagoselected(val){
-    if (val!="Efectivo"){
-      this.vp_efectivo=false;
-    }else{
-      this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
-    }
-  }//vpagoselected
-
-  tpagoselected(val){
-  
-    if (val == "Pago Total"){
-      let mp:number=0;
-      for (let i in this.matrisDetCobro){
-        mp = mp + this.matrisDetCobro[i].montodepago;
-        //this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-      }
-      this.cobroDet_.montodepago = parseFloat((this.cobro_.totalmontoneto-mp).toFixed(2));
-      this.pagototal = true;
-    }
-
-    if (val == "Pago Parcial"){
-      let aux:number=0;
-      this.cobroDet_.montodepago = aux;
-      this.pagototal = false;
-    }
-  }
-
   timestampConvert(fec){
     let dateObject = new Date(fec.seconds*1000);
     let mes_ = dateObject.getMonth()+1;
@@ -137,7 +143,7 @@ export class GcobroregListComponent implements OnInit {
     if(pf != null) pf.reset();
     this.cobroslist=[];
     this.cobro_ = {} as Cobro;
-    this.cobroDet_ = {} as CobroDet;
+    this.cobro_ = {} as CobroDet;
     this.MostrarCob = 'display:none;';
     this.pagoparcialpagado=0;
     this.ver=false;
@@ -147,90 +153,6 @@ export class GcobroregListComponent implements OnInit {
     this.cobro0_ = {} as Cobro;
     this.sendemail = false;
   }//onCancelar
-
-  verdetalles($event,elemento){
-    this.ver = true;
-    this.cobro_ =  Object.assign({}, elemento);
-
-    if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
-      this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
-    }
-
-    if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
-    } 
-    if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
-      this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
-    } 
-
-    //Valida la via de pago 
-    if (this.cobro_.viadepago != "Efectivo"){
-      this.vp_efectivo=false;
-    }else{
-      this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
-    }
-
-
-    //Get Order detaills
-    this.pagoparcialpagado = 0;
-    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet=>{
-      //this.cobroslistDet = cobrosDet;
-      this.matrisDetCobro = cobrosDet;
-      for (let i in this.matrisDetCobro){
-        this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado = (this.pagoparcialpagado + this.matrisDetCobro[i].montodepago);
-      }
-              
-    }) 
-    
-    if (this.cobro_.uid){
-      this.MostrarCob = 'display:block;';
-    }
-  }//verdetalles
-
-  selectEventCob(elemento){
-    this.cobro_ =  Object.assign({}, elemento);
-
-    if (this.cobroDet_.fechadepago == null || typeof this.cobroDet_.fechadepago === "undefined"){
-      this.cobroDet_.fechadepago =  new Date(); //propone la fecha actual
-    }
-
-    if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
-    } 
-    if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
-      this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
-    } 
-
-    //Valida la via de pago 
-    if (this.cobro_.viadepago != "Efectivo"){
-      this.vp_efectivo=false;
-    }else{
-      this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
-    }
-
-
-    //Get Order detaills
-    this.pagoparcialpagado = 0;
-    this.cobroService.getCobrosDet(elemento.idpedido.toString()).subscribe(cobrosDet=>{
-      //this.cobroslistDet = cobrosDet;
-      this.matrisDetCobro = cobrosDet;
-      for (let i in this.matrisDetCobro){
-        this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado = (this.pagoparcialpagado + this.matrisDetCobro[i].montodepago);
-      }
-              
-    }) 
-    
-    if (this.cobro_.uid){
-      this.MostrarCob = 'display:block;';
-    }
-
-  }//selectEventCob
 
   onEdit(event, ped){
 
@@ -245,43 +167,6 @@ export class GcobroregListComponent implements OnInit {
 
 
   }//moForm
-
-  onSubmit(pf?: NgForm){
-    if(this.cobro_.uid != null){
-      this.cobro_.montodepago=0;
-
-      if (this.cobro_.tipopago == "Pago Total"){
-        this.cobro_.statuscobro="CERRADO";
-      }
-
-      if (this.cobro_.tipopago == "Pago Parcial"){
-        this.cobro_.statuscobro="PARCIAL";
-        if (this.cobro_.totalmontoneto.toFixed(2) == (this.pagoparcialpagado+this.cobroDet_.montodepago).toFixed(2)){
-          this.cobro_.statuscobro="CERRADO";
-        }
-      }
-    
-      this.cobro_.modificado = new Date;
-      this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
-      this.cobroDet_.uid = this.cobro_.idpedido.toString();
-
-      /* if (this.cobroDet_.fechadepago > this.cobro_.fpvencimiento){
-        /* console.log('fpgo: ',this.cobroDet_.fechadepago);
-        console.log('fvencimiento: ',this.cobro_.fpvencimiento); 
-        this.cobro_.demora="S";
-      }else{
-        this.cobro_.demora="";
-      } */
-      //---------------------------------------------------------
-      //Update Cobro - 
-      this.cobroService.updatecobros(this.cobro_);
-      //Add detalles de cobro
-      this.cobroService.addCobrosDet(this.cobroDet_);
-
-      this.toastr.success('Operación Terminada', 'Registro Actualizado');
-    }
-    this.onCancelar(pf);
-  }
   sendpopup(e){
     this.cobro0_ =  Object.assign({}, e);
     this.sendemail=true;

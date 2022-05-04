@@ -28,6 +28,10 @@ export class CobrosService {
   cobroDoc: AngularFirestoreDocument<Cobro>;
   cobrosColletion: AngularFirestoreCollection<Cobro>;
 
+  cobrosPagados: Observable<Cobro[]>;
+  cobrosPagadosDoc: AngularFirestoreDocument<Cobro>;
+  cobrosPagadosColletion: AngularFirestoreCollection<Cobro>;
+
   cobrosP: Observable<Cobro[]>;
   cobroDocE: AngularFirestoreDocument<Cobro>;
   cobrosColletionE: AngularFirestoreCollection<Cobro>;
@@ -60,6 +64,15 @@ export class CobrosService {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
         //data.uid = a.payload.doc.id;
+        return data;
+      })
+    }));
+
+    //Busca todos los cobros pagados
+    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("montodepago", '>', 0).orderBy("montodepago", "desc").limit(50));
+    this.cobrosPagados = this.cobrosPagadosColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
         return data;
       })
     }));
@@ -213,13 +226,11 @@ export class CobrosService {
   }//getPedidosDet */
 
   getCobrosDet(idpedido) {
-    console.log("idpedido ",idpedido);
     //Busca todos los detalles de cobros (cobros registrados)
     this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido));
     this.cobrosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
-        //data.uid = a.payload.doc.id;
         return data;
       })
     }));

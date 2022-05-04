@@ -108,6 +108,10 @@ export class PedidoService {
   pedidosPendientesDocE: AngularFirestoreDocument<Pedido>;
   pedidosPendientesColletionE: AngularFirestoreCollection<Pedido>;
 
+  pedidosVencido: Observable<Pedido[]>;
+  pedidosDocVencido: AngularFirestoreDocument<Pedido>;
+  pedidosColletionVencido: AngularFirestoreCollection<Pedido>;
+
   db2 = firebase.firestore();
 
   constructor(public db: AngularFirestore) 
@@ -193,6 +197,22 @@ export class PedidoService {
     }));
 
     return this.pedidosPendientes;
+  }
+
+  getPedidosPagoVencido() {
+
+    //Busca todos los cobros con estatus - VENCIDO
+    let hoy = new Date();
+    this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
+    .where("status", "==", "ENTREGADO").where("statuscobro", "in", ["PENDIENTE","PARCIAL"]).orderBy("fpago", "desc").orderBy("creado", "desc").limit(50));
+    this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        return data;
+      })
+    }));
+
+    return this.pedidosVencido;
   }
 
   getSpecificPedido(idpedido) {

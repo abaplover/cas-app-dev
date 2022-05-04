@@ -366,26 +366,15 @@ onCancelar(pf?: NgForm,de?:number){
       this.cobro_.creadopor = this.loginS.getCurrentUser().email;
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
+      this.cobro_.tipodoc =  "";
       this.cobro_.idpedido = this.pedido_.idpedido;
-      this.cobro_.nrofactura = this.pedido_.nrofactura;
-      this.cobro_.condiciondepago = this.pedido_.condiciondepago;
-      this.cobro_.fpvencimiento = this.pedido_.fpago;
-      this.cobro_.idcliente = this.pedido_.idcliente;
-      this.cobro_.nomcliente = this.pedido_.nomcliente;
-      this.cobro_.idvendedor = this.pedido_.idvendedor;
-      this.cobro_.nomvendedor = this.pedido_.nomvendedor;
-      this.cobro_.emailcliente= this.pedido_.email;
-      this.cobro_.companyhead = this.pedido_.companyblk;
-      this.cobro_.totalmontobruto = this.pedido_.totalmontobruto;
-      this.cobro_.totalmontodescuento = this.pedido_.totalmontodescuento;
-      this.cobro_.totalmontoimpuesto = this.pedido_.totalmontoimpuesto;
-      this.cobro_.totalmontoneto = this.pedido_.totalmontoneto;
+      this.cobro_.fechadepago = new Date;
+      this.cobro_.moneda = "";
       this.cobro_.montodepago = 0;
-      this.cobro_.pdfb64 = this.pedido_.pdfb64;
-      this.cobro_.observacion = this.pedido_.observacion;
-      this.cobro_.status = this.pedido_.status;
-      this.cobro_.statuscobro = "PENDIENTE";
-      this.cobro_.observacion = "";
+      this.cobro_.banco = "";
+      this.cobro_.viadepago = "";
+
+      this.pedido_.statuscobro = "PENDIENTE";
       //Crea un registro para la coleccion cobros
 
       //Actualiza un elemento en la coleccion pedidos

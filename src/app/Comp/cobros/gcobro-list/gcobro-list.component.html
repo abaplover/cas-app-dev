@@ -1,29 +1,4 @@
 <div class="container9" style="border-style: solid; border-width: 0px;">
-
-	<!-- <div class="card bg-light mb-3" *ngIf="sendemail">
-		<div class="card-header">
-			¿Confirma que desea enviar una notificación de cobro?
-		</div>
-		<div class="card-body" style="width: 100%">
-			<div class="row" style="width: 100%">
-				<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Id Pedido</div>
-				<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{this.cobro0_.idpedido}}</div>
-				<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Factura</div>
-				<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{this.cobro0_.nrofactura}}</div>
-				<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">Cliente</div>
-				<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">{{this.cobro0_.nomcliente}}</div>
-			</div>
-		
-			<div class="row" style="width: 100%">
-				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="text-align: right; float: right;padding-right: 10%;">
-					<button type="button" class="btn btn-outline-info btn-space" (click)="cancelNotifi()">Cancelar</button>
-					<button type="button" class="btn btn-outline-danger" (click)="sendUpdate()">Enviar</button>
-				</div>
-			</div>
-		
-		</div>
-	</div> -->
-
 <!-- Parte de edición -->
 
 
@@ -190,6 +165,26 @@
 										</div>										
 									</div>
 								</div>
+
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="form-group" style="text-align:right;">
+											<button 
+												id="btnenviar"
+												name="btnenviar"
+												class="btn btn-primary btn-space" 
+												type="button" 
+												[disabled]="cobroForm.invalid"
+												(click)="onSubmit(cobroForm)"
+											>
+												<i class="fas fa-cloud-upload-alt"></i> Guardar
+											</button>
+											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
+												<i class="fas fa-sync-alt"></i> Cancelar
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>	
 					</div>
@@ -198,11 +193,11 @@
 
 				<div class="row" style="height: 5px;"></div>
 				<div class="row" *ngIf="!this.visual">
-					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 						<div class="card">
 							<div class="card-body" style="padding-right:8px; padding-left:8px; ">
 								<div class="row">
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-right: 1px;">
+									<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Tipo Documento</mat-label>											
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -213,13 +208,13 @@
 													aria-label=".form-select-sm example"
 												>
 													<option value={{tipod.nombre}}  *ngFor = "let tipod of tipodocList">
-														{{tipod.nombre}}
+														{{tipod.nombre}} - {{tipod.descripcion}}
 													</option>
 												</select>
 										</div>
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-left: 1px;">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 5px">
 										<mat-label style="font-size:smaller; font-weight: bold;">Tipo de Pago</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -240,7 +235,7 @@
 										</div>	
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="margin-right: 14px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Vía Pago</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -252,13 +247,13 @@
 													aria-label=".form-select-sm example"
 												>
 													<option value={{vp.nombre}}  *ngFor = "let vp of vpagoList">
-														{{vp.nombre}}
+														{{vp.nombre}} - {{vp.descripcion}}
 													</option>
 												</select>
 										</div>
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="padding-left: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Banco</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -270,13 +265,13 @@
 													[disabled]="this.vp_efectivo"
 												>
 													<option value={{bc.nombre}}  *ngFor = "let bc of bancoList">
-														{{bc.nombre}}
+														{{bc.nombre}} - {{bc.descripcion}}
 													</option>
 											</select>
 										</div>
 									</div>
 
-									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select 
@@ -315,7 +310,7 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="border-width:0px;border-style:solid;border-color:red">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
 										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto BsF</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<input 
@@ -333,31 +328,6 @@
 						</div>
 
 						<div class="row" style="height: 5px;"></div>
-					</div>
-					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-										<div class="form-group" style="text-align:right;">
-											<button 
-												id="btnenviar"
-												name="btnenviar"
-												class="btn btn-primary btn-space" 
-												type="button" 
-												[disabled]="cobroForm.invalid"
-												(click)="onSubmit(cobroForm)"
-											>
-												<i class="fas fa-cloud-upload-alt"></i> Guardar
-											</button>
-											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
-												<i class="fas fa-sync-alt"></i> Cancelar
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				
@@ -383,7 +353,8 @@
 									<th scope="col">Banco</th>
 									<th scope="col">Moneda</th>
 									<!-- <th scope="col">Referencia</th> -->
-									<th scope="col" style="text-align: right;">Monto</th>
+									<th scope="col" style="text-align: right;">Monto BSF</th>
+									<th scope="col" style="text-align: right;">Monto USD</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -395,12 +366,13 @@
 									<td>{{cobr.banco}}</td>
 									<td>{{cobr.moneda}}</td>
 									<!-- <td style="text-align: right;">{{cobr.nroreferencia}}</td> -->
+									<td style="text-align: right;">{{cobr.montobsf | currency:" "}}</td>
 									<td style="text-align: right;">{{cobr.montodepago | currency:" "}}</td>
 								</tr>
 							</tbody>
 							<thead class="thead-success table-success">
 								<tr>
-									<td scope="col" colspan="6">Total</td>
+									<td scope="col" colspan="7">Total</td>
 									<td scope="col" style="text-align: right;">{{this.pagoparcialpagado | currency:" "}}</td>
 								</tr>
 							</thead>

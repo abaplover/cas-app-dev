@@ -117,7 +117,7 @@
 										name="tipopago"
 										aria-placeholder="Tipo de Pago"
 										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.tipopago"
+										[(ngModel)]="this.cobro_.tipopago"
 										(selectionChange)="tpagoselected($event.value)"
 										required
 									>
@@ -139,7 +139,7 @@
 										name="fechadepago"
 										id="fechadepago"
 										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.fechadepago"
+										[(ngModel)]="this.cobro_.fechadepago"
 										required
 									>
 									<mat-datepicker-toggle matSuffix [for]="picker">
@@ -162,7 +162,7 @@
 										required
 										name="viadepgo"
 										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.viadepago"
+										[(ngModel)]="this.cobro_.viadepago"
 										(selectionChange)="vpagoselected($event.value)"
 									>
 										<mat-option value={{vp.descripcion}}  *ngFor = "let vp of vpagoList">
@@ -181,7 +181,7 @@
 										required
 										name="banco"
 										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.banco"
+										[(ngModel)]="this.cobro_.banco"
 										[disabled]="this.vp_efectivo"
 									>
 										<mat-option value={{bc.descripcion}}  *ngFor = "let bc of bancoList">
@@ -201,7 +201,7 @@
 										type="text"
 										maxlength="20"
 										name="nroreferencia"
-										[(ngModel)]="this.cobroDet_.nroreferencia"
+										[(ngModel)]="this.cobro_.nroreferencia"
 										[disabled]="this.vp_efectivo"
 										required
 									>
@@ -215,7 +215,7 @@
 									<input matInput placeholder="Monto de Pago"
 										type="number"
 										name="montodepago"
-										[(ngModel)]="this.cobroDet_.montodepago"
+										[(ngModel)]="this.cobro_.montodepago"
 										[disabled]="this.pagototal"
 										required
 									>

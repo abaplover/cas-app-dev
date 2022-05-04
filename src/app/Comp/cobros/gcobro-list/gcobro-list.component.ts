@@ -42,7 +42,7 @@ export class GcobroListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','send', 'Opc'];
+  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
   pedidoPend_ = {} as Pedido;
   cobro0_ = {} as Cobro;
   cobro_ = {} as Cobro;
@@ -76,24 +76,6 @@ export class GcobroListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pedidoPend_ = {} as Pedido;
-
-   /*  this.cobroService.getCobrosP().subscribe(cobros=>{
-      let cobrosArray = [];
-      cobrosArray = cobros;
-
-      //Filtramos en el array a mostrar los elementos que no tienen el pago completo
-      this.cobroslist = cobrosArray.filter( elemento => {
-        if (elemento.montodepago) {
-          return elemento.montodepago < elemento.totalmontoneto
-        } else {
-          return elemento;
-        }
-      })
-      
-      //ELEMENT_DATA
-      this.dataSource = new MatTableDataSource(this.cobroslist);
-      this.dataSource.sort = this.sort;
-    }) */
 
     this.pedidoS.getPedidosPendientes().subscribe( pedidosP =>{
       let cobrosArray = [];
@@ -138,57 +120,27 @@ export class GcobroListComponent implements OnInit {
 
     this.pedidoPend_ =  Object.assign({}, elemento);
 
+    this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
+
     let idpedido = this.pedidoPend_.idpedido.toString();
-
-    /* this.pedidoS.getSpecificPedido(id).subscribe(ped => {
-      let pedido:any[] = ped ;
-      this.pedidoCobro = ped;
-    }); */
-
-    /* if (this.cobro_.fechadepago == null || typeof this.cobro_.fechadepago === "undefined"){
-      this.cobro_.fechadepago =  new Date(); //propone la fecha actual
-    } */
 
     if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
       this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
-    } 
-    /* if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
-      this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
-    } */
-
-    /* //Valida la via de pago 
-    if (this.cobro_.viadepago.substr(0,3)!="EFE") {
-      this.vp_efectivo=false;
-    } else {
-      this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
-    } */
-
-
-    //Get Order detaills
-    this.pagoparcialpagado = 0;
+    }
 
     this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet=>{
-      //this.cobroslistDet = cobrosDet;
+
       this.matrisDetCobro = cobrosDet;
 
       for (let i in this.matrisDetCobro) {
         if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        
-        this.pagoparcialpagado += this.matrisDetCobro[i].montodepago;
-      }
-      this.pedidoPend_.montodepago = this.pagoparcialpagado;
-
-      if (this.pedidoPend_.montodepago == this.pagoparcialpagado) { 
-        this.pedidoPend_.statuscobro = "CERRADA";
-        this.MostrarCob = 'display:none;';
+        this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
       }
 
-      if ( this.pedidoPend_.montodepago ) {
+      if ( this.pagoparcialpagado > 0 ) {
         this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
       } else {
-        this.importeremanente = this.pedidoPend_.montodepago;
+        this.importeremanente = this.pedidoPend_.totalmontoneto;
       }
               
     }) 
@@ -215,11 +167,14 @@ export class GcobroListComponent implements OnInit {
     this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
+      this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
-        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        if(this.matrisDetCobro[i].fechadepago) {
+          this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        }
+          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
       }
 
       if ( this.pagoparcialpagado > 0 ) {
@@ -310,7 +265,6 @@ export class GcobroListComponent implements OnInit {
   tpagoselected(val) {
   
     if (val == "TOTAL") {
-
       this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto-this.pagoparcialpagado).toFixed(2));
       this.montodepago =  this.cobro_.montodepago;
       this.pedidoPend_.statuscobro = "CERRADA"
