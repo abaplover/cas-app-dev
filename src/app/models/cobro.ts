@@ -11,7 +11,7 @@ export interface Cobro {
 	montodepago?           :number;
 	montobsf?			   :number;
 	pdfb64?                :string;
-	tipodoc?			   :string; //Tipo de documento de pedido
+	tipodoc?			   :string; //Tipo de documento de cobro
 	tipopago?              :string;
 	viadepago?             :string;
 	lastnotifsend?         :Date;

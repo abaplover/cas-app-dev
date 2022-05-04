@@ -31,7 +31,7 @@ export interface Pedido {
   listaprecio?            : string;
   modificado?             : Date;
   modificadopor?          : string;
-  montodepago?            :number; //Monto pagado
+  montodepago?            :number; //Monto pagado (cobros)
   motivorechazo?          : string;
   nombrealmacenista?      :string;
   nomcliente?             : string;
