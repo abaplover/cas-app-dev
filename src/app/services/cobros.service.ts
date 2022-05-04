@@ -69,7 +69,7 @@ export class CobrosService {
     }));
 
     //Busca todos los cobros pagados
-    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("montodepago", '>', 0).orderBy("montodepago", "desc").limit(50));
+    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("montodepago", '>', 0).orderBy("montodepago", "desc").orderBy("fechadepago","asc").limit(50));
     this.cobrosPagados = this.cobrosPagadosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
