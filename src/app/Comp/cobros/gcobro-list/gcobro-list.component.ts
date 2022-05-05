@@ -37,6 +37,7 @@ export class GcobroListComponent implements OnInit {
   clientepedidoEli: string="";
   montodepago = 0;
   disableBSF =  false;
+  maxDate= moment(new Date()).format('YYYY-MM-DD');
 
 
   //var
@@ -56,7 +57,7 @@ export class GcobroListComponent implements OnInit {
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
-  matrisDetCobro: CobroDet[]=[];
+  matrisDetCobro: Cobro[]=[];
   pedidoCobro: Pedido[];
   pedido: Pedido[];
   sendemail=false;
@@ -167,12 +168,17 @@ export class GcobroListComponent implements OnInit {
     this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
+
       this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
         if(this.matrisDetCobro[i].fechadepago) {
           this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        }
+
+        if(this.matrisDetCobro[i].modificado) {
+          this.matrisDetCobro[i].modificado = this.timestampConvert(this.matrisDetCobro[i].modificado);
         }
           this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
       }
@@ -207,19 +213,22 @@ export class GcobroListComponent implements OnInit {
 
   onSubmit(pf?: NgForm) {
     if(this.pedidoPend_.idpedido != null) {
+      
+      let thisHour =  moment().hour();
+      let thisMinute = moment().minutes();
 
-      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).toDate();
-
+      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
+      
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobro_.idpedido = this.pedidoPend_.idpedido;
+      this.cobro_.status = "ACTIVO";
 
       this.cobro_.montodepago = Number(this.montodepago);
 
       if (this.pedidoPend_.totalmontoneto.toFixed(2) ==  this.pagoparcialpagado + this.cobro_.montodepago.toFixed(2)) {
         this.pedidoPend_.statuscobro="CERRADA";
-      }
-  
+      }  
 
       //Actualiza el pedido
       this.pedidoS.updatePedidos(this.pedidoPend_);
@@ -303,6 +312,17 @@ export class GcobroListComponent implements OnInit {
     this.pagoparcialpagado = 0;
     this.ver=false;
   }//onCancelar
+
+  eliminarCobro(posicionArray) {
+
+    let cobroDelete = {} as Cobro;
+    cobroDelete = this.matrisDetCobro[posicionArray];
+    cobroDelete.status = "ELIMINADO";
+    cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
+    cobroDelete.modificado = new Date;
+
+    this.cobroService.updatecobros(cobroDelete);
+  }
 
   cancelNotifi(){
     this.cobro0_ = {} as Cobro;

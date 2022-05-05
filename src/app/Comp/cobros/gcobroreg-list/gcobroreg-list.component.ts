@@ -63,58 +63,60 @@ export class GcobroregListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.cobro_ = {} as Cobro;
 
-    this.cobroService.cobrosPagados.subscribe(cobros => {
-      //Filtramos solo los cobros que tienen fecha de pago, es decir, que estan pagados
-      //ya sea parcial o total
-      let filter1 = cobros.filter( cobro => {
-        return cobro.fechadepago;
-      })
-      //Filtramos solo los cobros de las ultimas dos semanas a la fecha del dia
-      let filterTwoWeeks = filter1.filter( cobro => {
-        let c: any = cobro.fechadepago;
-        let now = moment();
-        let other:any = moment.unix(c.seconds);
-
-        let days:any = moment(now).diff(moment(other), 'days');
-
-        return days <= 14;
-      })
-
       //Obtenemos la lista de todos los pedidos
-      this.pedidoS.pedidos.subscribe(pedidos => {
+      this.pedidoS.getPedidos2().subscribe(pedidos => {
         this.pedidos = pedidos;
 
-        //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
-        for(let i = 0; i<filterTwoWeeks.length;i++) {  
-          for(let j = 0; j<this.pedidos.length;j++) {
-            if (this.pedidos[j].idpedido == filterTwoWeeks[i].idpedido) {
-              this.cobroslist.push(
-                {
-                  idpedido: filterTwoWeeks[i].idpedido,
-                  fechadepago: filterTwoWeeks[i].fechadepago,
-                  nrofactura: this.pedidos[j].nrofactura,
-                  nomcliente: this.pedidos[j].nomcliente,
-                  nomvendedor: this.pedidos[j].nomvendedor,
-                  tipopago: filterTwoWeeks[i].tipopago,
-                  viadepago: filterTwoWeeks[i].viadepago,
-                  banco: filterTwoWeeks[i].banco,
-                  montodepago: filterTwoWeeks[i].montodepago,
-                  montobsf: filterTwoWeeks[i].montobsf
+        this.cobroService.cobrosPagados.subscribe(cobros => {
+          //Filtramos solo los cobros que tienen fecha de pago, es decir, que estan pagados
+          //ya sea parcial o total
+          let filter1 = cobros.filter( cobro => {
+            return cobro.fechadepago;
+          });
+
+          //Filtramos solo los cobros de las ultimas dos semanas a la fecha del dia
+          let filterTwoWeeks = filter1.filter( cobro => {
+            let c: any = cobro.fechadepago;
+            let now = moment();
+            let other:any = moment.unix(c.seconds);
+    
+            let days:any = moment(now).diff(moment(other), 'days');
+    
+            return days <= 14;
+          });
+    
+          //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
+            for(let i = 0; i<pedidos.length;i++) {
+
+              for(let j = 0; j<filterTwoWeeks.length;j++) {
+
+                if (pedidos[i].idpedido == filterTwoWeeks[j].idpedido) {
+                  this.cobroslist.push(
+                    {
+                      idpedido: filterTwoWeeks[j].idpedido,
+                      fechadepago: filterTwoWeeks[j].fechadepago,
+                      nrofactura: pedidos[i].nrofactura,
+                      nomcliente: pedidos[i].nomcliente,
+                      nomvendedor: pedidos[i].nomvendedor,
+                      tipopago: filterTwoWeeks[j].tipopago,
+                      viadepago: filterTwoWeeks[j].viadepago,
+                      banco: filterTwoWeeks[j].banco,
+                      montodepago: filterTwoWeeks[j].montodepago,
+                      montobsf: filterTwoWeeks[j].montobsf
+                    }
+                  );
                 }
-              );
-              //Sale del for porque ya encontro la coincidencia */
+              }
+    
             }
-          }
-        }
-
-      // Asignamos los datos a la tabla del html
-      this.dataSource = new MatTableDataSource(this.cobroslist);
-      this.dataSource.sort = this.sort;
-
+          // Asignamos los datos a la tabla del html
+          this.dataSource = new MatTableDataSource(this.cobroslist);
+          this.dataSource.sort = this.sort;
       });
-    })
+    });
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
       this.vpagoList = vps;

@@ -3,7 +3,7 @@
 
 
 	<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
-		<div class="card-body text-info panel panel-login" *ngIf="this.cobro_.uid" style="border-style: solid; border-width: 0px;">
+		<div class="card-body text-info panel panel-login" *ngIf="this.pedidoPend_.idpedido" style="border-style: solid; border-width: 0px;">
 			<form #cobroForm="ngForm" (ngSubmit)="agregardetalles()">
 				<div class="row">
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -121,7 +121,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe OR</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.pedidoPend_.totalmontoneto}}</mat-label>
+												<mat-label>{{this.pedidoPend_.totalmontoneto | currency:" "}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -133,7 +133,7 @@
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe RE</span>
 											</div>
 											<div class="abs-center">
-												<mat-label>{{this.importeremanente}}</mat-label>
+												<mat-label>{{this.importeremanente | currency:" "}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -166,6 +166,25 @@
 										</div>										
 									</div>
 								</div>
+								<div class="row" *ngIf="!this.visual">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="form-group" style="text-align:right;">
+											<button 
+												id="btnenviar"
+												name="btnenviar"
+												class="btn btn-primary btn-space" 
+												type="button" 
+												[disabled]="cobroForm.invalid"
+												(click)="onSubmit(cobroForm)"
+											>
+												<i class="fas fa-cloud-upload-alt"></i> Guardar
+											</button>
+											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
+												<i class="fas fa-sync-alt"></i> Cancelar
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>	
 					</div>
@@ -173,12 +192,12 @@
 
 
 				<div class="row" style="height: 5px;"></div>
-				<div class="row"  *ngIf="!this.visual">
-					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+				<div class="row" *ngIf="!this.visual">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 						<div class="card">
 							<div class="card-body" style="padding-right:8px; padding-left:8px; ">
 								<div class="row">
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-right: 1px;">
+									<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Tipo Documento</mat-label>											
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -195,7 +214,7 @@
 										</div>
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-left: 1px;">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 5px">
 										<mat-label style="font-size:smaller; font-weight: bold;">Tipo de Pago</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -205,7 +224,6 @@
 											(change)="tpagoselected($event.target.value)"
 											class="form-control form-select form-select-sm"
 											aria-label=".form-select-sm example"
-											required
 											>
 												<option value="TOTAL" >
 													TOTAL
@@ -217,7 +235,7 @@
 										</div>	
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="margin-right: 14px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Vía Pago</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
@@ -227,6 +245,7 @@
 													(change)="vpagoselected($event.target.value)"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
+													[disabled]="this.cobro_.tipodoc!='PG01'"
 												>
 													<option value={{vp.nombre}}  *ngFor = "let vp of vpagoList">
 														{{vp.nombre}} - {{vp.descripcion}}
@@ -235,11 +254,10 @@
 										</div>
 									</div>
 
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"  style="padding-left: 1px;">
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="padding-left: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Banco</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select value=selected
-													required
 													name="banco"
 													[(ngModel)]="this.cobro_.banco"
 													(change)="bancoselected($event.target.value)"
@@ -254,7 +272,7 @@
 										</div>
 									</div>
 
-									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-left: 1px;">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 1px;">
 										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<select 
@@ -293,12 +311,13 @@
 										</div>
 									</div>
 									
-									<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="border-width:0px;border-style:solid;border-color:red">
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
 										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto BsF</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
 											<input 
 												type="text"
 												name="montobsf"
+												required
 												[(ngModel)]="this.cobro_.montobsf"
 												[disabled]="this.disableBSF"
 												class="form-control"
@@ -311,31 +330,6 @@
 
 						<div class="row" style="height: 5px;"></div>
 					</div>
-					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-										<div class="form-group" style="text-align:right;">
-											<button 
-												id="btnenviar"
-												name="btnenviar"
-												class="btn btn-primary btn-space" 
-												type="button" 
-												[disabled]="cobroForm.invalid"
-												(click)="onSubmit(cobroForm)"
-											>
-												<i class="fas fa-cloud-upload-alt"></i> Guardar
-											</button>
-											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
-												<i class="fas fa-sync-alt"></i> Cancelar
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 				
 			</form>
@@ -344,7 +338,7 @@
 
 
 
-	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
+	<div class="card-body text-info" *ngIf="this.pedidoPend_.idpedido" style="border-style:solid;border-width:0px;">
 	
 		<div class="row" style="border-style: solid; border-width: 0px;">	
 				<div id="gped" class="card border-light bg-light w-100" style="padding: 15px;">
@@ -360,7 +354,11 @@
 									<th scope="col">Banco</th>
 									<th scope="col">Moneda</th>
 									<!-- <th scope="col">Referencia</th> -->
-									<th scope="col" style="text-align: right;">Monto</th>
+									<th scope="col" style="text-align: right;">Monto BSF</th>
+									<th scope="col" style="text-align: right;">Monto USD</th>
+									<th scope="col">Fecha de modificación</th>
+									<th scope="col">Usuario</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -372,18 +370,21 @@
 									<td>{{cobr.banco}}</td>
 									<td>{{cobr.moneda}}</td>
 									<!-- <td style="text-align: right;">{{cobr.nroreferencia}}</td> -->
+									<td style="text-align: right;">{{cobr.montobsf | currency:" "}}</td>
 									<td style="text-align: right;">{{cobr.montodepago | currency:" "}}</td>
+									<td>{{cobr.modificado | date: 'dd/MM/yyyy'}}</td>
+									<td>{{cobr.modificadopor}}</td>									
+									<td>
+										<button class="btn btn-sm" (click)="eliminarCobro(i)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro">
+											<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro"></i>
+										</button>
+									</td>
 								</tr>
 							</tbody>
 							<thead class="thead-success table-success">
 								<tr>
-									<td scope="col" colspan="6">Total</td>
-									<td scope="col" style="text-align: right;">{{this.pagoparcialpagado | currency:" "}}</td>
-									<!-- <td scope="col"></td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | currency:" "}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalCnt | currency:" ":'symbol':'2.0'}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPed | currency:" "}}</td>
-									<td scope="col">-</td> -->
+									<td scope="col" style="font-weight: bolder" colspan="7">Total</td>
+									<td scope="col" style="text-align: right;font-weight: bolder">{{this.pagoparcialpagado | currency:" "}}</td>
 								</tr>
 							</thead>
 							<tr>
@@ -403,7 +404,7 @@
 
 	</div>
 
-	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.cobro_.uid">
+	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.pedidoPend_.idpedido">
 		<mat-form-field>
 			<mat-label>Buscar por</mat-label>
 			<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
@@ -413,13 +414,13 @@
 		
 		<!-- Position Column -->
 		<ng-container matColumnDef="Pedido">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;">Pedido </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Pedido </th>
 			<td mat-cell *matCellDef="let element">{{element.idpedido}}</td>
 		</ng-container>
 		
 		<!-- Name Column -->
 		<ng-container matColumnDef="Factura">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> NE/FA</th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> NE/FA</th>
 			<td mat-cell *matCellDef="let element">
 				<span *ngIf="element.tipodoc == 'Factura'">
 					FA{{element.nrofactura}}
@@ -441,54 +442,54 @@
 	
 		<!-- Weight Column -->
 		<ng-container matColumnDef="Condicion">
-			<th mat-header-cell *matHeaderCellDef>Condición de Pago</th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Condición de Pago</th>
 			<td mat-cell *matCellDef="let element"> {{element.condiciondepago}} </td>
 		</ng-container>
 		
 		<!-- Symbol Column .toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a' -->
 		<ng-container matColumnDef="Fecha">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Fecha Vencimiento </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Fecha Vencimiento </th>
 			<td mat-cell *matCellDef="let element"> {{element.fpago.toDate() | date: 'dd/MM/yyyy'}} </td>
 		</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Cliente">
-			<th mat-header-cell *matHeaderCellDef> Cliente </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
 			<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
 		</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Vendedor">
-			<th mat-header-cell *matHeaderCellDef> Vendedor </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
 			<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
 		</ng-container>
 	
 		<!-- Symbol Column -->
 			<ng-container matColumnDef="Subtotal">
-				<th mat-header-cell *matHeaderCellDef style="text-align: center;">Sub Total</th>
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Sub Total</th>
 				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto-element.totalmontodescuento | currency:" "}} </td>
 			</ng-container>
 
 		<!-- Symbol Column -->
 			<ng-container matColumnDef="totalmontoimpuesto">
-				<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Impuesto </th>
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Impuesto </th>
 				<td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
 			</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="totalmontoneto">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Total</th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Total</th>
 			<td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
 		</ng-container>
 
 		<ng-container matColumnDef="abono">
-			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Abono </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Abono </th>
 			<td mat-cell *matCellDef="let element"><b *ngIf="element.statuscobro == 'PARCIAL'">x</b></td>
 		</ng-container>
 
 		<!-- Symbol Column -->
 		<ng-container matColumnDef="Opc">
-			<th mat-header-cell *matHeaderCellDef style="width: 100px !important;"></th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px !important;"></th>
 			<td mat-cell *matCellDef="let element index as i">
 
 				<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">

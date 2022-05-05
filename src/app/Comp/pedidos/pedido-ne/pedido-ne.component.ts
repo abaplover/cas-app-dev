@@ -362,17 +362,17 @@ onCancelar(pf?: NgForm,de?:number){
       //console.log("fpago: ",this.pedido_.fpago)
 
       //Crea un registro para la coleccion cobros
-      this.cobro_.creado = new Date;
+     /*  this.cobro_.creado = new Date;
       this.cobro_.creadopor = this.loginS.getCurrentUser().email;
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobro_.tipodoc =  "";
       this.cobro_.idpedido = this.pedido_.idpedido;
-      this.cobro_.fechadepago = new Date;
+      //this.cobro_.fechadepago = new Date;
       this.cobro_.moneda = "";
       this.cobro_.montodepago = 0;
       this.cobro_.banco = "";
-      this.cobro_.viadepago = "";
+      this.cobro_.viadepago = ""; */
 
       this.pedido_.statuscobro = "PENDIENTE";
       //Crea un registro para la coleccion cobros

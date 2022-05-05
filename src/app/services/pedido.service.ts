@@ -68,6 +68,10 @@ export class PedidoService {
   pedidoDoc: AngularFirestoreDocument<Pedido>;
   pedidosColletion: AngularFirestoreCollection<Pedido>;
 
+  pedidos2: Observable<Pedido[]>;
+  pedidoDoc2: AngularFirestoreDocument<Pedido>;
+  pedidosColletion2: AngularFirestoreCollection<Pedido>;
+
   pedFac: Observable<Pedido[]>;
   pedFacDoc: AngularFirestoreDocument<Pedido>;
   pedFacColletion: AngularFirestoreCollection<Pedido>;
@@ -116,14 +120,6 @@ export class PedidoService {
 
   constructor(public db: AngularFirestore) 
   { 
-    //Busca todos los pedidos
-    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(150));
-    this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
-        return data;
-      })
-    }));
 
     //Busca todos los pedidos con estatus ACTIVO
     this.pedidosColletionA = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO']).orderBy("creado", "desc").limit(50));
@@ -181,6 +177,18 @@ export class PedidoService {
 
   }//constructor
 
+  onInit() {
+
+    //Busca todos los pedidos
+    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(150));
+    this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido; 
+        return data;
+      })
+    }));
+  }
+
   getPedidosPendientes() {
     //Busca todos los pedidos pendientes por pagar
     this.pedidosPendientesColletionE = this.db.collection('pedidos', ref => 
@@ -213,6 +221,20 @@ export class PedidoService {
     }));
 
     return this.pedidosVencido;
+  }
+
+  getPedidos2() { //Luego hay que unificar estos metodos para que sea uno solo y en lugar de 
+    //llamar a la variable pedidos en los componentes se llama al metodo
+    //Busca todos los pedidos
+    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO','ENTREGADO']).orderBy("creado", "desc").limit(150));
+    this.pedidos2 = this.pedidosColletion2.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido; 
+        return data;
+      })
+    }));
+
+    return this.pedidos2;
   }
 
   getSpecificPedido(idpedido) {
