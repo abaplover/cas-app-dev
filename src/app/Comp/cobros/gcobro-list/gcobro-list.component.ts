@@ -180,7 +180,10 @@ export class GcobroListComponent implements OnInit {
         if(this.matrisDetCobro[i].modificado) {
           this.matrisDetCobro[i].modificado = this.timestampConvert(this.matrisDetCobro[i].modificado);
         }
+
+        if(this.matrisDetCobro[i].status == "ACTIVO"){
           this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        }
       }
 
       if ( this.pagoparcialpagado > 0 ) {

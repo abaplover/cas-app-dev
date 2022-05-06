@@ -52,7 +52,7 @@ export class GcobrovListComponent implements OnInit {
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
-  matrisDetCobro: CobroDet[]=[];
+  matrisDetCobro: Cobro[]=[];
   pedidoCobro: Pedido[];
   sendemail=false;
   importeremanente = 0;
@@ -195,9 +195,19 @@ export class GcobrovListComponent implements OnInit {
 
       this.matrisDetCobro = cobrosDet;
 
+      //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
-        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        if(this.matrisDetCobro[i].fechadepago) {
+          this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        }
+
+        if(this.matrisDetCobro[i].modificado) {
+          this.matrisDetCobro[i].modificado = this.timestampConvert(this.matrisDetCobro[i].modificado);
+        }
+
+        if(this.matrisDetCobro[i].status == "ACTIVO"){
+          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        }
       }
 
       if ( this.pagoparcialpagado > 0 ) {
@@ -308,17 +318,6 @@ export class GcobrovListComponent implements OnInit {
     cobroDelete.modificado = new Date;
 
     this.cobroService.updatecobros(cobroDelete);
-  }
-
-  removeDetRow(i){
-    if(confirm('¿Está seguro de que quiere eliminar este elemento?.')) {
-      this.cobroService.deleteCobrosDet(this.matrisDetCobro[i].docid);
-      this.pagoparcialpagado=0;
-      //Update Cobro -
-     // this.cobro_.statuscobro="PARCIAL";
-      this.cobroService.updatecobros(this.cobro_);
-      this.toastr.show('Elemento Eliminado','Operación Terminada');
-    }
   }
 
   roundTo(num: number, places: number) {

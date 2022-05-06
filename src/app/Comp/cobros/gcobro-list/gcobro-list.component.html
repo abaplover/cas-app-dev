@@ -356,9 +356,7 @@
 									<!-- <th scope="col">Referencia</th> -->
 									<th scope="col" style="text-align: right;">Monto BSF</th>
 									<th scope="col" style="text-align: right;">Monto USD</th>
-									<th scope="col">Fecha de modificación</th>
-									<th scope="col">Usuario</th>
-
+									<th scope="col">Estatus</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -373,9 +371,8 @@
 									<!-- <td style="text-align: right;">{{cobr.nroreferencia}}</td> -->
 									<td style="text-align: right;">{{cobr.montobsf | currency:" "}}</td>
 									<td style="text-align: right;">{{cobr.montodepago | currency:" "}}</td>
-									<td>{{cobr.modificado | date: 'dd/MM/yyyy'}}</td>
-									<td>{{cobr.modificadopor}}</td>
-									<td>
+									<td>{{cobr.status}}</td>
+									<td *ngIf="cobr.status=='ACTIVO' && !this.visual">
 										<button class="btn btn-sm" (click)="eliminarCobro(i)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro">
 											<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro"></i>
 										</button>

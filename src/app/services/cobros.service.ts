@@ -69,7 +69,7 @@ export class CobrosService {
     }));
 
     //Busca todos los cobros pagados
-    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("tipopago", 'in', ['PARCIAL','TOTAL']).orderBy("fechadepago","desc").limit(50));
+    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("tipopago", 'in', ['PARCIAL','TOTAL']).where("status",'==',"ACTIVO").orderBy("fechadepago","desc").limit(50));
     this.cobrosPagados = this.cobrosPagadosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
@@ -226,7 +226,7 @@ export class CobrosService {
 
   getCobrosDet(idpedido) {
     //Busca todos los detalles de cobros (cobros registrados)
-    this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido).where("status","==","ACTIVO"));
+    this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido));
     this.cobrosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
