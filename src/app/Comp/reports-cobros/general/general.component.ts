@@ -204,7 +204,7 @@ export class GeneralComponent implements OnInit {
       if (typeof this.vendedor == "undefined" || this.vendedor == null || this.vendedor == '') 
       { } else {
         if(this.vendedor == ""){ } else {
-          q = q.where("nomvendedor", "==", this.vendedor);
+          q = q.where("nomvendedor", "in", this.vendedor);
         }
       }
 
