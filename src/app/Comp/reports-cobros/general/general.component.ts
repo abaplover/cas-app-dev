@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ChangeDetectorRef, Component, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { CollectionReference } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
@@ -8,10 +9,12 @@ import { Subject } from 'rxjs';
 import { Client } from 'src/app/models/client';
 import { Cobro } from 'src/app/models/cobro';
 import { CobroDet } from 'src/app/models/cobro-det';
+import { Pedido } from 'src/app/models/pedido';
 import { TipodocCobros } from 'src/app/models/tipodoc-cobros';
 import { BancoService } from 'src/app/services/banco.service';
 import { ClientService } from 'src/app/services/client.service';
 import { CobrosService } from 'src/app/services/cobros.service';
+import { PedidoService } from 'src/app/services/pedido.service';
 import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 import { VendedorService } from 'src/app/services/vendedor.service';
 import { VpagoService } from 'src/app/services/vpago.service';
@@ -36,6 +39,7 @@ export class GeneralComponent implements OnInit {
   banco: any;
   viapago: any;
   vendedor = "";
+  codCli: string;
   tipodoc: string;
   codVen: string;
   motivoAv="";
@@ -46,20 +50,19 @@ export class GeneralComponent implements OnInit {
   porcentajeReclamo: number = 0;
   firstTime: boolean = false;
   averiaCerrada = false;
-  arrayCobro: any[] = [];
+  arrayPedido: any[] = [];
   copyArray = [];
 
   showSpinner = false;
 
 
   public clienteList: Client[]; //arreglo vacio
-/*public materialList: Product[]; //arreglo vacio*/  
   public bancoList: BancoService[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public viapagoList: VpagoService[]; //arreglo vacio
   public vendedorList: VendedorService[]; //arreglo vacio
-  public Cobro_: Cobro[]; //arreglo vacio
-  public cobrosDet_: CobroDet[];
+  public Pedido_: Pedido[]; //arreglo vacio
+  public cobrosDet_: Cobro[];
   
 
 
@@ -92,6 +95,7 @@ export class GeneralComponent implements OnInit {
       public vendedorS: VendedorService,
       public cobrosS: CobrosService,
       public viapagoS: VpagoService,
+      public pedidoS: PedidoService,
       private http: HttpClient,
       private dialogo: MatDialog,
       public chRes: ChangeDetectorRef
@@ -132,8 +136,6 @@ export class GeneralComponent implements OnInit {
       this.materialList = mater;
     }) */
 
-    
-
     this.tipodocCobS.getTipods().valueChanges().subscribe(tipodocobros => {
       this.tipodocList = tipodocobros;
     });
@@ -168,6 +170,7 @@ export class GeneralComponent implements OnInit {
     }
   }
   onSubmitSearch(pf?: NgForm) {
+    this.showSpinner = true;
     let query: any;
     let queryDet: any;
     let hora = new Date().getHours();
@@ -178,143 +181,113 @@ export class GeneralComponent implements OnInit {
 
     queryDet = (ref: CollectionReference) => {
       //Busqueda entre fechas
-      let qdet = ref.where("fechadepago", ">=", this.desD)
+      let queryCobros = ref.where("fechadepago", ">=", this.desD)
         .where("fechadepago", "<=", this.hasT)
         .orderBy("fechadepago", "desc")
-        .orderBy("creado", "desc")
         .limit(5000)
 
-        //tipo de documento de cobro
+      //tipo de documento de cobro
       if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
-        qdet = qdet.where("tipodoc", "==", this.tipodoc)
-      }
-      
-      if (typeof this.tipopago == "undefined" || this.tipopago == null || this.tipopago == '') 
-      { } else {
-        if(this.tipopago == ""){ } else {
-          qdet = qdet.where("tipopago", "in", this.tipopago);
-        }
-      }
-      
-      if (typeof this.viapago == "undefined" || this.viapago == null || this.viapago == '') 
-      { } else {
-        if(this.viapago == ""){ } else {
-          qdet = qdet.where("viadepago", "in", this.viapago);
+        if(this.tipodoc == ""){ } else {
+          queryCobros = queryCobros.where("tipodoc", 'in', this.tipodoc);
         }
       }
 
-      if (typeof this.banco == "undefined" || this.banco == null) { } else {
-        qdet = qdet.where("banco", "==", this.banco)
-      }
+      return queryCobros;
     }
 
     query = (ref: CollectionReference) => {
-      let q = ref.where("indice",">=",0)
-      .orderBy("indice", "asc")
+      let q = ref.where("status","==","ENTREGADO")
+      .orderBy("creado", "asc")
       .limit(5000)
-      
-      if (typeof this.tipopago == "undefined" || this.tipopago == null || this.tipopago == '') 
-      { } else {
-        if(this.tipopago == ""){ } else {
-          q = q.where("tipopago", "in", this.tipopago);
-        }
-      }
-      
-      if (typeof this.viapago == "undefined" || this.viapago == null || this.viapago == '') 
-      { } else {
-        if(this.viapago == ""){ } else {
-          q = q.where("viadepago", "in", this.viapago);
-        }
-      }
-
-      if (typeof this.banco == "undefined" || this.banco == null) { } else {
-        q = q.where("banco", "==", this.banco)
-      }
 
       if (typeof this.vendedor == "undefined" || this.vendedor == null || this.vendedor == '') 
       { } else {
         if(this.vendedor == ""){ } else {
-          q = q.where("nomvendedor", "==", this.vendedor[0]);
+          q = q.where("nomvendedor", "==", this.vendedor);
         }
+      }
+
+      if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
+        q = q.where("idcliente", "==", this.codCli)
       }
 
       return q;
     }
 
-    this.cobrosS.getCobrosRep01(query).subscribe(cobro => {
+    this.pedidoS.getPedidosRep01(query).subscribe(pedido => {
 
-      this.Cobro_ = cobro;
-      this.arrayCobro = this.Cobro_;
+      this.Pedido_ = pedido;
+      this.arrayPedido = this.Pedido_;
 
-      this.cobrosS.getCobrosRep02(queryDet).subscribe(cobroDet => {
+      this.cobrosS.getCobrosRep01(queryDet).subscribe(cobro => {
 
-        this.cobrosDet_ = cobroDet;
-        //this.arrayDetallesCobrosAve = this.cobrosDet_;
+        this.cobrosDet_ = cobro;
 
-        this.metodoFor(this.arrayCobro,this.cobrosDet_);
+        //Filtramos de acuerdo a cada condicion porque en la parte del query no se pueden utilizar
+        // dos 'in' de where
+        if (typeof this.tipopago == "undefined" || this.tipopago == null || this.tipopago == '') 
+        { } else {
+          if(this.tipopago == ""){ } else {
+              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.tipopago.includes(cobr.tipopago));
+          }
+        }
 
-        //this.firstTime = true;
+        if (typeof this.viapago == "undefined" || this.viapago == null || this.viapago == '') 
+        { } else {
+          if(this.viapago == ""){ } else {
+              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.viapago.includes(cobr.viadepago));
+          }
+        }
+
+        if (typeof this.banco == "undefined" || this.banco == null || this.banco == '') 
+        { } else {
+          if(this.banco == ""){ } else {
+              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.banco.includes(cobr.banco));
+          }
+        }
+
+        this.metodoFor(this.arrayPedido,this.cobrosDet_);
 
         this.cobrosDet_ = this.copyArray;
-
-        /* this.copyArray.reduce((acc, cobdet) => {
-
-          acc[cobdet.idcobro] = ++acc[cobdet.idcobro] || 0;
-          //acc[avdet.idcobro] = avdet.porcentajereclamo;
-          if(acc[cobdet.idcobro] == 0){
-            this.porcentajeReclamo += this.roundTo(cobdet.porcentajereclamo,2);
-          }
-          return acc;
-        }, {});  */       
-
-        /* this.totalRegistroAv = this.cobrosDet_.length;
-        this.totalAveria = this.roundTo(this.cobrosDet_.reduce((total, row) => total + row.totalpormaterial, 0),2);
-       */
 
         if(!this.firstTime){
           this.rerender();
         }
-
+  
         this.showSpinner = false;
-        this.opcgenReport = true;
-      
+        this.opcgenReport = true;  
       
       })
 
-
     })
-      
-    this.opcgenReport = true;
 
   }//onSubmitSearch
 
-
-  metodoFor(arrayCobros:any[],arrayDetallesCobros:any[]) {
-    this.cobrosDet_ = [];
+//Unimos en un solo array los datos de los cobros con su correspondiente pedido
+  metodoFor(arrayPedidos:any[],arrayCobros:any[]) {
     this.copyArray = [];
-    for(let i = 0; i<arrayCobros.length;i++) {  
-      for(let j = 0; j<arrayDetallesCobros.length;j++) {
-        if (arrayDetallesCobros[j].idcobro == arrayCobros[i].uid) {
+    for(let i = 0; i<arrayPedidos.length;i++) {  
+      for(let j = 0; j<arrayCobros.length;j++) {
+        if (arrayCobros[j].idpedido == arrayPedidos[i].idpedido) {
           this.copyArray.push(
             {
-              idcobro: arrayCobros[i].uid,
-              idpedido: arrayCobros[i].idpedido,
-              fechapago: arrayCobros[i].fechadepago,
-              nrofactura: arrayCobros[j].nrofactura,
-              tipopago: arrayDetallesCobros[j].tipopago,
-              cliente: arrayCobros[i].nomcliente,
-              vendedor: arrayCobros[i].nomvendedor,
-              viapago: arrayDetallesCobros[j].viadepago,
-              banco: arrayDetallesCobros[j].banco,
-              montodepago: arrayDetallesCobros[j].montodepago,
-              montobsf: arrayDetallesCobros[j].montobsf
+              idpedido: arrayPedidos[i].idpedido,
+              fechapago: arrayCobros[j].fechadepago,
+              nrofactura: arrayPedidos[i].nrofactura,
+              tipopago: arrayCobros[j].tipopago,
+              cliente: arrayPedidos[i].nomcliente,
+              vendedor: arrayPedidos[i].nomvendedor,
+              viapago: arrayCobros[j].viadepago,
+              banco: arrayCobros[j].banco,
+              montodepago: arrayCobros[j].montodepago,
+              montobsf: arrayCobros[j].montobsf,
+              status: arrayCobros[j].status
             }
           );
-          //Sale del for porque ya encontro la coincidencia */
         }
       }
     }
-
   }
 
   timestampConvert(fec) {
@@ -354,7 +327,7 @@ export class GeneralComponent implements OnInit {
   }
 
   SelectedValue(Value){
-    this.tipodoc = Value;
+    this.codCli = Value;
   }
 
 }
