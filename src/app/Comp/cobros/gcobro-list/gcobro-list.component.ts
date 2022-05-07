@@ -121,8 +121,6 @@ export class GcobroListComponent implements OnInit {
 
     this.pedidoPend_ =  Object.assign({}, elemento);
 
-    this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
-
     let idpedido = this.pedidoPend_.idpedido.toString();
 
     if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
@@ -133,9 +131,14 @@ export class GcobroListComponent implements OnInit {
 
       this.matrisDetCobro = cobrosDet;
 
+      this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
+
       for (let i in this.matrisDetCobro) {
         if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
-        this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        
+        if(this.matrisDetCobro[i].status == "ACTIVO"){
+          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        }
       }
 
       if ( this.pagoparcialpagado > 0 ) {
@@ -317,14 +320,18 @@ export class GcobroListComponent implements OnInit {
   }//onCancelar
 
   eliminarCobro(posicionArray) {
+    if(confirm('¿Está seguro de que quiere eliminar este elemento?')) {
 
-    let cobroDelete = {} as Cobro;
-    cobroDelete = this.matrisDetCobro[posicionArray];
-    cobroDelete.status = "ELIMINADO";
-    cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
-    cobroDelete.modificado = new Date;
+      let cobroDelete = {} as Cobro;
+      cobroDelete = this.matrisDetCobro[posicionArray];
+      cobroDelete.status = "ELIMINADO";
+      cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
+      cobroDelete.modificado = new Date;
+  
+      this.cobroService.updatecobros(cobroDelete);
 
-    this.cobroService.updatecobros(cobroDelete);
+      this.toastr.warning('Operación Terminada', 'Registro de cobro eliminado');
+    }
   }
 
   cancelNotifi(){

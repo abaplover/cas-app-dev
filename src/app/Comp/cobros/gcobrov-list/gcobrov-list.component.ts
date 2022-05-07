@@ -248,7 +248,9 @@ export class GcobrovListComponent implements OnInit {
         if(this.matrisDetCobro[i].fechadepago) {
           this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
+        if(this.matrisDetCobro[i].status == "ACTIVO"){
           this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        }
       }
 
       if ( this.pagoparcialpagado > 0 ) {
@@ -310,14 +312,18 @@ export class GcobrovListComponent implements OnInit {
   }
 
   eliminarCobro(posicionArray) {
+    if(confirm('¿Está seguro de que quiere eliminar este elemento?')) {
 
-    let cobroDelete = {} as Cobro;
-    cobroDelete = this.matrisDetCobro[posicionArray];
-    cobroDelete.status = "ELIMINADO";
-    cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
-    cobroDelete.modificado = new Date;
+      let cobroDelete = {} as Cobro;
+      cobroDelete = this.matrisDetCobro[posicionArray];
+      cobroDelete.status = "ELIMINADO";
+      cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
+      cobroDelete.modificado = new Date;
+  
+      this.cobroService.updatecobros(cobroDelete);
 
-    this.cobroService.updatecobros(cobroDelete);
+      this.toastr.warning('Operación Terminada', 'Registro de cobro eliminado');
+    }
   }
 
   roundTo(num: number, places: number) {
