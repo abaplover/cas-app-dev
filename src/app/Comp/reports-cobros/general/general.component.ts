@@ -224,8 +224,8 @@ export class GeneralComponent implements OnInit {
 
         this.cobrosDet_ = cobro;
 
-        //Filtramos de acuerdo a cada condicion porque en la parte del query no se pueden utilizar
-        // dos 'in' de where
+        //Filtramos de acuerdo a cada condicion porque en la parte del query no se pueden
+        // utilizar dos 'in' de where
         if (typeof this.tipopago == "undefined" || this.tipopago == null || this.tipopago == '') 
         { } else {
           if(this.tipopago == ""){ } else {
