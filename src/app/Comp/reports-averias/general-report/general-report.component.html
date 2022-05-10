@@ -97,6 +97,9 @@
 							</div> -->
 
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div>
+									<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+								</div>
 								<!-- <div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Material</mat-label>
@@ -113,9 +116,6 @@
 								</div> -->
 							</div>
 					</div>
-					<div>
-						<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
-					</div>
 
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -123,7 +123,7 @@
 								<button
 									smat-stroked-button
 									class="btn btn-primary"
-									style=" height: 35px !important;"
+									style=" height: 35px !important; margin-right: 2px;"
 									type="reset"
 								>
 									Limpiar
