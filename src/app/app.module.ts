@@ -191,6 +191,7 @@ import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-c
 import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
 import { ReportsCobrosComponent } from './Comp/reports-cobros/reports-cobros.component';
 import { GeneralComponent } from './Comp/reports-cobros/general/general.component';
+import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-cobros.component';
 
 //
 @NgModule({
@@ -286,6 +287,7 @@ import { GeneralComponent } from './Comp/reports-cobros/general/general.componen
     TipodcobrosListComponent,
     ReportsCobrosComponent,
     GeneralComponent,
+    TotalesDeCobrosComponent,
 
   ],
   imports: [
