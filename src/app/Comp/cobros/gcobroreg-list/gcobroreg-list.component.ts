@@ -63,23 +63,26 @@ export class GcobroregListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    console.log("iniciando");
     this.cobro_ = {} as Cobro;
 
       //Obtenemos la lista de todos los pedidos
       this.pedidoS.getPedidos2().subscribe(pedidos => {
+        this.pedidos = [];
+        let filter1 = [];
+        let filterTwoWeeks =[];
         this.pedidos = pedidos;
 
         this.cobroService.cobrosPagados.subscribe(cobros => {
           //Filtramos solo los cobros que tienen fecha de pago, es decir, que estan pagados
           //ya sea parcial o total
-          let filter1 = cobros.filter( cobro => {
-            return cobro.fechadepago;
+          filter1 = cobros.filter( cobro1 => {
+            return cobro1.fechadepago;
           });
 
           //Filtramos solo los cobros de las ultimas dos semanas a la fecha del dia
-          let filterTwoWeeks = filter1.filter( cobro => {
-            let c: any = cobro.fechadepago;
+          filterTwoWeeks = filter1.filter( cobro2 => {
+            let c: any = cobro2.fechadepago;
             let now = moment();
             let other:any = moment.unix(c.seconds);
     
@@ -87,6 +90,7 @@ export class GcobroregListComponent implements OnInit {
     
             return days <= 14;
           });
+          this.cobroslist = [];
     
           //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
             for(let i = 0; i<pedidos.length;i++) {

@@ -226,7 +226,7 @@ export class CobrosService {
 
   getCobrosDet(idpedido) {
     //Busca todos los detalles de cobros (cobros registrados)
-    this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido));
+    this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido).orderBy("fechadepago","asc"));
     this.cobrosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;

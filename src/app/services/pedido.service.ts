@@ -121,6 +121,15 @@ export class PedidoService {
   constructor(public db: AngularFirestore) 
   { 
 
+    //Busca todos los pedidos
+    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(150));
+    this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido; 
+        return data;
+      })
+    }));
+    
     //Busca todos los pedidos con estatus ACTIVO
     this.pedidosColletionA = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO']).orderBy("creado", "desc").limit(50));
     this.pedidosA = this.pedidosColletionA.snapshotChanges().pipe(map(changes => {
@@ -178,15 +187,6 @@ export class PedidoService {
   }//constructor
 
   onInit() {
-
-    //Busca todos los pedidos
-    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(150));
-    this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
-        return data;
-      })
-    }));
   }
 
   getPedidosPendientes() {

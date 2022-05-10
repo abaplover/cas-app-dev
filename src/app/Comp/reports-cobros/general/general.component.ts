@@ -5,6 +5,7 @@ import { CollectionReference } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
+import { each } from 'jquery';
 import { Subject } from 'rxjs';
 import { Client } from 'src/app/models/client';
 import { Cobro } from 'src/app/models/cobro';
@@ -52,6 +53,9 @@ export class GeneralComponent implements OnInit {
   averiaCerrada = false;
   arrayPedido: any[] = [];
   copyArray = [];
+
+  montototalUSD = 0;
+  montototalBSF = 0;
 
   showSpinner = false;
 
@@ -250,17 +254,29 @@ export class GeneralComponent implements OnInit {
         this.metodoFor(this.arrayPedido,this.cobrosDet_);
 
         this.cobrosDet_ = this.copyArray;
+        this.montototalUSD = 0;
+        this.montototalBSF = 0;
+
+        this.cobrosDet_.forEach(cobro => {
+          this.montototalUSD += Number(cobro.montodepago);
+          if(cobro.montobsf) {
+            this.montototalBSF += Number(cobro.montobsf)
+          } else {
+            this.montototalBSF += 0;
+          }
+        });
 
         if(!this.firstTime){
           this.rerender();
         }
   
-        this.showSpinner = false;
-        this.opcgenReport = true;  
+        this.opcgenReport = true;
+        
       
       })
 
     })
+    this.showSpinner = false;
 
   }//onSubmitSearch
 
