@@ -225,10 +225,10 @@ td.col-8, th.col-8 {
 	border-color: rgba(175, 173, 173, 0.884);
 }
 
-.ng-autocomplete ::ng-deep .autocomplete-container { 
+/* .ng-autocomplete ::ng-deep .autocomplete-container { 
 	width: 307px;
 	min-width: 300px;
-}
+} */
 
 
 .outerDivFull { margin:1px; } 

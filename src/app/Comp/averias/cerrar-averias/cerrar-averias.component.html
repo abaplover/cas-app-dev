@@ -21,11 +21,11 @@
 				<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
 					<div class="card">
 						<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 195px;">
-							<div class="row" style="height: 45px;">
+							<div class="row" style="height: 47px; margin-top: -3px;">
 								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 									<div class="input-group input-group-sm mb-3">
-										<div class="form-group">
-											<div class="ng-autocomplete" > 
+										<div class="form-group" style="width: 100%;">
+											<div class="ng-autocomplete" style="width: 100%;"> 
 												<ng-autocomplete 
 													[data]="clienteList"
 													[searchKeyword]="keywordCli"
@@ -126,30 +126,6 @@
 							<div class="row">
 								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 									<div class="input-group input-group-sm mb-3">
-										
-										<!-- <div class="ng-autocompleteDoc" > 
-												<ng-autocomplete 
-													[data]="this.gestionaveriasService.lpedidoList"
-													[searchKeyword]="keywordDoc"
-													placeHolder="N° Doc/Fac"
-													[itemTemplate]="itemTemplateDoc"
-													[notFoundTemplate]="notFoundTemplateDoc"
-													name="nrodocUID"
-													(inputChanged)='onChangeSearchDoc($event)'
-													(selected)='selectEventDoc($event)'
-													(inputCleared) = 'closeautoCompleteDoc()'
-													notFoundText="No existe"
-													[disabled]="this.gestionaveriasService.readonlyField"
-													
-												>                                 
-												</ng-autocomplete>
-												<ng-template #itemTemplateDoc let-item>
-													<a [innerHTML]="item.nrofactura"></a>
-												</ng-template>
-												<ng-template #notFoundTemplateDoc let-notFound>
-													<div [innerHTML]="notFound"></div>
-												</ng-template>
-											</div> -->
 
 											<div class="input-group-prepend" style="width: 125px;">
 												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc/Fac</span>
