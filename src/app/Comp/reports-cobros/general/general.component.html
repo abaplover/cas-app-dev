@@ -2,7 +2,7 @@
 	<div *ngIf="showSpinner" class="bars-spinner">
 		<mat-spinner></mat-spinner>
 	</div>
-	<form #generalReport="ngForm" *ngIf="!this.opcgenReport">
+	<form id="generalReport" #generalReport="ngForm" *ngIf="!this.opcgenReport">
 		<div class="row">
 			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 				<div id="ndesp" class="card" style="padding:10px;">
@@ -129,20 +129,26 @@
 								</div>
 							</div>
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div>
+									<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+								</div>			
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 checkClass">
+								<input type="checkbox" name="seeDeleted"
+								class="form-control"
+								(change)="verEliminados($event)"
+								>
+								<span>ELIMINADOS</span>
 							</div>
 					</div>
-					<div>
-						<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
-					</div>
-
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 							<div class="form-group" style="text-align:right;">
 								<button
 									smat-stroked-button
 									class="btn btn-primary"
-									style=" height: 35px !important;"
-									type="reset"
+									style=" height: 35px !important;margin-right: 2px;"
+									(click) = "limpiar(generalReport)"
 								>
 									Limpiar
 								</button>
@@ -195,7 +201,7 @@
 		</div>
 	</form>
 
-	<div id="generalReport">
+	<div>
 		<button *ngIf="this.opcgenReport"
 		id="back"
 		name="back"

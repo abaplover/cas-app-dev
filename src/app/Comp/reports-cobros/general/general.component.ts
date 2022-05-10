@@ -56,6 +56,7 @@ export class GeneralComponent implements OnInit {
 
   montototalUSD = 0;
   montototalBSF = 0;
+  status:string;
 
   showSpinner = false;
 
@@ -164,7 +165,14 @@ export class GeneralComponent implements OnInit {
   }//orgValueChange
 
   regresar() {
+    this.cobrosDet_ = [];
     this.opcgenReport = false;
+    this.tipodoc = "";
+    this.vendedor = "";
+    this.codCli = null;
+    this.tipopago = "";
+    this.viapago = "";
+    this.banco = "";
   }
 
   onBookChange(event) {
@@ -194,6 +202,16 @@ export class GeneralComponent implements OnInit {
       if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
         if(this.tipodoc == ""){ } else {
           queryCobros = queryCobros.where("tipodoc", 'in', this.tipodoc);
+        }
+      }
+
+      console.log("this.statyus ",this.status);
+
+      if (typeof this.status == "undefined" || this.status == null) {
+        queryCobros = queryCobros.where("status", '==','ACTIVO');
+      } else {
+        if(this.status == ""){ } else {
+          queryCobros = queryCobros.where("status", 'in', ['ELIMINADO',' ','ACTIVO']);
         }
       }
 
@@ -250,6 +268,10 @@ export class GeneralComponent implements OnInit {
               this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.banco.includes(cobr.banco));
           }
         }
+/* 
+        if (typeof this.status == "undefined" || this.status == null) { } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.status.includes(cobr.status))
+        } */
 
         this.metodoFor(this.arrayPedido,this.cobrosDet_);
 
@@ -264,19 +286,21 @@ export class GeneralComponent implements OnInit {
           } else {
             this.montototalBSF += 0;
           }
-        });
+        });   
 
         if(!this.firstTime){
           this.rerender();
-        }
-  
+        }   
         this.opcgenReport = true;
-        
+        this.status = null;
       
       })
 
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 500);
+
     })
-    this.showSpinner = false;
 
   }//onSubmitSearch
 
@@ -314,7 +338,7 @@ export class GeneralComponent implements OnInit {
     return dateObject;
   }//timestampConvert
 
-  verdetalles(cobro){
+  verdetalles(cobro) {
     const dialogConfig = new MatDialogConfig;
     dialogConfig.autoFocus = true;
     dialogConfig.maxWidth = "100%"
@@ -330,6 +354,25 @@ export class GeneralComponent implements OnInit {
     };
   
     //this.dialogo.open(AveriaShowComponent,dialogConfig);
+  }
+
+  verEliminados(ev) {
+    if (ev.target.checked ) {
+      this.status = "ELIMINADO";
+    } else {
+      this.status = null;
+    }
+  }
+
+  limpiar(formu?: NgForm) {
+    if(!formu) formu.reset();
+    this.status = null;
+    this.tipodoc = "";
+    this.vendedor = "";
+    this.codCli = null;
+    this.tipopago = "";
+    this.viapago = "";
+    this.banco = "";
   }
 
   rerender(): void {

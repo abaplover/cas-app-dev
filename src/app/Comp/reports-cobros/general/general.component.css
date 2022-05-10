@@ -22,6 +22,22 @@ mat-spinner {
 	left: 45vw;
 }
 
+.checkClass {
+	flex-wrap: wrap;
+	display: flex;
+	height: 10%;
+}
+
+.checkClass input {
+	width: 10% !important;
+    margin-right: 10px;
+}
+
+.checkClass span {
+	display: flex;
+	align-items: center;
+}
+
 .abbreviation {
 	height: 50vh;
 	margin-top: 12px;
