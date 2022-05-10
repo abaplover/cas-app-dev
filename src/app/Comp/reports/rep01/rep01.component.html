@@ -129,8 +129,10 @@
 									</mat-form-field>
 								</div>
 							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+							</div>
 						</div>
-            <div><app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete></div>
 
 						<div class="row">
 

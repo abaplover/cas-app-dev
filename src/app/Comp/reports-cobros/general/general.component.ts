@@ -364,8 +364,8 @@ export class GeneralComponent implements OnInit {
     }
   }
 
-  limpiar(formu?: NgForm) {
-    if(!formu) formu.reset();
+  limpiar(pf?: NgForm) {
+    pf.reset();
     this.status = null;
     this.tipodoc = "";
     this.vendedor = "";
