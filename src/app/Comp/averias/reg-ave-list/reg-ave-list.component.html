@@ -118,4 +118,9 @@
 			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
 		</tr>
 	</table>
+	<mat-paginator 
+	  #paginator 
+	  [pageSizeOptions]="[40,60,10,20]" 
+	  showFirstLastButtons
+	></mat-paginator>
 </div>

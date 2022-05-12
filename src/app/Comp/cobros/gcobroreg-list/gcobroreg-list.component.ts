@@ -17,6 +17,7 @@ import { Vpago } from '../../../models/vpago';
 import { Banco } from '../../../models/banco';
 import * as moment from 'moment';
 import { PedidoService } from 'src/app/services/pedido.service';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-gcobroreg-list',
   templateUrl: './gcobroreg-list.component.html',
@@ -37,7 +38,9 @@ export class GcobroregListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['fechapago', 'pedido','documento', 'vendedor','cliente','tipopago', 'viapago', 'banco', 'totalmontonetousd','totalmontonetobsf'];
+  
   cobro_ = {} as Cobro;
   cobro0_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
@@ -46,11 +49,13 @@ export class GcobroregListComponent implements OnInit {
   pagototal=true;
   pagoparcialpagado:number;
   ver:boolean;
+
   public vpagoList: Vpago[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
   pedidos = [];
   matrisDetCobro: CobroDet[]=[];
+
   sendemail=false;
 
   constructor(
@@ -63,7 +68,6 @@ export class GcobroregListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("iniciando");
     this.cobro_ = {} as Cobro;
 
       //Obtenemos la lista de todos los pedidos
@@ -119,6 +123,7 @@ export class GcobroregListComponent implements OnInit {
           // Asignamos los datos a la tabla del html
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
       });
     });
 

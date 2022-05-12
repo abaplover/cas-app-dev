@@ -37,6 +37,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog,MatDialogConfig } from "@angular/material/dialog";
 import { PedidoShowComponent } from '../pedido-show/pedido-show.component';
 import * as moment from 'moment';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-pedido-ne',
@@ -47,6 +48,7 @@ export class PedidoNeComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
@@ -106,6 +108,7 @@ export class PedidoNeComponent implements OnInit {
   @ViewChild('pedidoFormnf') myFormnf;
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
+
   constructor
   (
     public pedidoService: PedidoService,
@@ -140,6 +143,7 @@ export class PedidoNeComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
     this.pedido_ = {} as Pedido;
 

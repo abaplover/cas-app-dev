@@ -17,7 +17,7 @@
     matSort
   >
     <ng-container matColumnDef="idpedido">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="">Pedido</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido</th>
       <td mat-cell *matCellDef="let element">{{ element.idpedido }}</td>
     </ng-container>
 
@@ -127,9 +127,9 @@
       </td>
     </tr>
   </table>
-  <!--mat-paginator
-	#paginator
-	[pageSizeOptions]="[15, 30, 50]"
-	showFirstLastButtons
-	></mat-paginator-->
+  <mat-paginator 
+    #paginator 
+    [pageSizeOptions]="[40,60,10,20]" 
+    showFirstLastButtons
+  ></mat-paginator>
 </div>

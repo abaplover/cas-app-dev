@@ -52,7 +52,9 @@
 		</form>
 	</div>
 </div>
-<!---->
+
+
+<!--TABLA EXTERNA-->
 <div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.pedidoService.mostrarForm">
 	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
 		<!-- Position Column -->
@@ -165,4 +167,9 @@
 			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
 		</tr>
 	</table>
+	<mat-paginator 
+		#paginator 
+		[pageSizeOptions]="[40,60,10,20]" 
+		showFirstLastButtons
+	></mat-paginator>
 </div>

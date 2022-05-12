@@ -20,6 +20,7 @@ import { TipodocCobros } from 'src/app/models/tipodoc-cobros';
 import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 import * as moment from 'moment';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 
@@ -40,10 +41,12 @@ export class GcobroListComponent implements OnInit {
   maxDate= moment(new Date()).format('YYYY-MM-DD');
 
 
-  //var
+  //datos de la tabla externa
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
+  
   pedidoPend_ = {} as Pedido;
   cobro0_ = {} as Cobro;
   cobro_ = {} as Cobro;
@@ -94,6 +97,7 @@ export class GcobroListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{

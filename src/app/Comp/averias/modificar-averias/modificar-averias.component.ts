@@ -56,6 +56,7 @@ import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { AlertsService } from 'src/app/services/alerts.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -143,8 +144,10 @@ export class ModificarAveriasComponent implements OnInit {
   averiaslist = [];
   AvelistDet=[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
+
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['uid', 'Fecha', 'nrodocumento', 'Status', 'Cliente', 'Vendedor', 'totalaveria', 'Opc'];
 
 
@@ -183,6 +186,7 @@ export class ModificarAveriasComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.averiaslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz =>{

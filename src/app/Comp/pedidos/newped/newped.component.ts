@@ -171,6 +171,7 @@ export class NewpedComponent implements OnInit {
     })
 
 
+    //Desactiva el boton enviar 
     this.pedidoService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
@@ -639,14 +640,6 @@ export class NewpedComponent implements OnInit {
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null)
     {
-        //set parameter date
-        //console.log('desde pedidos: ',url);
-
-
-        //this.pedidoService.pedido_.email = "yhonatandcarruido@gmail.com";
-
-
-
         this.pedidoService.pedido_.pdfurl = url;
 
   
@@ -654,9 +647,6 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
         this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
         this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes());
-
-        //console.log('Fecha ped: ',this.pedidoService.pedido_.fechapedido);
-
 
         this.pedidoService.pedido_.creado = new Date;
         this.pedidoService.pedido_.modificado = new Date;
@@ -746,13 +736,6 @@ export class NewpedComponent implements OnInit {
 
         this.pedidoService.pedido_.companyblk = this.companyblk;
 
-        //GENERAR PDF
-        //this.generarpdf();
-        //console.log('pdfURLooo: ',this.URLPublica);
-
-
-
-
         //Add in fireStore head
         this.pedidoService.addPedidos(this.pedidoService.pedido_,pedNro);
         this.pedidoService.tmontb = 0;
@@ -776,7 +759,8 @@ export class NewpedComponent implements OnInit {
         }
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
 
 
     }else{ //Actualiza Pedido
@@ -854,7 +838,8 @@ export class NewpedComponent implements OnInit {
 
 
         this.toastr.success('Operación Terminada','Pedido Actualizado');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     }
 
     // if(this.pedidoService.txtBtnAccion == "Agregar Pedido"){}else{}
@@ -893,7 +878,8 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         this.pedidoService.txtBtnAccion = "Crear Pedido";
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
       }
     }else{
@@ -910,7 +896,8 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         this.pedidoService.txtBtnAccion = "Crear Pedido";
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
     }
 
@@ -1307,7 +1294,8 @@ export class NewpedComponent implements OnInit {
     this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
 
     if (this.pedidoService.tmontn <= 0 || this.pedidoService.totalCnt <= 0 || this.pedidoService.tmontb <= 0){
-      this.pedidoService.enviar = false;
+      //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
       this.pedidoService.readonlyField = false;
     }
   }//removeDetRow

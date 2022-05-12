@@ -152,7 +152,8 @@ export class PedidoComponent implements OnInit {
       this.mrechazoList = mrz;
     })
 
-    this.pedidoService.enviar = false;
+    //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
 
@@ -351,7 +352,8 @@ onEdit(event, ped){
         }
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
 
     }else{ //Actualiza Pedido
         //set parameter date
@@ -419,7 +421,8 @@ onEdit(event, ped){
 
         
         this.toastr.success('Operación Terminada','Pedido Actualizado');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     }
 
     // if(this.pedidoService.txtBtnAccion == "Agregar Pedido"){}else{}
@@ -455,7 +458,8 @@ onEdit(event, ped){
     this.pedidoService.tmonti = 0;
     this.pedidoService.tmontn = 0;
     this.pedidoService.txtBtnAccion = "Enviar Pedido";
-    this.pedidoService.enviar = false;
+    //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     this.pedidoService.mostrarForm = false;
   }
 
@@ -854,7 +858,8 @@ onEdit(event, ped){
     this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
 
     if (this.pedidoService.tmontn <= 0 || this.pedidoService.totalCnt <= 0 || this.pedidoService.tmontb <= 0){
-      this.pedidoService.enviar = false;
+      //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
       this.pedidoService.readonlyField = false;
     }
 

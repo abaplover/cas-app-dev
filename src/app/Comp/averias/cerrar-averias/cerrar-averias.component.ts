@@ -58,6 +58,7 @@ import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { solucionAveriaService } from 'src/app/services/solucionAveria.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -68,6 +69,7 @@ import { solucionAveriaService } from 'src/app/services/solucionAveria.service';
   styleUrls: ['./cerrar-averias.component.css']
 })
 export class CerrarAveriasComponent implements OnInit {
+
   @ViewChild('cantidadmaterial') cantidadmaterial_: MatInput;
 
   estadoElement= "estado1";
@@ -112,7 +114,7 @@ export class CerrarAveriasComponent implements OnInit {
   public keywordVen = "idvendedor";
   valorAutCli: string;
   valorAutVen: string;
-  //maxDate:Date;
+
   maxDate= moment(new Date()).format('YYYY-MM-DD');
   codeBlock ='';
   companyblk ='';
@@ -139,8 +141,10 @@ export class CerrarAveriasComponent implements OnInit {
   averiaslist = [];
   AvelistDet=[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
+
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;  
   displayedColumns: string[] = ['uid', 'Fecha', 'nrodocumento', 'Status', 'Cliente', 'Vendedor', 'totalaveria', 'Opc'];
 
 
@@ -183,6 +187,7 @@ export class CerrarAveriasComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.averiaslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz =>{

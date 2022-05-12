@@ -15,6 +15,7 @@ import { BancoService } from '../../../services/banco.service';
 //models
 import { Vpago } from '../../../models/vpago';
 import { Banco } from '../../../models/banco';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-gcobroc-list',
@@ -32,7 +33,9 @@ export class GcobrocListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['Pedido', 'Factura', 'Status', 'Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','demora', 'Opc'];
+  
   cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;
@@ -40,6 +43,7 @@ export class GcobrocListComponent implements OnInit {
   pagototal=true;
   pagoparcialpagado:number;
   ver:boolean;
+
   public vpagoList: Vpago[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
@@ -63,6 +67,7 @@ export class GcobrocListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{

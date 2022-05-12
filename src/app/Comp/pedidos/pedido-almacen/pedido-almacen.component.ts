@@ -49,6 +49,7 @@ import { DatoempService } from 'src/app/services/datoemp.service';
 import * as moment from 'moment';
 import { AlmacenistaService } from 'src/app/services/almacenista.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { MatPaginator } from '@angular/material/paginator';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -61,6 +62,7 @@ export class PedidoAlmacenComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
@@ -130,6 +132,8 @@ export class PedidoAlmacenComponent implements OnInit {
   @ViewChild('pedidoFormnAlmacen') myFormnAlmacen;
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
+
+
   constructor
   (
     public pedidoService: PedidoService,
@@ -170,6 +174,7 @@ export class PedidoAlmacenComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.pedido_ = {} as Pedido;

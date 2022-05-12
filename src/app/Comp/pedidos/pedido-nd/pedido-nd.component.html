@@ -996,7 +996,7 @@
 
 		  <!-- Position Column -->
 		  <ng-container matColumnDef="idpedido">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header style="">Pedido </th>
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido </th>
 			<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
 		</ng-container>
 
@@ -1058,12 +1058,6 @@
 		  <ng-container matColumnDef="Opc">
 			  <th mat-header-cell *matHeaderCellDef></th>
 			  <td mat-cell *matCellDef="let element index as i">
-				  <!--
-
-				  <a class="btn btn-info text-white btn-sm" (click)="mostrarOcultar($event,i)">
-					  <i class="far fa-minus-square"></i>
-				  </a>
-				  -->
 					<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)" data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
 						<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
 					</a>
@@ -1084,6 +1078,12 @@
 			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda {{input.value}}</td>
 		  </tr>
 		</table>
+		<mat-paginator 
+			#paginator 
+			[pageSizeOptions]="[40,60,10,20]" 
+			showFirstLastButtons
+		></mat-paginator>
+		
 	  </div>
 
 

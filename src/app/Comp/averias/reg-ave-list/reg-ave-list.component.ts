@@ -14,6 +14,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AveriaShowComponent } from '../averia-show/averia-show.component';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { ContentObserver } from '@angular/cdk/observers';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 
@@ -33,8 +34,10 @@ export class RegAveListComponent implements OnInit {
   averiaslist = [];
   AvelistDet=[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
+  
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['uid', 'Fecha', 'nrodocumento', 'Status', 'Cliente', 'Vendedor', 'totalaveria', 'Opc'];
 
 
@@ -55,6 +58,7 @@ export class RegAveListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.averiaslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz =>{

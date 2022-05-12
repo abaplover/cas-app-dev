@@ -19,6 +19,7 @@ import { TipodocCobros } from 'src/app/models/tipodoc-cobros';
 import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import * as moment from 'moment';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-gcobrov-list',
@@ -39,7 +40,9 @@ export class GcobrovListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
+  
   pedidoPend_ = {} as Pedido;
   cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
@@ -47,6 +50,7 @@ export class GcobrovListComponent implements OnInit {
   vp_efectivo=true;
   pagototal=true;
   pagoparcialpagado:number;
+
   ver:boolean;
   public vpagoList: Vpago[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
@@ -54,6 +58,7 @@ export class GcobrovListComponent implements OnInit {
   cobroslist = [];
   matrisDetCobro: Cobro[]=[];
   pedidoCobro: Pedido[];
+
   sendemail=false;
   importeremanente = 0;
   visual = false;
@@ -86,6 +91,7 @@ export class GcobrovListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
