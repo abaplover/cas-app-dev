@@ -235,17 +235,6 @@ export class GcobrocListComponent implements OnInit {
   onSubmit(pf?: NgForm){
     if(this.cobro_.uid != null){
       this.cobro_.montodepago=0;
-
-      /* if (this.cobro_.tipopago == "Pago Total"){
-        this.cobro_.statuscobro="CERRADA";
-      } */
-
-      /* if (this.cobro_.tipopago == "Pago Parcial"){
-        this.cobro_.statuscobro="PARCIAL";
-        if (this.cobro_.totalmontoneto.toFixed(2) == (this.pagoparcialpagado+this.cobroDet_.montodepago).toFixed(2)){
-          this.cobro_.statuscobro="CERRADA";
-        }
-      } */
     
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;

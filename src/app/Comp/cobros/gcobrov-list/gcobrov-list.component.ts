@@ -147,7 +147,7 @@ export class GcobrovListComponent implements OnInit {
     if (val == "TOTAL") {
       this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto-this.pagoparcialpagado).toFixed(2));
       this.montodepago =  this.cobro_.montodepago;
-      this.pedidoPend_.statuscobro = "CERRADA"
+      this.pedidoPend_.status = "COBRADO"
       this.pagototal = true;
     }
     else if (val == "PARCIAL") {
@@ -303,7 +303,7 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.montodepago = Number(this.montodepago);
 
       if (this.pedidoPend_.totalmontoneto.toFixed(2) ==  this.pagoparcialpagado + this.cobro_.montodepago.toFixed(2)) {
-        this.pedidoPend_.statuscobro="CERRADA";
+        this.pedidoPend_.statuscobro="COBRADO";
       }  
 
       //Actualiza el pedido
