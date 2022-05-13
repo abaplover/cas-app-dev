@@ -32,9 +32,11 @@ export class GcobroregListComponent implements OnInit {
   idpedidoEli: string="";
   fechapedidoEli: Date;
   clientepedidoEli: string="";
+  vp_efectivo=true;
+  pagototal=true;
+  pagoparcialpagado:number;
+  ver:boolean;
   
-
-
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
@@ -45,10 +47,6 @@ export class GcobroregListComponent implements OnInit {
   cobro0_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;
-  vp_efectivo=true;
-  pagototal=true;
-  pagoparcialpagado:number;
-  ver:boolean;
 
   public vpagoList: Vpago[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio

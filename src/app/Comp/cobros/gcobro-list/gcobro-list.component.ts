@@ -56,6 +56,10 @@ export class GcobroListComponent implements OnInit {
   pagototal=true;
   pagoparcialpagado:number = 0;
   ver:boolean;
+  sendemail=false;
+  importeremanente = 0;
+  visual = false;
+
   public vpagoList: Vpago[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
@@ -63,9 +67,6 @@ export class GcobroListComponent implements OnInit {
   matrisDetCobro: Cobro[]=[];
   pedidoCobro: Pedido[];
   pedido: Pedido[];
-  sendemail=false;
-  importeremanente = 0;
-  visual = false;
 
 
   constructor(

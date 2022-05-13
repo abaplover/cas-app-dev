@@ -120,7 +120,6 @@ export class GcobrovListComponent implements OnInit {
       this.vp_efectivo=false;
     } else {
       this.cobro_.banco = "";
-      //this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
     }
   }//vpagoselected
