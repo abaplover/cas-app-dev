@@ -190,10 +190,6 @@ export class PedidoService {
      // //Busca todos los detalles de pedidos
      this.pedidosDetColletion = this.db.collection('pedidosDet');
 
-     /* setTimeout(() => {
-      this.updatePedidosCo();
-     }, 8000); */
-
   }//constructor
 
   onInit() {
