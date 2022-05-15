@@ -19,6 +19,8 @@ export class PedidoService {
   selectedIndex = 0;
   matrisDetPedido: PedidoDet[]=[];
   elementoBorrados: PedidoDet[]=[];
+  arrayIdPedidos = []; //Array de ids de los pedidos para cambiar el estatus y poner en funcionamiento el modulo de cobros
+
   docAdd:number = -1;
   readonlyField = false;
   disabledFieldVen = false;
@@ -116,6 +118,10 @@ export class PedidoService {
   pedidosDocVencido: AngularFirestoreDocument<Pedido>;
   pedidosColletionVencido: AngularFirestoreCollection<Pedido>;
 
+  pedidosCobrados: Observable<Pedido[]>;
+  pedidosDocCobrados: AngularFirestoreDocument<Pedido>;
+  pedidosCollectionCobrados: AngularFirestoreCollection<Pedido>;
+
   db2 = firebase.firestore();
 
   constructor(public db: AngularFirestore) 
@@ -171,7 +177,7 @@ export class PedidoService {
     }));
 
     //Busca todos los pedidos con estatus ENTREGADO
-    this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(50));
+    this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(300));
     this.pedidosE = this.pedidosColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
@@ -184,18 +190,36 @@ export class PedidoService {
      // //Busca todos los detalles de pedidos
      this.pedidosDetColletion = this.db.collection('pedidosDet');
 
+     /* setTimeout(() => {
+      this.updatePedidosCo();
+     }, 8000); */
+
   }//constructor
 
   onInit() {
+  }
+  getPedidosCobrados() {
+    //Busca todos los pedidos con estatus COBRADO
+    this.pedidosCollectionCobrados = this.db.collection('pedidos', ref => ref.where("status", 'in', ['COBRADO']).orderBy("creado", "desc").limit(200));
+    this.pedidosCobrados = this.pedidosCollectionCobrados.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        //data.uid = a.payload.doc.id;
+        return data;
+      })
+    }));
+
+    return this.pedidosCobrados;
   }
 
   getPedidosPendientes() {
     //Busca todos los pedidos pendientes por pagar
     this.pedidosPendientesColletionE = this.db.collection('pedidos', ref => 
-      ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
-      .where("fpago",">",this.today) //Fecha de vencimiento
+      //ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
+      ref.where("status", '==', 'ENTREGADO')
+      .where("fpago",">=",this.today) //Fecha de vencimiento
       .orderBy("fpago", "desc")
-      .orderBy("creado", "desc").limit(50)
+      .orderBy("creado", "desc").limit(300)
     );
     this.pedidosPendientes = this.pedidosPendientesColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -212,7 +236,7 @@ export class PedidoService {
     //Busca todos los cobros con estatus - VENCIDO
     let hoy = new Date();
     this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
-    .where("status", "==", "ENTREGADO").where("statuscobro", "in", ["PENDIENTE","PARCIAL"]).orderBy("fpago", "desc").orderBy("creado", "desc").limit(50));
+    .where("status", "==", "ENTREGADO").orderBy("fpago", "desc").orderBy("creado", "desc").limit(300));
     this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
@@ -399,6 +423,64 @@ export class PedidoService {
     this.pedidoDoc.update(pedido);
   }
 
+  updatePedidosCo(idpedido?) //HACER EL UPDATE DEl estatus de entregado a x
+  {
+
+    /* let pedtoChange = this.db.collection('pedidos', ref => ref.where('idpedido','==',idpedido.toString()));
+
+    pedtoChange.valueChanges().subscribe((ped:any) => {
+      //Guardamos el id en una variable
+      const uidPed = ped[0].uid;
+      console.log("uidPed ",uidPed,ped);
+      //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
+      var pedDetRef = this.db.collection('pedidos').doc(uidPed);
+      //Cambiamos el check a false
+      /* pedDetRef.update({
+        status: "COBRADO"
+      }); *
+
+    }) */
+    let pedidosEnt;
+
+    this.pedidosE.subscribe(pedidos=>{
+      pedidosEnt = pedidos;
+    });
+    
+    setTimeout(() => {
+      console.log("length ",pedidosEnt.length);
+      for(let i = 0; i< pedidosEnt.length;i++) {
+  
+        const uidPed = pedidosEnt[i].uid;
+        var pedDetRef = this.db.collection('pedidos').doc(uidPed);
+          //Cambiamos el check a false
+          pedDetRef.update({
+            status: "ENTREGADO"
+          }); 
+      }
+      setTimeout(() => {
+        console.log("length ",pedidosEnt);
+      }, 2000);
+
+    }, 5000);
+
+    /* setTimeout(() => {
+      window.location.reload();
+    }, 5000); */
+
+
+      /* pedtoChange.valueChanges().subscribe((ped:any) => {
+          //Guardamos el id en una variable
+          const uidPed = ped[0].uid;
+          console.log("uidPed ",uidPed,ped);
+          //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
+          var pedDetRef = this.db.collection('pedidos').doc(uidPed);
+          //Cambiamos el check a false
+          pedDetRef.update({
+            status: "X"
+          });
+      }); */
+  }
+
   updatePedidos(pedido: Pedido,anularN?:number)
   {
     this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
@@ -434,8 +516,8 @@ export class PedidoService {
       });
 
       //Busca en la tabla/coleccion pedidosDet si hay alguno que coincida con el uid del pedido
-      var coincideDetail = this.db.collection(
-        'pedidosDet', ref => ref.where('idpedido','==',pedido.uid.toString()));
+      var coincideDetail = this.db.collection('pedidosDet', ref => ref.where('idpedido','==',pedido.uid.toString()));
+
         //Ahora que conocemos que hay alguno/s que coincide, solicitamos el id de ese material(pedidoDet)
         coincideDetail.valueChanges().subscribe((material:PedidoDet[]) => {
         //Por cada material que coincida con el id del pedido
