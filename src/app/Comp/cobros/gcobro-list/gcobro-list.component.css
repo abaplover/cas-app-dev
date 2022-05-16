@@ -16,6 +16,12 @@
 	width: 80%;
 	font-size: 14px;
 }
+
+
+
+td.mat-cell {
+	padding-right: 10px;
+}
   
 th.mat-sort-header-sorted {
 	color: black;
