@@ -41,7 +41,7 @@ export class GcobrovListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['Pedido', 'Factura','Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
+  displayedColumns: string[] = ['idpedido', 'nrofactura','condiciondepago', 'fpago','nomcliente','nomvendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
   
   pedidoPend_ = {} as Pedido;
   cobro_ = {} as Cobro;
@@ -59,6 +59,8 @@ export class GcobrovListComponent implements OnInit {
   matrisDetCobro: Cobro[]=[];
   pedidoCobro: Pedido[];
 
+  showSpinner = false;
+
   sendemail=false;
   importeremanente = 0;
   visual = false;
@@ -74,24 +76,26 @@ export class GcobrovListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showSpinner = true;
     this.cobro_ = {} as Cobro;
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
       let cobrosArray = [];
-      cobrosArray = cobros;
+      this.cobroslist = cobros;
       //Filtramos en el array a mostrar los elementos que no tienen el pago completo
-      this.cobroslist = cobrosArray.filter( elemento => {
+      /* this.cobroslist = cobrosArray.filter( elemento => {
         if (elemento.montodepago) {
           return elemento.montodepago < elemento.totalmontoneto
         } else {
           return elemento;
         }
-      })
+      }) */
       
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.showSpinner = false;
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
