@@ -60,13 +60,13 @@ export class BancoComponent implements OnInit {
 
   public msj_enlace: string = 'Bancos';
 
-  moForm(){
-      if (this.bancoService.mostrarForm){
+  moForm() {
+      if (this.bancoService.mostrarForm) {
         this.bancoService.mostrarForm = false;
         this.bancoService.idFieldReadOnly = true;
         this.resetForm();
         this.msj_enlace = 'Bancos';
-      }else{
+      } else {
         this.bancoService.mostrarForm = true;
         this.bancoService.idFieldReadOnly = false;
         this.msj_enlace = '';

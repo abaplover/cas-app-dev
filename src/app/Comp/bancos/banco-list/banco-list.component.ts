@@ -51,7 +51,7 @@ export class BancoListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  moForm(){
+  moForm() {
     if (this.bancoService.mostrarForm){
        this.bancoService.mostrarForm = false;
        this.bancoService.idFieldReadOnly = true;
