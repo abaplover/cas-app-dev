@@ -181,6 +181,8 @@ export class GcobrovListComponent implements OnInit {
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
       this.montodepago = null;
+    } else {
+      this.montodepago = monto;
     }
   }
 

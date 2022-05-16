@@ -312,6 +312,8 @@ export class GcobroListComponent implements OnInit {
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
       this.montodepago = null;
+    } else {
+      this.montodepago == monto;
     }
   }
 
