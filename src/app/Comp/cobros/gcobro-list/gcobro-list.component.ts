@@ -255,9 +255,15 @@ export class GcobroListComponent implements OnInit {
   //select via de pago
   vpagoselected(val) {
     //si no es efectivo
-    if (val.substr(0,3)!="EFE"){
+    if (val.substr(0,3)!="EFE"){ 
       this.vp_efectivo=false;
     } else {
+      this.cobro_.banco = "";
+      //this.cobro_.nroreferencia="";
+      this.vp_efectivo=true;
+    }
+
+    if (val.substr(0,3)=="OLD"){ //quitar
       this.cobro_.banco = "";
       //this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
