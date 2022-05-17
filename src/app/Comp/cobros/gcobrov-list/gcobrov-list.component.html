@@ -207,6 +207,7 @@
 													required
 													name="tipodoc"
 													[(ngModel)]="this.cobro_.tipodoc"
+													(change) = "tipodocSelected($event.target.value)"
 													class="form-control form-select form-select-sm"
 													aria-label=".form-select-sm example"
 												>

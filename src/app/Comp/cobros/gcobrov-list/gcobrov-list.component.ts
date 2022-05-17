@@ -119,6 +119,15 @@ export class GcobrovListComponent implements OnInit {
   checkValue(){
   }
 
+
+  tipodocSelected(val) {
+    if (val == "GE01") {
+      this.vp_efectivo=true;
+      this.cobro_.moneda ="USD";
+      this.disableBSF = true;
+    }
+  }
+
   vpagoselected(val) {
     //si no es efectivo
     if (val.substr(0,3)!="EFE"){ 

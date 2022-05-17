@@ -274,6 +274,14 @@ export class GcobroListComponent implements OnInit {
     }
   }//vpagoselected
 
+  tipodocSelected(val) {
+    if (val == "GE01") {
+      this.vp_efectivo=true;
+      this.cobro_.moneda ="USD";
+      this.disableBSF = true;
+    }
+  }
+
   //Select bancos
   bancoselected(val) {
     //Buscamos en la lista de bancos el que coincida con el nombre del banco seleccionado
