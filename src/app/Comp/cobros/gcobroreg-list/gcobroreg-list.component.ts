@@ -81,28 +81,26 @@ export class GcobroregListComponent implements OnInit {
 
         this.cobroService.cobrosPagados.subscribe(cobros => {
           
-          filterTwoWeeks = cobros;
-
           this.cobroslist = [];
           //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
             for(let i = 0; i<pedidos.length;i++) {
 
-              for(let j = 0; j<filterTwoWeeks.length;j++) {
+              for(let j = 0; j<cobros.length;j++) {
 
-                if (pedidos[i].idpedido == filterTwoWeeks[j].idpedido) {
+                if (pedidos[i].idpedido == cobros[j].idpedido) {
                   this.cobroslist.push(
                     {
-                      idpedido: filterTwoWeeks[j].idpedido,
-                      fechadepago: filterTwoWeeks[j].fechadepago,
+                      idpedido: cobros[j].idpedido,
+                      fechadepago: cobros[j].fechadepago,
                       tipodoc: pedidos[i].tipodoc,
                       nrofactura: pedidos[i].nrofactura,
                       nomcliente: pedidos[i].nomcliente,
                       nomvendedor: pedidos[i].nomvendedor,
-                      tipopago: filterTwoWeeks[j].tipopago,
-                      viadepago: filterTwoWeeks[j].viadepago,
-                      banco: filterTwoWeeks[j].banco,
-                      montodepago: filterTwoWeeks[j].montodepago,
-                      montobsf: filterTwoWeeks[j].montobsf
+                      tipopago: cobros[j].tipopago,
+                      viadepago: cobros[j].viadepago,
+                      banco: cobros[j].banco,
+                      montodepago: cobros[j].montodepago,
+                      montobsf: cobros[j].montobsf
                     }
                   );
                 }
