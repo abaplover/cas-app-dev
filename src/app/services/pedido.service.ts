@@ -125,7 +125,7 @@ export class PedidoService {
   db2 = firebase.firestore();
 
   constructor(public db: AngularFirestore) 
-  { /* 
+  { 
 
     //Busca todos los pedidos
     this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO','COBRADO']).orderBy("creado", "desc").limit(150));
@@ -134,9 +134,9 @@ export class PedidoService {
         const data = a.payload.doc.data() as Pedido; 
         return data;
       })
-    })); */
+    }));
     
-    /* //Busca todos los pedidos con estatus ACTIVO
+    //Busca todos los pedidos con estatus ACTIVO
     this.pedidosColletionA = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO']).orderBy("creado", "desc").limit(50));
     this.pedidosA = this.pedidosColletionA.snapshotChanges().pipe(map(changes => {
      return changes.map(a => {
@@ -144,9 +144,9 @@ export class PedidoService {
         //data.uid = a.payload.doc.id;
         return data;
       })
-    })); */
+    }));
 
-    /* //Busca todos los pedidos con estatus FACTURADO
+    //Busca todos los pedidos con estatus FACTURADO
     this.pedidosColletionF = this.db.collection('pedidos', ref => ref.where("status", 'in', ['FACTURADO']).orderBy("creado", "desc").limit(50));
     this.pedidosF = this.pedidosColletionF.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -154,9 +154,9 @@ export class PedidoService {
         //data.uid = a.payload.doc.id;
         return data;
       })
-    })); */
+    }));
 
-    /* //Busca todos los pedidos con estatus PREPARADO
+    //Busca todos los pedidos con estatus PREPARADO
     this.pedidosColletionPrep = this.db.collection('pedidos', ref => ref.where("status", 'in', ['PREPARADO']).orderBy("creado", "desc").limit(50));
     this.pedidosPrep = this.pedidosColletionPrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -164,9 +164,9 @@ export class PedidoService {
         //data.uid = a.payload.doc.id;
         return data;
       })
-    })); */
+    }));
 
-    /* //Busca todos los pedidos con estatus DESPACHADO
+    //Busca todos los pedidos con estatus DESPACHADO
     this.pedidosColletionD = this.db.collection('pedidos', ref => ref.where("status", 'in', ['DESPACHADO']).orderBy("creado", "desc").limit(50));
     this.pedidosD = this.pedidosColletionD.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -174,9 +174,9 @@ export class PedidoService {
        //data.uid = a.payload.doc.id;
         return data;
       })
-    })); */
+    }));
 
-    /* //Busca todos los pedidos con estatus ENTREGADO
+    //Busca todos los pedidos con estatus ENTREGADO
     this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(300));
     this.pedidosE = this.pedidosColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -184,7 +184,7 @@ export class PedidoService {
         //data.uid = a.payload.doc.id;
         return data;
       })
-    })); */
+    }));
 
 
      // //Busca todos los detalles de pedidos
@@ -323,15 +323,6 @@ export class PedidoService {
 
   getPedidos()
   {
-    //Busca todos los pedidos
-    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO','COBRADO']).orderBy("creado", "desc").limit(150));
-    this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
-        return data;
-      })
-    }));
-
     return this.pedidos;
   }
 
@@ -352,65 +343,23 @@ export class PedidoService {
     return this.pedFac;
   }
   getPedidosA()
-  {//Busca todos los pedidos con estatus ACTIVO
-    this.pedidosColletionA = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO']).orderBy("creado", "desc").limit(50));
-    this.pedidosA = this.pedidosColletionA.snapshotChanges().pipe(map(changes => {
-     return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido;
-        //data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
+  {
     return this.pedidosA;
   }
   getPedidosF()
-  {//Busca todos los pedidos con estatus FACTURADO
-    this.pedidosColletionF = this.db.collection('pedidos', ref => ref.where("status", 'in', ['FACTURADO']).orderBy("creado", "desc").limit(50));
-    this.pedidosF = this.pedidosColletionF.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido;
-        //data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
+  {
     return this.pedidosF;
   }
-  
   getPedidosD()
-  {//Busca todos los pedidos con estatus DESPACHADO
-    this.pedidosColletionD = this.db.collection('pedidos', ref => ref.where("status", 'in', ['DESPACHADO']).orderBy("creado", "desc").limit(50));
-    this.pedidosD = this.pedidosColletionD.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido;
-       //data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
+  {
     return this.pedidosD;
   }
-
   getPedidosE()
-  {//Busca todos los pedidos con estatus ENTREGADO
-    this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(300));
-    this.pedidosE = this.pedidosColletionE.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido;
-        //data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
+  {
     return this.pedidosE;
   }
 
-  getPedidosPreparados() {//Busca todos los pedidos con estatus PREPARADO
-    this.pedidosColletionPrep = this.db.collection('pedidos', ref => ref.where("status", 'in', ['PREPARADO']).orderBy("creado", "desc").limit(50));
-    this.pedidosPrep = this.pedidosColletionPrep.snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido;
-        //data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
+  getPedidosPreparados() {
     return this.pedidosPrep;
   }
 
