@@ -202,10 +202,6 @@ export class GcobroListComponent implements OnInit {
 
   }//selectEventCob
 
-  onEdit(event, ped){
-
-  }//onEdit
-
   moForm(){
     if (this.cobroService.mostrarForm){
       this.cobroService.mostrarForm = false;
