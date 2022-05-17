@@ -86,10 +86,10 @@ export class GcobroListComponent implements OnInit {
     this.pedidoPend_ = {} as Pedido;
 
     this.pedidoS.getPedidosPendientes().subscribe( pedidosP => {
-      //this.cobroslist = pedidosP;
+      this.cobroslist = pedidosP;
       
       //ELEMENT_DATA
-      this.dataSource = new MatTableDataSource(pedidosP); //Aqui
+      this.dataSource = new MatTableDataSource( this.cobroslist);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.showSpinner = false;

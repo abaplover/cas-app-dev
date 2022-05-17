@@ -80,10 +80,10 @@ export class GcobrovListComponent implements OnInit {
     this.cobro_ = {} as Cobro;
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
-      //this.cobroslist = cobros;
+      this.cobroslist = cobros;
       
       //ELEMENT_DATA
-      this.dataSource = new MatTableDataSource(cobros);//Aqui
+      this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.showSpinner = false;
