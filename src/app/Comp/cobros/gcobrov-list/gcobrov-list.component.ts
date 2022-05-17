@@ -80,19 +80,10 @@ export class GcobrovListComponent implements OnInit {
     this.cobro_ = {} as Cobro;
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
-      let cobrosArray = [];
-      this.cobroslist = cobros;
-      //Filtramos en el array a mostrar los elementos que no tienen el pago completo
-      /* this.cobroslist = cobrosArray.filter( elemento => {
-        if (elemento.montodepago) {
-          return elemento.montodepago < elemento.totalmontoneto
-        } else {
-          return elemento;
-        }
-      }) */
+      //this.cobroslist = cobros;
       
       //ELEMENT_DATA
-      this.dataSource = new MatTableDataSource(this.cobroslist);
+      this.dataSource = new MatTableDataSource(cobros);//Aqui
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.showSpinner = false;

@@ -86,20 +86,10 @@ export class GcobroListComponent implements OnInit {
     this.pedidoPend_ = {} as Pedido;
 
     this.pedidoS.getPedidosPendientes().subscribe( pedidosP => {
-      let cobrosArray = [];
-      this.cobroslist = pedidosP;
-
-      //Filtramos en el array a mostrar los elementos que no tienen el pago completo
-      /* this.cobroslist = cobrosArray.filter( elemento => {
-        if (elemento.montodepago) {
-          return elemento.montodepago < elemento.totalmontoneto
-        } else {
-          return elemento;
-        }
-      }) */
+      //this.cobroslist = pedidosP;
       
       //ELEMENT_DATA
-      this.dataSource = new MatTableDataSource(this.cobroslist);
+      this.dataSource = new MatTableDataSource(pedidosP); //Aqui
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.showSpinner = false;
