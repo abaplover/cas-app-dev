@@ -74,10 +74,6 @@ export class GcobroregListComponent implements OnInit {
 
       //Obtenemos la lista de todos los pedidos
       this.pedidoS.getPedidosCobros().subscribe(pedidos => {
-        this.pedidos = [];
-        let filter1 = [];
-        let filterTwoWeeks =[];
-        this.pedidos = pedidos;
 
         this.cobroService.cobrosPagados.subscribe(cobros => {
           
