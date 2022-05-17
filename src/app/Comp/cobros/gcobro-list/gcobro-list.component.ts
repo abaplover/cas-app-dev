@@ -165,7 +165,7 @@ export class GcobroListComponent implements OnInit {
 
   selectEventCob(elemento) {
 
-    this.montodepago = null;
+    this.montodepago = 0;
     this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
     this.visual = false; //No es la parte de visualizacion
 
@@ -311,7 +311,7 @@ export class GcobroListComponent implements OnInit {
   montoChanged(monto) {
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
-      this.montodepago = null;
+      this.montodepago = 0;
     } else {
       this.montodepago == monto;
     }

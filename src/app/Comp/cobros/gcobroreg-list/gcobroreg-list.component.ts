@@ -18,6 +18,8 @@ import { Banco } from '../../../models/banco';
 import * as moment from 'moment';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { filter } from 'jszip';
+
 @Component({
   selector: 'app-gcobroreg-list',
   templateUrl: './gcobroreg-list.component.html',
@@ -41,7 +43,7 @@ export class GcobroregListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['fechapago', 'pedido','documento', 'vendedor','cliente','tipopago', 'viapago', 'banco', 'totalmontonetousd','totalmontonetobsf'];
+  displayedColumns: string[] = ['fechadepago', 'idpedido','nrofactura', 'nomvendedor','nomcliente','tipopago', 'viadepago', 'banco', 'montodepago','montobsf'];
   
   cobro_ = {} as Cobro;
   cobro0_ = {} as Cobro;
@@ -78,7 +80,8 @@ export class GcobroregListComponent implements OnInit {
         this.cobroService.cobrosPagados.subscribe(cobros => {
           //Filtramos solo los cobros que tienen fecha de pago, es decir, que estan pagados
           //ya sea parcial o total
-          filter1 = cobros.filter( cobro1 => {
+          filterTwoWeeks = cobros;
+          /* filter1 = cobros.filter( cobro1 => {
             return cobro1.fechadepago;
           });
 
@@ -91,9 +94,8 @@ export class GcobroregListComponent implements OnInit {
             let days:any = moment(now).diff(moment(other), 'days');
     
             return days <= 14;
-          });
+          }); */
           this.cobroslist = [];
-    
           //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
             for(let i = 0; i<pedidos.length;i++) {
 
@@ -104,6 +106,7 @@ export class GcobroregListComponent implements OnInit {
                     {
                       idpedido: filterTwoWeeks[j].idpedido,
                       fechadepago: filterTwoWeeks[j].fechadepago,
+                      tipodoc: pedidos[i].tipodoc,
                       nrofactura: pedidos[i].nrofactura,
                       nomcliente: pedidos[i].nomcliente,
                       nomvendedor: pedidos[i].nomvendedor,

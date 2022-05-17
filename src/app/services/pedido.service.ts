@@ -246,7 +246,7 @@ export class PedidoService {
   getPedidos2() { //Luego hay que unificar estos metodos para que sea uno solo y en lugar de 
     //llamar a la variable pedidos en los componentes se llama al metodo
     //Busca todos los pedidos
-    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO','ENTREGADO']).orderBy("creado", "desc").limit(150));
+    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("status", '==', 'ENTREGADO').orderBy("creado", "desc").limit(5000));
     this.pedidos2 = this.pedidosColletion2.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido; 

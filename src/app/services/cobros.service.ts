@@ -69,7 +69,8 @@ export class CobrosService {
     }));
 
     //Busca todos los cobros pagados
-    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("tipopago", 'in', ['PARCIAL','TOTAL']).where("status",'==',"ACTIVO").orderBy("fechadepago","desc").limit(50));
+    let dateFrom = new Date(moment().subtract(14,'d').format('YYYY-MM-DD'));
+    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("tipopago", 'in', ['PARCIAL','TOTAL']).where("status",'==',"ACTIVO").where("fechadepago",'>=',dateFrom).orderBy("fechadepago","desc").limit(5000));
     this.cobrosPagados = this.cobrosPagadosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
