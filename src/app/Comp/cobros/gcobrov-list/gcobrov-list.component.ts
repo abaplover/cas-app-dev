@@ -321,6 +321,7 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobro_.idpedido = this.pedidoPend_.idpedido;
       this.cobro_.status = "ACTIVO";
+      this.pedidoPend_.status="ABONADO";
 
       this.cobro_.montodepago = Number(this.montodepago);
 
