@@ -1,5 +1,9 @@
 <div class="container9" style="border-style: solid; border-width: 0px;">
 
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+
 	<div class="card bg-light mb-3" *ngIf="sendemail">
 		<div class="card-header">
 			¿Confirma que desea enviar una notificación de cobro?

@@ -57,6 +57,7 @@ export class GcobroregListComponent implements OnInit {
   matrisDetCobro: CobroDet[]=[];
 
   sendemail=false;
+  showSpinner = false;
 
   constructor(
     public cobroService: CobrosService,
@@ -68,10 +69,11 @@ export class GcobroregListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showSpinner = true;
     this.cobro_ = {} as Cobro;
 
       //Obtenemos la lista de todos los pedidos
-      this.pedidoS.getPedidos2().subscribe(pedidos => {
+      this.pedidoS.getPedidosCobros().subscribe(pedidos => {
         this.pedidos = [];
         let filter1 = [];
         let filterTwoWeeks =[];
@@ -111,6 +113,7 @@ export class GcobroregListComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
+          this.showSpinner = false;
       });
     });
 
