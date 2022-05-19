@@ -126,10 +126,10 @@ export class CobrosService {
     // }));
 
 
-    this.cobrosDetColletion = this.db.collection('cobrosDet');
+    this.cobrosDetColletion = this.db.collection('cobros');
     this.cobrosDet = this.cobrosDetColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as CobroDet;
+        const data = a.payload.doc.data() as Cobro;
         //data.uid = a.payload.doc.id;
         return data;
       })
@@ -239,6 +239,7 @@ export class CobrosService {
   }//getPedidosDet
 
   getCobrosRep01(strq){
+    console.log("cobrosS ",strq);
     this.cobrosColletionrep = this.db.collection("cobros", strq);
     this.cobrosrep = this.cobrosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
