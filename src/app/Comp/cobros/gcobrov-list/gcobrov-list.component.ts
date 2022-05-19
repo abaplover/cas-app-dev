@@ -316,9 +316,9 @@ export class GcobrovListComponent implements OnInit {
 
       this.cobro_.montodepago = Number(this.montodepago);
 
-      if (this.pedidoPend_.totalmontoneto.toFixed(2) ==  this.pagoparcialpagado + this.cobro_.montodepago.toFixed(2)) {
-        this.pedidoPend_.statuscobro="COBRADO";
-      }  
+      if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
+        this.pedidoPend_.status="COBRADO";
+      }
 
       //Actualiza el pedido
       this.pedidoS.updatePedidos(this.pedidoPend_);

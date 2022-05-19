@@ -230,7 +230,7 @@ export class GcobroListComponent implements OnInit {
 
       this.cobro_.montodepago = Number(this.montodepago);
 
-      if (this.pedidoPend_.totalmontoneto.toFixed(2) ==  this.pagoparcialpagado + this.cobro_.montodepago.toFixed(2)) {
+      if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
         this.pedidoPend_.status="COBRADO";
       }
 
