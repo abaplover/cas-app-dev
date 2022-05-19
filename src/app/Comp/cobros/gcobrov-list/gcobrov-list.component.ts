@@ -280,14 +280,14 @@ export class GcobrovListComponent implements OnInit {
               
     }) 
     
-    if (this.pedidoPend_.idpedido){
+    if (this.pedidoPend_.idpedido) {
       this.MostrarCob = 'display:block;';
     }
 
   }//selectEventCob
 
-  moForm(){
-    if (this.cobroService.mostrarForm){
+  moForm() {
+    if (this.cobroService.mostrarForm) {
       this.cobroService.mostrarForm = false;
     }else{
       this.cobroService.mostrarForm = true;

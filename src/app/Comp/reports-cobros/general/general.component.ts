@@ -278,7 +278,7 @@ export class GeneralComponent implements OnInit {
   }//onSubmitSearch
 
 //Unimos en un solo array los datos de los cobros con su correspondiente pedido
-  metodoFor(arrayPedidos:any[],arrayCobros:any[]) {
+  /* metodoFor(arrayPedidos:any[],arrayCobros:any[]) {
     this.copyArray = [];
     for(let i = 0; i<arrayPedidos.length;i++) {  
       for(let j = 0; j<arrayCobros.length;j++) {
@@ -301,7 +301,7 @@ export class GeneralComponent implements OnInit {
         }
       }
     }
-  }
+  } */
 
   timestampConvert(fec) {
     let dateObject = new Date(fec.seconds * 1000);

@@ -56,7 +56,6 @@ export class GcobroregListComponent implements OnInit {
   pedidos = [];
   matrisDetCobro: CobroDet[]=[];
 
-  sendemail=false;
   showSpinner = false;
 
   constructor(
@@ -128,7 +127,7 @@ export class GcobroregListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
 
-  timestampConvert(fec){
+  timestampConvert(fec) {
     let dateObject = new Date(fec.seconds*1000);
     let mes_ = dateObject.getMonth()+1;
     let ano_ = dateObject.getFullYear();
@@ -145,15 +144,6 @@ export class GcobroregListComponent implements OnInit {
     this.ver=false;
   }//onCancelar
 
-  cancelNotifi(){
-    this.cobro0_ = {} as Cobro;
-    this.sendemail = false;
-  }//onCancelar
-
-  onEdit(event, ped){
-
-  }//onEdit
-
   moForm(){
     if (this.cobroService.mostrarForm){
       this.cobroService.mostrarForm = false;
@@ -161,19 +151,5 @@ export class GcobroregListComponent implements OnInit {
       this.cobroService.mostrarForm = true;
     }
 
-
   }//moForm
-  sendpopup(e){
-    this.cobro0_ =  Object.assign({}, e);
-    this.sendemail=true;
-  }
-  sendUpdate(){
-    this.sendemail=true;
-    //Update Cobro - 
-    this.cobro0_.lastnotifsend = new Date;
-    this.cobro0_.sendmail=true;
-    this.cobroService.updatecobros(this.cobro0_);
-    this.cancelNotifi();
-    this.toastr.success('Operación Terminada', 'Se ha enviado una notificación de cobro');
-  }
 }

@@ -247,7 +247,6 @@ export class PedidoService {
     //llamar a la variable pedidos en los componentes se llama al metodo
   getPedidosCobros() { 
     //Busca todos los pedidos
-    //var dateFrom = new Date(moment().subtract(7,'months').format('YYYY-MM-DD'));
     this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("statuscobro", '==','ABONADO').orderBy("creado", "desc"));
     this.pedidos2 = this.pedidosColletion2.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {

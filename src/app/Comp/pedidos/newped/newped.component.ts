@@ -1274,7 +1274,7 @@ export class NewpedComponent implements OnInit {
     i !== -1 && this.pedidoService.matrisDetPedido.splice( i, 1 );
 
     //console.log('matriz pedido 2? ',this.pedidoService.matrisDetPedido);
-    console.table(this.pedidoService.matrisDetPedido);
+    //console.table(this.pedidoService.matrisDetPedido);
     if (this.pedidoService.matrisDetPedido.length > 0){
       this.pedidoService.mostrardesc = true;
     }else{

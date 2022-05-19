@@ -114,7 +114,7 @@ export class GcobroListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
 
-  verdetalles($event,elemento){
+  verdetalles($event,elemento) {
     this.ver = true;
     this.visual = true;
 
@@ -148,7 +148,7 @@ export class GcobroListComponent implements OnInit {
               
     }) 
     
-    if (this.pedidoPend_.idpedido){
+    if (this.pedidoPend_.idpedido) {
       this.MostrarCob = 'display:block;';
     }
   }//verdetalles
@@ -162,7 +162,7 @@ export class GcobroListComponent implements OnInit {
     this.pedidoPend_ =  Object.assign({}, elemento);
     let idpedido = this.pedidoPend_.idpedido.toString();
 
-    if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
+    if (elemento.fpago != null && typeof elemento.fpago != "undefined") {
       this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
     }
 

@@ -20,6 +20,6 @@ export interface Cobro {
 	lastnotifsend?         :Date;
 	sendmail?              :boolean;
 	status?				   :string;
-	tipodocpedido		   :string;
+	tipodocpedido		   :string; //Tipo de documento de pedido
 
 }
