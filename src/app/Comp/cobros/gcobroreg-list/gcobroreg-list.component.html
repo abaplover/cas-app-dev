@@ -333,20 +333,20 @@
 			</ng-container>
 			
 			<!-- Name Column -->
-			<ng-container matColumnDef="nrofactura">
+			<ng-container matColumnDef="nrofacturapedido">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> NE/FA </th>
 				<td mat-cell *matCellDef="let element">
-					<span *ngIf="element.tipodoc == 'Factura'">
-						FA{{element.nrofactura}}
+					<span *ngIf="element.tipodocpedido == 'Factura'">
+						FA{{element.nrofacturapedido}}
 					</span>
-					<span *ngIf="element.tipodoc == 'Nota de entrega'">
-						NE{{element.nrofactura}}
+					<span *ngIf="element.tipodocpedido == 'Nota de entrega'">
+						NE{{element.nrofacturapedido}}
 					</span>
-					<span *ngIf="element.tipodoc == 'Nota de Entrega'">
-						NE{{element.nrofactura}}
+					<span *ngIf="element.tipodocpedido == 'Nota de Entrega'">
+						NE{{element.nrofacturapedido}}
 					</span>
-					<span *ngIf="!element.tipodoc">
-						{{element.nrofactura}}
+					<span *ngIf="!element.tipodocpedido">
+						{{element.nrofacturapedido}}
 					</span>
 				</td>
 			</ng-container>

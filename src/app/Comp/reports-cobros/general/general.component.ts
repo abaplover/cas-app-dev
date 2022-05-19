@@ -40,10 +40,12 @@ export class GeneralComponent implements OnInit {
   banco: any;
   viapago: any;
   vendedor = "";
+  cliente = "";
   codCli: string;
   tipodoc: string;
   codVen: string;
   motivoAv="";
+
   opcgenReport = false;
   cobroVer_ = {} as Cobro;
   totalRegistroAv: number = 0;
@@ -61,7 +63,7 @@ export class GeneralComponent implements OnInit {
   showSpinner = false;
 
 
-  public clienteList: Client[]; //arreglo vacio
+  public clientesList: Client[]; //arreglo vacio
   public bancoList: BancoService[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public viapagoList: VpagoService[]; //arreglo vacio
@@ -122,7 +124,7 @@ export class GeneralComponent implements OnInit {
     this.minDateh = new Date(currentYear, currentm, currentd);
 
     this.clienteS.getClients().valueChanges().subscribe(cs => {
-      this.clienteList = cs;
+      this.clientesList = cs;
     })
 
     this.vendedorS.getVendedors().valueChanges().subscribe(vendedores => {
@@ -168,8 +170,9 @@ export class GeneralComponent implements OnInit {
     this.cobrosDet_ = [];
     this.opcgenReport = false;
     this.tipodoc = "";
+    this.status = null;
     this.vendedor = "";
-    this.codCli = null;
+    this.cliente = "";
     this.tipopago = "";
     this.viapago = "";
     this.banco = "";
@@ -191,7 +194,7 @@ export class GeneralComponent implements OnInit {
 
     this.cobrosDet_ = [];
 
-    queryDet = (ref: CollectionReference) => {
+    query = (ref: CollectionReference) => {
       //Busqueda entre fechas
       let queryCobros = ref.where("fechadepago", ">=", this.desD)
         .where("fechadepago", "<=", this.hasT)
@@ -201,81 +204,53 @@ export class GeneralComponent implements OnInit {
       //tipo de documento de cobro
       if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
         if(this.tipodoc == ""){ } else {
-          queryCobros = queryCobros.where("tipodoc", 'in', this.tipodoc);
+          queryCobros = queryCobros.where("tipodoc", '==', this.tipodoc);
         }
       }
 
-      console.log("this.statyus ",this.status);
+      if (typeof this.tipopago == "undefined" || this.tipopago == null) { } else {
+        if(this.tipopago == ""){ } else {
+          queryCobros = queryCobros.where("tipopago", '==', this.tipopago);
+        }
+      }
 
-      if (typeof this.status == "undefined" || this.status == null) {
+      if (typeof this.viapago == "undefined" || this.viapago == null) { } else {
+        if(this.viapago == ""){ } else {
+          queryCobros = queryCobros.where("viadepago", '==', this.viapago);
+        }
+      }
+
+      if (typeof this.banco == "undefined" || this.banco == null) { } else {
+        if(this.banco == ""){ } else {
+          queryCobros = queryCobros.where("banco", '==', this.banco);
+        }
+      }
+
+      if (typeof this.vendedor == "undefined" || this.vendedor == null) { } else {
+        if(this.vendedor == ""){ } else {
+          queryCobros = queryCobros.where("nomvendedor", '==', this.vendedor);
+        }
+      }
+
+      if (typeof this.cliente == "undefined" || this.cliente == null) { } else {
+        if(this.cliente == ""){ } else {
+          queryCobros = queryCobros.where("nomcliente", '==', this.cliente);
+        }
+      }
+      
+      if (typeof this.status == "undefined" || this.status == null || this.status == "") {
         queryCobros = queryCobros.where("status", '==','ACTIVO');
       } else {
-        if(this.status == ""){ } else {
-          queryCobros = queryCobros.where("status", 'in', ['ELIMINADO',' ','ACTIVO']);
-        }
+        queryCobros = queryCobros.where("status", 'in', ['ACTIVO','ELIMINADO']);
       }
 
       return queryCobros;
     }
 
-    query = (ref: CollectionReference) => {
-      let q = ref.where("status","==","ENTREGADO")
-      .orderBy("creado", "asc")
-      .limit(5000)
-
-      if (typeof this.vendedor == "undefined" || this.vendedor == null || this.vendedor == '') 
-      { } else {
-        if(this.vendedor == ""){ } else {
-          q = q.where("nomvendedor", "in", this.vendedor);
-        }
-      }
-
-      if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
-        q = q.where("idcliente", "==", this.codCli)
-      }
-
-      return q;
-    }
-
-    this.pedidoS.getPedidosRep01(query).subscribe(pedido => {
-
-      this.Pedido_ = pedido;
-      this.arrayPedido = this.Pedido_;
-
-      this.cobrosS.getCobrosRep01(queryDet).subscribe(cobro => {
+      this.cobrosS.getCobrosRep01(query).subscribe(cobro => {
 
         this.cobrosDet_ = cobro;
 
-        //Filtramos de acuerdo a cada condicion porque en la parte del query no se pueden
-        // utilizar dos 'in' de where
-        if (typeof this.tipopago == "undefined" || this.tipopago == null || this.tipopago == '') 
-        { } else {
-          if(this.tipopago == ""){ } else {
-              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.tipopago.includes(cobr.tipopago));
-          }
-        }
-
-        if (typeof this.viapago == "undefined" || this.viapago == null || this.viapago == '') 
-        { } else {
-          if(this.viapago == ""){ } else {
-              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.viapago.includes(cobr.viadepago));
-          }
-        }
-
-        if (typeof this.banco == "undefined" || this.banco == null || this.banco == '') 
-        { } else {
-          if(this.banco == ""){ } else {
-              this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.banco.includes(cobr.banco));
-          }
-        }
-/* 
-        if (typeof this.status == "undefined" || this.status == null) { } else {
-          this.cobrosDet_ = this.cobrosDet_.filter(cobr => this.status.includes(cobr.status))
-        } */
-
-        this.metodoFor(this.arrayPedido,this.cobrosDet_);
-
-        this.cobrosDet_ = this.copyArray;
         this.montototalUSD = 0;
         this.montototalBSF = 0;
 
@@ -294,8 +269,6 @@ export class GeneralComponent implements OnInit {
         this.opcgenReport = true;
         this.status = null;
       
-      })
-
       setTimeout(() => {
         this.showSpinner = false;
       }, 500);
@@ -369,7 +342,7 @@ export class GeneralComponent implements OnInit {
     this.status = null;
     this.tipodoc = "";
     this.vendedor = "";
-    this.codCli = null;
+    this.cliente = "";  
     this.tipopago = "";
     this.viapago = "";
     this.banco = "";

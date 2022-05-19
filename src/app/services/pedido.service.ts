@@ -230,7 +230,7 @@ export class PedidoService {
   getPedidosPagoVencido() {
 
     //Busca todos los cobros con estatus - VENCIDO
-    let hoy = new Date();
+    var hoy = new Date();
     this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
     .where("status", "==", "ENTREGADO").orderBy("fpago", "desc").orderBy("creado", "desc").limit(300));
     this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
@@ -247,7 +247,8 @@ export class PedidoService {
     //llamar a la variable pedidos en los componentes se llama al metodo
   getPedidosCobros() { 
     //Busca todos los pedidos
-    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO','COBRADO']).orderBy("creado", "desc").limit(5000));
+    //var dateFrom = new Date(moment().subtract(7,'months').format('YYYY-MM-DD'));
+    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("statuscobro", '==','ABONADO').orderBy("creado", "desc"));
     this.pedidos2 = this.pedidosColletion2.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido; 
@@ -330,7 +331,7 @@ export class PedidoService {
   {
 
     //Busca Pedidos Facturados en periodo ejemplo 60 meses a tras o 5 Anos
-    let aux = new Date();
+    var aux = new Date();
     const ahora = new Date(aux.setMonth(aux.getMonth()-60));
     this.pedFacColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).where("fentrega", ">=", ahora).where("idcliente", "==", cli));
     this.pedFac = this.pedFacColletion.snapshotChanges().pipe(map(changes => {
@@ -437,14 +438,13 @@ export class PedidoService {
       }); *
 
     }) */
-    let pedidosEnt;
+    var pedidosEnt;
 
     this.pedidosE.subscribe(pedidos=>{
       pedidosEnt = pedidos;
     });
     
     setTimeout(() => {
-      console.log("length ",pedidosEnt.length);
       for(let i = 0; i< pedidosEnt.length;i++) {
   
         const uidPed = pedidosEnt[i].uid;

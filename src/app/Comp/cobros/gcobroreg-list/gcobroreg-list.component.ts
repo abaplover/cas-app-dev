@@ -43,7 +43,7 @@ export class GcobroregListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['fechadepago', 'idpedido','nrofactura', 'nomvendedor','nomcliente','tipopago', 'viadepago', 'banco', 'montodepago','montobsf'];
+  displayedColumns: string[] = ['fechadepago', 'idpedido','nrofacturapedido', 'nomvendedor','nomcliente','tipopago', 'viadepago', 'banco', 'montodepago','montobsf'];
   
   cobro_ = {} as Cobro;
   cobro0_ = {} as Cobro;
@@ -73,43 +73,45 @@ export class GcobroregListComponent implements OnInit {
     this.cobro_ = {} as Cobro;
 
       //Obtenemos la lista de todos los pedidos
-      this.pedidoS.getPedidosCobros().subscribe(pedidos => {
+      /* this.pedidoS.getPedidosCobros().subscribe(pedidos => {
+        var arrayPedidos = pedidos; */
 
         this.cobroService.cobrosPagados.subscribe(cobros => {
-          
-          this.cobroslist = [];
+          //var arrayCobros = cobros;
+          this.cobroslist = cobros;
+          //this.cobroslist = [];
           //combinamos en un solo array los datos de cobro junto a los de su pedido correspondiente
-            for(let i = 0; i<pedidos.length;i++) {
+            /* for(let i = 0; i<arrayPedidos.length;i++) {
 
-              for(let j = 0; j<cobros.length;j++) {
+              for(let j = 0; j<arrayCobros.length;j++) {
 
-                if (pedidos[i].idpedido == cobros[j].idpedido) {
+                if (arrayPedidos[i].idpedido == arrayCobros[j].idpedido) {
                   this.cobroslist.push(
                     {
-                      idpedido: cobros[j].idpedido,
-                      fechadepago: cobros[j].fechadepago,
-                      tipodoc: pedidos[i].tipodoc,
-                      nrofactura: pedidos[i].nrofactura,
-                      nomcliente: pedidos[i].nomcliente,
-                      nomvendedor: pedidos[i].nomvendedor,
-                      tipopago: cobros[j].tipopago,
-                      viadepago: cobros[j].viadepago,
-                      banco: cobros[j].banco,
-                      montodepago: cobros[j].montodepago,
-                      montobsf: cobros[j].montobsf
+                      idpedido: arrayCobros[j].idpedido,
+                      fechadepago: arrayCobros[j].fechadepago,
+                      tipodoc: arrayPedidos[i].tipodoc,
+                      nrofactura: arrayPedidos[i].nrofactura,
+                      nomcliente: arrayPedidos[i].nomcliente,
+                      nomvendedor: arrayPedidos[i].nomvendedor,
+                      tipopago: arrayCobros[j].tipopago,
+                      viadepago: arrayCobros[j].viadepago,
+                      banco: arrayCobros[j].banco,
+                      montodepago: arrayCobros[j].montodepago,
+                      montobsf: arrayCobros[j].montobsf
                     }
                   );
                 }
               }
     
-            }
+            } */
           // Asignamos los datos a la tabla del html
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.showSpinner = false;
       });
-    });
+    //});
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
       this.vpagoList = vps;
@@ -138,7 +140,6 @@ export class GcobroregListComponent implements OnInit {
     if(pf != null) pf.reset();
     this.cobroslist=[];
     this.cobro_ = {} as Cobro;
-    this.cobro_ = {} as CobroDet;
     this.MostrarCob = 'display:none;';
     this.pagoparcialpagado=0;
     this.ver=false;

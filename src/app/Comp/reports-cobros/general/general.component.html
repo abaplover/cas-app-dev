@@ -51,7 +51,7 @@
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Tipo Documento</mat-label>
-										<mat-select value=selected multiple
+										<mat-select value=selected
 											name="tipococ" 
 											[(ngModel)]="this.tipodoc"
 
@@ -70,7 +70,7 @@
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Tipo de Pago</mat-label>
-										<mat-select value=selected multiple
+										<mat-select value=selected
 											name="tipopago" 
 											[(ngModel)]="this.tipopago"
 
@@ -85,7 +85,7 @@
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Vía de Pago</mat-label>
-											<mat-select value=selected multiple
+											<mat-select value=selected
 												name="viapago"
 												[(ngModel)]="this.viapago"
 												(selectionChange)="onBookChange($event)"
@@ -101,7 +101,7 @@
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Banco</mat-label>
-											<mat-select value=selected multiple
+											<mat-select value=selected
 												name="banco"
 												[(ngModel)]="this.banco"
 											>
@@ -116,11 +116,9 @@
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Vendedor</mat-label>
-											<mat-select value=selected multiple
+											<mat-select value=selected
 												name="vendedor"
-												[(ngModel)]="this.vendedor"
-												(selectionChange)="onBookChange($event)"
-											>
+												[(ngModel)]="this.vendedor"s											>
 												<mat-option value={{vendedor.descripcion}} *ngFor = "let vendedor of vendedorList">
 													{{vendedor.descripcion}}
 												</mat-option>
@@ -129,10 +127,26 @@
 								</div>
 							</div>
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+										<mat-form-field appearance="legacy" class="campo-width">
+											<mat-label>Cliente</mat-label>
+											<mat-select value=selected
+												name="cliente"
+												[(ngModel)]="this.cliente"
+												(selectionChange)="onBookChange($event)"
+											>
+												<mat-option value={{cliente.descripcion}} *ngFor = "let cliente of clientesList">
+													{{cliente.descripcion}}
+												</mat-option>
+											</mat-select>
+										</mat-form-field>
+								</div>
+							</div><!-- 
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<div>
 									<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
 								</div>			
-							</div>
+							</div> -->
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 checkClass">
 								<input type="checkbox" name="seeDeleted"
 								class="form-control"
@@ -245,11 +259,11 @@
 						{{cob.fechapago}}
 					</a>
 				</td> -->
-				<td>{{cob.fechapago.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
+				<td>{{cob.fechadepago.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
 				<td>{{cob.idpedido}}</td>
-				<td>{{cob.nrofactura}}</td>
-				<td>{{cob.vendedor}}</td>
-				<td>{{cob.cliente}}</td>
+				<td>{{cob.nrofacturapedido}}</td>
+				<td>{{cob.nomvendedor}}</td>
+				<td>{{cob.nomcliente}}</td>
 				<td>{{cob.tipopago}}</td>
 				<td>{{cob.viapago}}</td>
 				<td>{{cob.banco}}</td>

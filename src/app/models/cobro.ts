@@ -10,6 +10,9 @@ export interface Cobro {
 	moneda?				   :string;
 	montodepago?           :number;
 	montobsf?			   :number;
+	nomcliente			   :string;
+	nomvendedor			   :string;
+	nrofacturapedido	   :string;
 	pdfb64?                :string;
 	tipodoc?			   :string; //Tipo de documento de cobro 
 	tipopago?              :string;
@@ -17,5 +20,6 @@ export interface Cobro {
 	lastnotifsend?         :Date;
 	sendmail?              :boolean;
 	status?				   :string;
+	tipodocpedido		   :string;
 
 }

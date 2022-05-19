@@ -33,7 +33,7 @@ export class GcobrovListComponent implements OnInit {
   idpedidoEli: string="";
   fechapedidoEli: Date;
   clientepedidoEli: string="";
-  montodepago = 0;
+  montodepago = null;
   disableBSF =  false;
   maxDate= moment(new Date()).format('YYYY-MM-DD');
   
@@ -162,7 +162,7 @@ export class GcobrovListComponent implements OnInit {
       this.pagototal = true;
     }
     else if (val == "PARCIAL") {
-      this.montodepago = 0;
+      this.montodepago = null;
       this.pedidoPend_.statuscobro = "PARCIAL"
       this.pagototal = false;
     }
@@ -180,7 +180,7 @@ export class GcobrovListComponent implements OnInit {
   montoChanged(monto) {
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
-      this.montodepago = 0;
+      this.montodepago = null;
     } else {
       this.montodepago = monto;
     }
@@ -244,7 +244,7 @@ export class GcobrovListComponent implements OnInit {
 
   selectEventCob(elemento) {
 
-    this.montodepago = 0;
+    this.montodepago = null;
     this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
     this.visual = false; //No es la parte de visualizacion
 
@@ -308,6 +308,10 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobro_.idpedido = this.pedidoPend_.idpedido;
       this.cobro_.status = "ACTIVO";
+      this.cobro_.nomcliente = this.pedidoPend_.nomcliente;
+      this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
+      this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
+      this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
       this.pedidoPend_.statuscobro="ABONADO";
 
       this.cobro_.montodepago = Number(this.montodepago);
@@ -328,15 +332,20 @@ export class GcobrovListComponent implements OnInit {
   }
 
   eliminarCobro(posicionArray) {
+    
     if(confirm('¿Está seguro de que quiere eliminar este elemento?')) {
 
       let cobroDelete = {} as Cobro;
       cobroDelete = this.matrisDetCobro[posicionArray];
+      if (this.matrisDetCobro.length == 1) {
+        this.pedidoPend_.statuscobro = "PENDIENTE"
+      }
       cobroDelete.status = "ELIMINADO";
       cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
       cobroDelete.modificado = new Date;
   
       this.cobroService.updatecobros(cobroDelete);
+      this.pedidoS.updatePedidos(this.pedidoPend_);
 
       this.toastr.warning('Operación Terminada', 'Registro de cobro eliminado');
     }
