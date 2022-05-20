@@ -5,6 +5,7 @@ export interface Cobro {
 	creadopor?			   :string;
 	fechadepago?           :Date;
 	idpedido?	           :number; 
+	lastnotifsend?         :Date;
 	modificado?			   :Date;
 	modificadopor?         :string;
 	moneda?				   :string;
@@ -14,12 +15,11 @@ export interface Cobro {
 	nomvendedor			   :string;
 	nrofacturapedido	   :string;
 	pdfb64?                :string;
-	tipodoc?			   :string; //Tipo de documento de cobro 
-	tipopago?              :string;
-	viadepago?             :string;
-	lastnotifsend?         :Date;
 	sendmail?              :boolean;
 	status?				   :string;
 	tipodocpedido		   :string; //Tipo de documento de pedido
+	tipodoc?			   :string; //Tipo de documento de cobro 
+	tipopago?              :string;
+	viadepago?             :string;
 
 }
