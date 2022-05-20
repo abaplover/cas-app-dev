@@ -134,8 +134,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
   }//orgValueChange
   regresar() {
-
     this.opcrep01 = false;
+    this.codCli = null;
   }
 
   onBookChange(event) {
