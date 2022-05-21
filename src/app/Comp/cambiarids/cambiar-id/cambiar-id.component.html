@@ -32,7 +32,7 @@
 								<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(pedidoForm)">
 										Reset
 								</button>
-								<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="cambiarId(pedidoForm)">
+								<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="cambiarId(pedidoForm)" [disabled]="!this.pedidoId">
 										Llevar a cuentas por cobrar
 								</button>
 							</div>

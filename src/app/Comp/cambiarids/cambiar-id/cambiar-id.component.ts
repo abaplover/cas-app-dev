@@ -110,8 +110,10 @@ export class CambiarIdComponent implements OnInit {
 
   resetForm(pedidoForm?: NgForm)
   {
-    pedidoForm.reset();
     this.pedidoList = [];
+
+    pedidoForm.reset();
+    this.pedidoId = '';
 
     this.dataSource = new MatTableDataSource(this.pedidoList);
     this.dataSource.sort = this.sort;
