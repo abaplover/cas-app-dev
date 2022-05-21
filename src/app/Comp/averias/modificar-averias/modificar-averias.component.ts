@@ -283,7 +283,7 @@ export class ModificarAveriasComponent implements OnInit {
     if (this.reject>=1) {
       this.alertsS.warning(
         "Existen materiales rechazados",
-        "¿Está seguro que desea rechazar los materiales?","warning"
+        "¿Está seguro que desea rechazar los materiales?","warning","Rechazar"
         ).then((res) => {
         if (res.isConfirmed) {
           this.submit(pf);

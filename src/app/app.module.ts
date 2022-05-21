@@ -193,6 +193,13 @@ import { ReportsCobrosComponent } from './Comp/reports-cobros/reports-cobros.com
 import { GeneralComponent } from './Comp/reports-cobros/general/general.component';
 import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-cobros.component';
 
+import { CambiarIdComponent } from './Comp/cambiarids/cambiar-id/cambiar-id.component';
+import { IdsListComponent } from './Comp/cambiarids/ids-list/ids-list.component';
+
+
+/* const firebase = require('firebase');
+firebase.firestore().settings({experimentalForceLongPolling: true}); */
+
 //
 @NgModule({
   declarations: [
@@ -288,6 +295,8 @@ import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-co
     ReportsCobrosComponent,
     GeneralComponent,
     TotalesDeCobrosComponent,
+    CambiarIdComponent,
+    IdsListComponent,
 
   ],
   imports: [
@@ -358,7 +367,7 @@ import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-co
     TipodcobrosService,
     GestionaveriasService,
     {provide: LOCALE_ID, useValue: 'es-VE'},
-    { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() }
+    { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() },
   ],
   bootstrap: [AppComponent],
   entryComponents:[PedidoShowComponent]

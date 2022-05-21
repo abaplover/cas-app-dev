@@ -23,13 +23,13 @@ export class AlertsService {
         Swal.fire(configObject);
     }
 
-	async warning (title, text, icon) {
+	async warning (title, text, icon,buttonname) {
 		let res = await Swal.fire({
 		  title: title,
 		  text: text,
 		  icon: icon,
 		  showCancelButton: true,
-		  confirmButtonText: 'Rechazar',
+		  confirmButtonText: buttonname,
 		  confirmButtonColor: '#d33',
 		}).then((result) => {
 		  return result;
