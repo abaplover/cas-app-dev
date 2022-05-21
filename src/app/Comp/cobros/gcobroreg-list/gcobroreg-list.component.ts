@@ -144,7 +144,7 @@ export class GcobroregListComponent implements OnInit {
     this.ver=false;
   }//onCancelar
 
-  moForm(){
+  moForm() {
     if (this.cobroService.mostrarForm){
       this.cobroService.mostrarForm = false;
     }else{

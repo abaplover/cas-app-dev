@@ -576,7 +576,6 @@ export class PedidoService {
   {
     this.pedidosDetColletion.add(ped)
     .then(function(docRef) {
-      //console.log("Document written ");
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);

@@ -366,7 +366,7 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     TipodService,
     TipodcobrosService,
     GestionaveriasService,
-    {provide: LOCALE_ID, useValue: 'es-VE'},
+    { provide: LOCALE_ID, useValue: 'es-VE'},
     { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() },
   ],
   bootstrap: [AppComponent],
