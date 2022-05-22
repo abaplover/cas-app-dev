@@ -81,17 +81,17 @@ export class CambiarIdComponent implements OnInit {
     });
   }
 
-  cambiarStatusCobrado(pedForm:NgForm) {
+  cambiarStatusCobrado() {
     this.pedidoService.pedidosE.subscribe( pedido => {
       this.pedidoslist = pedido;
 
       setTimeout(() => {
         this.pedidoslist.forEach( element => {
-          console.table(element);
-          //element.status = "COBRADO";
-          //this.pedidoService.updatePedidos(element);
+          //console.log(element);
+          element.status = "ENTREGADO";
+          this.pedidoService.updatePedidos(element);
         })
-      }, 3000);
+      }, 6000);
 
     }); 
   }
