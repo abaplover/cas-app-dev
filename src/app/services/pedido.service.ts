@@ -177,7 +177,7 @@ export class PedidoService {
     }));
 
     //Busca todos los pedidos con estatus ENTREGADO
-    this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(300));
+    this.pedidosColletionE = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).orderBy("creado", "desc").limit(100));
     this.pedidosE = this.pedidosColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;

@@ -17,7 +17,7 @@ import { PedidoService } from 'src/app/services/pedido.service';
 export class CambiarIdComponent implements OnInit {
 
   pedidoList: Pedido[];
-  pedidoslist: [];
+  pedidoslist: Pedido[];
   idped = "";
   arrayIds = [];
   pedidoId = "";
@@ -79,33 +79,21 @@ export class CambiarIdComponent implements OnInit {
         return;
       }
     });
+  }
 
-    
+  cambiarStatusCobrado(pedForm:NgForm) {
+    this.pedidoService.pedidosE.subscribe( pedido => {
+      this.pedidoslist = pedido;
 
-    /* if (this.arrayIds.length > 0) {
- 
-      for(let i = 0; i < this.arrayIds.length;i++) {
-        
-        for (let j=0; j< this.pedidoslist.length;j++) {
-          if (this.arrayIds[i] == this.pedidoslist[j].idpedido) {
-            this.pedidoslist.splice(j,1);
-            break;
-          }
-        }
-      }
-  
-      console.log("pedidosList ", this.pedidoslist);
-  
-      this.pedidoslist.forEach( element => {
-        //element.status = "COBRADO";
-        this.pedidoService.updatePedidos(element);
-      })
-      
-      this.toastr.success('Operación Terminada', 'Pedido Editado');
-    } else {
+      setTimeout(() => {
+        this.pedidoslist.forEach( element => {
+          console.table(element);
+          //element.status = "COBRADO";
+          //this.pedidoService.updatePedidos(element);
+        })
+      }, 3000);
 
-      this.toastr.success('Operación Erronea', 'No hay ids');
-    } */
+    }); 
   }
 
   resetForm(pedidoForm?: NgForm)
