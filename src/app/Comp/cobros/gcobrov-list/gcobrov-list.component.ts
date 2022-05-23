@@ -215,6 +215,7 @@ export class GcobrovListComponent implements OnInit {
     this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet=>{
 
       this.matrisDetCobro = cobrosDet;
+      this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
@@ -227,8 +228,10 @@ export class GcobrovListComponent implements OnInit {
         }
 
         if(this.matrisDetCobro[i].status == "ACTIVO"){
-          if(this.matrisDetCobro[i].montodepago) {
+          if (this.matrisDetCobro[i].montodepago>=0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          } else {
+            this.pagoparcialpagado += 0;
           }
         }
       }
