@@ -210,8 +210,7 @@ export class PedidoService {
 
   getPedidosPendientes() {
     //Busca todos los pedidos pendientes por pagar
-    this.pedidosPendientesColletionE = this.db.collection('pedidos', ref => 
-      //ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
+    this.pedidosPendientesColletionE = this.db.collection('pedidos', ref =>
       ref.where("status", 'in', ['ENTREGADO'])
       .where("fpago",">=",this.today) //Fecha de vencimiento
       .orderBy("fpago", "desc")
