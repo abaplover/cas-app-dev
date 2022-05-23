@@ -311,7 +311,6 @@
 												[disabled]="this.cobro_.tipopago=='TOTAL'"
 												class="form-control"
 												(input) ="montoChanged(monto.value)"
-												onkeypress="if(event.keyCode < 48 || event.keyCode > 57) return false;"
 											/>
 										</div>
 									</div>
@@ -326,7 +325,6 @@
 												[(ngModel)]="this.cobro_.montobsf"
 												[disabled]="this.disableBSF"
 												class="form-control"
-												onkeypress="if(event.keyCode < 48 || event.keyCode > 57) return false;"
 											/>
 										</div>
 									</div>								
