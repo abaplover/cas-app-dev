@@ -20,6 +20,7 @@ import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
+import { AlertsService } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-gcobrov-list',
@@ -67,6 +68,7 @@ export class GcobrovListComponent implements OnInit {
 
   constructor(
     public cobroService: CobrosService,
+    public alertsService: AlertsService,
     public loginS      : FirebaseloginService,
     private toastr     : ToastrService,
     public vpagoS      : VpagoService,
@@ -225,7 +227,9 @@ export class GcobrovListComponent implements OnInit {
         }
 
         if(this.matrisDetCobro[i].status == "ACTIVO"){
-          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          if(this.matrisDetCobro[i].montodepago) {
+            this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          }
         }
       }
 
@@ -267,8 +271,12 @@ export class GcobrovListComponent implements OnInit {
         if(this.matrisDetCobro[i].fechadepago) {
           this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
-        if(this.matrisDetCobro[i].status == "ACTIVO"){
-          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        if(this.matrisDetCobro[i].status == "ACTIVO") {
+          if (this.matrisDetCobro[i].montodepago>=0) {
+            this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          } else {
+            this.pagoparcialpagado += 0;
+          }
         }
       }
 
@@ -314,7 +322,11 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
       this.pedidoPend_.statuscobro="ABONADO";
 
-      this.cobro_.montodepago = Number(this.montodepago);
+      if (this.montodepago) {
+        this.cobro_.montodepago = Number(this.montodepago);
+      } else {
+        this.cobro_.montodepago = 0;
+      }
 
       if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
         this.pedidoPend_.status="COBRADO";

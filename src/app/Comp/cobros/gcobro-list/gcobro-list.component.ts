@@ -135,8 +135,13 @@ export class GcobroListComponent implements OnInit {
       for (let i in this.matrisDetCobro) {
         if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         
-        if(this.matrisDetCobro[i].status == "ACTIVO"){
-          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        
+        if(this.matrisDetCobro[i].status == "ACTIVO") {
+          if (this.matrisDetCobro[i].montodepago>=0) {
+            this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          } else {
+            this.pagoparcialpagado += 0;
+          }
         }
       }
 
@@ -183,8 +188,13 @@ export class GcobroListComponent implements OnInit {
           this.matrisDetCobro[i].modificado = this.timestampConvert(this.matrisDetCobro[i].modificado);
         }
 
-        if(this.matrisDetCobro[i].status == "ACTIVO"){
-          this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+        
+        if(this.matrisDetCobro[i].status == "ACTIVO") {
+          if (this.matrisDetCobro[i].montodepago>=0) {
+            this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
+          } else {
+            this.pagoparcialpagado += 0;
+          }
         }
       }
 
@@ -228,7 +238,11 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
       this.pedidoPend_.statuscobro="ABONADO";
 
-      this.cobro_.montodepago = Number(this.montodepago);
+      if (this.montodepago) {
+        this.cobro_.montodepago = Number(this.montodepago);
+      } else {
+        this.cobro_.montodepago = 0;
+      }
 
       if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
         this.pedidoPend_.status="COBRADO";
