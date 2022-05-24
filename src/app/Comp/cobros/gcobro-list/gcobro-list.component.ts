@@ -45,7 +45,7 @@ export class GcobroListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['idpedido', 'nrofactura','condiciondepago', 'fpago','nomcliente','nomvendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','abono','Opc'];
+  displayedColumns: string[] = ['idpedido', 'nrofactura','condiciondepago', 'fpago','nomcliente','nomvendedor', 'Subtotal','montopendiente','abono','Opc'];
   
   pedidoPend_ = {} as Pedido;
   cobro0_ = {} as Cobro;
@@ -237,6 +237,7 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
       this.pedidoPend_.statuscobro="ABONADO";
+      this.pedidoPend_.montopendiente= this.importeremanente;
 
       if (this.montodepago) {
         this.cobro_.montodepago = Number(this.montodepago);
