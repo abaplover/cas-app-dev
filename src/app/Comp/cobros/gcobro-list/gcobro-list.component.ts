@@ -237,13 +237,14 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
       this.pedidoPend_.statuscobro="ABONADO";
-      this.pedidoPend_.montopendiente= this.importeremanente;
 
       if (this.montodepago) {
         this.cobro_.montodepago = Number(this.montodepago);
       } else {
         this.cobro_.montodepago = 0;
       }
+
+      this.pedidoPend_.montopendiente= this.importeremanente - this.cobro_.montodepago;
 
       if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
         this.pedidoPend_.status="COBRADO";
