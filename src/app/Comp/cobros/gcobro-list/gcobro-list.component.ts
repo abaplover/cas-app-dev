@@ -362,6 +362,8 @@ export class GcobroListComponent implements OnInit {
       cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
       cobroDelete.modificado = new Date;
   
+      this.pedidoPend_.montopendiente = this.importeremanente + cobroDelete.montodepago;
+
       this.cobroService.updatecobros(cobroDelete);
       this.pedidoS.updatePedidos(this.pedidoPend_);
 
