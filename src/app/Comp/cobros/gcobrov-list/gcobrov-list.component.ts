@@ -331,12 +331,12 @@ export class GcobrovListComponent implements OnInit {
         this.cobro_.montodepago = 0;
       }
 
-      //Monto pendiente para registrar en la tabla pedidos
-      this.pedidoPend_.montopendiente= this.importeremanente - this.cobro_.montodepago;
-
-      if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
+      if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ===  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
         this.pedidoPend_.status="COBRADO";
       }
+      
+      //Monto pendiente para registrar en la tabla pedidos
+      this.pedidoPend_.montopendiente= this.importeremanente - this.cobro_.montodepago;
 
       //Actualiza el pedido
       this.pedidoS.updatePedidos(this.pedidoPend_);
