@@ -336,7 +336,8 @@ export class GcobrovListComponent implements OnInit {
       }
       
       //Monto pendiente para registrar en la tabla pedidos
-      this.pedidoPend_.montopendiente= this.importeremanente - this.cobro_.montodepago;
+      this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
+      this.pedidoPend_.pagopuntual = false;
 
       //Actualiza el pedido
       this.pedidoS.updatePedidos(this.pedidoPend_);

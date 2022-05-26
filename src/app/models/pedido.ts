@@ -25,21 +25,22 @@ export interface Pedido {
   idcliente?: string;
   idpedido?: number;
   idvendedor?: string;
-  indicadorImpuestodesc?  : string;
-  indicadorImpuestoporc?  : number;
-  lastaction?             : string;
-  listaprecio?            : string;
-  modificado?             : Date;
-  modificadopor?          : string;
+  indicadorImpuestodesc?  :string;
+  indicadorImpuestoporc?  :number;
+  lastaction?             :string;
+  listaprecio?            :string;
+  modificado?             :Date;
+  modificadopor?          :string;
   montodepago?            :number; //Monto pagado (cobros)
   montopendiente?         :number;
-  motivorechazo?          : string;
+  motivorechazo?          :string;
   nombrealmacenista?      :string;
-  nomcliente?             : string;
-  nomvendedor?            : string;
+  nomcliente?             :string;
+  nomvendedor?            :string;
   nrobultos?              :number;
   nrofactura?: string;
   observacion?: string;
+  pagopuntual?            :boolean; //Indica si el pedido se pagó de forma puntual o no
   pdfb64?: string;
   pdfname?: string;
   pdfurl?: string;
