@@ -305,7 +305,9 @@
 									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
 										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
-											<input 
+											<input
+												currencyMask
+												[options]="{ prefix: ' ', thousands: ',', decimal: '.' }"
 												type="text"
 												name="montodepago"
 												#monto
@@ -321,7 +323,9 @@
 									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
 										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto BsF</mat-label>
 										<div class="form-group input-group input-group-sm mb-3">
-											<input 
+											<input
+												currencyMask
+												[options]="{ prefix: ' ', thousands: ',', decimal: '.' }"
 												type="text"
 												name="montobsf"
 												required

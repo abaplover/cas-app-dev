@@ -180,6 +180,7 @@ export class GcobrovListComponent implements OnInit {
 
   //Se ejecuta cuando ingresan un monto
   montoChanged(monto) {
+    console.log("monto ",monto, Number(monto));
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
       this.montodepago = null;

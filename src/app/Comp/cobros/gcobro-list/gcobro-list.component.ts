@@ -392,9 +392,9 @@ export class GcobroListComponent implements OnInit {
     this.toastr.success('Operación Terminada', 'Se ha enviado una notificación de cobro');
   }
 
-
   roundTo(num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
+
 }

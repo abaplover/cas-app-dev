@@ -22,6 +22,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 // Print modules
 
 import { NgxPrintModule } from 'ngx-print';
+import { NgxCurrencyModule } from "ngx-currency";
 
 
 //firebase
@@ -337,7 +338,8 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     DataTablesModule,
     MatTooltipModule,
     NgxPrintModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgxCurrencyModule
   ],
   providers: [
     PedidoService,
