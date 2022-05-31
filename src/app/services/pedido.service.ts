@@ -74,6 +74,11 @@ export class PedidoService {
   pedidoDoc2: AngularFirestoreDocument<Pedido>;
   pedidosColletion2: AngularFirestoreCollection<Pedido>;
 
+
+  pedidosCob: Observable<Pedido[]>;
+  pedidoCobDoc: AngularFirestoreDocument<Pedido>;
+  pedidosCobColletion: AngularFirestoreCollection<Pedido>;
+
   pedFac: Observable<Pedido[]>;
   pedFacDoc: AngularFirestoreDocument<Pedido>;
   pedFacColletion: AngularFirestoreCollection<Pedido>;
@@ -255,6 +260,17 @@ export class PedidoService {
     }));
 
     return this.pedidos2;
+  }
+
+  getPedidosReporteCobros(strq) { 
+    this.pedidosCobColletion = this.db.collection("pedidos", strq);
+    this.pedidosCob = this.pedidosCobColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Pedido;
+        return data;
+      })
+    }));
+    return this.pedidosCob;
   }
 
   getSpecificPedido(idpedido) {

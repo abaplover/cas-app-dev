@@ -22,6 +22,7 @@ export interface Pedido {
   fpago?: Date;
   fpreparacion?:Date;
   ftentrega?: Date;
+  fvencida? : boolean;
   idcliente?: string;
   idpedido?: number;
   idvendedor?: string;

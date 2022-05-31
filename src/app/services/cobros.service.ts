@@ -115,16 +115,6 @@ export class CobrosService {
       })
     }));
 
-    // let hoy = new Date();
-    // this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("creado", "desc").limit(50));
-    // this.cobrosV = this.cobrosColletionV.snapshotChanges().pipe(map(changes => {
-    //   return changes.map(a => {
-    //     const data = a.payload.doc.data() as Cobro;
-    //     //data.uid = a.payload.doc.id;
-    //     return data;
-    //   })
-    // }));
-
 
     this.cobrosDetColletion = this.db.collection('cobros');
     this.cobrosDet = this.cobrosDetColletion.snapshotChanges().pipe(map(changes => {
@@ -173,15 +163,6 @@ export class CobrosService {
   }
 
   addCobrosDet(cod: CobroDet){
-    //console.table(cod);
-
-    // this.cobrosDetColletion.add(cod)
-    // .then(function(docRef) {
-    //   console.log("Document written ");
-    // })
-    // .catch(function(error) {
-    //     console.error("Error adding document: ", error);
-    // });
 
 
     const db = firebase.firestore();
@@ -199,11 +180,6 @@ export class CobrosService {
 
   }
 
-  // deleteCobrosDet(cobroDet: PedidoDet){
-  //   this.cobroDetDoc = this.db.doc(`pedidos/${cobroDet.uid}`);
-  //   //this.pedidoDoc.delete();
-  //   this.cobroDetDoc.update(cobroDet);
-  // }
 
   deleteCobrosDet(docid: string){
     this.db.collection("cobrosDet").doc(docid).delete().then(function() {

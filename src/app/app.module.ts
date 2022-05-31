@@ -197,6 +197,8 @@ import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-co
 import { CambiarIdComponent } from './Comp/cambiarids/cambiar-id/cambiar-id.component';
 import { IdsListComponent } from './Comp/cambiarids/ids-list/ids-list.component';
 import { PedidosCobrosComponent } from './Comp/reports-cobros/pedidos-cobros/pedidos-cobros.component';
+import { PedidoscobrosShowComponent } from './Comp/cobros/pedidoscobros-show/pedidoscobros-show.component';
+import { TotalesPedCobrosComponent } from './Comp/totales-ped-cobros/totales-ped-cobros.component';
 
 
 /* const firebase = require('firebase');
@@ -300,6 +302,8 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     CambiarIdComponent,
     IdsListComponent,
     PedidosCobrosComponent,
+    PedidoscobrosShowComponent,
+    TotalesPedCobrosComponent,
 
   ],
   imports: [
