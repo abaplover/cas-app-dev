@@ -70,8 +70,6 @@ export class GeneralComponent implements OnInit {
   public vendedorList: VendedorService[]; //arreglo vacio
   public Pedido_: Pedido[]; //arreglo vacio
   public cobrosDet_: Cobro[];
-  
-
 
   //data table
   dtOptionsAv: any = {
@@ -138,10 +136,6 @@ export class GeneralComponent implements OnInit {
     this.viapagoS.getVpagos().valueChanges().subscribe( vpagos => {
       this.viapagoList = vpagos;
     })
-
-    /* this.productS.getProducts().valueChanges().subscribe(mater => {
-      this.materialList = mater;
-    }) */
 
     this.tipodocCobS.getTipods().valueChanges().subscribe(tipodocobros => {
       this.tipodocList = tipodocobros;
@@ -277,32 +271,6 @@ export class GeneralComponent implements OnInit {
 
   }//onSubmitSearch
 
-//Unimos en un solo array los datos de los cobros con su correspondiente pedido
-  /* metodoFor(arrayPedidos:any[],arrayCobros:any[]) {
-    this.copyArray = [];
-    for(let i = 0; i<arrayPedidos.length;i++) {  
-      for(let j = 0; j<arrayCobros.length;j++) {
-        if (arrayCobros[j].idpedido == arrayPedidos[i].idpedido) {
-          this.copyArray.push(
-            {
-              idpedido: arrayPedidos[i].idpedido,
-              fechapago: arrayCobros[j].fechadepago,
-              nrofactura: arrayPedidos[i].nrofactura,
-              tipopago: arrayCobros[j].tipopago,
-              cliente: arrayPedidos[i].nomcliente,
-              vendedor: arrayPedidos[i].nomvendedor,
-              viapago: arrayCobros[j].viadepago,
-              banco: arrayCobros[j].banco,
-              montodepago: arrayCobros[j].montodepago,
-              montobsf: arrayCobros[j].montobsf,
-              status: arrayCobros[j].status
-            }
-          );
-        }
-      }
-    }
-  } */
-
   timestampConvert(fec) {
     let dateObject = new Date(fec.seconds * 1000);
     let mes_ = dateObject.getMonth() + 1;
@@ -318,15 +286,12 @@ export class GeneralComponent implements OnInit {
     dialogConfig.width = "95%";
     dialogConfig.height = "95%"
     
-    //this.cobrosS.pestana = "CA";
-    
     this.cobroVer_ =  Object.assign({}, cobro);
   
     dialogConfig.data = {
       averiaShow: Object.assign({}, this.cobroVer_)
     };
   
-    //this.dialogo.open(AveriaShowComponent,dialogConfig);
   }
 
   verEliminados(ev) {
