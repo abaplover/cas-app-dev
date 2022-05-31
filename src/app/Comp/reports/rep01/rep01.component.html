@@ -131,24 +131,10 @@
 								</div>
 							</div>
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<div class="form-group">
-										<mat-form-field appearance="legacy" class="campo-width">
-											<mat-label>Cliente</mat-label>
-											<mat-select value=selected
-												name="cliente"
-												[(ngModel)]="this.codCli"
-												(selectionChange)="onBookChange($event)"
-											>
-												<mat-option value={{cliente.idcliente}} *ngFor = "let cliente of clienteList">
-													{{cliente.descripcion}}
-												</mat-option>
-											</mat-select>
-										</mat-form-field>
+								<div>
+									<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
 								</div>
 							</div>
-							<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
-							</div> -->
 						</div>
 
 						<div class="row">
@@ -240,8 +226,8 @@
 				<td>{{p.idvendedor}}</td>
 				<td>{{p.nomvendedor}}</td>
 				<td>{{p.status}}</td>
-        <td>{{p.listaprecio }}</td>
-        <td>{{p.condiciondepago}}</td>
+				<td>{{p.listaprecio }}</td>
+				<td>{{p.condiciondepago}}</td>
 				<td>{{p.totalmontobruto | currency:" "}}</td>
 				<td>{{p.totalmontodescuento | currency:" "}}</td>
 				<!--td>{{p.totalmontoimpuesto | currency:" "}}</td-->
