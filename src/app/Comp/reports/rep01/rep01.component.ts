@@ -52,6 +52,9 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   totalNeto: number = 0;
   firstTime: boolean = false;
 
+
+  showSpinner = false;
+
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
@@ -146,6 +149,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
   }
   onSubmitSearch(pf?: NgForm) {
+    this.showSpinner = true;
     let query: any;
     let hora = new Date().getHours();
     hora = 24 - hora;
@@ -161,17 +165,15 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
         q = q.where("idcliente", "==", this.codCli)
       }
-
-      if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
-        if(this.staTus == ""){ } else {
-          q = q.where("status", "==", this.staTus);
-        }
-      }
-      
+      // if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
+      //   if(this.staTus == ""){ } else {
+      //     q = q.where("status", "in", this.staTus);
+      //   }
+      //   // q = q.where("status", "==", this.staTus)
+      // }
       if (typeof this.codVen == "undefined" || this.codVen == null) { } else {
         q = q.where("nomvendedor", "==", this.codVen)
       }
-
       if (typeof this.conPag == "undefined" || this.conPag == "null" || this.conPag == null) { } else {
         if (this.conPag == "") { } else {
           q = q.where("condiciondepago", "in", this.conPag)
@@ -183,6 +185,10 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       
       this.Ped_ = ped;
+      
+      if(this.staTus == ""){ } else {
+          this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
+      }
 
       this.totalRegistro = this.Ped_.length;
 
@@ -195,9 +201,14 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       if(!this.firstTime){
         this.rerender();
       }
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 500);
+      
     })
 
     this.opcrep01 = true;
+    
 
   }//onSubmitSearch
 
@@ -239,7 +250,6 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
 
     this.dialogo.open(PedidoShowComponent, dialogConfig);
   }//verdetalles
-
   rerender(): void {
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
