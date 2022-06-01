@@ -186,7 +186,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       
       this.Ped_ = ped;
       
-      if(this.staTus == ""){ } else {
+      if(this.staTus == "" || typeof this.staTus == "undefined"){ } else {
           this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
       }
 
