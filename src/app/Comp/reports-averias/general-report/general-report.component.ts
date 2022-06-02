@@ -60,6 +60,8 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   averiaCerrada = false;
   arrayAveria: any[] = [];
 
+  showSpinner = false;
+
   public clienteList: Client[]; //arreglo vacio
 /*public materialList: Product[]; //arreglo vacio*/  
   public motivoList: MaveriaService[]; //arreglo vacio
@@ -179,6 +181,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
     }
   }
   onSubmitSearch(pf?: NgForm) {
+    this.showSpinner = true;
     let query: any;
     let hora = new Date().getHours();
     hora = 24 - hora;
@@ -298,6 +301,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
       if(!this.firstTime){
         this.rerender();
       }
+      this.showSpinner = false;
     })
       
     this.opcgenReport = true;
