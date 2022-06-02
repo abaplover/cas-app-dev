@@ -85,6 +85,8 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
                     //y las comas de los decimaleslas cambiamos por puntos
                     data.body[i][7] = data.body[i][7].replace( ".", "" );
                     data.body[i][7] = data.body[i][7].replace( ",", "." );
+                    data.body[i][8] = data.body[i][8].replace( ".", "" );
+                    data.body[i][8] = data.body[i][8].replace( ",", "." );
                     data.body[i][9] = data.body[i][9].replace( ".", "" );
                     data.body[i][9] = data.body[i][9].replace( ",", "." );
                   }
