@@ -69,8 +69,7 @@ export class PedidosCobrosComponent implements OnInit {
   importeremanente = 0;
 
   showSpinner = false;
-
-
+  
   //data table
   dtOptionsAv: any = {
     pagingType: 'full_numbers',
