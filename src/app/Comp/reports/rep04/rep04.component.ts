@@ -82,6 +82,8 @@ export class Rep04Component implements OnInit {
                     //y las comas de los decimaleslas cambiamos por puntos
                     data.body[i][8] = data.body[i][8].replace( ".", "" );
                     data.body[i][8] = data.body[i][8].replace( ",", "." );
+                    data.body[i][9] = data.body[i][9].replace( ".", "" );
+                    data.body[i][9] = data.body[i][9].replace( ",", "." );
                     data.body[i][10] = data.body[i][10].replace( ".", "" );
                     data.body[i][10] = data.body[i][10].replace( ",", "." );
                   }
