@@ -79,12 +79,15 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
         for(var i = 0; i < data.body.length; i++) {
           //Quitamos los puntos como separador de miles 
           //y las comas de los decimaleslas cambiamos por puntos
-          data.body[i][9] = data.body[i][9].replace( ".", "" );
+          data.body[i][9] = data.body[i][9].replace( ".", "-" );
           data.body[i][9] = data.body[i][9].replace( ",", "." );
-          data.body[i][10] = data.body[i][10].replace( ".", "" );
+          data.body[i][9] = data.body[i][9].replace( "-", "," );
+          data.body[i][10] = data.body[i][10].replace( ".", "-" );
           data.body[i][10] = data.body[i][10].replace( ",", "." );
-          data.body[i][11] = data.body[i][11].replace( ".", "" );
+          data.body[i][10] = data.body[i][10].replace( "-", "," );
+          data.body[i][11] = data.body[i][11].replace( ".", "-" );
           data.body[i][11] = data.body[i][11].replace( ",", "." );
+          data.body[i][11] = data.body[i][11].replace( "-", "," );
         }
       }},'pdf', 'print'
     ]

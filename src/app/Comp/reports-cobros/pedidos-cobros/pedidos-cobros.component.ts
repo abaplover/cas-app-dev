@@ -89,10 +89,12 @@ export class PedidosCobrosComponent implements OnInit {
         for(var i = 0; i < data.body.length; i++) {
           //Quitamos los puntos como separador de miles 
           //y las comas de los decimaleslas cambiamos por puntos
-          data.body[i][8] = data.body[i][8].replace( ".", "" );
+          data.body[i][8] = data.body[i][8].replace( ".", "-" );
           data.body[i][8] = data.body[i][8].replace( ",", "." );
-          data.body[i][9] = data.body[i][9].replace( ".", "" );
+          data.body[i][8] = data.body[i][8].replace( "-", "," );
+          data.body[i][9] = data.body[i][9].replace( ".", "-" );
           data.body[i][9] = data.body[i][9].replace( ",", "." );
+          data.body[i][9] = data.body[i][9].replace( "-", "," );
         }
       }}, 'pdf', 'print'
     ]

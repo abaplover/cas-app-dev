@@ -87,12 +87,15 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
         for(var i = 0; i < data.body.length; i++) {
           //Quitamos los puntos como separador de miles 
           //y las comas de los decimaleslas cambiamos por puntos
-          data.body[i][6] = data.body[i][6].replace( ".", "" );
+          data.body[i][6] = data.body[i][6].replace( ".", "-" ); //El guion es provisional
           data.body[i][6] = data.body[i][6].replace( ",", "." );
-          data.body[i][7] = data.body[i][7].replace( ".", "" );
+          data.body[i][6] = data.body[i][6].replace( "-", "," );
+          data.body[i][7] = data.body[i][7].replace( ".", "-" );
           data.body[i][7] = data.body[i][7].replace( ",", "." );
-          data.body[i][8] = data.body[i][8].replace( ".", "" );
+          data.body[i][7] = data.body[i][7].replace( "-", "," );
+          data.body[i][8] = data.body[i][8].replace( ".", "-" );
           data.body[i][8] = data.body[i][8].replace( ",", "." );
+          data.body[i][8] = data.body[i][8].replace( "-", "," );
         }
       }}, 'pdf', 'print'
     ]
