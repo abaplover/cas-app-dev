@@ -72,7 +72,19 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     processing: true,
     dom: 'Bfrtip',
     buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
+      'copy',{extend: 'excelHtml5',
+      text: 'Excel',
+      customizeData: function(data) {
+        //Recorremos todas las filas de la tabla
+        for(var i = 0; i < data.body.length; i++) {
+          //Quitamos los puntos como separador de miles 
+          //y las comas de los decimaleslas cambiamos por puntos
+          data.body[i][9] = data.body[i][9].replace( ".", "" );
+          data.body[i][9] = data.body[i][9].replace( ",", "." );
+          data.body[i][11] = data.body[i][11].replace( ".", "" );
+          data.body[i][11] = data.body[i][11].replace( ",", "." );
+        }
+      }},'pdf', 'print'
     ]
   };
   //dtOptions: DataTables.Settings = {};

@@ -73,7 +73,19 @@ export class Rep04Component implements OnInit {
           processing: true,
           dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                'copy', {extend: 'excelHtml5',
+                text: 'Excel',
+                customizeData: function(data) {
+                  //Recorremos todas las filas de la tabla
+                  for(var i = 0; i < data.body.length; i++) {
+                    //Quitamos los puntos como separador de miles 
+                    //y las comas de los decimaleslas cambiamos por puntos
+                    data.body[i][8] = data.body[i][8].replace( ".", "" );
+                    data.body[i][8] = data.body[i][8].replace( ",", "." );
+                    data.body[i][10] = data.body[i][10].replace( ".", "" );
+                    data.body[i][10] = data.body[i][10].replace( ",", "." );
+                  }
+                }},'pdf', 'print'
             ]
         };
   }//constructor
