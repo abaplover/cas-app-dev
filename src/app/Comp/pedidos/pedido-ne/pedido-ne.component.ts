@@ -99,7 +99,7 @@ export class PedidoNeComponent implements OnInit {
   public keywordsCli = ['idcliente','descripcion'];
 
   maxDate: Date;
-  minDate = moment(new Date()).format('YYYY-MM-DD');
+  //minDate = moment(new Date()).format('YYYY-MM-DD');
   maxDate_= moment(new Date()).format('YYYY-MM-DD');
   enviar = false;
   private myempty: number;
