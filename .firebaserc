@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "cloud-advanced-selling-dev"
+    "default": "cloud-anvanced-selling"
   },
   "targets": {
-    "cloud-advanced-selling-dev": {
+    "cloud-anvanced-selling": {
       "hosting": {
         "cas-app": [
-          "cloud-advanced-selling-dev"
+          "cloud-anvanced-selling"
         ]
       }
     }

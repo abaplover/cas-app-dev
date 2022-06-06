@@ -222,11 +222,11 @@ export class GeneralComponent implements OnInit {
         }
       }
 
-      if (typeof this.viapago == "undefined" || this.viapago == null) { } else {
+      /* if (typeof this.viapago == "undefined" || this.viapago == null) { } else {
         if(this.viapago == ""){ } else {
-          queryCobros = queryCobros.where("viadepago", '==', this.viapago);
+          queryCobros = queryCobros.where("viadepago", 'in', this.viapago);
         }
-      }
+      } */
 
       if (typeof this.banco == "undefined" || this.banco == null) { } else {
         if(this.banco == ""){ } else {
@@ -258,6 +258,11 @@ export class GeneralComponent implements OnInit {
       this.cobrosS.getCobrosRep01(query).subscribe(cobro => {
 
         this.cobrosDet_ = cobro;
+
+        //Filtramos por via de pago porque no se permiten dos in en el query
+        if(this.viapago == "" || typeof this.viapago == "undefined"){ } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(value => this.viapago.includes(value.viadepago));
+        }
 
         this.montototalUSD = 0;
         this.montototalBSF = 0;
