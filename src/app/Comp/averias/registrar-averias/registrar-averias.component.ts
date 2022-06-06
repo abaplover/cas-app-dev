@@ -964,20 +964,6 @@ export class RegistrarAveriasComponent implements OnInit {
 
   }//closeautoComplete
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   selectEventDoc(txt){
     //solo si se envia $event como parametro
     console.log(txt)
