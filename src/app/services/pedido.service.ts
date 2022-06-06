@@ -355,10 +355,10 @@ export class PedidoService {
   getpedFact(cli?:string)
   {
 
-    //Busca Pedidos Facturados en periodo ejemplo 60 meses a tras o 5 Anos
+    //Busca Pedidos Facturados en periodo ejemplo 60 meses atras o 5 Anos
     var aux = new Date();
     const ahora = new Date(aux.setMonth(aux.getMonth()-60));
-    this.pedFacColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO']).where("fentrega", ">=", ahora).where("idcliente", "==", cli));
+    this.pedFacColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO','COBRADO']).where("fentrega", ">=", ahora).where("idcliente", "==", cli));
     this.pedFac = this.pedFacColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido; 
