@@ -18,8 +18,6 @@ export const environment = {
   messagingSenderId: "940769672352",
 
   appId: "1:940769672352:web:13de3e60b117efa7795dc5" */
-  
-  
   apiKey: "AIzaSyDlyVa-85DeK4dyX6D9wS34O14vC3F4QHY",
 
   authDomain: "cloud-anvanced-seliing.firebaseapp.com",
