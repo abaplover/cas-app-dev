@@ -282,7 +282,7 @@ export class GcobroListComponent implements OnInit {
   }//vpagoselected
 
   tipodocSelected(val) {
-    if (val == "GE01") {
+    if (val == "GE01" || val == "SP01") {
       this.vp_efectivo=true;
       this.cobro_.moneda ="USD";
       this.disableBSF = true;
