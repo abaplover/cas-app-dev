@@ -278,7 +278,8 @@ export class GeneralComponent implements OnInit {
 
         if(!this.firstTime){
           this.rerender();
-        }   
+        }
+        
         this.opcgenReport = true;
         this.status = null;
       
