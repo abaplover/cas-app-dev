@@ -229,7 +229,7 @@ export class GcobrovListComponent implements OnInit {
         }
 
         if(this.matrisDetCobro[i].status == "ACTIVO"){
-          if (this.matrisDetCobro[i].montodepago>=0) {
+          if (this.matrisDetCobro[i].montodepago>0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
             this.pagoparcialpagado += 0;
@@ -276,7 +276,7 @@ export class GcobrovListComponent implements OnInit {
           this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
         if(this.matrisDetCobro[i].status == "ACTIVO") {
-          if (this.matrisDetCobro[i].montodepago>=0) {
+          if (this.matrisDetCobro[i].montodepago>0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
             this.pagoparcialpagado += 0;
@@ -332,8 +332,10 @@ export class GcobrovListComponent implements OnInit {
         this.cobro_.montodepago = 0;
       }
 
-      if (Number(this.pedidoPend_.totalmontoneto.toFixed(2)) ===  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago.toFixed(2))) {
+      if (Number(this.pedidoPend_.totalmontoneto) ==  Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago)) {
         this.pedidoPend_.status="COBRADO";
+      } else {
+        this.pedidoPend_.status="ENTREGADO";
       }
       
       //Monto pendiente para registrar en la tabla pedidos
