@@ -114,7 +114,7 @@ export class GcobrovListComponent implements OnInit {
 
 
   tipodocSelected(val) {
-    if (val == "GE01" || val == "SP01") {
+    if (val == "GE01" || val == "SP01" || val == "DC01") {
       this.vp_efectivo=true;
       this.cobro_.moneda ="USD";
       this.disableBSF = true;
