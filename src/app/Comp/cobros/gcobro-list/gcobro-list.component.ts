@@ -226,18 +226,6 @@ export class GcobroListComponent implements OnInit {
       let thisHour =  moment().hour();
       let thisMinute = moment().minutes();
 
-      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
-      
-      this.cobro_.modificado = new Date;
-      this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
-      this.cobro_.idpedido = this.pedidoPend_.idpedido;
-      this.cobro_.status = "ACTIVO";
-      this.cobro_.nomcliente = this.pedidoPend_.nomcliente;
-      this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
-      this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
-      this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
-      this.pedidoPend_.statuscobro="ABONADO";
-
       if (this.montodepago) {
         this.cobro_.montodepago = Number(this.montodepago);
       } else {
@@ -249,6 +237,18 @@ export class GcobroListComponent implements OnInit {
       } else {
         this.pedidoPend_.status = "ENTREGADO";
       }
+
+      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
+      
+      this.cobro_.modificado = new Date;
+      this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
+      this.cobro_.idpedido = this.pedidoPend_.idpedido;
+      this.cobro_.status = "ACTIVO";
+      this.cobro_.nomcliente = this.pedidoPend_.nomcliente;
+      this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
+      this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
+      this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
+      this.pedidoPend_.statuscobro="ABONADO";
 
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
