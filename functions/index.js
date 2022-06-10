@@ -338,6 +338,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 			}
 		]
 	}
+	
 	let enviar = false;
 	if (typeof fped !== "undefined"){
 		enviar = true;
