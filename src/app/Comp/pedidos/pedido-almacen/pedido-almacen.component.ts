@@ -363,6 +363,7 @@ anulardoc(pf?: NgForm,elemento?,num?:number){
         //this.pedido_.ffactura = null;
         this.pedido_.tipodoc = "";
         this.pedido_.nrofactura = "";
+        console.log(this.pedido_,num);
         this.pedidoService.updatePedidos(this.pedido_,num);
 
         if(pf != null) pf.reset();

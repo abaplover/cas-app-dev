@@ -505,6 +505,7 @@ export class PedidoService {
 
   updatePedidos(pedido: Pedido,anularN?:number)
   {
+    console.log("pedidoUpdate ",pedido);
     this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
     this.pedidoDoc.update(pedido);
 
