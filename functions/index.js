@@ -1177,7 +1177,7 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 				]
 
 
-	}).then(r=>console.log('Email enviado sin problemas',asunto)).catch(e=>console.log('El error es: ',e));
+	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
 }//sendpedidomail
 
 //ENVIA MAIL COBROS
