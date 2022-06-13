@@ -126,7 +126,7 @@ export class GcobroListComponent implements OnInit {
       this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
     }
 
-    this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet=>{
+    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet=>{
 
       this.matrisDetCobro = cobrosDet;
 
@@ -146,7 +146,7 @@ export class GcobroListComponent implements OnInit {
       }
 
       if ( this.pagoparcialpagado > 0 ) {
-        this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
+        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
       }
@@ -172,7 +172,7 @@ export class GcobroListComponent implements OnInit {
     }
 
     //Get Order detaills
-    this.cobroService.getCobrosDet(idpedido).subscribe(cobrosDet => {
+    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
 
@@ -199,7 +199,7 @@ export class GcobroListComponent implements OnInit {
       }
 
       if ( this.pagoparcialpagado > 0 ) {
-        this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
+        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
       }
@@ -220,22 +220,31 @@ export class GcobroListComponent implements OnInit {
     }
   }//moForm
 
-  onSubmit(pf?: NgForm) {
+  async onSubmit(pf?: NgForm) {
     if(this.pedidoPend_.idpedido != null) {
       
       let thisHour =  moment().hour();
       let thisMinute = moment().minutes();
 
       if (this.montodepago) {
-        this.cobro_.montodepago = Number(this.montodepago);
+        this.cobro_.montodepago = await this.roundTo(Number(this.montodepago),2);
       } else {
         this.cobro_.montodepago = 0;
-      }      
+      }
 
-      if (Number(this.pedidoPend_.totalmontoneto) == Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago)) {
-        this.pedidoPend_.status = "COBRADO";
+      this.pedidoPend_.totalmontoneto = await this.roundTo(Number(this.pedidoPend_.totalmontoneto),2);
+      this.pagoparcialpagado = await this.roundTo(Number(this.pagoparcialpagado),2);
+
+      console.log("Cobrado (true)/Negado (false): ",
+        this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago)),
+        this.pedidoPend_.totalmontoneto,
+        Number(this.pagoparcialpagado),
+        Number(this.cobro_.montodepago));
+
+      if (this.pedidoPend_.totalmontoneto == this.pagoparcialpagado + this.cobro_.montodepago) {
+        this.pedidoPend_.status="COBRADO";
       } else {
-        this.pedidoPend_.status = "ENTREGADO";
+        this.pedidoPend_.status="ENTREGADO";
       }
 
       this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
@@ -394,7 +403,7 @@ export class GcobroListComponent implements OnInit {
     this.toastr.success('Operación Terminada', 'Se ha enviado una notificación de cobro');
   }
 
-  roundTo(num: number, places: number) {
+  async roundTo(num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
