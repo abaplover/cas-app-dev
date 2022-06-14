@@ -241,7 +241,7 @@ export class GcobroListComponent implements OnInit {
         Number(this.pagoparcialpagado),
         Number(this.cobro_.montodepago));
 
-      if (this.pedidoPend_.totalmontoneto == this.pagoparcialpagado + this.cobro_.montodepago) {
+      if (this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago))) {
         this.pedidoPend_.status="COBRADO";
       } else {
         this.pedidoPend_.status="ENTREGADO";
