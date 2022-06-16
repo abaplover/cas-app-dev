@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  /* firebaseConfig : {
+  firebaseConfig : {
     apiKey: "AIzaSyAGRVU2FXL9cI4NiusyAwdQyYD9tH8iVEM",
 
   authDomain: "cloud-advanced-selling-dev.firebaseapp.com",
@@ -15,9 +15,9 @@ export const environment = {
 
   appId: "1:940769672352:web:13de3e60b117efa7795dc5" 
 
-  }  */
+  } 
   
-  firebaseConfig: {
+  /* firebaseConfig: {
     apiKey: "AIzaSyDlyVa-85DeK4dyX6D9wS34O14vC3F4QHY",
 
   authDomain: "cloud-anvanced-seliing.firebaseapp.com",
@@ -33,6 +33,6 @@ export const environment = {
   appId: "1:38633795965:web:a9ba68e3846ee9b7f15c14",
 
   measurementId: "G-FFF4M4KJMF"
-  }
+  } */
   
 };
