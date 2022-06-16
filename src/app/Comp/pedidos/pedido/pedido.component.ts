@@ -353,9 +353,9 @@ onEdit(event, ped){
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
         //Desactiva el boton enviar 
- this.pedidoService.enviar = false;
+        this.pedidoService.enviar = false;
 
-    }else{ //Actualiza Pedido
+    } else { //Actualiza Pedido
         //set parameter date
         //this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.pedido_.fechapedido);
         this.pedidoService.pedido_.modificado = new Date;

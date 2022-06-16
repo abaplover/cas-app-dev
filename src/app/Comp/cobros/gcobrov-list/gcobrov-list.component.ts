@@ -310,7 +310,7 @@ export class GcobrovListComponent implements OnInit {
           this.matrisDetCobro[i].fechadepago = await this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
         if(this.matrisDetCobro[i].status == "ACTIVO") {
-          if (this.matrisDetCobro[i].montodepago>0) {
+          if (this.matrisDetCobro[i].montodepago > 0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
             this.pagoparcialpagado += 0;

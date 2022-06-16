@@ -1295,7 +1295,7 @@ export class NewpedComponent implements OnInit {
 
     if (this.pedidoService.tmontn <= 0 || this.pedidoService.totalCnt <= 0 || this.pedidoService.tmontb <= 0){
       //Desactiva el boton enviar 
- this.pedidoService.enviar = false;
+      this.pedidoService.enviar = false;
       this.pedidoService.readonlyField = false;
     }
   }//removeDetRow

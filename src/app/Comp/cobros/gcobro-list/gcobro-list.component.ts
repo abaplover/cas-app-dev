@@ -197,7 +197,7 @@ export class GcobroListComponent implements OnInit {
 
         
         if(this.matrisDetCobro[i].status == "ACTIVO") {
-          if (this.matrisDetCobro[i].montodepago>=0) {
+          if (this.matrisDetCobro[i].montodepago >= 0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
             this.pagoparcialpagado += 0;
