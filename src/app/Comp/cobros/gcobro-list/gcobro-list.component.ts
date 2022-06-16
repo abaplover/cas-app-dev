@@ -85,6 +85,11 @@ export class GcobroListComponent implements OnInit {
     this.showSpinner = true;
     this.pedidoPend_ = {} as Pedido;
 
+    this.cargarDatos();
+
+  }//ngOnInit
+
+  cargarDatos() {
     this.pedidoS.getPedidosPendientes().subscribe( pedidosP => {
       this.cobroslist = pedidosP;
       
@@ -106,15 +111,15 @@ export class GcobroListComponent implements OnInit {
     this.bancoS.getBancos().valueChanges().subscribe(bc =>{
       this.bancoList = bc;
     })
-
-  }//ngOnInit
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
 
-  verdetalles($event,elemento) {
+  async verdetalles($event,elemento) {
+    this.showSpinner = true;
     this.ver = true;
     this.visual = true;
 
@@ -123,17 +128,17 @@ export class GcobroListComponent implements OnInit {
     let idpedido = this.pedidoPend_.idpedido.toString();
 
     if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
-      this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
+      this.pedidoPend_.fpago = await this.timestampConvert(elemento.fpago);
     }
 
-    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet=>{
+    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
 
       this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
       for (let i in this.matrisDetCobro) {
-        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+        if(this.matrisDetCobro[i].fechadepago) this.matrisDetCobro[i].fechadepago = await this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         
         
         if(this.matrisDetCobro[i].status == "ACTIVO") {
@@ -147,8 +152,10 @@ export class GcobroListComponent implements OnInit {
 
       if ( this.pagoparcialpagado > 0 ) {
         this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
+        this.showSpinner = false;
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
+        this.showSpinner = false;
       }
               
     }) 
@@ -158,7 +165,7 @@ export class GcobroListComponent implements OnInit {
     }
   }//verdetalles
 
-  selectEventCob(elemento) {
+  async selectEventCob(elemento) {
 
     this.montodepago = null;
     this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
@@ -168,7 +175,7 @@ export class GcobroListComponent implements OnInit {
     let idpedido = this.pedidoPend_.idpedido.toString();
 
     if (elemento.fpago != null && typeof elemento.fpago != "undefined") {
-      this.pedidoPend_.fpago = this.timestampConvert(elemento.fpago);
+      this.pedidoPend_.fpago = await this.timestampConvert(elemento.fpago);
     }
 
     //Get Order detaills
@@ -181,11 +188,11 @@ export class GcobroListComponent implements OnInit {
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
         if(this.matrisDetCobro[i].fechadepago) {
-          this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
+          this.matrisDetCobro[i].fechadepago = await this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
 
         if(this.matrisDetCobro[i].modificado) {
-          this.matrisDetCobro[i].modificado = this.timestampConvert(this.matrisDetCobro[i].modificado);
+          this.matrisDetCobro[i].modificado = await this.timestampConvert(this.matrisDetCobro[i].modificado);
         }
 
         
@@ -343,7 +350,7 @@ export class GcobroListComponent implements OnInit {
     }
   }
 
-  timestampConvert(fec) {
+  async timestampConvert(fec) {
     let dateObject = new Date(fec.seconds*1000);
     
     let mes_ = dateObject.getMonth()+1;
@@ -355,6 +362,7 @@ export class GcobroListComponent implements OnInit {
   onCancelar(pf?: NgForm ){
     if(pf != null) pf.reset();
     this.cobroslist=[];
+    this.cargarDatos(); //Se vuelven a cargar los datos de la tabla
     this.cobro_ = {} as Cobro;
     this.pedidoPend_ = {} as Pedido;
     this.MostrarCob = 'display:none;';
