@@ -291,7 +291,7 @@ onEdit(event, ped){
 
 }//onEdit
 
-  onSubmit(pf?: NgForm){
+  async onSubmit(pf?: NgForm){
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null){
         //set parameter date
@@ -307,7 +307,7 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -365,7 +365,7 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -864,5 +864,11 @@ onEdit(event, ped){
     }
 
   }//removeDetRow
+
+
+  async roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
 
 }//export class PedidoComponent implements OnInit

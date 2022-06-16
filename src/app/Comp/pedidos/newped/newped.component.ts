@@ -633,7 +633,7 @@ export class NewpedComponent implements OnInit {
 
 
 
-  onSubmit(pf?: NgForm, url?:string,pedNro?:any){
+  async onSubmit(pf?: NgForm, url?:string,pedNro?:any){
     
     let ahora = new Date();
 
@@ -659,7 +659,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -782,7 +782,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -1299,5 +1299,10 @@ export class NewpedComponent implements OnInit {
       this.pedidoService.readonlyField = false;
     }
   }//removeDetRow
+
+  async roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
 
 }//class
