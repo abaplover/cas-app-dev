@@ -25,7 +25,15 @@ mat-spinner {
 .dates-radio-group {
 	display: flex;
 	flex-direction: column;
-	margin: 15px 0;
-	align-items: flex-start;
+	margin: 10px 0;
+	left: 50px;
+	font-size: inherit;
+    font-weight: 400;
+    line-height: 1.125;
+	color: rgba(0,0,0,.87);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    letter-spacing: normal;
+	/* position:absolute; */
+	/* align-items: flex-start; */
   }
   

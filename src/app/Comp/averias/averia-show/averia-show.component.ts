@@ -18,8 +18,8 @@ export class AveriaShowComponent implements OnInit {
   totalPri: number = 0;
   totalCnt: number = 0;
   totalPed: number = 0;
-  fechadecierre: any;
-  fechaderesolucion: any;
+  fechadecierre: string;
+  fechaderesolucion: string;
 
   tmontb: number=0;
   tmontd: number=0;
@@ -39,13 +39,13 @@ export class AveriaShowComponent implements OnInit {
     this.averiaShow = data.averiaShow;
 
     if (!this.averiaShow.fecierre){
-      this.fechadecierre = "";
+      this.fechadecierre = null;
     }else{
       this.fechadecierre = this.timestampConvert(this.averiaShow.fecierre);
     }
 
     if (!this.averiaShow.feresolucion){
-      this.fechaderesolucion = "";
+      this.fechaderesolucion = null;
     }else{
       this.fechaderesolucion = this.timestampConvert(this.averiaShow.feresolucion);
     }
@@ -98,7 +98,7 @@ export class AveriaShowComponent implements OnInit {
 
     ampm = dateObject.getHours() >= 12 ? ' p.m.' : ' a.m.';
 
-    return (d1a+"/"+m3s+"/"+dateObject.getFullYear() + " " +dateObject.getHours()+":"+dateObject.getMinutes()+ ampm).toString();
+    return (d1a+"/"+m3s+"/"+dateObject.getFullYear()).toString();
   }//timestampConvert
 
 

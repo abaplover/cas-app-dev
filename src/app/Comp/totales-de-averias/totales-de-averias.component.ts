@@ -12,6 +12,7 @@ export class TotalesDeAveriasComponent implements OnInit, OnChanges {
   @Input() aver_: AveriaDet[] = [];
   @Input() porcentajeReclamo: any;
   @Input() totalAveria: any;
+  @Input() montoOriginalTotal: any;
 
   totalRegistroAv: number = 0;
   constructor() {}

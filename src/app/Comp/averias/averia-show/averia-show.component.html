@@ -208,8 +208,9 @@
 													<td class="col-3" style="text-align:right;">{{ave.cantidadmaterial| currency:" ":'symbol':'2.0'}}</td>
 													<td class="col-4" style="text-align:right;">{{ave.preciomaterial | currency:" "}}</td>
 													<td class="col-5" style="text-align:right;">{{ave.totalpormaterial | currency:" "}}</td>
-													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && ave.aprobado" class="col-5" style="text-align:left;">ACEPTADA</td>
-													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && !ave.aprobado" class="col-5" style="text-align:left;">RECHAZADA</td>
+													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && ave.aprobado && this.averiaShow.status!='ABIERTA'" class="col-5" style="text-align:left;">ACEPTADA</td>
+													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && !ave.aprobado && this.averiaShow.status!='ABIERTA'" class="col-5" style="text-align:left;">RECHAZADA</td>
+													<!-- <td #default_td class="col-5" style="text-align:left;"></td> -->
 													<td *ngIf="ave.solucion" class="col-5" style="text-align:center;">{{ave.solucion}}</td>
 												</tr>
 											</tbody>

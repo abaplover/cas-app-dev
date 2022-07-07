@@ -53,6 +53,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   motivoAv="";
   opcgenReport = false;
   averiaVer_ = {} as Averia;
+  totalMontoOriginal: number = 0;
   totalRegistroAv: number = 0;
   totalAveria: number = 0;
   porcentajeReclamo: number = 0;
@@ -107,7 +108,10 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
   data: any;
   //-----------------------------------------------------------
   //data table
-  tiposFecha: string[] = ['fechaAveria', 'fecharesolucion', 'fechacierre']
+  tiposFecha: {}[] = [{name: 'Fecha de Creación', value: 'fechaaveria'}, 
+                      {name: 'Fecha de Resolución', value: 'feresolucion'},   
+                      {name: 'Fecha de Cierre', value: 'fecierre'}];
+
   fechaSeleccionada: string = '';
 
   constructor
@@ -154,6 +158,7 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
     })
     
     this.firstTime = true;
+    this.fechaSeleccionada = 'fechaaveria';
 
   }//ngOnInit
 
@@ -199,10 +204,10 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
     console.log("fecha", this.fechaSeleccionada);
 
     query = (ref: CollectionReference) => {
-      let q = ref.where("fechaaveria", ">=", this.desD)
-        .where("fechaaveria", "<=", this.hasT)
-        .orderBy("fechaaveria", "desc")
-        .orderBy("creado", "desc")
+      let q = ref.where(`${this.fechaSeleccionada}`, ">=", this.desD)
+        .where(`${this.fechaSeleccionada}`, "<=", this.hasT)
+        .orderBy(`${this.fechaSeleccionada}`, "desc")
+        // .orderBy("creado", "desc")
         .limit(5000)
 
       if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
@@ -296,10 +301,10 @@ export class GeneralReportComponent implements OnDestroy, OnInit, AfterViewInit 
           this.metodoFor(this.arrayAveria,this.averiasDet_);
         });
 
-        let totalMontoOriginal = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.montoOriginal, 0),2)
+        this.totalMontoOriginal = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.montoOriginal, 0),2)
         this.totalRegistroAv = this.arrayAveria.length;
         this.totalAveria = this.roundTo(this.arrayAveria.reduce((total, row) => total + row.totalaveria, 0),2);
-        this.porcentajeReclamo = this.roundTo(this.totalAveria/totalMontoOriginal *100,2); 
+        this.porcentajeReclamo = this.roundTo(this.totalAveria/this.totalMontoOriginal *100,2); 
       }
 
       if(!this.firstTime){
