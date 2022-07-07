@@ -1,9 +1,10 @@
 
 	<mat-dialog-content style="width: 100%;">
 		<div class="card-body text-info panel panel-login" *ngIf="this.pedidoShow.uid" style="border-style:solid;border-width:1px;">
-			<button type="button" class="close" data-dismiss="modal" (click)="onClose()">&times;</button>
+			<button type="button" class="close" data-dismiss="modal" (click)="onClose()" style="margin-inline: 5px;">&times;</button>
 				
 			<div class="row">
+				<br/><br/>
 				<br/><br/>
 			</div>
 			<form #pedidoFormne="ngForm" *ngIf="this.pedidoShow.uid">			
@@ -118,26 +119,124 @@
 										</div>
 									</div>
 								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Pedido</span>
+											</div>
+											<div class="abs-center-fecha">
+												<mat-label>{{this.pedidoShow.fechapedido | date: 'dd/MM/yyyy' }}</mat-label>
+											</div>
+										</div>	
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-right: 2px;" >
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Factura</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoShow.ffactura | date: 'dd/MM/yyyy '}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
 						
 							<div class="card">
 								<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
 									<div class="row" >
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 125px;">
-													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Pedido</span>
+													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Doc</span>
 												</div>
-												<div class="abs-center-fecha">
-													<mat-label>{{this.pedidoShow.fechapedido | date: 'dd/MM/yyyy hh:mm a' }}</mat-label>
+												<div class="abs-center">
+													<mat-label>{{this.pedidoShow.tipodoc}}</mat-label>
 												</div>
-											</div>	
+											</div>
 										</div>
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									</div>
+									<div class="row" >
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 125px;">
+													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.pedidoShow.nrofactura}}</mat-label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										  <div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 130px">
+											  <span
+												class="input-group-text"
+												style="width: 130px"
+												id="inputGroup-sizing-sm"
+												>Fecha Preparación</span
+											  >
+											</div>
+											<div class="abs-center">
+											  <mat-label>{{ this.pedidoShow.fpreparacion | date: 'dd/MM/yyyy'}}</mat-label>
+											</div>
+										  </div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										  <div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 130px">
+											  <span
+												class="input-group-text"
+												style="width: 130px"
+												id="inputGroup-sizing-sm"
+												>Almacenista</span
+											  >
+											</div>
+											<div class="abs-center">
+											  <mat-label>{{ this.pedidoShow.nombrealmacenista }}</mat-label>
+											</div>
+										  </div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										  <div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 130px">
+											  <span
+												class="input-group-text"
+												style="width: 130px"
+												id="inputGroup-sizing-sm"
+												>N° Bultos</span
+											  >
+											</div>
+											<div class="abs-center">
+											  <mat-label>{{ this.pedidoShow.nrobultos }}</mat-label>
+											</div>
+										  </div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
+						
+						<div class="card">
+							<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 													<div class="input-group-prepend" style="width: 135px;">
 														<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Despacho</span>
@@ -148,18 +247,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" >
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="padding-right: 2px;" >
-											<div class="input-group input-group-sm mb-3">
-												<div class="input-group-prepend" style="width: 125px;">
-													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Factura</span>
-												</div>
-												<div class="abs-center">
-													<mat-label>{{this.pedidoShow.ffactura | date: 'dd/MM/yyyy '}}</mat-label>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 135px;">
 													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
@@ -170,19 +259,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" >
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-											<div class="input-group input-group-sm mb-3">
-												<div class="input-group-prepend" style="width: 125px;">
-													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Doc</span>
-												</div>
-												<div class="abs-center">
-													<mat-label>{{this.pedidoShow.tipodoc}}</mat-label>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 													<div class="input-group-prepend" style="width: 135px;">
 														<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha T-Entrega</span>
@@ -193,18 +271,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" >
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-											<div class="input-group input-group-sm mb-3">
-												<div class="input-group-prepend" style="width: 125px;">
-													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Doc</span>
-												</div>
-												<div class="abs-center">
-													<mat-label>{{this.pedidoShow.nrofactura}}</mat-label>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 135px;">
 													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha de Entrega</span>
@@ -216,17 +284,7 @@
 										</div>
 									</div>
 									<div class="row" >
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-											<!-- <div class="input-group input-group-sm mb-3">
-												<div class="input-group-prepend" style="width: 125px;">
-													<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Nota de Entrega</span>
-												</div>
-												<div class="abs-center">
-													<mat-label>{{this.pedidoShow.nrofactura}}</mat-label>
-												</div>
-											</div> -->
-										</div>
-										<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 135px;">
 													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Vencimiento</span>
@@ -243,11 +301,6 @@
 					</div>
 				</div>
 
-
-
-
-
-				<div class="row" style="height: 5px;"></div>
 				<div class="row">
 					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
 						<div class="card">
@@ -259,8 +312,8 @@
 												<tr>
 													<th scope="col"><mat-label style="font-size:smaller;">CÓDIGO</mat-label></th>
 												<th scope="col"><mat-label style="font-size:smaller;">MATERIAL</mat-label></th>
-												<th scope="col"><mat-label style="font-size:smaller;">UME</mat-label></th>
-												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANT</mat-label></th>
+												<th scope="col"><mat-label style="font-size:smaller;">U. MEDIDA</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANTIDAD</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">PRECIO</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">TOTAL</mat-label></th>
 												</tr>
@@ -355,33 +408,52 @@
 						</div>
 
 						<div class="card">
-							<div class="card-body">
+							<div class="card-body" style="width: 100%; display: flex; flex-wrap: wrap; padding-inline: 0.4vw;justify-content: center;">
 								<div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin: 0%; padding: auto;">
 
-									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid;">
-										<!--	<button 
-												class="btn-space" 
+									 	<div class="form-group" style="text-align:right;padding-top: 10px; border-width: 0px;border-style: solid; display: flex; flex-wrap: wrap;justify-content: center;">
+											<button 
+												class="btn btn-secondary btn-space" 
 												smat-stroked-button 
-												style="background-color:#bcc0c252; width: 60% !important;height: 35px !important;" 
+												style="background-color:#bcc0c252; width: 120px!important;height: 35px !important; margin: 0.3vw 0.2vw;font-size: 14px;" 
 												type="button" 
 												[disabled]="pedidoFormne.invalid"
-												(click)="onSubmitne(pedidoFormne)"
+												(click)="downloadPdf(pedidoFormne)"
 												id="btnenviarne"
 												name="btnenviarne"
 											>
-												Actualizar Pedido
-											</button>-->
+												Descargar PDF
+											</button>
 											<button 
+												class="btn btn-secondary btn-space"
 												smat-stroked-button 
-												style=" background-color:#bcc0c252;width: 35% !important;height: 35px !important;" 
+												style=" background-color:#bcc0c252;width: 120px !important;height: 35px !important;margin: 0.3vw 0.2vw;font-size: 14px;" 
 												type="reset" 
 												(click)="onClose()">
 													Atrás
-												</button>
+											</button>
 										</div>
 									</div>
 								</div>
+
+					<div class="row" style="height: 50px;">
+					
+<!-- 					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="display: flex; justify-content: right;">		
+ -->						<button 
+							class="btn btn-secondary btn-space" 
+							smat-stroked-button 
+							style="background-color:#bcc0c252;height: 35px !important; margin: 0.4vw 1.2vw;font-size: 14px;" 
+							type="button" 
+							[disabled]="!someticket"
+							(click)="downloadEtiquetas()"
+							id="btnetiqueta"
+							name="btnetiqueta"
+						>
+							Imprimir etiquetas
+						</button>
+<!-- 					</div>
+ -->				</div>
 							</div>
 						</div> 
 					</div>

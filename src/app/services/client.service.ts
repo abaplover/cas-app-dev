@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import {AngularFireDatabase, AngularFireList, AngularFireObject, snapshotChanges} from '@angular/fire/database';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreDocument } from '@angular/fire/firestore/document/document';
 import { RippleRef } from '@angular/material/core';
+import { firestore } from 'firebase';
+
 //import{AngularFirestore,AngularFirestoreCollection,AngularFirestoreDocument} from '@angular/fire/firestore';
 //import{observable} from 'rxjs';
 //import{ map } from 'rxjs';
@@ -12,17 +16,62 @@ import { Client } from '../models/client';
 export class ClientService {
 
   clientList: AngularFireList<any>;
+  //list2: AngularFireList<any>;
+  clientRef: AngularFireObject<any>;
   selectedClient: Client = new Client();
   mostrarForm: boolean = false;
   idFieldReadOnly = false;
 
-  constructor(private firebase: AngularFireDatabase) { }
+  phoneClient: string;
+
+
+  client: AngularFireList<any>;
+
+  
+  clientData:any; //Variable que se llena al solicitar los datos de un cliente
+
+  constructor(
+    private firebase: AngularFireDatabase,
+    private afs: AngularFirestore) { }
 
 
   getClients()
   {
     return this.clientList = this.firebase.list('clients');
   }
+
+  getSpecificClient(idClient){
+    /* this.clientRef = this.firebase.object('clients/' + idClient);
+    return this.clientRef; */
+    this.client = this.firebase.list("/clients",ref => ref.orderByChild('idcliente').equalTo(idClient));
+    console.log(this.client)
+    return this.client;
+    
+    /* var f = this.afs.collection('clients');
+    var query = f.ref.where('idcliente','==', `${idClient}`)
+    console.log("query ", query)
+    return query; */
+  }
+
+   /*  let f = this.db.doc<Client>('clients/' + clientId).valueChanges();
+    f.toPromise().then(doc => {
+      console.log("doc ", doc)
+    })
+    this.clientList2 = this.firebase.list('clients', ref => ref.orderByChild('idcliente').equalTo(clientId));
+    console.log(this.clientList2.valueChanges().toPromise().then( doc => console.log(doc))) */
+    // return new Promise((resolve, reject) => {
+    //   let c = this.db.collection('clients', ref => ref.where("idcliente", "==", clientId));
+    //   /* let c = this.db.collection("clients").doc(`${clientId}`).get().toPromise()
+    //   .then(doc => {
+    //     console.log("=====CLIENT ",doc.data());
+    //     resolve(doc);
+    //   }).catch(function (err) {
+    //     console.log("Error getting document:", err);
+    //     reject(err);
+    //   }); */
+    //     console.log("=====CLIENT ",c);
+    // })
+
 
   insertClient(client: Client)
   {

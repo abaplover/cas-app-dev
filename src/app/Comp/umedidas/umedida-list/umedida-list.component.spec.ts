@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UmedidaListComponent } from './umedida-list.component';
 
@@ -6,7 +6,7 @@ describe('UmedidaListComponent', () => {
   let component: UmedidaListComponent;
   let fixture: ComponentFixture<UmedidaListComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ UmedidaListComponent ]
     })

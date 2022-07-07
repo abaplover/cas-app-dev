@@ -64,22 +64,6 @@
 
 
 						<div class="row">
-							<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<div class="form-group">
-									<mat-form-field appearance="legacy" class="campo-width">
-										<mat-label>Código de Cliente</mat-label>
-										<mat-select value=selected
-											name="Código de Cliente"
-											[(ngModel)]="this.codCli"
-
-										>
-											<mat-option value={{cdc.idcliente}} *ngFor = "let cdc of clienteList">
-												{{cdc.idesc}}
-											</mat-option>
-										</mat-select>
-									</mat-form-field>
-								</div>
-							</div> -->
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
@@ -96,27 +80,12 @@
 									</mat-form-field>
 								</div>
 							</div>
-              <div><app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete></div>
-							<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<div class="form-group">
-									<mat-form-field appearance="legacy" class="campo-width">
-										<mat-label>Status</mat-label>
-										<mat-select value=selected
-											name="status"
-											[(ngModel)]="this.staTus"
-
-										>
-
-											<mat-option value=""></mat-option>
-											<mat-option value="ACTIVO">ACTIVO</mat-option>
-											<mat-option value="FACTURADO">FACTURADO</mat-option>
-											<mat-option value="DESPACHADO">DESPACHADO</mat-option>
-											<mat-option value="ENTREGADO">ENTREGADO</mat-option>
-											<mat-option value="ELIMINADO">ELIMINADO</mat-option>
-										</mat-select>
-									</mat-form-field>
-								</div>
-							</div> -->
+							
+             				<div>
+								<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+							</div>
+							
+								 
 						</div>
 
 						<div class="row">
@@ -129,7 +98,7 @@
 						<div class="row">
 							<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 								<div class="form-group" style="text-align:right;">
-									<button type="reset" class="btn btn-primary" >Limpiar</button>
+									<button type="reset" class="btn btn-primary" style="margin-right: 2px;" >Limpiar</button>
 									<button
 										id="btnenviarne"
 										name="btnenviarne"

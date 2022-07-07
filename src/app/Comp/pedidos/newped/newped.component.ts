@@ -40,6 +40,7 @@ import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import * as moment from 'moment';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 
@@ -68,6 +69,7 @@ export class NewpedComponent implements OnInit {
 
   public msj_enlace: string = 'Pedidos';
   public clienteList: Client[]; //arreglo vacio
+  //public justClient: Client[];
   public vendedorList: Vendedor[]; //arreglo vacio
   public lprecioList: Lprecio[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
@@ -88,8 +90,7 @@ export class NewpedComponent implements OnInit {
   codeBlock ='';
   companyblk ='';
   //minDate = moment(new Date()).format('YYYY-MM-DD')
-  start_time = moment(new Date()).format('YYYY-MM-DD')
-
+  start_time = moment().format('YYYY-MM-DD hh:mm:ss');
 
   nomCli='';
   rifCli='';
@@ -117,11 +118,19 @@ export class NewpedComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
-    //this.maxDate = new Date(currentYear, currentm, currentd);
+
+    // let f = this.clienteS.getSpecificClient('J12345678').valueChanges().subscribe( (data)  => {
+    //   return data;
+    //   console.log(data)
+    //   //this.tlfCli = data;justClient
+    // });
 
   }
 
+    //this.maxDate = new Date(currentYear, currentm, currentd);
+
   ngOnInit(): void {
+    
     //this.pedidoService.pedido_.descuentoporc = 0;
     //this.pedidoService.pedido_.descuentovalor = 0;
     this.pedidoService.mostrarForm = false;
@@ -162,25 +171,26 @@ export class NewpedComponent implements OnInit {
     })
 
 
+    //Desactiva el boton enviar 
     this.pedidoService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
 
   }//ngOnInit
 
-
+  async OneClient(){
+    
+  }
 
   async generarpdf(pf?: NgForm){
-
+   
     var bodyData = [];
     let observacion='';
     let totalArticulos=0;
     let spaceBottom=260;
 
     bodyData = this.pedidoService.matrisDetPedido;
-    //console.log("bodyData ",bodyData);
-    //console.log("Matris ",this.pedidoService.matrisDetPedido);
-
+    //console.log(bodyData);
     if (this.pedidoService.pedido_.observacion=="" || typeof this.pedidoService.pedido_.observacion=="undefined"){
       observacion = "";
     }else{
@@ -208,15 +218,18 @@ export class NewpedComponent implements OnInit {
       docAdd = ordern.toString();
     }
     if (this.pedidoService.txtBtnAccion.toString() == "Actualizar Pedido"){
+    //Llena los datos vacios del cliente para enviarlos al pdf cuando se actualiza un pedido
+      this.tlfCli = this.clienteS.clientData[0].telefonom;
+      this.zonVen = this.clienteS.clientData[0].zona;
       docAdd = this.pedidoService.pedido_.idpedido.toString();
     }
 
     const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
-    let dateObj = this.pedidoService.pedido_.fechapedido;
-    let min_ = dateObj.getMinutes();
+    let dateObj = moment(this.pedidoService.start_time).toDate(); //Toma la fecha del formulario
+    let min_ = new Date().getMinutes();
 
 	  var horas_ = new Array();
-    horas_ [0]  = "12:" + min_ + " PM";
+    horas_ [0]  = "12:" + min_ + " AM";
     horas_ [23] = "11:" + min_ + " PM";
     horas_ [22] = "10:" + min_ + " PM";
     horas_ [21] = "09:" + min_ + " PM";
@@ -228,7 +241,7 @@ export class NewpedComponent implements OnInit {
 		horas_ [15] = "03:" + min_ + " PM";
 		horas_ [14] = "02:" + min_ + " PM";
 		horas_ [13] = "01:" + min_ + " PM";
-		horas_ [12] = "12:" + min_ + " AM";
+		horas_ [12] = "12:" + min_ + " PM";
 		horas_ [11] = "11:" + min_ + " AM";
 		horas_ [10] = "10:" + min_ + " AM";
 		horas_ [9] = "09:" + min_ + " AM";
@@ -244,7 +257,7 @@ export class NewpedComponent implements OnInit {
     let month = monthNames[dateObj.getMonth()];
     let day = String(dateObj.getDate()).padStart(2, '0');
     let year = dateObj.getFullYear();
-    let momento = horas_[dateObj.getHours()];
+    let momento = horas_[new Date().getHours()];
     let output = day +'/'+ month + '/' + year + ' '+ momento;
     let margin_bottom = 50;
     let y1 = 600;
@@ -355,7 +368,7 @@ export class NewpedComponent implements OnInit {
                     ],
                     [
                         {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]},
-                        {text: this.dirCli, border: [false, false, true, true]}
+                        {text: this.pedidoService.pedido_.clientedir, border: [false, false, true, true]}
                     ]
                   ]
               }
@@ -587,7 +600,7 @@ export class NewpedComponent implements OnInit {
 
       //console.log('fileId ',fileId);
       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-      console.log(fileId);
+
       const idfile = fileId +'.pdf';
       this.pedidoService.pedido_.pdfname = idfile;
       this.pedidoService.pedido_.pdfb64 = file;
@@ -620,30 +633,20 @@ export class NewpedComponent implements OnInit {
 
 
 
-  onSubmit(pf?: NgForm, url?:string,pedNro?:any){
-
-
+  async onSubmit(pf?: NgForm, url?:string,pedNro?:any){
+    
     let ahora = new Date();
+
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null)
     {
-        //set parameter date
-        //console.log('desde pedidos: ',url);
-
-
-        //this.pedidoService.pedido_.email = "yhonatandcarruido@gmail.com";
-
-
-
         this.pedidoService.pedido_.pdfurl = url;
 
+  
         this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.start_time);
         this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
         this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
         this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes());
-
-        //console.log('Fecha ped: ',this.pedidoService.pedido_.fechapedido);
-
 
         this.pedidoService.pedido_.creado = new Date;
         this.pedidoService.pedido_.modificado = new Date;
@@ -656,7 +659,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -733,13 +736,6 @@ export class NewpedComponent implements OnInit {
 
         this.pedidoService.pedido_.companyblk = this.companyblk;
 
-        //GENERAR PDF
-        //this.generarpdf();
-        //console.log('pdfURLooo: ',this.URLPublica);
-
-
-
-
         //Add in fireStore head
         this.pedidoService.addPedidos(this.pedidoService.pedido_,pedNro);
         this.pedidoService.tmontb = 0;
@@ -763,7 +759,8 @@ export class NewpedComponent implements OnInit {
         }
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
 
 
     }else{ //Actualiza Pedido
@@ -776,7 +773,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.fechapedido.setDate(this.pedidoService.pedido_.fechapedido.getDate()+1);
         this.pedidoService.pedido_.fechapedido.setHours(ahora.getHours());
         this.pedidoService.pedido_.fechapedido.setMinutes(ahora.getMinutes());
-        
+
         
         this.pedidoService.pedido_.modificado = new Date;
         this.pedidoService.pedido_.modificadopor = this.loginS.getCurrentUser().email;
@@ -785,7 +782,7 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -808,7 +805,7 @@ export class NewpedComponent implements OnInit {
         }
 
         //Update Orders
-        //console.log(this.pedidoService.pedido_);
+        console.log(this.pedidoService.pedido_);
         this.pedidoService.updatePedidos(this.pedidoService.pedido_);
 
         for (let i in this.pedidoService.matrisDetPedido){
@@ -841,7 +838,8 @@ export class NewpedComponent implements OnInit {
 
 
         this.toastr.success('Operación Terminada','Pedido Actualizado');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     }
 
     // if(this.pedidoService.txtBtnAccion == "Agregar Pedido"){}else{}
@@ -880,7 +878,8 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         this.pedidoService.txtBtnAccion = "Crear Pedido";
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
       }
     }else{
@@ -897,7 +896,8 @@ export class NewpedComponent implements OnInit {
         this.pedidoService.tmonti = 0;
         this.pedidoService.tmontn = 0;
         this.pedidoService.txtBtnAccion = "Crear Pedido";
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
         this.pedidoService.mostrarForm = false;
     }
 
@@ -918,7 +918,6 @@ export class NewpedComponent implements OnInit {
 
     this.pedidoService.pedido_.email = "";
     this.pedidoService.pedido_.listaprecio = "";
-
 
     this.pedidoService.pedido_.codigodematerial = "Ninguno";
     this.pedidoService.pedido_.descripcionmaterial = "";
@@ -1180,6 +1179,7 @@ export class NewpedComponent implements OnInit {
   // }
 
   agregardetalles(){
+
     //agregar fila en el array
    // console.log("indice ",this.pedidoService.matrisDetPedido.length);
 
@@ -1274,7 +1274,7 @@ export class NewpedComponent implements OnInit {
     i !== -1 && this.pedidoService.matrisDetPedido.splice( i, 1 );
 
     //console.log('matriz pedido 2? ',this.pedidoService.matrisDetPedido);
-    console.table(this.pedidoService.matrisDetPedido);
+    //console.table(this.pedidoService.matrisDetPedido);
     if (this.pedidoService.matrisDetPedido.length > 0){
       this.pedidoService.mostrardesc = true;
     }else{
@@ -1294,9 +1294,15 @@ export class NewpedComponent implements OnInit {
     this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
 
     if (this.pedidoService.tmontn <= 0 || this.pedidoService.totalCnt <= 0 || this.pedidoService.tmontb <= 0){
+      //Desactiva el boton enviar 
       this.pedidoService.enviar = false;
       this.pedidoService.readonlyField = false;
     }
   }//removeDetRow
+
+  async roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
 
 }//class

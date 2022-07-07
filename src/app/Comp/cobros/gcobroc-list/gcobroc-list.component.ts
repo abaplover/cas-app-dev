@@ -15,6 +15,7 @@ import { BancoService } from '../../../services/banco.service';
 //models
 import { Vpago } from '../../../models/vpago';
 import { Banco } from '../../../models/banco';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-gcobroc-list',
@@ -32,7 +33,9 @@ export class GcobrocListComponent implements OnInit {
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['Pedido', 'Factura', 'Status', 'Condicion', 'Fecha','Cliente','Vendedor', 'Subtotal', 'totalmontoimpuesto', 'totalmontoneto','demora', 'Opc'];
+  
   cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;
@@ -40,6 +43,7 @@ export class GcobrocListComponent implements OnInit {
   pagototal=true;
   pagoparcialpagado:number;
   ver:boolean;
+
   public vpagoList: Vpago[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
@@ -63,6 +67,7 @@ export class GcobrocListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
@@ -87,7 +92,7 @@ export class GcobrocListComponent implements OnInit {
       this.vp_efectivo=false;
     }else{
       this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
+      //this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
     }
   }//vpagoselected
@@ -100,7 +105,7 @@ export class GcobrocListComponent implements OnInit {
         mp = mp + this.matrisDetCobro[i].montodepago;
         //this.matrisDetCobro[i].fechadepago = this.timestampConvert(this.matrisDetCobro[i].fechadepago);
       }
-      this.cobroDet_.montodepago = parseFloat((this.cobro_.totalmontoneto-mp).toFixed(2));
+     // this.cobroDet_.montodepago = parseFloat((this.cobro_.totalmontoneto-mp).toFixed(2));
       this.pagototal = true;
     }
 
@@ -138,7 +143,7 @@ export class GcobrocListComponent implements OnInit {
     }
 
     if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
+      //this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
     } 
     if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
@@ -149,7 +154,7 @@ export class GcobrocListComponent implements OnInit {
       this.vp_efectivo=false;
     }else{
       this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
+      //this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
     }
 
@@ -179,7 +184,7 @@ export class GcobrocListComponent implements OnInit {
     }
 
     if (elemento.fpvencimiento != null && typeof elemento.fpvencimiento != "undefined"){
-      this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
+     // this.cobro_.fpvencimiento = this.timestampConvert(elemento.fpvencimiento);
     } 
     if (elemento.fechadepago != null && typeof elemento.fechadepago != "undefined"){
       this.cobro_.fechadepago = this.timestampConvert(elemento.fechadepago);
@@ -190,7 +195,7 @@ export class GcobrocListComponent implements OnInit {
       this.vp_efectivo=false;
     }else{
       this.cobro_.banco = "";
-      this.cobro_.nroreferencia="";
+      //this.cobro_.nroreferencia="";
       this.vp_efectivo=true;
     }
 
@@ -230,17 +235,6 @@ export class GcobrocListComponent implements OnInit {
   onSubmit(pf?: NgForm){
     if(this.cobro_.uid != null){
       this.cobro_.montodepago=0;
-
-      if (this.cobro_.tipopago == "Pago Total"){
-        this.cobro_.statuscobro="CERRADA";
-      }
-
-      if (this.cobro_.tipopago == "Pago Parcial"){
-        this.cobro_.statuscobro="PARCIAL";
-        if (this.cobro_.totalmontoneto.toFixed(2) == (this.pagoparcialpagado+this.cobroDet_.montodepago).toFixed(2)){
-          this.cobro_.statuscobro="CERRADA";
-        }
-      }
     
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
@@ -262,7 +256,7 @@ export class GcobrocListComponent implements OnInit {
       this.cobroService.deleteCobrosDet(this.matrisDetCobro[i].docid);
       this.pagoparcialpagado=0;
       //Update Cobro -
-      this.cobro_.statuscobro="PARCIAL";
+      //this.cobro_.statuscobro="PARCIAL";
       this.cobroService.updatecobros(this.cobro_);
       this.toastr.show('Elemento Eliminado','Operación Terminada');
     }

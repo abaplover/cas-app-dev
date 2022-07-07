@@ -1,6 +1,14 @@
-.container9{
+.averia-table{
+	width: 100%;
+}
+.mat-column-Opc {
+	width: 100px !important;
+	text-align: right;
+}
+/* .container9{
 	padding-top: 5px;
 }
+
 
 .mat-form-field {
 	font-size: 14px;
@@ -98,27 +106,40 @@ td.col-0, th.col-0 {
 }
 
 td.col-1, th.col-1 {
-	width: 360px; 
+	width: 250px; 
 }
   
 td.col-2, th.col-2 {
-	width: 100px; 
+	width: 120px; 
 }
   
 td.col-3, th.col-3 {
-	width: 78px; 
+	width: 65px; 
 }
   
 td.col-4, th.col-4 {
-	width: 78px; 
+	width: 65px; 
 }
   
 td.col-5, th.col-5 {
-	width: 78px; 
+	width: 65px; 
 }
 td.col-6, th.col-6 {
 	width: 5px; 
 }
+
+td.col-8, th.col-8 {
+	width: 130px; 
+}
+
+#solucionAve {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	font-size: 12px;
+}
+
 
 .abs-center {
 	display: flex;
@@ -212,13 +233,13 @@ td.col-6, th.col-6 {
 	border-color: rgba(175, 173, 173, 0.884);
 }
 
-.ng-autocomplete ::ng-deep .autocomplete-container { 
+/* .ng-autocomplete ::ng-deep .autocomplete-container { 
 	width: 307px;
 	min-width: 300px;
-}
+} */
 
 
-.outerDivFull { margin:1px; } 
+/* .outerDivFull { margin:1px; } 
 
 .switchToggle input[type=checkbox]{height: 0; width: 0; visibility: hidden; position: absolute; }
 .switchToggle label {cursor: pointer; text-indent: -9999px; width: 70px; max-width: 70px; height: 30px; background: #d1d1d1; display: block; border-radius: 100px; position: relative; }
@@ -228,4 +249,4 @@ td.col-6, th.col-6 {
 .switchToggle input:checked + label:before, .switchToggle input:checked + input + label:before {content: 'Aceptada'; position: absolute; top: 5px; left: 10px; width: 26px; height: 26px; border-radius: 90px; transition: 0.3s; text-indent: 0; color: #fff; }
 .switchToggle input:checked + label:after, .switchToggle input:checked + input + label:after {left: calc(100% - 2px); transform: translateX(-100%); }
 .switchToggle label:active:after {width: 60px; } 
-.toggle-switchArea { margin: 10px 0 10px 0; }
+.toggle-switchArea { margin: 10px 0 10px 0; } */ 

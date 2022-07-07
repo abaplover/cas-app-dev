@@ -24,6 +24,11 @@ td.col-5, th.col-5 {
 td.col-6, th.col-6 {
 	width: 25px; 
 }
+
+div:has(mat-dialog-container) {
+	max-width:90vw;
+} 
+
 .mat-dialog-content {
 	max-height: 100vh;
 	height: 95%;

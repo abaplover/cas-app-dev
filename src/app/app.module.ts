@@ -1,5 +1,5 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';  //<<<< import it here
@@ -16,11 +16,13 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { AppComponent } from './app.component';
 
+
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 // Print modules
 
 import { NgxPrintModule } from 'ngx-print';
+import { NgxCurrencyModule } from "ngx-currency";
 
 
 //firebase
@@ -51,6 +53,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -157,12 +160,15 @@ import { MaveriaService } from './services/maveria.service';
 import { VendedorService } from './services/vendedor.service';
 import { ConexionService } from './services/conexion.service';
 import { ClientService } from './services/client.service';
+import { AlmacenistaService } from './services/almacenista.service';
+import { AlertsService } from './services/alerts.service';
 import { FirebaseloginService } from './services/firebaselogin.service';
 import { DatoempService } from './services/datoemp.service';
 import { TipodService  } from './services/tipod.service';
+import { TipodcobrosService  } from './services/tipodcobros.service';
 import { GestionaveriasService } from './services/gestionaverias.service';
+import { solucionAveriaService } from './services/solucionAveria.service';
 
-//+ mas
 import { CurrencyPipe } from '@angular/common';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
@@ -174,9 +180,32 @@ import { PrintLabelComponent } from './Comp/print-label/print-label.component';
 import { PedidosLayoutComponent } from './Comp/pedidos/pedidos-layout/pedidos-layout.component';
 import { TotalesDePedidosComponent } from './Comp/totales-de-pedidos/totales-de-pedidos.component';
 import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-auto-complete.component';
+import { PedidoAlmacenComponent } from './Comp/pedidos/pedido-almacen/pedido-almacen.component';
+import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
+import { GeneralReportComponent } from './Comp/reports-averias/general-report/general-report.component';
+import { TotalesDeAveriasComponent } from './Comp/totales-de-averias/totales-de-averias.component';
+import { DetalleComponent } from './Comp/reports-averias/detalle/detalle.component';
+import { GcobroregListComponent } from './Comp/cobros/gcobroreg-list/gcobroreg-list.component';
+
+import { MonedaComponent } from './Comp/monedas/moneda/moneda.component';
+import { MonedaListComponent } from './Comp/monedas/moneda-list/moneda-list.component';
+import { TipodCobrosComponent } from './Comp/tipodoc-cobros/tipod-cobros/tipod-cobros.component';
+import { TipodcobrosListComponent } from './Comp/tipodoc-cobros/tipodcobros-list/tipodcobros-list.component';
+import { ReportsCobrosComponent } from './Comp/reports-cobros/reports-cobros.component';
+import { GeneralComponent } from './Comp/reports-cobros/general/general.component';
+import { TotalesDeCobrosComponent } from './Comp/totales-de-cobros/totales-de-cobros.component';
+
+import { CambiarIdComponent } from './Comp/cambiarids/cambiar-id/cambiar-id.component';
+import { IdsListComponent } from './Comp/cambiarids/ids-list/ids-list.component';
+import { PedidosCobrosComponent } from './Comp/reports-cobros/pedidos-cobros/pedidos-cobros.component';
+import { PedidoscobrosShowComponent } from './Comp/cobros/pedidoscobros-show/pedidoscobros-show.component';
+import { TotalesPedCobrosComponent } from './Comp/totales-ped-cobros/totales-ped-cobros.component';
 
 
+/* const firebase = require('firebase');
+firebase.firestore().settings({experimentalForceLongPolling: true}); */
 
+//
 @NgModule({
   declarations: [
     AppComponent,
@@ -258,6 +287,24 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
     PedidosLayoutComponent,
     TotalesDePedidosComponent,
     ClientAutoCompleteComponent,
+    PedidoAlmacenComponent,
+    ReportsAveriasComponent,
+    GeneralReportComponent,
+    TotalesDeAveriasComponent,
+    DetalleComponent,
+    GcobroregListComponent,
+    MonedaComponent,
+    MonedaListComponent,
+    TipodCobrosComponent,
+    TipodcobrosListComponent,
+    ReportsCobrosComponent,
+    GeneralComponent,
+    TotalesDeCobrosComponent,
+    CambiarIdComponent,
+    IdsListComponent,
+    PedidosCobrosComponent,
+    PedidoscobrosShowComponent,
+    TotalesPedCobrosComponent,
 
   ],
   imports: [
@@ -295,7 +342,10 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
     MatDialogModule,
     DataTablesModule,
     MatTooltipModule,
-    NgxPrintModule
+    NgxPrintModule,
+    MatProgressSpinnerModule,
+    NgxCurrencyModule,
+    MatRadioModule
   ],
   providers: [
     PedidoService,
@@ -314,18 +364,23 @@ import { ClientAutoCompleteComponent } from './Comp/client-auto-complete/client-
     MrechazoService,
     VpagoService,
     MaveriaService,
+    solucionAveriaService,
     VendedorService,
     ConexionService,
     ClientService,
+    AlmacenistaService,
+    AlertsService,
     FirebaseloginService,
     CurrencyPipe,
     DatoempService,
     TipodService,
+    TipodcobrosService,
     GestionaveriasService,
-    {provide: LOCALE_ID, useValue: 'es-VE'},
-    { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() }
+    { provide: LOCALE_ID, useValue: 'es-VE'},
+    { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() },
   ],
   bootstrap: [AppComponent],
   entryComponents:[PedidoShowComponent]
 })
+
 export class AppModule { }

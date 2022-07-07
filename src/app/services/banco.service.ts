@@ -23,7 +23,9 @@ export class BancoService {
   {
     this.bancoList.push({
       idbanco: banco.idbanco,
+      nombre: banco.nombre,
       descripcion: banco.descripcion,
+      moneda: banco.moneda,
     });
   }
 
@@ -31,7 +33,9 @@ export class BancoService {
   {
     this.bancoList.update(banco.$key, {
       idbanco: banco.idbanco,
-      descripcion: banco.descripcion
+      nombre: banco.nombre,
+      descripcion: banco.descripcion,
+      moneda: banco.moneda,
     });
   }
 

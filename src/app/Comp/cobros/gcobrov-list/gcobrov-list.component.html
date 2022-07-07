@@ -1,278 +1,404 @@
 <div class="container9" style="border-style: solid; border-width: 0px;">
-	<div class="card-body text-info" *ngIf="this.cobro_.uid" style="border-style:solid;border-width:0px;">
-		<div class="row">
-			<div class="table-responsive">
-				<table class="table table-sm">
-					<tbody>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Número de Pedido</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.idpedido}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Número de Factura</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nrofactura}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Condición de Pago</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.condiciondepago}}</mat-label>
-							</td>
-							<th scope="row">Status Pedido</th>
-							<td>
-								<mat-label>{{this.cobro_.status}}</mat-label>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Fecha de Vencimiento</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.fpvencimiento | date: 'dd/MM/yyyy'}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Cliente</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nomcliente}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Vendedor</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.nomvendedor}}</mat-label>
-							</td>
-							<th scope="row">Status Cobro</th>
-							<td>
-								<mat-label>{{this.cobro_.statuscobro}}</mat-label>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Sub Total</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontobruto-this.cobro_.totalmontodescuento | currency:" "}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Impuesto</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontoimpuesto | currency:" "}}</mat-label>
-							</td>
-							<th scope="row">
-								<mat-label style="font-weight: bold;">Total</mat-label>
-							</th>
-							<td>
-								<mat-label>{{this.cobro_.totalmontoneto | currency:" "}}</mat-label>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	
-		<div class="row" style="border-style: solid; border-width: 0px;">
-			
-				<div *ngIf="!this.ver" id="gped" class="card border-secondary bg-light w-100" style="padding: 10px;">
-					<form #cobroForm="ngForm">
-					<div class="row" style="padding-top:10px;">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Tipo de Pago</mat-label>
-									<mat-select 
-										value=selected
-										name="tipopago"
-										aria-placeholder="Tipo de Pago"
-										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.tipopago"
-										(selectionChange)="tpagoselected($event.value)"
-										required
-									>
-										<mat-option value="Pago Total" >
-											Pago Total
-										</mat-option>
-										<mat-option value="Pago Parcial">
-											Pago Parcial
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+	<!-- Parte de edición -->
+
+
+	<div class="card bg-light mb-3" style="padding-top: 0; margin-top: 0;">
+		<div class="card-body text-info panel panel-login" *ngIf="this.pedidoPend_.idpedido" style="border-style: solid; border-width: 0px;">
+			<form #cobroForm="ngForm" (ngSubmit)="agregardetalles()">
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px;height: 250px;">
+								
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Pedido</span>
+											</div>
+
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.idpedido}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fec. Vencimiento</span>
+											</div>
+
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.fpago | date: 'dd/MM/yyyy'}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cond. de Pago</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.condiciondepago}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">N° Factura</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.nrofactura}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Tipo Documento</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.tipodoc}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Fecha de Pago</mat-label>
-									<input matInput [matDatepicker]="picker"
-										name="fechadepago"
-										id="fechadepago"
-										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.fechadepago"
-										required
-									>
-									<mat-datepicker-toggle matSuffix [for]="picker">
-										<mat-icon matDatepickerToggleIcon>
-											event_note
-										</mat-icon>
-									</mat-datepicker-toggle>
-									<mat-datepicker #picker></mat-datepicker>
-								</mat-form-field>
+					</div>
+
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px; ">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Cliente</span>
+											</div>
+											<div class="abs-center" style="width: 65%;">
+												<mat-label>{{this.pedidoPend_.nomcliente}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Vendedor</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.nomvendedor}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Zona</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.listaprecio}}</mat-label>											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe OR</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.pedidoPend_.totalmontoneto | currency:" "}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Importe RE</span>
+											</div>
+											<div class="abs-center">
+												<mat-label>{{this.importeremanente | currency:" "}}</mat-label>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>	
 					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Vía de pago</mat-label>
-									<mat-select value=selected
-										aria-placeholder="Vía de Pago"
-										required
-										name="viadepgo"
-										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.viadepago"
-										(selectionChange)="vpagoselected($event.value)"
-									>
-										<mat-option value={{vp.descripcion}}  *ngFor = "let vp of vpagoList">
-											{{vp.descripcion}}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
+
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px;">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;" id="inputGroup-sizing-sm">Fecha Pago</span>
+											 </div>
+											<input 
+												type="date"
+												[max]="maxDate"
+												name="fechadepago"
+												id="fechadepago"
+												#fechadepago="ngModel"
+												[(ngModel)]="this.cobro_.fechadepago"
+												required
+												class="form-control"
+												[disabled] = "this.visual"
+												
+											/>
+										</div>										
+									</div>
+								</div>
+								<div class="row" *ngIf="!this.visual">
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="form-group" style="text-align:right;">
+											<button 
+												id="btnenviar"
+												name="btnenviar"
+												class="btn btn-primary btn-space" 
+												type="button" 
+												[disabled]="cobroForm.invalid"
+												(click)="onSubmit(cobroForm)"
+											>
+												<i class="fas fa-cloud-upload-alt"></i> Guardar
+											</button>
+											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
+												<i class="fas fa-sync-alt"></i> Cancelar
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field appearance="legacy">
-									<mat-label>Banco</mat-label>
-									<mat-select value=selected
-										aria-placeholder="Banco"
-										required
-										name="banco"
-										#name="ngModel"
-										[(ngModel)]="this.cobroDet_.banco"
-										[disabled]="this.vp_efectivo"
-									>
-										<mat-option value={{bc.descripcion}}  *ngFor = "let bc of bancoList">
-											{{bc.descripcion}}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
-							</div>
-						</div>
+						</div>	
 					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field class="campo-width">
-									<mat-label>Referencia</mat-label>
-									<input matInput placeholder="Referencia."
-										type="text"
-										maxlength="20"
-										name="nroreferencia"
-										[(ngModel)]="this.cobroDet_.nroreferencia"
-										[disabled]="this.vp_efectivo"
-										required
-									>
-								</mat-form-field>
+				</div> <!--Fila cabecera-->
+
+
+				<div class="row" style="height: 5px;"></div>
+				<div class="row" *ngIf="!this.visual">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						<div class="card">
+							<div class="card-body" style="padding-right:8px; padding-left:8px; ">
+								<div class="row">
+									<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Tipo Documento</mat-label>											
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													required
+													name="tipodoc"
+													[(ngModel)]="this.cobro_.tipodoc"
+													(change) = "tipodocSelected($event.target.value)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+												>
+													<option value={{tipod.nombre}}  *ngFor = "let tipod of tipodocList">
+														{{tipod.nombre}} - {{tipod.descripcion}}
+													</option>
+												</select>
+										</div>
+									</div>
+
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 5px">
+										<mat-label style="font-size:smaller; font-weight: bold;">Tipo de Pago</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+											name="tipopago"
+											[(ngModel)]="this.cobro_.tipopago"
+											required
+											(change)="tpagoselected($event.target.value)"
+											class="form-control form-select form-select-sm"
+											aria-label=".form-select-sm example"
+											>
+												<option value="TOTAL" >
+													TOTAL
+												</option>
+												<option value="PARCIAL">
+													PARCIAL
+												</option>
+											</select>
+										</div>	
+									</div>
+
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="margin-right: 14px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Vía Pago</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													required
+													name="viadepago"
+													[(ngModel)]="this.cobro_.viadepago"
+													(change)="vpagoselected($event.target.value)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+													[disabled]="this.cobro_.tipodoc!='PG01'"
+												>
+													<option value={{vp.nombre}}  *ngFor = "let vp of vpagoList">
+														{{vp.nombre}} - {{vp.descripcion}}
+													</option>
+												</select>
+										</div>
+									</div>
+
+									<div class="col-sm-2.5 col-md-2.5 col-lg-2.5 col-xl-2.5"  style="padding-left: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Banco</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select value=selected
+													name="banco"
+													[(ngModel)]="this.cobro_.banco"
+													(change)="bancoselected($event.target.value)"
+													class="form-control form-select form-select-sm"
+													aria-label=".form-select-sm example"
+													[disabled]="this.vp_efectivo"
+												>
+													<option value={{bc.nombre}}  *ngFor = "let bc of bancoList">
+														{{bc.nombre}} - {{bc.descripcion}}
+													</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 1px;">
+										<mat-label style="font-size:smaller; font-weight: bold;">Moneda</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<select 
+												value = selected
+												name="moneda"
+												required
+												#moneda
+												(change) = "monedaSelected($event.target.value)"
+												[(ngModel)]="this.cobro_.moneda"
+												class="form-control form-select form-select-sm"
+												aria-label=".form-select-sm example"
+												[disabled]="!this.vp_efectivo"
+											>
+												<option value="USD" >
+													USD
+												</option>
+												<option value="BSF">
+													BSF
+												</option>
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
+										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<input 
+												currencyMask
+												[options]="{ prefix: ' ', thousands: ',', decimal: '.' }"
+												type="text"
+												name="montodepago"
+												#monto
+												[(ngModel)]="this.montodepago"
+												[disabled]="this.cobro_.tipopago=='TOTAL'"
+												class="form-control"
+												(input) ="montoChanged(monto.value)"
+												onkeypress="if(event.keyCode < 46 || event.keyCode > 57 || event.keyCode == 47) event.returnValue = false;"
+											/>
+										</div>
+									</div>
+									
+									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="border-width:0px;border-style:solid;border-color:red">
+										<mat-label style="font-size:smaller; font-weight: bold; text-align:left">Monto BsF</mat-label>
+										<div class="form-group input-group input-group-sm mb-3">
+											<input
+												currencyMask
+												[options]="{ prefix: ' ', thousands: ',', decimal: '.' }"
+												type="text"
+												name="montobsf"
+												required
+												[(ngModel)]="this.cobro_.montobsf"
+												[disabled]="this.disableBSF"
+												class="form-control"
+												onkeypress="if(event.keyCode < 46 || event.keyCode > 57 || event.keyCode == 47) event.returnValue = false;"
+												[ngModel]="totalCollected | number : '1.2-2'"
+											/>
+										</div>
+									</div>								
+								</div>
 							</div>
 						</div>
-						<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-							<div class="form-group">
-								<mat-form-field class="campo-width">
-									<mat-label>Monto de Pago</mat-label>
-									<input matInput placeholder="Monto de Pago"
-										type="number"
-										name="montodepago"
-										[(ngModel)]="this.cobroDet_.montodepago"
-										[disabled]="this.pagototal"
-										required
-									>
-								</mat-form-field>
-							</div>
-						</div>
+						<div class="row" style="height: 5px;"></div>
 					</div>
-					<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<div class="form-group">
-								<mat-form-field class="example-full-width"> 
-									<mat-label>Observación</mat-label>
-									<textarea rows="3" cols="40" matInput placeholder="Observación"
-										name="Observación"
-										maxlength="200"
-										id="Observación"
-										[(ngModel)]="this.cobro_.observacion"
-									></textarea>
-								</mat-form-field>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<div class="form-group" style="text-align:right;">
-								<button 
-									id="btnenviar"
-									name="btnenviar"
-									class="btn btn-primary btn-space" 
-									type="button" 
-									[disabled]="cobroForm.invalid"
-									(click)="onSubmit(cobroForm)"
-								>
-									<i class="fas fa-cloud-upload-alt"></i> Guardar
-								</button>
-								<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
-									<i class="fas fa-sync-alt"></i> Cancelar
-								</button>
-							</div>
-						</div>
-					</div>
-					</form><!--Form notificar factura-->
 				</div>
-			
+				
+			</form>
+		</div>
+	</div><!--class card-->
+
+
+
+	<div class="card-body text-info" *ngIf="this.pedidoPend_.idpedido" style="border-style:solid;border-width:0px;">
+	
+		<div class="row" style="border-style: solid; border-width: 0px;">	
 				<div id="gped" class="card border-light bg-light w-100" style="padding: 15px;">
-					Detalles de Pagos
-					<div class="table-responsive">
+<!-- 					Detalles de Pagos
+ -->				<div class="table-responsive">						
 						<table class="table table-striped table-hover table-sm">
 							<thead class="thead-success table-success">
 								<tr>
 									<th scope="col">Fecha</th>
+									<th scope="col">Tipo Documento</th>
+									<th scope="col">Tipo Pago</th>
 									<th scope="col">Vía de pago</th>
 									<th scope="col">Banco</th>
-									<th scope="col">Referencia</th>
-									<th scope="col" style="text-align: right;">Monto</th>
-									<th scope="col">-</th>
+									<th scope="col">Moneda</th>
+									<!-- <th scope="col">Referencia</th> -->
+									<th scope="col" style="text-align: right;">Monto USD</th>
+									<th scope="col" style="text-align: right;">Monto BSF</th>
+									<th scope="col">Estatus</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let cobr of this.matrisDetCobro; index as i">
 									<th scope="row">{{cobr.fechadepago | date: 'dd/MM/yyyy'}}</th>
+									<td>{{cobr.tipodoc}}</td>
+									<td>{{cobr.tipopago}}</td>
 									<td>{{cobr.viadepago}}</td>
 									<td>{{cobr.banco}}</td>
-									<td style="text-align: right;">{{cobr.nroreferencia}}</td>
+									<td>{{cobr.moneda}}</td>
+									<!-- <td style="text-align: right;">{{cobr.nroreferencia}}</td> -->
 									<td style="text-align: right;">{{cobr.montodepago | currency:" "}}</td>
-									<th style="cursor: pointer;" scope="col" (click)="removeDetRow(i)"><i class="fas fa-trash"></i></th>
+									<td style="text-align: right;">{{cobr.montobsf | currency:" "}}</td>
+									<td>{{cobr.status}}</td>
+									<td>
+										<button class="btn btn-sm" *ngIf="cobr.status=='ACTIVO' && !this.visual" (click)="eliminarCobro(i)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro">
+											<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar Cobro"></i>
+										</button>
+									</td>
 								</tr>
 							</tbody>
 							<thead class="thead-success table-success">
 								<tr>
-									<td scope="col" colspan="4">Total</td>
-									<td scope="col" style="text-align: right;">{{this.pagoparcialpagado | currency:" "}}</td>
-									 <!-- <td scope="col"></td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPri | currency:" "}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalCnt | currency:" ":'symbol':'2.0'}}</td>
-									<td scope="col" style="text-align: right;">{{this.pedidoService.totalPed | currency:" "}}</td> -->
-									<td scope="col">-</td>
+									<td scope="col" style="font-weight: bolder" colspan="6">Total</td>
+									<td scope="col" style="text-align: right;font-weight: bolder">{{this.pagoparcialpagado | currency:" "}}</td>
 								</tr>
 							</thead>
 							<tr>
 								<td colspan="5" style="text-align:right;">
 									<button *ngIf="this.ver" class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
-										<i class="fas fa-sync-alt"></i> Regresar
+										<i class="fas fa-sync-alt"></i> Cancelar
 									</button>
 								</td>
 							</tr>
@@ -286,7 +412,7 @@
 
 	</div>
 
-	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.cobro_.uid">
+	<div style="width: 100%; margin-left: 10px; padding-right: 10px;" *ngIf="!this.pedidoPend_.idpedido">
 		<mat-form-field>
 			<mat-label>Buscar por</mat-label>
 			<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
@@ -294,103 +420,100 @@
 
 		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
 		
-			<!-- Position Column -->
-			<ng-container matColumnDef="Pedido">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;">Pedido </th>
-				<td mat-cell *matCellDef="let element"> {{element.idpedido}} </td>
-			</ng-container>
-			
-			<!-- Name Column -->
-			<ng-container matColumnDef="Factura">
-				<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Factura</th>
-				<td mat-cell *matCellDef="let element"> {{element.nrofactura}} </td>
-			</ng-container>
+		<!-- Position Column -->
+		<ng-container matColumnDef="idpedido">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido </th>
+			<td mat-cell *matCellDef="let element">{{element.idpedido}}</td>
+		</ng-container>
 		
-			<!-- Name Column -->
-			<ng-container matColumnDef="Status">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left;"> Status </th>
-				<td mat-cell *matCellDef="let element"> {{element.statuscobro}} </td>
-				</ng-container>
+		<!-- Name Column -->
+		<ng-container matColumnDef="nrofactura">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> NE/FA</th>
+			<td mat-cell *matCellDef="let element">
+				<span *ngIf="element.tipodoc == 'Factura'">
+					FA{{element.nrofactura}}
+				</span>
+				<span *ngIf="element.tipodoc == 'Nota de entrega'">
+					NE{{element.nrofactura}}
+				</span>
+				<span *ngIf="element.tipodoc == 'Nota de Entrega'">
+					NE{{element.nrofactura}}
+				</span>
+				<span *ngIf="!element.tipodoc">
+					{{element.nrofactura}}
+				</span>
+			</td>
+		</ng-container>
+	
+		<!-- Weight Column -->
+		<ng-container matColumnDef="condiciondepago">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Condición de Pago</th>
+			<td mat-cell *matCellDef="let element"> {{element.condiciondepago}} </td>
+		</ng-container>
 		
-			<!-- Weight Column -->
-			<ng-container matColumnDef="Condicion">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header>Condición de Pago</th>
-				<td mat-cell *matCellDef="let element"> {{element.condiciondepago}} </td>
-			</ng-container>
-			
-			<!-- Symbol Column .toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a' -->
-			<ng-container matColumnDef="Fecha">
-				<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Fecha Vencimiento </th>
-				<td mat-cell *matCellDef="let element"> {{element.fpvencimiento.toDate() | date: 'dd/MM/yyyy'}} 
-				</td>
+		<!-- Symbol Column .toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a' -->
+		<ng-container matColumnDef="fpago">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Vencimiento </th>
+			<td mat-cell *matCellDef="let element"> {{element.fpago.toDate() | date: 'dd/MM/yyyy'}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="nomcliente">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="nomvendedor">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
+			<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
+		</ng-container>
+	
+		<!-- Symbol Column -->
+			<ng-container matColumnDef="Subtotal">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Total</th>
+				<td mat-cell *matCellDef="let element"> {{element.totalmontobruto-element.totalmontodescuento | currency:" "}} </td>
 			</ng-container>
 
-			<!-- Symbol Column -->
-			<ng-container matColumnDef="Cliente">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
-				<td mat-cell *matCellDef="let element"> {{element.nomcliente}} </td>
-			</ng-container>
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="montopendiente">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Pendiente</th>
+			<td mat-cell *matCellDef="let element"> {{element.montopendiente | currency:" "}} </td>
+		</ng-container>
 
-			<!-- Symbol Column -->
-			<ng-container matColumnDef="Vendedor">
-				<th mat-header-cell *matHeaderCellDef mat-sort-header> Vendedor </th>
-				<td mat-cell *matCellDef="let element"> {{element.nomvendedor}} </td>
-			</ng-container>
+		<ng-container matColumnDef="abono">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Abono </th>
+			<td mat-cell *matCellDef="let element"><b *ngIf="element.statuscobro == 'ABONADO'">x</b></td>
+		</ng-container>
+
+		<!-- Symbol Column -->
+		<ng-container matColumnDef="Opc">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px !important;"></th>
+			<td mat-cell *matCellDef="let element index as i">
+
+				<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
+					<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
+				</a>
+				<button class="btn btn-light" (click)="selectEventCob(element)" [disabled]="element.status == 'PENDIENTE'">
+					<i class="far fa-edit" data-toggle="tooltip" data-placement="top" title="Editar pedido"></i>
+				</button>
+	
+			</td>
+		</ng-container>
+	
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 		
-			<!-- Symbol Column -->
-				<ng-container matColumnDef="Subtotal">
-					<th mat-header-cell *matHeaderCellDef style="text-align: right;">Sub Total</th>
-					<td mat-cell *matCellDef="let element"> {{element.totalmontobruto-element.totalmontodescuento | currency:" "}} </td>
-				</ng-container>
-
-			<!-- Symbol Column -->
-				<ng-container matColumnDef="totalmontoimpuesto">
-					<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Impuesto </th>
-					<td mat-cell *matCellDef="let element"> {{element.totalmontoimpuesto | currency:" "}} </td>
-				</ng-container>
-
-			<!-- Symbol Column -->
-			<ng-container matColumnDef="totalmontoneto">
-				<th mat-header-cell *matHeaderCellDef style="text-align: right;"> Total</th>
-				<td mat-cell *matCellDef="let element"> {{element.totalmontoneto | currency:" "}} </td>
-			</ng-container>
-		
-			<!-- Symbol Column -->
-			<ng-container matColumnDef="demora">
-				<th mat-header-cell *matHeaderCellDef></th>
-				<td mat-cell *matCellDef="let element index as i">
-					<div class="custom-control custom-switch" >
-						<input [checked] = "element.demora" type="checkbox" class="custom-control-input" id="sw1" onclick="javascript: return false;" />
-						<label class="custom-control-label" for="sw1"></label>
-					</div>
-				</td>
-			</ng-container>
-
-			<ng-container matColumnDef="Opc">
-				<th mat-header-cell *matHeaderCellDef></th>
-				<td mat-cell *matCellDef="let element index as i">
-
-					<a class="btn btn-info text-white btn-sm" (click)="verdetalles($event,element)"  data-toggle="tooltip" data-placement="top" title="Visualizar pedido">
-						<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar pedido"></i>
-					</a>
-					<button class="btn btn-light" (click)="selectEventCob(element)" [disabled]="element.status == 'PENDIENTE'">
-						<i class="far fa-edit" data-toggle="tooltip" data-placement="top" title="Editar pedido"></i>
-					</button> 
-
-					<!-- <button class="btn btn-light" (click)="verdetalles($event,element)" [disabled]="element.status == 'PENDIENTE'">
-						<i class="far fa-edit" data-toggle="tooltip" data-placement="top" title="Editar pedido"></i>
-					</button> -->
-				</td>
-			</ng-container>
-		
-			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-			<tr mat-row [ngClass]="{'make-gold': row.symbol == 'H'}" *matRowDef="let row; columns: displayedColumns;"></tr>
-			
-			<!-- Row shown when there is no matching data. -->
-			<tr class="mat-row" *matNoDataRow>
-				<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
-			</tr>
+		<!-- Row shown when there is no matching data. -->
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
+		</tr>
 		</table>
+		<mat-paginator 
+		  #paginator 
+		  [pageSizeOptions]="[40,60,10,20]" 
+		  showFirstLastButtons
+		></mat-paginator>
   	</div>
 </div>
 

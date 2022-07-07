@@ -37,6 +37,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog,MatDialogConfig } from "@angular/material/dialog";
 import { PedidoShowComponent } from '../pedido-show/pedido-show.component';
 import * as moment from 'moment';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-pedido-ne',
@@ -47,6 +48,7 @@ export class PedidoNeComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
@@ -81,6 +83,8 @@ export class PedidoNeComponent implements OnInit {
   tmonti: number=0;
   tmontn: number=0;
 
+  someticket = false; //Variable que almacena si tiene etiquetas
+
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -95,7 +99,7 @@ export class PedidoNeComponent implements OnInit {
   public keywordsCli = ['idcliente','descripcion'];
 
   maxDate: Date;
-  minDate = moment(new Date()).format('YYYY-MM-DD');
+  //minDate = moment(new Date()).format('YYYY-MM-DD');
   maxDate_= moment(new Date()).format('YYYY-MM-DD');
   enviar = false;
   private myempty: number;
@@ -104,6 +108,7 @@ export class PedidoNeComponent implements OnInit {
   @ViewChild('pedidoFormnf') myFormnf;
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
+
   constructor
   (
     public pedidoService: PedidoService,
@@ -132,13 +137,16 @@ export class PedidoNeComponent implements OnInit {
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
 
+
     this.pedidoService.getPedidosD().subscribe(pedidos=>{
       this.pedidoslist = pedidos;
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
     this.pedido_ = {} as Pedido;
+
     this.valorAutPed = "";
 
     this.clienteS.getClients().valueChanges().subscribe(cs =>{
@@ -212,9 +220,14 @@ timestampConvert(fec,col?:number){
   if (col==6){
     this.pedidoVer_.fentrega = dateObject;
   }
+  if (col==7){
+    this.pedidoVer_.fpreparacion = dateObject;
+  }
 }
 
 verdetalles(event, ped){
+  ped.fentrega = undefined;
+  ped.fpago = undefined;
   const dialogConfig = new MatDialogConfig;
   //dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
@@ -239,6 +252,9 @@ verdetalles(event, ped){
   }
   if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
     this.timestampConvert(ped.fentrega,6);
+  }
+  if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
+    this.timestampConvert(ped.fpreparacion,7);
   }
 
 
@@ -349,30 +365,7 @@ onCancelar(pf?: NgForm,de?:number){
       //console.log("fentre: ",this.pedido_.fentrega)
       //console.log("fpago: ",this.pedido_.fpago)
 
-      //Crea un registro para la coleccion cobros
-      this.cobro_.creado = new Date;
-      this.cobro_.creadopor = this.loginS.getCurrentUser().email;
-      this.cobro_.modificado = new Date;
-      this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
-      this.cobro_.idpedido = this.pedido_.idpedido;
-      this.cobro_.nrofactura = this.pedido_.nrofactura;
-      this.cobro_.condiciondepago = this.pedido_.condiciondepago;
-      this.cobro_.fpvencimiento = this.pedido_.fpago;
-      this.cobro_.idcliente = this.pedido_.idcliente;
-      this.cobro_.nomcliente = this.pedido_.nomcliente;
-      this.cobro_.idvendedor = this.pedido_.idvendedor;
-      this.cobro_.nomvendedor = this.pedido_.nomvendedor;
-      this.cobro_.emailcliente= this.pedido_.email;
-      this.cobro_.companyhead = this.pedido_.companyblk;
-      this.cobro_.totalmontobruto = this.pedido_.totalmontobruto;
-      this.cobro_.totalmontodescuento = this.pedido_.totalmontodescuento;
-      this.cobro_.totalmontoimpuesto = this.pedido_.totalmontoimpuesto;
-      this.cobro_.totalmontoneto = this.pedido_.totalmontoneto;
-      this.cobro_.pdfb64 = this.pedido_.pdfb64;
-      this.cobro_.observacion = this.pedido_.observacion;
-      this.cobro_.status = this.pedido_.status;
-      this.cobro_.statuscobro = "PENDIENTE";
-      this.cobro_.observacion = "";
+      this.pedido_.statuscobro = "PENDIENTE";
       //Crea un registro para la coleccion cobros
 
       //Actualiza un elemento en la coleccion pedidos
@@ -380,7 +373,7 @@ onCancelar(pf?: NgForm,de?:number){
       //Crea un elemento en la coleccion cobros
       this.cobroService.addCobros(this.cobro_);
 
-      this.toastr.success('Operación Terminada', 'Nofificacinón de entrega creada');
+      this.toastr.success('Operación Terminada', 'Nofificación de entrega creada');
     }
     this.onCancelar(pf,1);
   }
@@ -486,10 +479,10 @@ onCancelar(pf?: NgForm,de?:number){
 
   selectEventPed(elemento){
 
-
-    console.log('aaaa:',elemento);
-
     this.pedido_ =  Object.assign({}, elemento);
+
+    //Verifica que el pedido haya pasado por el proceso de almacen
+    if (this.pedido_.nrobultos) this.someticket = true;
 
     if (this.pedido_.uid){
       this.MostrarPed = 'display:block;';
@@ -500,6 +493,9 @@ onCancelar(pf?: NgForm,de?:number){
     }
     if (elemento.ffactura != null || typeof elemento.ffactura != "undefined"){
         this.pedido_.ffactura = this.timestampConvert2(elemento.ffactura);
+    }
+    if (elemento.fpreparacion != null || typeof elemento.fpreparacion != "undefined"){
+        this.pedido_.fpreparacion = this.timestampConvert2(elemento.fpreparacion);
     }
     if (elemento.ftentrega != null || typeof elemento.ftentrega != "undefined"){
         this.pedido_.ftentrega = this.timestampConvert2(elemento.ftentrega);
@@ -683,6 +679,10 @@ onCancelar(pf?: NgForm,de?:number){
     if (this.pedidoService.selectedIndex==3){
       this.resetFormnf(this.myFormne);
     }
+  }
+
+  downloadEtiquetas() {
+    window.open(this.pedido_.ticketurl);
   }
 
 

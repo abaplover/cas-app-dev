@@ -45,12 +45,12 @@ export class PedidosListComponent implements OnInit {
   pedidoVer_ = {} as Pedido;
 
   //displayedColumns: string[];
+  
   dataSource: any;
-
-  //@ViewChild('nav') ngnav;
-  //@ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago','nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento',/*'totalmontoimpuesto',*/ 'totalmontoneto', 'Opc'];
+  
   constructor(
     public pedidoService: PedidoService,
     private toastr: ToastrService,
@@ -67,7 +67,7 @@ export class PedidosListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
-      //this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.paginator;
     })
   }
 
@@ -128,6 +128,9 @@ export class PedidosListComponent implements OnInit {
     if (col==6){
       this.pedidoVer_.fentrega = dateObject;
     }
+    if (col==7){
+      this.pedidoVer_.fpreparacion = dateObject;
+    }
   }
 
   verdetalles(event, ped){
@@ -156,6 +159,9 @@ export class PedidosListComponent implements OnInit {
     }
     if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
       this.timestampConvert(ped.fentrega,6);
+    }
+    if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
+      this.timestampConvert(ped.fpreparacion,7);
     }
 
     dialogConfig.data = {

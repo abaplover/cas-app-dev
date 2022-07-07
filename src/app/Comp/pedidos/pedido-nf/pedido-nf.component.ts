@@ -45,6 +45,7 @@ import { finalize } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { DatoempService } from 'src/app/services/datoemp.service';
 import * as moment from 'moment';
+import { MatPaginator } from '@angular/material/paginator';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -57,6 +58,7 @@ export class PedidoNfComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
@@ -155,6 +157,7 @@ export class PedidoNfComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.pedido_ = {} as Pedido;

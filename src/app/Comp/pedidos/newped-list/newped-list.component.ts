@@ -12,6 +12,8 @@ import { Mrechazo } from '../../../models/mrechazo';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../pedido-show/pedido-show.component';
+import { ClientService } from 'src/app/services/client.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-newped-list',
@@ -24,13 +26,16 @@ export class NewpedListComponent implements OnInit {
   mostrardiv:boolean=false;
   pedIndex: number=-990;
   idpedidoEli: string="";
+  
   fechapedidoEli: Date;
   clientepedidoEli: string="";
   pedidoslist = [];
   pedidoslistDet=[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
+
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto', 'totalmontodescuento',/*'totalmontoimpuesto',*/ 'totalmontoneto', 'Opc'];
 
 
@@ -40,6 +45,7 @@ export class NewpedListComponent implements OnInit {
     private toastr      : ToastrService,
     public mrechazoS    : MrechazoService,
     private dialogo     : MatDialog,
+    private clienteS    : ClientService
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +56,7 @@ export class NewpedListComponent implements OnInit {
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     })
 
     this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz =>{
@@ -117,6 +124,13 @@ export class NewpedListComponent implements OnInit {
   }
 
   onEdit(event, ped){
+
+    //Obtiene los datos del cliente
+    this.clienteS.getSpecificClient(ped.idcliente).valueChanges().subscribe(client =>{
+      this.clienteS.clientData = client;
+    })
+
+
     this.pedidoService.totalPri=0;
     this.pedidoService.totalCnt=0;
     this.pedidoService.totalPed=0;

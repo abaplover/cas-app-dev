@@ -21,7 +21,7 @@ export class BancoListComponent implements OnInit {
   dataSource: MatTableDataSource<Banco>;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idbanco', 'descripcion', 'Opc'];
+  displayedColumns: string[] = ['idbanco','nombre', 'descripcion','moneda', 'Opc'];
 
   constructor(
     public bancoService: BancoService,
@@ -38,7 +38,7 @@ export class BancoListComponent implements OnInit {
           this.bancoList.push(x as Banco);
         });
 
-        //ELEMENT_DATA
+        //
         this.dataSource = new MatTableDataSource(this.bancoList);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -51,7 +51,7 @@ export class BancoListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  moForm(){
+  moForm() {
     if (this.bancoService.mostrarForm){
        this.bancoService.mostrarForm = false;
        this.bancoService.idFieldReadOnly = true;

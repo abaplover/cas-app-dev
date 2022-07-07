@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { GestionaveriasService } from 'src/app/services/gestionaverias.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -19,8 +19,9 @@ import { ElementRef, Renderer2 } from '@angular/core';
 import { Stats } from 'src/app/models/stats';
 import { AveriaDet } from 'src/app/models/gaveriaDet';
 import { FormControl } from '@angular/forms';
+import { ViewportScroller } from "@angular/common";
 
-import { animate, state,style,transition,trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 //  Service 
 import { ClientService } from '../../../services/client.service';
@@ -45,6 +46,8 @@ import { Pedido } from '../../../models/pedido';
 import { PedidoDet } from '../../../models/pedidoDet';
 import { Maveria } from 'src/app/models/maveria';
 import { MatInput } from '@angular/material/input';
+import { SolucionAveria } from 'src/app/models/solucionaveria';
+
 
 // Import pdfmake and the fonts to use
 import * as pdfMake from "pdfmake/build/pdfmake";
@@ -55,6 +58,10 @@ import { TextAst } from '@angular/compiler';
 import { snapshotChanges } from '@angular/fire/database';
 import { finalize, isEmpty, map } from 'rxjs/operators';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import { solucionAveriaService } from 'src/app/services/solucionAveria.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
+
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -63,18 +70,19 @@ import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask 
   templateUrl: './cerrar-averias.component.html',
   styleUrls: ['./cerrar-averias.component.css']
 })
-export class CerrarAveriasComponent implements OnInit {
+export class CerrarAveriasComponent implements OnInit, AfterViewInit {
+
   @ViewChild('cantidadmaterial') cantidadmaterial_: MatInput;
 
-  estadoElement= "estado1";
-  currencyPipeVEF='VEF';
-  currencyPipeUSD='USD';
+  estadoElement = "estado1";
+  currencyPipeVEF = 'VEF';
+  currencyPipeUSD = 'USD';
   currencyPipe: String;
   //pdfURL: Observable<string>;
   UploadValue: number;
   public URLPublica: any;
   //elementoBorrados: AveriaDet[]=[];
-  
+
   public msj_enlace: string = 'Averias';
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -88,7 +96,9 @@ export class CerrarAveriasComponent implements OnInit {
   private idAveNumber: Averia[]; //arreglo vacio
 
   public maveriaList: Maveria[];
-  public motivoAve:string;
+  public motivoAve: string;
+  public listaSolucionesA: SolucionAveria[];
+  public solucionAve: string;
 
   public matrix: PedidoDet[];
   public maxCant: number;
@@ -97,19 +107,19 @@ export class CerrarAveriasComponent implements OnInit {
   public codigodematerial: string;
   public descripcionmaterial: string;
   public totalpormaterial: number
-  private nrodoc:string;
+  private nrodoc: string;
 
   private myempty: number;
   //public keywordCli = "idcliente";
   public keywordCli = "descripcion";
-  public keywordsCli = ['idcliente','descripcion'];
+  public keywordsCli = ['idcliente', 'descripcion'];
   public keywordVen = "idvendedor";
   valorAutCli: string;
   valorAutVen: string;
-  //maxDate:Date;
-  maxDate= moment(new Date()).format('YYYY-MM-DD');
-  codeBlock ='';
-  companyblk ='';
+
+  maxDate = moment(new Date()).format('YYYY-MM-DD');
+  codeBlock = '';
+  companyblk = '';
   //minDate = moment(new Date()).format('YYYY-MM-DD');
   start_time = moment(new Date()).format('YYYY-MM-DD');
   timeFD = moment(new Date()).format('DD/MM/YYYY');
@@ -117,64 +127,90 @@ export class CerrarAveriasComponent implements OnInit {
   timeFC = moment(new Date()).format('DD/MM/YYYY');
   checkboxState1: boolean;
   checkboxState: boolean[];
-  nomCli='';
-  rifCli='';
-  tlfCli='';
-  dirCli='';
-  zonVen='';
+  nomCli = '';
+  rifCli = '';
+  tlfCli = '';
+  dirCli = '';
+  zonVen = '';
 
   averiaVer_ = {} as Averia;
   txtComentario = "";
-  mostrardiv:boolean=false;
-  pedIndex: number=-990;
-  idaveriaEli: string="";
+  mostrardiv: boolean = false;
+  pedIndex: number = -990;
+  idaveriaEli: string = "";
   fechaaveriaEli: Date;
-  clienteaveriaEli: string="";
+  clienteaveriaEli: string = "";
   averiaslist = [];
-  AvelistDet=[];
+  AvelistDet = [];
   public mrechazoList: Mrechazo[]; //arreglo vacio
+
+  EditElement: HTMLElement = null;
+
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['uid', 'Fecha', 'nrodocumento', 'Status', 'Cliente', 'Vendedor', 'totalaveria', 'Opc'];
 
 
   constructor(
-    public mrechazoS    : MrechazoService,
-    private dialogo     : MatDialog,
+    public mrechazoS: MrechazoService,
+    private dialogo: MatDialog,
     public gestionaveriasService: GestionaveriasService,
-    private toastr      : ToastrService,
-    public clienteS     : ClientService,
-    public vendedorS    : VendedorService,
-    public lprecioS     : LprecioService,
-    public cpagoS       : CpagoService,
-    public productS     : ProductService,
-    public umedidaS     : UmedidaService,
-    public iimpuestoS   : IimpuestoService,
-    public loginS       : FirebaseloginService,
-    public datoempresaS : DatoempService,
-    public lpedidoS     : PedidoService,
-    public maveriaS     : MaveriaService,
+    private toastr: ToastrService,
+    public clienteS: ClientService,
+    public vendedorS: VendedorService,
+    public lprecioS: LprecioService,
+    public cpagoS: CpagoService,
+    public productS: ProductService,
+    public umedidaS: UmedidaService,
+    public iimpuestoS: IimpuestoService,
+    public loginS: FirebaseloginService,
+    public datoempresaS: DatoempService,
+    public lpedidoS: PedidoService,
+    public maveriaS: MaveriaService,
+    public solaveriaS: solucionAveriaService,
     private renderer: Renderer2,
-    private afStorage:AngularFireStorage
-  )
-  {
+    private afStorage: AngularFireStorage,
+    private scroller: ViewportScroller
+  ) {
     const currentYear = new Date().getFullYear();
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
     //this.maxDate = new Date(currentYear, currentm, currentd);
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
   ngOnInit(): void {
+
+    /* this.solaveriaS.getSoluaverias();
+    this.solaveriaS.insertSolaveria(); */
+
     this.gestionaveriasService.pestana = "CA";
-    this.gestionaveriasService.getAveriasF().subscribe(averias=>{
+    this.gestionaveriasService.getAveriasF().subscribe(averias => {
       this.averiaslist = averias;
-      
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.averiaslist);
+      this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        if (property === 'Cliente') {
+          return item.nomcliente;
+        } else if (property === 'Vendedor') {
+          return item.nomvendedor;
+        }
+        else {
+          return item[property];
+        }
+      };
+
     })
 
-    this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz =>{
+    this.mrechazoS.getMrechazos().valueChanges().subscribe(mrz => {
       this.mrechazoList = mrz;
     })
 
@@ -182,40 +218,47 @@ export class CerrarAveriasComponent implements OnInit {
     this.gestionaveriasService.valorAutCli = "";
     this.gestionaveriasService.valorAutVen = "";
 
-    this.clienteS.getClients().valueChanges().subscribe(cs =>{
+    this.clienteS.getClients().valueChanges().subscribe(cs => {
       this.clienteList = cs;
     })
 
-    this.vendedorS.getVendedors().valueChanges().subscribe(vs =>{
+    this.vendedorS.getVendedors().valueChanges().subscribe(vs => {
       this.vendedorList = vs;
     })
 
-    this.lprecioS.getLprecio().valueChanges().subscribe(lps =>{
+    this.lprecioS.getLprecio().valueChanges().subscribe(lps => {
       this.lprecioList = lps;
     })
 
-    this.cpagoS.getCpagos().valueChanges().subscribe(cps =>{
+    this.cpagoS.getCpagos().valueChanges().subscribe(cps => {
       this.cpagoList = cps;
     })
 
-    this.productS.getProducts().valueChanges().subscribe(ps =>{
+    this.productS.getProducts().valueChanges().subscribe(ps => {
       this.productList = ps;
     })
 
-    this.umedidaS.getUmedidas().valueChanges().subscribe(ums =>{
+    this.umedidaS.getUmedidas().valueChanges().subscribe(ums => {
       this.umedidaList = ums;
-    })    
+    })
 
-    this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis =>{
+    this.iimpuestoS.getIimpuestos().valueChanges().subscribe(iis => {
       this.iimpuestoList = iis;
     })
 
-    this.datoempresaS.getDatoemps().valueChanges().subscribe(emps =>{
+    this.datoempresaS.getDatoemps().valueChanges().subscribe(emps => {
       this.dempresaList = emps;
     })
 
-    this.maveriaS.getMaverias().valueChanges().subscribe(mave =>{
+    //Obtiene la lista de motivos de averias
+    this.maveriaS.getMaverias().valueChanges().subscribe(mave => {
       this.maveriaList = mave;
+    })
+
+    //Obtiene la lista de soluciones de averias
+    this.solaveriaS.getSoluaverias().valueChanges().subscribe(soluave => {
+      this.listaSolucionesA = soluave;
+      console.log("lista ", this.listaSolucionesA);
     })
 
     this.gestionaveriasService.enviar = false;
@@ -224,22 +267,19 @@ export class CerrarAveriasComponent implements OnInit {
 
   }
 
-
-
-
-  async generarpdf(pf?: NgForm){
+  async generarpdf(pf?: NgForm) {
 
     var bodyData = [];
-    let observacion='';
-    let totalArticulos=0;
-    let spaceBottom=260;
+    let observacion = '';
+    let totalArticulos = 0;
+    let spaceBottom = 260;
 
     bodyData = this.gestionaveriasService.matrisDetAveria;
 
-    if (this.gestionaveriasService.averia_.observacion=="" || typeof this.gestionaveriasService.averia_.observacion=="undefined"){
+    if (this.gestionaveriasService.averia_.observacion == "" || typeof this.gestionaveriasService.averia_.observacion == "undefined") {
       observacion = "";
-    }else{
-      observacion = "Observación: "+this.gestionaveriasService.averia_.observacion;
+    } else {
+      observacion = "Observación: " + this.gestionaveriasService.averia_.observacion;
     }
 
     this.tlfCli = this.gestionaveriasService.averia_.tlfcliente;
@@ -250,83 +290,93 @@ export class CerrarAveriasComponent implements OnInit {
     var algo = "";
     var rows = [];
     rows.push(['', '', '', '', '', '', '']);
-    let estado="";
-    for (let i in this.gestionaveriasService.matrisDetAveria){
-      let indice:number = parseInt(i);
-      
-      if (this.gestionaveriasService.matrisDetAveria[i].aprobado == true){
-        estado = "ACEPTADO"; 
-      }else{
+    let estado = "";
+
+    for (let i in this.gestionaveriasService.matrisDetAveria) {
+      let indice: number = parseInt(i);
+
+      if (this.gestionaveriasService.matrisDetAveria[i].aprobado == true) {
+        estado = "ACEPTADO";
+      } else {
         estado = "RECHAZADO";
       }
-      rows.push([this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(), this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', {maximumFractionDigits: 0}), this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}),this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),estado.toString()]);
-      totalArticulos = indice+1;
-      if (totalArticulos>1){
-        spaceBottom=spaceBottom-20;
+      rows.push([
+        this.gestionaveriasService.matrisDetAveria[i].codigodematerial.toString(),
+        this.gestionaveriasService.matrisDetAveria[i].descripcionmaterial.toString(),
+        this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial.toLocaleString('de-DE', { maximumFractionDigits: 0 }),
+        this.gestionaveriasService.matrisDetAveria[i].preciomaterial.toLocaleString('de-DE', { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+        this.gestionaveriasService.matrisDetAveria[i].totalpormaterial.toLocaleString('de-DE', { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+        this.gestionaveriasService.matrisDetAveria[i].motivoaveria.toString(),
+        estado.toString(),
+      ]);
+
+      totalArticulos = indice + 1;
+      if (totalArticulos > 1) {
+        spaceBottom = spaceBottom - 20;
       }
     }
- 
+
     let idAven: any;
     var docAdd: string
 
-    if (this.gestionaveriasService.txtBtnAccion.toString() == "Crear Averia"){
+    if (this.gestionaveriasService.txtBtnAccion.toString() == "Crear Averia") {
       //busca el nro de averia
       idAven = await this.gestionaveriasService.getOrderStat2();
       docAdd = idAven.toString();
     }
-    if (this.gestionaveriasService.txtBtnAccion.toString().trim() == "Actualizar Averia"){
+    if (this.gestionaveriasService.txtBtnAccion.toString().trim() == "Actualizar Averia") {
       docAdd = this.gestionaveriasService.averia_.idaveria.toString();
     }
 
-    const monthNames = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
+    const monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
     let dateObj = this.gestionaveriasService.averia_.fechaaveria;
     let dateObj2 = this.gestionaveriasService.averia_.fechadocumento;
     let min_ = dateObj.getMinutes();
 
-	  var horas_ = new Array();
-    horas_ [0]  = "12:" + min_ + " PM";
-    horas_ [23] = "11:" + min_ + " PM";
-    horas_ [22] = "10:" + min_ + " PM";
-    horas_ [21] = "09:" + min_ + " PM";
-		horas_ [20] = "08:" + min_ + " PM";
-		horas_ [19] = "07:" + min_ + " PM";
-		horas_ [18] = "06:" + min_ + " PM";
-		horas_ [17] = "05:" + min_ + " PM";
-		horas_ [16] = "04:" + min_ + " PM";
-		horas_ [15] = "03:" + min_ + " PM";
-		horas_ [14] = "02:" + min_ + " PM";
-		horas_ [13] = "01:" + min_ + " PM";
-		horas_ [12] = "12:" + min_ + " AM";
-		horas_ [11] = "11:" + min_ + " AM";
-		horas_ [10] = "10:" + min_ + " AM";
-		horas_ [9] = "09:" + min_ + " AM";
-		horas_ [8] = "08:" + min_ + " AM";
-		horas_ [7] = "07:" + min_ + " AM";
-		horas_ [6] = "06:" + min_ + " AM";
-		horas_ [5] = "05:" + min_ + " AM";
-		horas_ [4] = "04:" + min_ + " AM";
-		horas_ [3] = "03:" + min_ + " AM";
-		horas_ [2] = "02:" + min_ + " AM";
-    horas_ [1] = "01:" + min_ + " AM";
-    
+    var horas_ = new Array();
+    horas_[0] = "12:" + min_ + " PM";
+    horas_[23] = "11:" + min_ + " PM";
+    horas_[22] = "10:" + min_ + " PM";
+    horas_[21] = "09:" + min_ + " PM";
+    horas_[20] = "08:" + min_ + " PM";
+    horas_[19] = "07:" + min_ + " PM";
+    horas_[18] = "06:" + min_ + " PM";
+    horas_[17] = "05:" + min_ + " PM";
+    horas_[16] = "04:" + min_ + " PM";
+    horas_[15] = "03:" + min_ + " PM";
+    horas_[14] = "02:" + min_ + " PM";
+    horas_[13] = "01:" + min_ + " PM";
+    horas_[12] = "12:" + min_ + " AM";
+    horas_[11] = "11:" + min_ + " AM";
+    horas_[10] = "10:" + min_ + " AM";
+    horas_[9] = "09:" + min_ + " AM";
+    horas_[8] = "08:" + min_ + " AM";
+    horas_[7] = "07:" + min_ + " AM";
+    horas_[6] = "06:" + min_ + " AM";
+    horas_[5] = "05:" + min_ + " AM";
+    horas_[4] = "04:" + min_ + " AM";
+    horas_[3] = "03:" + min_ + " AM";
+    horas_[2] = "02:" + min_ + " AM";
+    horas_[1] = "01:" + min_ + " AM";
+
     let month = monthNames[dateObj.getMonth()];
     let day = String(dateObj.getDate()).padStart(2, '0');
     let year = dateObj.getFullYear();
-    let momento = horas_[dateObj.getHours()]; 
-    let output = day +'/'+ month + '/' + year;  // + ' '+ momento;
+    let momento = horas_[dateObj.getHours()];
+    let output = day + '/' + month + '/' + year;  // + ' '+ momento;
 
     let month2 = monthNames[dateObj2.getMonth()];
     let day2 = String(dateObj2.getDate()).padStart(2, '0');
     let year2 = dateObj2.getFullYear();
-    let momento2 = horas_[dateObj2.getHours()]; 
-    let output2 = day2 +'/'+ month2 + '/' + year2;  // + ' '+ momento2;
+    let momento2 = horas_[dateObj2.getHours()];
+    let output2 = day2 + '/' + month2 + '/' + year2;  // + ' '+ momento2;
 
     let margin_bottom = 50;
     let y1 = 600;
     let y2 = 630;
     let y3 = 640;
 
-    if (rows.length-1 > 17){
+    if (rows.length - 1 > 17) {
       margin_bottom = 150;
       y1 = 520;
       y2 = 550;
@@ -338,16 +388,16 @@ export class CerrarAveriasComponent implements OnInit {
         width: 600,
         height: 760
       },
-      pageMargins: [ 25, 30, 25, margin_bottom ],  
+      pageMargins: [25, 30, 25, margin_bottom],
 
-    
+
       //Aqui va el footer  
-    
-    
-    
+
+
+
       content: [
         // if you don't need styles, you can use a simple string to define a paragraph
-        
+
         {
           columns: [
             {
@@ -361,18 +411,18 @@ export class CerrarAveriasComponent implements OnInit {
             },
             {
               width: 200,
-              table: 
+              table:
               {
-                  widths: [200],
-                  body: 
-                      [
-                          [
-                              {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'center', fontSize: 12,border: [false, false, false, false]}, 
-                          ],    
-                          [
-                              {text: this.dempresaList[0].direccion, fontSize: 10,border: [false, false, false, false]}, 
-                          ]
-                      ]
+                widths: [200],
+                body:
+                  [
+                    [
+                      { text: this.dempresaList[0].descripcion, style: "boldtxt", alignment: 'center', fontSize: 12, border: [false, false, false, false] },
+                    ],
+                    [
+                      { text: this.dempresaList[0].direccion, fontSize: 10, border: [false, false, false, false] },
+                    ]
+                  ]
               }
             },
             {
@@ -381,236 +431,236 @@ export class CerrarAveriasComponent implements OnInit {
             },
             {
               width: '*',
-              table: 
+              table:
               {
-                  widths: [40,'*'],
-                  body: 
-                      [
-                          [
-                              {text: 'Teléfono',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
-                              {text: this.dempresaList[0].telefonoFijo, fontSize: 10,border: [false, false, false, false]},
-                          ],    
-                          [
-                              {text: 'Celular',style: "boldtxt", fontSize: 10,border: [false, false, false, false]},
-                              {text: this.dempresaList[0].telefonocel1, fontSize: 10,border: [false, false, false, false]}, 
-                          ],    
-                          [
-                              {text: 'Email:',style: "boldtxt", fontSize: 10,border: [false, false, false, false]}, 
-                              {text: this.dempresaList[0].email, fontSize: 9,border: [false, false, false, false]},
-                          ]
-                      ]
+                widths: [40, '*'],
+                body:
+                  [
+                    [
+                      { text: 'Teléfono', style: "boldtxt", fontSize: 10, border: [false, false, false, false] },
+                      { text: this.dempresaList[0].telefonoFijo, fontSize: 10, border: [false, false, false, false] },
+                    ],
+                    [
+                      { text: 'Celular', style: "boldtxt", fontSize: 10, border: [false, false, false, false] },
+                      { text: this.dempresaList[0].telefonocel1, fontSize: 10, border: [false, false, false, false] },
+                    ],
+                    [
+                      { text: 'Email:', style: "boldtxt", fontSize: 10, border: [false, false, false, false] },
+                      { text: this.dempresaList[0].email, fontSize: 9, border: [false, false, false, false] },
+                    ]
+                  ]
               }
-      
+
             }
           ],
         },
 
-        { text:'Gestión de Avería ',style: "linecentertitle",fontSize: 16},
+        { text: 'Gestión de Avería ', style: "linecentertitle", fontSize: 16 },
 
         { //dos columnas, en cada se define una tabla 
-          columns: 
-          [
-            {
-              width: 285,
-              table: 
+          columns:
+            [
               {
+                width: 285,
+                table:
+                {
                   widths: [50, 175],
                   body: [
                     [
-                        {text: 'Cliente:',style: "boldtxt", border: [true, true, false, false]}, 
-                        {text: this.gestionaveriasService.averia_.nomcliente, border: [false, true, true, false]}
-                    ],  
+                      { text: 'Cliente:', style: "boldtxt", border: [true, true, false, false] },
+                      { text: this.gestionaveriasService.averia_.nomcliente, border: [false, true, true, false] }
+                    ],
                     [
-                      {text: 'Rif:',style: "boldtxt", border: [true, false, false, false]}, 
-                      {text: this.gestionaveriasService.averia_.idcliente, border: [false, false, true, false]}
-                    ],  
+                      { text: 'Rif:', style: "boldtxt", border: [true, false, false, false] },
+                      { text: this.gestionaveriasService.averia_.idcliente, border: [false, false, true, false] }
+                    ],
                     [
-                        {text: 'Teléfono:',style: "boldtxt", border: [true, false, false, false]}, 
-                        {text: this.tlfCli, border: [false, false, true, false]}
-                    ],    
+                      { text: 'Teléfono:', style: "boldtxt", border: [true, false, false, false] },
+                      { text: this.tlfCli, border: [false, false, true, false] }
+                    ],
                     [
-                        {text: 'Dirección:',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: this.dirCli, border: [false, false, true, true]}
+                      { text: 'Dirección:', style: "boldtxt", border: [true, false, false, true] },
+                      { text: this.dirCli, border: [false, false, true, true] }
                     ]
                   ]
-              }
-            },
-            {
+                }
+              },
+              {
                 width: 180,
-                table: 
+                table:
                 {
-                    widths: [90, 135],
-                    body: [
-                      [
-                          {text: 'N°:',style: "boldtxt", border: [true, true, false, false]}, 
-                          {text: docAdd , border: [false, true, true, false]}
-                      ],    
-                      [
-                        {text: 'Fecha:',style: "boldtxt", border: [true, false, false, false]}, 
-                        {text: output, border: [false, false, true, false]}
-                      ],
-                      [
-                        {text: '',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: '', border: [false, false, true, true]}
-                      ]
-                      ,
-                      [
-                          {text: '', border: [false, false, false, false]}, 
-                          {text: '', border: [false, false, false, false]}
-                      ]
-                      ,    
-                      [
-                          {text: 'Vendedor:',style: "boldtxt", border: [true, true, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.nomvendedor, border: [false, true, true, false]}
-                      ]
-                      ,    
-                      [
-                          {text: 'Zona:',style: "boldtxt", border: [true, false, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.zonvendedor, border: [false, false, true, false]}
-                      ],
-                      [
-                          {text: 'Doc. Ref:',style: "boldtxt", border: [true, false, false, false]}, 
-                          {text: this.gestionaveriasService.averia_.nrodocumento, border: [false, false, true, false]}
-                      ]
-                      ,
-                      [
-                          {text: 'Fecha Documento:',style: "boldtxt", border: [true, false, false, true]}, 
-                          {text: output2, border: [false, false, true, true]}
-                      ]
+                  widths: [90, 135],
+                  body: [
+                    [
+                      { text: 'N°:', style: "boldtxt", border: [true, true, false, false] },
+                      { text: docAdd, border: [false, true, true, false] }
+                    ],
+                    [
+                      { text: 'Fecha:', style: "boldtxt", border: [true, false, false, false] },
+                      { text: output, border: [false, false, true, false] }
+                    ],
+                    [
+                      { text: '', style: "boldtxt", border: [true, false, false, true] },
+                      { text: '', border: [false, false, true, true] }
                     ]
-                  }
-            }
-          ],
+                    ,
+                    [
+                      { text: '', border: [false, false, false, false] },
+                      { text: '', border: [false, false, false, false] }
+                    ]
+                    ,
+                    [
+                      { text: 'Vendedor:', style: "boldtxt", border: [true, true, false, false] },
+                      { text: this.gestionaveriasService.averia_.nomvendedor, border: [false, true, true, false] }
+                    ]
+                    ,
+                    [
+                      { text: 'Zona:', style: "boldtxt", border: [true, false, false, false] },
+                      { text: this.gestionaveriasService.averia_.zonvendedor, border: [false, false, true, false] }
+                    ],
+                    [
+                      { text: 'Doc. Ref:', style: "boldtxt", border: [true, false, false, false] },
+                      { text: this.gestionaveriasService.averia_.nrodocumento, border: [false, false, true, false] }
+                    ]
+                    ,
+                    [
+                      { text: 'Fecha Documento:', style: "boldtxt", border: [true, false, false, true] },
+                      { text: output2, border: [false, false, true, true] }
+                    ]
+                  ]
+                }
+              }
+            ],
           // optional space between columns
           columnGap: 10
         },
 
-         //solo espaciado
-        { text:' ',style: "SpacingFull",fontSize: 14},
+        //solo espaciado
+        { text: ' ', style: "SpacingFull", fontSize: 14 },
 
         //IMPRIME EL DETALLE DE LA MATRIX
         {
           width: 530,
-          table: 
+          table:
           {
             widths: [530],
-            body: 
-            [
+            body:
               [
-                {
-                  layout: 'lightHorizontalLines', fontSize: 7,// optional
-                  table: 
-                      {
-                      widths: [40, 175, 35, 35, 35,75,50],
-                      body: 
-                      [
+                [
+                  {
+                    layout: 'lightHorizontalLines', fontSize: 7,// optional
+                    table:
+                    {
+                      widths: [40, 175, 35, 35, 35, 75, 50],
+                      body:
                         [
-                            {text: 'ARTÍCULO',style: "boldtxt", border: [true, true, false, true]}, 
-                            {text: 'DESCRIPCIÓN',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'CTD',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'PREC. U',style: "boldtxt", border: [false, true, false, true]},
-                            {text: 'TOTAL',style: "boldtxt", border: [false, true, true, true]},
-                            {text: 'MOTIVO',style: "boldtxt", border: [false, true, true, true]},
-                            {text: 'RESOLUCIÓN',style: "boldtxt", border: [false, true, true, true]},
+                          [
+                            { text: 'ARTÍCULO', style: "boldtxt", border: [true, true, false, true] },
+                            { text: 'DESCRIPCIÓN', style: "boldtxt", border: [false, true, false, true] },
+                            { text: 'CTD', style: "boldtxt", border: [false, true, false, true] },
+                            { text: 'PREC. U', style: "boldtxt", border: [false, true, false, true] },
+                            { text: 'TOTAL', style: "boldtxt", border: [false, true, true, true] },
+                            { text: 'MOTIVO', style: "boldtxt", border: [false, true, true, true] },
+                            { text: 'RESOLUCIÓN', style: "boldtxt", border: [false, true, true, true] },
+                          ]
                         ]
-                      ]
-                      
-                      }
-                }
+
+                    }
+                  }
+                ]
               ]
-            ]
           }
         },
 
         //Tabla simple sin borde, se llena con la variable "rows"
         {
           layout: 'headerLineOnly', // optional
-          id: 'detalleTbl',fontSize: 7,
+          id: 'detalleTbl', fontSize: 7,
           table: {
-            widths: [45, 175, 35, 35, 35,75,50],
+            widths: [45, 175, 35, 35, 35, 75, 50],
             body: rows,
           },
 
         },
-       //IMPRIME EL DETALLE DE LA MATRIX        
-        
-        { 
+        //IMPRIME EL DETALLE DE LA MATRIX        
+
+        {
           text: observacion,
           id: "observacion",
           style: "lineSpacing",
           fontSize: 10,
           dontBreakRows: true,
-          absolutePosition:{x:25, y:y1}
+          absolutePosition: { x: 25, y: y1 }
         },
 
-        { text:' ',style: "lineSpacing",fontSize: 10,absolutePosition:{x:25, y:y2}},
+        { text: ' ', style: "lineSpacing", fontSize: 10, absolutePosition: { x: 25, y: y2 } },
 
         //va en el pie de la pagina pero no como footer
         {
-          columns: 
-          [
-           { //columna 1
-              width: 295,
-              table: 
-              {
+          columns:
+            [
+              { //columna 1
+                width: 295,
+                table:
+                {
                   dontBreakRows: true,
                   widths: [80, 145],
                   body: [
                     [
-                        {text: 'Total artículos:',style: "boldtxt", border: [true, true, false, false]}, 
-                        {text: totalArticulos, border: [false, true, true, false]}
-                    ],    
+                      { text: 'Total artículos:', style: "boldtxt", border: [true, true, false, false] },
+                      { text: totalArticulos, border: [false, true, true, false] }
+                    ],
                     [
-                        {text: 'Total cantidades:',style: "boldtxt", border: [true, false, false, true]}, 
-                        {text: this.gestionaveriasService.totalCnt.toLocaleString('de-DE', {maximumFractionDigits: 0}), border: [false, false, true, true]}
+                      { text: 'Total cantidades:', style: "boldtxt", border: [true, false, false, true] },
+                      { text: this.gestionaveriasService.totalCnt.toLocaleString('de-DE', { maximumFractionDigits: 0 }), border: [false, false, true, true] }
                     ]
                   ]
-              }
-            }, //columna 2
-            {
-                width: 180,
-                table: 
-                {
-                    dontBreakRows: true,  
-                    widths: [70, 155],
-                    body: [
-                      [
-                          {text: 'Total Averías:',style: "boldtxt", border: [true, true, false, true]}, 
-                          {text: this.gestionaveriasService.averia_.totalaveria.toLocaleString('de-DE', {maximumFractionDigits: 2,minimumFractionDigits:2}), alignment: 'left', border: [false, true, true, true]}
-                      ]
-                    ]
                 }
-            }
-          ],absolutePosition:{x:25, y:y3}
-        
+              }, //columna 2
+              {
+                width: 180,
+                table:
+                {
+                  dontBreakRows: true,
+                  widths: [70, 155],
+                  body: [
+                    [
+                      { text: 'Total Averías:', style: "boldtxt", border: [true, true, false, true] },
+                      { text: this.gestionaveriasService.averia_.totalaveria.toLocaleString('de-DE', { maximumFractionDigits: 2, minimumFractionDigits: 2 }), alignment: 'left', border: [false, true, true, true] }
+                    ]
+                  ]
+                }
+              }
+            ], absolutePosition: { x: 25, y: y3 }
+
         },
 
       ],
       defaultStyle: {
         fontSize: 10
       },
-      pageBreakBefore: function(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
+      pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
         return false;
       }
       ,
 
-      styles:{
+      styles: {
         'linecentertitle': {
-            margin:[190,30,0,30] //change number 6 to increase nspace
+          margin: [190, 30, 0, 30] //change number 6 to increase nspace
         },
         'lineSpacing': {
-          margin:[0,0,0,10] //change number 6 to increase nspace
+          margin: [0, 0, 0, 10] //change number 6 to increase nspace
         },
         'SpacingFull': {
-          margin:[0,0,0,30] //change number 6 to increase nspace
+          margin: [0, 0, 0, 30] //change number 6 to increase nspace
         },
         'SpacingFull2': {
-          margin:[0,0,0,60] //change number 6 to increase nspace
+          margin: [0, 0, 0, 60] //change number 6 to increase nspace
         },
         'SpacingFullxl': {
-          margin:[0,0,0,spaceBottom] //change number 6 to increase nspace
+          margin: [0, 0, 0, spaceBottom] //change number 6 to increase nspace
         },
-        'boldtxt':{
+        'boldtxt': {
           bold: true
         }
       }
@@ -618,39 +668,39 @@ export class CerrarAveriasComponent implements OnInit {
 
     //si se va a generar en string base64
     const pdfDocGenerator0 = pdfMake.createPdf(documentDefinition);
-      pdfDocGenerator0.getBase64((data) => {
-        var file = data;
+    pdfDocGenerator0.getBase64((data) => {
+      var file = data;
       // });
-      
 
-    //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
-    //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
-    // pdfDocGenerator1.getBlob((blob) => {
-    //   var file = blob;
+
+      //descomentar si se va agenerar el file de tipo blob. y comentar el de arriba  
+      //const pdfDocGenerator1 = pdfMake.createPdf(documentDefinition);
+      // pdfDocGenerator1.getBlob((blob) => {
+      //   var file = blob;
       var fileId: number;
-      if (this.gestionaveriasService.averia_.uid != null){
-        fileId = parseInt(docAdd)-1;
-      }else{
+      if (this.gestionaveriasService.averia_.uid != null) {
+        fileId = parseInt(docAdd) - 1;
+      } else {
         fileId = parseInt(docAdd);
       }
 
-      //console.log('fileId ',fileId);
       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-      const idfile = fileId +'.pdf';
+      const idfile = fileId + '.pdf';
       this.gestionaveriasService.averia_.pdfname = idfile;
       this.gestionaveriasService.averia_.pdfb64 = file;
-                                                                  
-      const fileRef:AngularFireStorageReference=this.afStorage.ref("Orders").child(idfile);
+
+      const fileRef: AngularFireStorageReference = this.afStorage.ref("Orders").child(idfile);
       //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
       const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64
       task.snapshotChanges().pipe(
-          finalize(() => {                        
-            this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
-              fileRef.getDownloadURL().subscribe(downloadURL => {
-                this.gestionaveriasService.averia_.pdfurl=downloadURL;
-                this.URLPublica = downloadURL;
-                this.onSubmit(pf,this.URLPublica,docAdd);
-              });
+        finalize(() => {
+          this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
+          fileRef.getDownloadURL().subscribe(downloadURL => {
+            this.gestionaveriasService.averia_.pdfurl = downloadURL;
+            this.URLPublica = downloadURL;
+
+            this.onSubmit(pf, this.URLPublica, docAdd);
+          });
         })
       ).subscribe();
 
@@ -661,207 +711,203 @@ export class CerrarAveriasComponent implements OnInit {
     //pdfMake.createPdf(documentDefinition).open();
   }//Generar pdf make
 
-  aceptarRechazarItems(e,ind){
-    let estado_ = false;
-    if (e.target.checked){
-      estado_ = true;
-    }
-
-    for (let i in this.gestionaveriasService.matrisDetAveria){
-      //Actualiza los registros 
-      if (this.gestionaveriasService.matrisDetAveria[i].indice == ind){
-        this.gestionaveriasService.matrisDetAveria[i].aprobado = estado_;
-      }
-    }
-  }
-
-  onSubmit(pf?: NgForm, url?:string,aveNro?:any){
-    
+  onSubmit(pf?: NgForm, url?: string, aveNro?: any) {
     //this.gestionaveriasService.averia_.email = "yhonatandcarruido@gmail.com"; 
     //this.gestionaveriasService.averia_.email = "yhonatandcarruido@gmail.com,ricardoarangures@gmail.com";
 
     //Nuevo Averia
-    if(this.gestionaveriasService.averia_.uid == null)
-    { 
+    if (this.gestionaveriasService.averia_.uid == null) {
       //nada
-    }else{ //Actualiza Averia
-        this.gestionaveriasService.averia_.modificado = new Date;
-        this.gestionaveriasService.averia_.modificadopor = this.loginS.getCurrentUser().email;
-        this.gestionaveriasService.averia_.status = "CERRADA";
+    } else { //Actualiza Averia
+      this.gestionaveriasService.averia_.modificado = new Date;
+      this.gestionaveriasService.averia_.modificadopor = this.loginS.getCurrentUser().email;
+      this.gestionaveriasService.averia_.status = "CERRADA";
 
-        let ahora = new Date();
-        this.gestionaveriasService.averia_.fechaaveria = new Date(this.gestionaveriasService.start_time);
-        
-        //console.log('sssssd ',this.timeFR)
-        this.gestionaveriasService.averia_.feresolucion = new Date(this.timeFR);
-        this.gestionaveriasService.averia_.fecierre = new Date(this.timeFC);
+      let ahora = new Date();
+      this.gestionaveriasService.averia_.fechaaveria = new Date(this.gestionaveriasService.start_time);
 
-        this.gestionaveriasService.averia_.fechaaveria.setDate(this.gestionaveriasService.averia_.fechaaveria.getDate()+1);
-        this.gestionaveriasService.averia_.fechaaveria.setHours(ahora.getHours());
-        this.gestionaveriasService.averia_.fechaaveria.setMinutes(ahora.getMinutes());
+      this.gestionaveriasService.averia_.feresolucion = new Date(this.timeFR);
+      this.gestionaveriasService.averia_.fecierre = new Date(this.timeFC);
 
-        this.gestionaveriasService.averia_.feresolucion.setDate(this.gestionaveriasService.averia_.feresolucion.getDate()+1);
-        this.gestionaveriasService.averia_.feresolucion.setHours(ahora.getHours());
-        this.gestionaveriasService.averia_.feresolucion.setMinutes(ahora.getMinutes());
+      this.gestionaveriasService.averia_.fechaaveria.setDate(this.gestionaveriasService.averia_.fechaaveria.getDate() + 1);
+      this.gestionaveriasService.averia_.fechaaveria.setHours(ahora.getHours());
+      this.gestionaveriasService.averia_.fechaaveria.setMinutes(ahora.getMinutes());
 
-        this.gestionaveriasService.averia_.fecierre.setDate(this.gestionaveriasService.averia_.fecierre.getDate()+1);
-        this.gestionaveriasService.averia_.fecierre.setHours(ahora.getHours());
-        this.gestionaveriasService.averia_.fecierre.setMinutes(ahora.getMinutes());
+      this.gestionaveriasService.averia_.feresolucion.setDate(this.gestionaveriasService.averia_.feresolucion.getDate() + 1);
+      this.gestionaveriasService.averia_.feresolucion.setHours(ahora.getHours());
+      this.gestionaveriasService.averia_.feresolucion.setMinutes(ahora.getMinutes());
 
-        //Update Orders
-        this.gestionaveriasService.updateAverias(this.gestionaveriasService.averia_);
-        
-        for (let i in this.gestionaveriasService.matrisDetAveria){
-          //Actualiza los registros 
-          if (this.gestionaveriasService.matrisDetAveria[i].uid!=""){
-              this.gestionaveriasService.updateAveriasDet(this.gestionaveriasService.matrisDetAveria[i]);
-              
+      this.gestionaveriasService.averia_.fecierre.setDate(this.gestionaveriasService.averia_.fecierre.getDate() + 1);
+      this.gestionaveriasService.averia_.fecierre.setHours(ahora.getHours());
+      this.gestionaveriasService.averia_.fecierre.setMinutes(ahora.getMinutes());
 
-          }else{
-              //Agrega los nuevos registros
-              this.gestionaveriasService.matrisDetAveria[i].idaveria=this.gestionaveriasService.averia_.uid;
-              this.gestionaveriasService.addAveriasDet(this.gestionaveriasService.matrisDetAveria[i]);
-          }      
+      //Update Orders
+      this.gestionaveriasService.updateAverias(this.gestionaveriasService.averia_);
+
+      for (let i in this.gestionaveriasService.matrisDetAveria) {
+        //Actualiza los registros 
+        if (this.gestionaveriasService.matrisDetAveria[i].uid != "") {
+          this.gestionaveriasService.updateAveriasDet(this.gestionaveriasService.matrisDetAveria[i]);
+
+
+        } else {
+          //Agrega los nuevos registros
+          this.gestionaveriasService.matrisDetAveria[i].idaveria = this.gestionaveriasService.averia_.uid;
+          this.gestionaveriasService.addAveriasDet(this.gestionaveriasService.matrisDetAveria[i]);
         }
-        //Elimina los registros seleccionados 
-        for (let k in this.gestionaveriasService.elementoBorrados){
-          this.gestionaveriasService.deleteAveriasDet(this.gestionaveriasService.elementoBorrados[k])
-        }
-        this.gestionaveriasService.elementoBorrados = []; // vacia la instancia
-     
-        this.toastr.success('Operación Terminada','Averia Actualizado');
-        this.gestionaveriasService.enviar = false;
+      }
+      //Elimina los registros seleccionados 
+      for (let k in this.gestionaveriasService.elementoBorrados) {
+        this.gestionaveriasService.deleteAveriasDet(this.gestionaveriasService.elementoBorrados[k])
+      }
+      this.gestionaveriasService.elementoBorrados = []; // vacia la instancia
+
+      this.toastr.success('Operación Terminada', 'Averia Actualizado');
+      this.gestionaveriasService.enviar = false;
     }
 
     pf.resetForm();
     this.gestionaveriasService.readonlyField = false;
-    this.gestionaveriasService.averia_ = {} as Averia;  
+    this.gestionaveriasService.averia_ = {} as Averia;
     this.gestionaveriasService.matrisDetAveria = []; // vacia la instancia
-    this.gestionaveriasService.txtBtnAccion = "Crear Averia"; 
+    this.gestionaveriasService.txtBtnAccion = "Crear Averia";
     this.gestionaveriasService.mostrarForm3 = false;
   }//onSubmit
 
 
+  solucionSelected(e, ind) {
+    let solucionAv = "";
+    solucionAv = e.target.selectedOptions[0].value;
+
+    for (let i in this.gestionaveriasService.matrisDetAveria) {
+      //Actualiza los registros 
+      if (this.gestionaveriasService.matrisDetAveria[i].indice == ind) {
+        this.gestionaveriasService.matrisDetAveria[i].solucion = solucionAv;
+      }
+    }
+  }
+
   @ViewChild('avForm') myForm;
-  resetFormFunc(field?: number){  
+  resetFormFunc(field?: number) {
     this.myForm.resetForm();
-    if (field == 2){  
+    if (field == 2) {
     }
   }//resetFormfunc
 
 
-  resetForm(pf?: NgForm)
-  {
-   
-    if (this.gestionaveriasService.averia_.nomcliente !== undefined){
-      if(confirm("¿Quieres abandonar esta averia? " )) {
-        if(pf != null) pf.reset();
+  resetForm(pf?: NgForm) {
+
+    if (this.gestionaveriasService.averia_.nomcliente !== undefined) {
+      if (confirm("¿Quieres abandonar esta averia? ")) {
+        if (pf != null) pf.reset();
         this.gestionaveriasService.matrisDetAveria = []; // vacia la instancia
         this.gestionaveriasService.elementoBorrados = []; // vacia la instancia
         this.gestionaveriasService.readonlyField = false;
-        this.gestionaveriasService.averia_ = {} as Averia; 
-        this.gestionaveriasService.txtBtnAccion = "Crear Averia"; 
+        this.gestionaveriasService.averia_ = {} as Averia;
+        this.gestionaveriasService.txtBtnAccion = "Crear Averia";
         this.gestionaveriasService.enviar = false;
         this.gestionaveriasService.mostrarForm3 = false;
       }
-    }else{
-        if(pf != null) pf.reset();
-        this.gestionaveriasService.matrisDetAveria = []; // vacia la instancia
-        this.gestionaveriasService.elementoBorrados = []; // vacia la instancia
-        this.gestionaveriasService.readonlyField = false;
-        this.gestionaveriasService.averia_ = {} as Averia; 
-        this.gestionaveriasService.txtBtnAccion = "Crear Averia"; 
-        this.gestionaveriasService.enviar = false;
-        this.gestionaveriasService.mostrarForm3 = false;
+    } else {
+      if (pf != null) pf.reset();
+      this.gestionaveriasService.matrisDetAveria = []; // vacia la instancia
+      this.gestionaveriasService.elementoBorrados = []; // vacia la instancia
+      this.gestionaveriasService.readonlyField = false;
+      this.gestionaveriasService.averia_ = {} as Averia;
+      this.gestionaveriasService.txtBtnAccion = "Crear Averia";
+      this.gestionaveriasService.enviar = false;
+      this.gestionaveriasService.mostrarForm3 = false;
     }
   }//resetForm
 
-  borrarSeleccion(){
+  borrarSeleccion() {
     this.cantidadmaterial = 0;
     this.maxCant = 0
     this.preciomaterial = 0;
     this.totalpormaterial = 0;
     this.motivoAve = "";
-  } 
+    this.solucionAve = "";
+  }
 
-  selectedFactDoc(txt){
+  selectedFactDoc(txt) {
     const value = txt.target.value.toString().trim();
-    const text  = txt.target.options[txt.target.options.selectedIndex].text
-    let i = value.indexOf( "<>" );
-    const uidPed = value.substring(i+2, value.length);
+    const text = txt.target.options[txt.target.options.selectedIndex].text
+    let i = value.indexOf("<>");
+    const uidPed = value.substring(i + 2, value.length);
 
     //Get Order detaills
-    this.lpedidoS.getPedidosDet(uidPed).subscribe(pedidosDet=>{
+    this.lpedidoS.getPedidosDet(uidPed).subscribe(pedidosDet => {
       this.gestionaveriasService.averiaslistDet = pedidosDet;
     })
-    
+
     this.nrodoc = text
 
     this.borrarSeleccion();
   }
 
-  selectedchangeCodMat(val,pffield?){
+  selectedchangeCodMat(val, pffield?) {
     this.borrarSeleccion();
     const isLargeNumber = (element) => element.codigodematerial == val.target.value.toString().trim();
     const i = this.gestionaveriasService.averiaslistDet.findIndex(isLargeNumber);
 
-    if (i != -1){
+    if (i != -1) {
       this.descripcionmaterial = this.gestionaveriasService.averiaslistDet[i].descripcionmaterial;
       this.codigodematerial = this.gestionaveriasService.averiaslistDet[i].codigodematerial;
 
-      this.maxCant =  this.gestionaveriasService.averiaslistDet[i].cantidadmaterial;
-      this.preciomaterial =  this.gestionaveriasService.averiaslistDet[i].preciomaterial;
+      this.maxCant = this.gestionaveriasService.averiaslistDet[i].cantidadmaterial;
+      this.preciomaterial = this.gestionaveriasService.averiaslistDet[i].preciomaterial;
     }
     this.renderer.selectRootElement('#cantidadmaterial').focus();
   }// selectedchangeCodMat  
 
-  txtctnchange(cnt){
+  txtctnchange(cnt) {
     let tmat;
-    if (cnt.target.value > this.maxCant){
+    if (cnt.target.value > this.maxCant) {
       this.cantidadmaterial = 0;
       tmat = 0 * this.preciomaterial;
       this.totalpormaterial = parseFloat(tmat.toFixed(2));
-    }else{
-      if (this.preciomaterial != null){
+    } else {
+      if (this.preciomaterial != null) {
         tmat = cnt.target.value * this.preciomaterial;
         this.totalpormaterial = parseFloat(tmat.toFixed(2));  //.toLocaleString("es-CO");
       }
-    }   
+    }
   }//txtctnchange
 
-  agregardetalles(){ 
+  agregardetalles() {
     this.gestionaveriasService.matrisDetAveria = this.gestionaveriasService.matrisDetAveria.concat({
-      idaveria:null,
-      uid:'',
-      codigodematerial:this.codigodematerial,
-      descripcionmaterial:this.descripcionmaterial,
-      preciomaterial:this.preciomaterial,
-      cantidadmaterial:this.cantidadmaterial,
-      totalpormaterial:this.totalpormaterial,
-      motivoaveria:this.motivoAve,
-      indice:this.gestionaveriasService.matrisDetAveria.length
+      idaveria: null,
+      uid: '',
+      codigodematerial: this.codigodematerial,
+      descripcionmaterial: this.descripcionmaterial,
+      preciomaterial: this.preciomaterial,
+      cantidadmaterial: this.cantidadmaterial,
+      totalpormaterial: this.totalpormaterial,
+      motivoaveria: this.motivoAve,
+      solucion: this.solucionAve,
+      indice: this.gestionaveriasService.matrisDetAveria.length
     });
 
-    let totalm: number=0;
-    for (let i in this.gestionaveriasService.matrisDetAveria){
-     totalm = totalm + this.gestionaveriasService.matrisDetAveria[i].totalpormaterial
+    let totalm: number = 0;
+    for (let i in this.gestionaveriasService.matrisDetAveria) {
+      totalm = totalm + this.gestionaveriasService.matrisDetAveria[i].totalpormaterial
     }
     this.gestionaveriasService.averia_.totalaveria = totalm;
 
-    if (this.gestionaveriasService.matrisDetAveria.length > 0){
+    if (this.gestionaveriasService.matrisDetAveria.length > 0) {
       this.gestionaveriasService.mostrardesc = true;
-    }else{
+    } else {
       this.gestionaveriasService.mostrardesc = false;
     }
 
-    if (this.gestionaveriasService.averia_.totalaveria > 0){
+    if (this.gestionaveriasService.averia_.totalaveria > 0) {
       this.gestionaveriasService.enviar = true;
       this.gestionaveriasService.readonlyField = true;
     }
     this.borrarSeleccion();
   }//agregardetalles
 
-  removeDetRow(i){
+  removeDetRow(i) {
     this.gestionaveriasService.averia_.totalaveria = this.gestionaveriasService.averia_.totalaveria - this.gestionaveriasService.matrisDetAveria[i].totalpormaterial;
     this.gestionaveriasService.totalCnt = this.gestionaveriasService.totalCnt - this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial;
 
@@ -869,15 +915,15 @@ export class CerrarAveriasComponent implements OnInit {
     this.gestionaveriasService.elementoBorrados.push(this.gestionaveriasService.matrisDetAveria[i]);
 
     //Eliminando el registro del vector
-    i !== -1 && this.gestionaveriasService.matrisDetAveria.splice( i, 1 );
+    i !== -1 && this.gestionaveriasService.matrisDetAveria.splice(i, 1);
 
-    if (this.gestionaveriasService.matrisDetAveria.length > 0){
+    if (this.gestionaveriasService.matrisDetAveria.length > 0) {
       this.gestionaveriasService.mostrardesc = true;
-    }else{
+    } else {
       this.gestionaveriasService.mostrardesc = false;
     }
 
-    if (this.gestionaveriasService.averia_.totalaveria <= 0){
+    if (this.gestionaveriasService.averia_.totalaveria <= 0) {
       this.gestionaveriasService.enviar = false;
       //this.gestionaveriasService.readonlyField = false;
     }
@@ -900,168 +946,169 @@ export class CerrarAveriasComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  timestampConvert(fec){
-    let dateObject = new Date(fec.seconds*1000);
-    let mes_ = dateObject.getMonth()+1;
+  timestampConvert(fec) {
+    let dateObject = new Date(fec.seconds * 1000);
+    let mes_ = dateObject.getMonth() + 1;
     let ano_ = dateObject.getFullYear();
     let dia_ = dateObject.getDate();
     this.gestionaveriasService.averia_.fechaaveria = dateObject;
   }//timestampConvert
 
-  timestamp2(fec){
+  timestamp2(fec) {
     let dateObject;
-    let d1a, m3s : string;
+    let d1a, m3s: string;
 
-    if (fec){
-      dateObject = new Date(fec.seconds*1000);
+    if (fec) {
+      dateObject = new Date(fec.seconds * 1000);
 
       d1a = dateObject.getDate().toString();
-      if (dateObject.getDate()<10){
-        d1a = "0"+dateObject.getDate().toString();
+      if (dateObject.getDate() < 10) {
+        d1a = "0" + dateObject.getDate().toString();
       }
-      m3s = (dateObject.getMonth()+1).toString();
-      if (dateObject.getMonth()+1<10){
-        m3s = "0"+(dateObject.getMonth()+1).toString();
-      }      
+      m3s = (dateObject.getMonth() + 1).toString();
+      if (dateObject.getMonth() + 1 < 10) {
+        m3s = "0" + (dateObject.getMonth() + 1).toString();
+      }
 
-      return dateObject.getFullYear()+"-"+m3s+"-"+d1a;
-    }else{
+      return dateObject.getFullYear() + "-" + m3s + "-" + d1a;
+    } else {
       dateObject = new Date();
       d1a = dateObject.getDate().toString();
-      if (dateObject.getDate()<10){
-        d1a = "0"+dateObject.getDate().toString();
+      if (dateObject.getDate() < 10) {
+        d1a = "0" + dateObject.getDate().toString();
       }
-      m3s = (dateObject.getMonth()+1).toString();
-      if (dateObject.getMonth()+1<10){
-        m3s = "0"+(dateObject.getMonth()+1).toString();
-      } 
+      m3s = (dateObject.getMonth() + 1).toString();
+      if (dateObject.getMonth() + 1 < 10) {
+        m3s = "0" + (dateObject.getMonth() + 1).toString();
+      }
     }
 
-    return dateObject.getFullYear()+"-"+m3s+"-"+d1a;
+    return dateObject.getFullYear() + "-" + m3s + "-" + d1a;
   }//timestampConvert
 
-  timestamp3(fec){
-    let dateObject = new Date(fec.seconds*1000);
-    let d1a, m3s : string;
+  timestamp3(fec) {
+    let dateObject = new Date(fec.seconds * 1000);
+    let d1a, m3s: string;
 
     d1a = dateObject.getDate().toString();
-    if (dateObject.getDate()<10){
-      d1a = "0"+dateObject.getDate().toString();
+    if (dateObject.getDate() < 10) {
+      d1a = "0" + dateObject.getDate().toString();
     }
-    m3s = (dateObject.getMonth()+1).toString();
-    if (dateObject.getMonth()+1<10){
-      m3s = "0"+(dateObject.getMonth()+1).toString();
+    m3s = (dateObject.getMonth() + 1).toString();
+    if (dateObject.getMonth() + 1 < 10) {
+      m3s = "0" + (dateObject.getMonth() + 1).toString();
     }
-    
+
     this.gestionaveriasService.averia_.fechadocumento = dateObject;
 
-    return (d1a+"/"+m3s+"/"+dateObject.getFullYear()).toString();
+    return (d1a + "/" + m3s + "/" + dateObject.getFullYear()).toString();
   }//timestampConvert
 
-  mostrarOcultar(event,pedi){
+  mostrarOcultar(event, pedi) {
     this.mostrardiv = true;
     this.pedIndex = pedi;
     this.idaveriaEli = this.averiaslist[this.pedIndex].idaveria;
     this.fechaaveriaEli = this.averiaslist[this.pedIndex].fechaaveria;
     this.clienteaveriaEli = this.averiaslist[this.pedIndex].nomcliente;
-    this.gestionaveriasService.mostrarForm3=false;
+    this.gestionaveriasService.mostrarForm3 = false;
   }
-  
-  onCancelar(pf?: NgForm){
-    if(pf != null) pf.reset();
+
+  onCancelar(pf?: NgForm) {
+    if (pf != null) pf.reset();
     this.idaveriaEli = "";
     this.clienteaveriaEli = "";
     this.mostrardiv = false;
   }
 
-  onDelete(event){
-    if (this.txtComentario != ""){
-      if (this.pedIndex!=-990){
-        this.averiaslist[this.pedIndex].status="ELIMINADO";
-        this.averiaslist[this.pedIndex].modificadopor=this.loginS.getCurrentUser().email;
+  onDelete(event) {
+    if (this.txtComentario != "") {
+      if (this.pedIndex != -990) {
+        this.averiaslist[this.pedIndex].status = "ELIMINADO";
+        this.averiaslist[this.pedIndex].modificadopor = this.loginS.getCurrentUser().email;
         this.averiaslist[this.pedIndex].motivoEli = this.txtComentario;
         this.gestionaveriasService.deleteAverias(this.averiaslist[this.pedIndex]);
-        this.toastr.show('Avería Eliminada','Operación Terminada');
-        this.mostrardiv=false;
+        this.toastr.show('Avería Eliminada', 'Operación Terminada');
+        this.mostrardiv = false;
       }
     }
   }
 
-  onEdit(event, ave){
+  onEdit(event, ave) {
     this.gestionaveriasService.elementoBorrados = [];
     this.gestionaveriasService.averiaslistDet = [];
     this.gestionaveriasService.lpedidoList = [];
     //this.checkboxState = false;
 
-    if (ave.status.toUpperCase() == 'PROCESADA'){
-        this.gestionaveriasService.mostrarForm3 = true;
-        this.gestionaveriasService.txtBtnAccion = "Actualizar Averia";
-        this.gestionaveriasService.readonlyField = true;
+    if (ave.status.toUpperCase() == 'PROCESADA') {
+      this.gestionaveriasService.mostrarForm3 = true;
+      this.gestionaveriasService.txtBtnAccion = "Actualizar Averia";
+      this.gestionaveriasService.readonlyField = true;
 
-        this.gestionaveriasService.valorAutCli = ave.nomcliente;
-        this.gestionaveriasService.start_time = this.timestamp2(ave.fechaaveria).toString();
-        this.timeFR = this.timestamp2(ave.feresolucion).toString();
-        this.timeFC = this.timestamp2(ave.fecierre).toString();
+      this.gestionaveriasService.valorAutCli = ave.nomcliente;
+      this.gestionaveriasService.start_time = this.timestamp2(ave.fechaaveria).toString();
+      this.timeFR = this.timestamp2(ave.feresolucion).toString();
+      this.timeFC = this.timestamp2(ave.fecierre).toString();
 
-        this.gestionaveriasService.valorAutVen = ave.idvendedor;
-        
-        this.gestionaveriasService.presAscList = ave.precioasociado;
-        this.gestionaveriasService.docAdd = ave.uid;
+      this.gestionaveriasService.valorAutVen = ave.idvendedor;
 
-        this.gestionaveriasService.indicadorImpuesto = ave.indicadorImpuestoporc;
-        this.gestionaveriasService.indicadorImpuestoDesc = ave.indicadorImpuestodesc;
+      this.gestionaveriasService.presAscList = ave.precioasociado;
+      this.gestionaveriasService.docAdd = ave.uid;
 
-
-        this.lpedidoS.getpedFact(ave.idcliente).subscribe(avfc=>{
-          this.gestionaveriasService.lpedidoList = avfc;
-        })
-
-        this.gestionaveriasService.averia_ =  Object.assign({}, ave);
-        this.gestionaveriasService.averia_.nrodocumento = ave.nrodocumento;
-        this.gestionaveriasService.averia_.fechadocumento = ave.fechadocumento;
-
-        this.timestampConvert(ave.fechaaveria);
-
-        this.timeFD = this.timestamp3(ave.fechadocumento);
-
-        //Get Order detaills
-        this.gestionaveriasService.getAveriasDet(ave.uid).subscribe(averiasDet=>{
-            this.AvelistDet = averiasDet;
-            this.gestionaveriasService.matrisDetAveria = this.AvelistDet;
-            this.gestionaveriasService.totalCnt = 0;
-            for (let i in this.gestionaveriasService.matrisDetAveria){
-              this.gestionaveriasService.totalPri = this.gestionaveriasService.totalPri +  this.gestionaveriasService.matrisDetAveria[i].preciomaterial;
-              this.gestionaveriasService.totalCnt = this.gestionaveriasService.totalCnt +  this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial;
-              this.gestionaveriasService.totalAve = this.gestionaveriasService.totalAve +  this.gestionaveriasService.matrisDetAveria[i].totalpormaterial;
-            
-              if (this.gestionaveriasService.matrisDetAveria[i].aprobado == true){
-                //this.checkboxState[i] = true;
-              }
-              if (this.gestionaveriasService.matrisDetAveria[i].aprobado == false){
-                //this.checkboxState[i] = false;
-              }
-              //console.log('ooo ',this.checkboxState[i])
-            }
-
-            this.gestionaveriasService.enviar=true;
-        }) 
-        
-        // //Get Order detaills
-        // const value = this.gestionaveriasService.averia_.nrodocUID.toString().trim();
-        // this.lpedidoS.getPedidosDet(value).subscribe(pedidosDet=>{
-        //   this.gestionaveriasService.averiaslistDet = pedidosDet;
-        // })
+      this.gestionaveriasService.indicadorImpuesto = ave.indicadorImpuestoporc;
+      this.gestionaveriasService.indicadorImpuestoDesc = ave.indicadorImpuestodesc;
 
 
+      this.lpedidoS.getpedFact(ave.idcliente).subscribe(avfc => {
+        this.gestionaveriasService.lpedidoList = avfc;
+      })
+
+      this.gestionaveriasService.averia_ = Object.assign({}, ave);
+      this.gestionaveriasService.averia_.nrodocumento = ave.nrodocumento;
+      this.gestionaveriasService.averia_.fechadocumento = ave.fechadocumento;
+
+      this.timestampConvert(ave.fechaaveria);
+
+      this.timeFD = this.timestamp3(ave.fechadocumento);
+
+      //Get Order detaills
+      this.gestionaveriasService.getAveriasDet(ave.uid).subscribe(averiasDet => {
+        this.AvelistDet = averiasDet;
+        this.gestionaveriasService.matrisDetAveria = this.AvelistDet;
+        this.gestionaveriasService.totalCnt = 0;
+        for (let i in this.gestionaveriasService.matrisDetAveria) {
+          this.gestionaveriasService.totalPri = this.gestionaveriasService.totalPri + this.gestionaveriasService.matrisDetAveria[i].preciomaterial;
+          this.gestionaveriasService.totalCnt = this.gestionaveriasService.totalCnt + this.gestionaveriasService.matrisDetAveria[i].cantidadmaterial;
+          this.gestionaveriasService.totalAve = this.gestionaveriasService.totalAve + this.gestionaveriasService.matrisDetAveria[i].totalpormaterial;
+
+          if (this.gestionaveriasService.matrisDetAveria[i].aprobado == true) {
+            //this.checkboxState[i] = true;
+          }
+          if (this.gestionaveriasService.matrisDetAveria[i].aprobado == false) {
+            //this.checkboxState[i] = false;
+          }
+        }
+
+        this.gestionaveriasService.enviar = true;
+      })
+
+      // //Get Order detaills
+      // const value = this.gestionaveriasService.averia_.nrodocUID.toString().trim();
+      // this.lpedidoS.getPedidosDet(value).subscribe(pedidosDet=>{
+      //   this.gestionaveriasService.averiaslistDet = pedidosDet;
+      // })
+
+      this.EditElement = ave;
+
+      document.getElementById("avForm").scrollIntoView();
 
     } //Si status es ABIERTA
 
   }//onEdit
 
-  moForm(){
-    if (this.gestionaveriasService.mostrarForm3){
+  moForm() {
+    if (this.gestionaveriasService.mostrarForm3) {
       this.gestionaveriasService.mostrarForm3 = false;
-    }else{
+    } else {
       this.gestionaveriasService.mostrarForm3 = true;
     }
 
@@ -1069,7 +1116,7 @@ export class CerrarAveriasComponent implements OnInit {
     this.gestionaveriasService.valorAutCli = "";
     this.gestionaveriasService.valorAutVen = "";
     this.gestionaveriasService.readonlyField = false;
-    this.gestionaveriasService.averia_ = {} as Averia;  
+    this.gestionaveriasService.averia_ = {} as Averia;
     this.gestionaveriasService.averia_.fechaaveria = new Date;
 
     this.gestionaveriasService.totalPri = 0;
@@ -1080,24 +1127,24 @@ export class CerrarAveriasComponent implements OnInit {
     this.timeFR = moment(new Date()).format('YYYY-MM-DD');
     this.timeFC = moment(new Date()).format('YYYY-MM-DD');
     this.gestionaveriasService.txtBtnAccion = "Crear Averia";
- 
+
   }//moForm
 
-  verdetalles(event, ave){
+  verdetalles(event, ave) {
     const dialogConfig = new MatDialogConfig;
     dialogConfig.autoFocus = true;
     dialogConfig.maxWidth = "100%"
     dialogConfig.width = "95%";
     dialogConfig.height = "95%"
-    
+
     this.gestionaveriasService.pestana = "CA";
-    
-    this.averiaVer_ =  Object.assign({}, ave);
-  
+
+    this.averiaVer_ = Object.assign({}, ave);
+
     dialogConfig.data = {
       averiaShow: Object.assign({}, this.averiaVer_)
     };
-  
-    this.dialogo.open(AveriaShowComponent,dialogConfig);
+
+    this.dialogo.open(AveriaShowComponent, dialogConfig);
   }
 }

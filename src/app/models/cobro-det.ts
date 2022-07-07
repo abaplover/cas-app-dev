@@ -1,10 +1,13 @@
 export interface  CobroDet {
 	uid?				   :string;
-	tipopago?              :string;
-	fechadepago?           :Date;
-	viadepago?             :string;
     banco?                 :string;
-	nroreferencia?         :string;
-	montodepago?           :number;
 	docid?				   :string;
+	fechadepago?           :Date;
+	moneda?				   :string;
+	montodepago?           :number;
+	montobsf?			   :number;
+	nroreferencia?         :string;
+	tipopago?              :string;
+	tipodoc?			   :string;
+	viadepago?             :string;
 }

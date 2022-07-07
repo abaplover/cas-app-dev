@@ -26,6 +26,7 @@ export class VpagoService {
   {
     this.vpagoList.push({
       idvpago: vpago.idvpago,
+      nombre: vpago.nombre,
       descripcion: vpago.descripcion,
     });
   }
@@ -34,6 +35,7 @@ export class VpagoService {
   {
     this.vpagoList.update(vpago.$key, {
       idvpago: vpago.idvpago,
+      nombre: vpago.nombre,
       descripcion: vpago.descripcion
     });
   }

@@ -45,6 +45,7 @@ import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask 
 import { DatoempService } from 'src/app/services/datoemp.service';
 import { Datoemp } from 'src/app/models/datoemp';
 import * as moment from 'moment';
+import { MatPaginator } from '@angular/material/paginator';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -56,6 +57,7 @@ export class PedidoNdComponent implements OnInit {
   //PARA EL LISTADO DE PEDIDOS
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['idpedido', 'fechapedido', 'status', 'listaprecio', 'condiciondepago', 'nomcliente', 'nomvendedor', 'totalmontobruto','totalmontodescuento','totalmontoneto', 'Opc'];
 
   pedidoVer_ = {} as Pedido;
@@ -120,11 +122,13 @@ export class PedidoNdComponent implements OnInit {
   private myempty: number;
   public msj_enlace: string = 'Pedidos';
 
-
+  someticket = false; //Variable que almacena si tiene etiquetas
 
   @ViewChild('pedidoFormnf') myFormnf;
   @ViewChild('pedidoFormnd') myFormnd;
   @ViewChild('pedidoFormne') myFormne;
+
+
   constructor
   (
     public pedidoService: PedidoService,
@@ -155,11 +159,13 @@ export class PedidoNdComponent implements OnInit {
     this.ocultarBtn = 'padding: 10px;display:none;';
     this.MostrarPed = 'display:none;';
 
-    this.pedidoService.getPedidosF().subscribe(pedidos=>{
+    this.pedidoService.getPedidosPreparados().subscribe(pedidos=>{
       this.pedidoslist = pedidos;
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.pedidoslist);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+
     })
 
     this.pedido_ = {} as Pedido;
@@ -243,10 +249,15 @@ timestampConvert(fec,col?:number){
   if (col==6){
     this.pedidoVer_.fentrega = dateObject;
   }
+  if (col==7){
+    this.pedidoVer_.fpreparacion = dateObject;
+  }
 }
 
 verdetalles(event, ped){
 
+  ped.fdespacho = undefined;
+  ped.ftentrega = undefined;
   const dialogConfig = new MatDialogConfig;
   //dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
@@ -271,6 +282,9 @@ verdetalles(event, ped){
   }
   if (ped.fentrega !== null && typeof ped.fentrega != "undefined"){
     this.timestampConvert(ped.fentrega,6);
+  }
+  if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
+    this.timestampConvert(ped.fpreparacion,7);
   }
 
   dialogConfig.data = {
@@ -332,28 +346,6 @@ onCancelar(pf?: NgForm,de?:number){
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 generarpdf(pf?: NgForm)
 {
 
@@ -363,8 +355,6 @@ generarpdf(pf?: NgForm)
   let spaceBottom=260;
 
   bodyData = this.pedidoService.matrisDetPedido;
-  console.log(bodyData);
-  console.log(this.pedidoService.matrisDetPedido);
 
   if (this.pedido_.observacion=="" || typeof this.pedido_.observacion=="undefined"){
     observacion = "";
@@ -733,7 +723,9 @@ generarpdf(pf?: NgForm)
 
 }//pdf make
 
-
+downloadEtiquetas() {
+  window.open(this.pedido_.ticketurl);
+}
 
 
 
@@ -745,7 +737,7 @@ generarpdf(pf?: NgForm)
 
   onSubmitnf(pf?: NgForm){
     if(this.pedido_.uid != null){
-      this.pedido_.status="FACTURADO";
+      this.pedido_.status="PREPARADO";
       this.pedido_.modificado = new Date;
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
 
@@ -779,7 +771,7 @@ generarpdf(pf?: NgForm)
       this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
       //Update Pedido - Notifi Facttura
       this.pedidoService.updatePedidos(this.pedido_);
-      this.toastr.success('Operación Terminada', 'Nofificacinón de despacho creada.');
+      this.toastr.success('Operación Terminada', 'Nofificación de despacho creada.');
     }
     this.onCancelar(pf,1);
   }
@@ -796,20 +788,37 @@ generarpdf(pf?: NgForm)
   }
   anulardoc(pf?: NgForm,elemento?,num?:number){
     this.pedido_= elemento;
-    if(confirm('¿Está seguro de que quiere anular la notificación de factura actual para el pedido Nro: '+elemento.idpedido+'?')) {
+    if(confirm('¿Está seguro de que quiere anular la preparación en almacén para el pedido Nro: '+elemento.idpedido+'?')) {
       if(this.pedido_.uid != null){
-          this.pedido_.status="ACTIVO";
+          this.pedido_.status="FACTURADO";
           this.pedido_.modificado = new Date;
           this.pedido_.modificadopor = this.loginS.getCurrentUser().email;
-          this.pedido_.lastaction = "Anular NF";
+          this.pedido_.lastaction = "Anular Prep";
+
+          //Get Order detaills
+    this.pedidoService.getPedidosDet(elemento.uid).subscribe(pedidosDet=>{
+      this.pedidoslistDet = pedidosDet;
+
+      for (let i in this.pedidoslistDet){
+        this.totalPri = this.totalPri +  this.pedidoslistDet[i].preciomaterial;
+        this.totalCnt = this.totalCnt +  this.pedidoslistDet[i].cantidadmaterial;
+        this.totalPed = this.totalPed +  this.pedidoslistDet[i].totalpormaterial;
+
+        //this.tmontb = this.tmontb + this.pedidoslistDet[i].totalpormaterial;
+      }
+    })
+          
+
           //this.pedido_.ffactura = null;
-          this.pedido_.tipodoc = "";
-          this.pedido_.nrofactura = "";
+          this.pedido_.nombrealmacenista = "";
+          this.pedido_.nrobultos = null;
+          this.pedido_.fpreparacion = null;
+          //updatePedidosDet(this.elementosCheckeados[j])
           this.pedidoService.updatePedidos(this.pedido_,num);
 
           if(pf != null) pf.reset();
       }
-      this.toastr.warning('Operación Terminada', 'Notificación de factura, anulada');
+      this.toastr.warning('Operación Terminada', 'Preparación de almacén, anulada');
       this.onCancelar(pf,1);
     }
     else{
@@ -897,6 +906,9 @@ generarpdf(pf?: NgForm)
   selectEventPed(elemento){
     this.pedido_ =  Object.assign({}, elemento);
 
+    //Verifica que el pedido haya pasado por el proceso de almacen
+    if (this.pedido_.nrobultos) this.someticket = true;
+
     const val = elemento.idcliente;
     const isLargeNumber = (element) => element.idcliente.trim() == val.trim();
     const indice = this.clienteList.findIndex(isLargeNumber);
@@ -920,6 +932,9 @@ generarpdf(pf?: NgForm)
     }
     if (elemento.ffactura != null || typeof elemento.ffactura != "undefined"){
         this.pedido_.ffactura = this.timestampConvert2(elemento.ffactura);
+    }
+    if (elemento.fpreparacion != null || typeof elemento.fpreparacion != "undefined"){
+        this.pedido_.fpreparacion = this.timestampConvert2(elemento.fpreparacion);
     }
     if (elemento.ftentrega != null || typeof elemento.ftentrega != "undefined"){
         this.pedido_.ftentrega = this.timestampConvert2(elemento.ftentrega);
@@ -977,7 +992,7 @@ generarpdf(pf?: NgForm)
       }
     }
     if (this.opcnd == true){
-      if (this.pedido_.status == "FACTURADO" ||  this.pedido_.status == "DESPACHADO"){
+      if (this.pedido_.status == "PREPARADO" ||  this.pedido_.status == "DESPACHADO"){
         this.ocultarBtn = "padding: 10px;display:block;";
       }else{
         this.mensaje01 = " Este pedido contiene una solicitud de despacho"

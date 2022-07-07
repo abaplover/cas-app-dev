@@ -8,6 +8,7 @@ import { PedidoDet } from '../models/pedidoDet';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { AngularFireDatabase } from '@angular/fire/database';
 import * as firebase from 'firebase';
+import * as moment from 'moment';
 
 
 @Injectable({
@@ -17,6 +18,7 @@ export class CobrosService {
   selectedIndex = 0;
   docAdd:number = -1; //id del elemento
   mostrarForm: boolean = false;
+  today = moment().toDate();
 
   itemsCollection: AngularFirestoreCollection<CobroDet>;
   items: Observable<CobroDet[]>;
@@ -26,7 +28,11 @@ export class CobrosService {
   cobroDoc: AngularFirestoreDocument<Cobro>;
   cobrosColletion: AngularFirestoreCollection<Cobro>;
 
-  cobrosE: Observable<Cobro[]>;
+  cobrosPagados: Observable<Cobro[]>;
+  cobrosPagadosDoc: AngularFirestoreDocument<Cobro>;
+  cobrosPagadosColletion: AngularFirestoreCollection<Cobro>;
+
+  cobrosP: Observable<Cobro[]>;
   cobroDocE: AngularFirestoreDocument<Cobro>;
   cobrosColletionE: AngularFirestoreCollection<Cobro>;
 
@@ -38,12 +44,21 @@ export class CobrosService {
   cobroDocV: AngularFirestoreDocument<Cobro>;
   cobrosColletionV: AngularFirestoreCollection<Cobro>;
 
-  cobrosDet: Observable<CobroDet[]>;
-  cobroDetDoc: AngularFirestoreDocument<CobroDet>;
-  cobrosDetColletion: AngularFirestoreCollection<CobroDet>;
+  cobrosDet: Observable<Cobro[]>;
+  cobroDetDoc: AngularFirestoreDocument<Cobro>;
+  cobrosDetColletion: AngularFirestoreCollection<Cobro>;
+
+  cobrosrep: Observable<Cobro[]>;
+  cobroDocrep: AngularFirestoreDocument<Cobro>;
+  cobrosColletionrep: AngularFirestoreCollection<Cobro>;
+
+  cobrosdetrep: Observable<CobroDet[]>;
+  cobrosdetDocrep: AngularFirestoreDocument<CobroDet>;
+  cobrosdetColletionrep: AngularFirestoreCollection<CobroDet>;
 
   constructor(public db: AngularFirestore) { 
-    //Busca todos los pedidos
+
+    //Busca todos los cobros
     this.cobrosColletion = this.db.collection('cobros', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO']).orderBy("creado", "desc").limit(50));
     this.cobros = this.cobrosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -53,9 +68,24 @@ export class CobrosService {
       })
     }));
 
+    //Busca todos los cobros pagados en los ultimos 14 dias
+    let dateFrom = new Date(moment().subtract(14,'d').format('YYYY-MM-DD'));
+    
+    this.cobrosPagadosColletion = this.db.collection('cobros', ref => ref.where("tipopago", 'in', ['PARCIAL','TOTAL']).where("status",'==',"ACTIVO").where("fechadepago",'>=',dateFrom).orderBy("fechadepago","desc").limit(5000));
+    this.cobrosPagados = this.cobrosPagadosColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
+        return data;
+      })
+    }));
+
     //Busca todos los cobros con estatus - PENDIENTE ypedido ENTREGADO
-    this.cobrosColletionE = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL']).orderBy("creado", "desc").limit(50));
-    this.cobrosE = this.cobrosColletionE.snapshotChanges().pipe(map(changes => {
+    this.cobrosColletionE = this.db.collection('cobros', ref => 
+      ref.where("statuscobro", 'in', ['PENDIENTE', 'PARCIAL'])
+      .where("fpvencimiento",">",this.today)
+      .orderBy("fpvencimiento", "desc")
+    );
+    this.cobrosP = this.cobrosColletionE.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
         //data.uid = a.payload.doc.id;
@@ -64,8 +94,8 @@ export class CobrosService {
     }));
 
 
-    //Busca todos los cobros con estatus - CERRDO
-    this.cobrosColletionC = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['CERRADO']).orderBy("creado", "desc").limit(50));
+    //Busca todos los cobros con estatus - CERRADO
+    this.cobrosColletionC = this.db.collection('cobros', ref => ref.where("statuscobro", 'in', ['CERRADA']).orderBy("creado", "desc").limit(50));
     this.cobrosC = this.cobrosColletionC.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
@@ -76,7 +106,7 @@ export class CobrosService {
 
     //Busca todos los cobros con estatus - VENCIDO
     let hoy = new Date();
-    this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("fechadepago", "<", hoy).where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("fechadepago", "desc").orderBy("creado", "desc").limit(50));
+    this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("fpvencimiento", "<", hoy).where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("fpvencimiento", "desc").orderBy("creado", "desc").limit(50));
     this.cobrosV = this.cobrosColletionV.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Cobro;
@@ -85,22 +115,20 @@ export class CobrosService {
       })
     }));
 
-    // let hoy = new Date();
-    // this.cobrosColletionV = this.db.collection('cobros', ref => ref.where("status", "==", "ENTREGADO").where("condiciondepago", "in", ["Crédito 7 días","Crédito 15 días","Crédito 10 días","Contado"]).orderBy("creado", "desc").limit(50));
-    // this.cobrosV = this.cobrosColletionV.snapshotChanges().pipe(map(changes => {
-    //   return changes.map(a => {
-    //     const data = a.payload.doc.data() as Cobro;
-    //     //data.uid = a.payload.doc.id;
-    //     return data;
-    //   })
-    // }));
 
+    this.cobrosDetColletion = this.db.collection('cobros');
+    this.cobrosDet = this.cobrosDetColletion.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
+        //data.uid = a.payload.doc.id;
+        return data;
+      })
+    }));
 
-    this.cobrosDetColletion = this.db.collection('cobrosDet');
   } //Constructor
 
-  getCobrosE(){
-    return this.cobrosE;
+  getCobrosP(){
+    return this.cobrosP;
   }
   getCobrosC(){
     return this.cobrosC;
@@ -129,21 +157,12 @@ export class CobrosService {
   }//addCobros
 
   updatecobros(cobro: Cobro){
-    console.log('uid: ',cobro.uid);
+    console.log('uid: ',cobro.uid,cobro);
     this.cobroDoc = this.db.doc(`cobros/${cobro.uid}`);
     this.cobroDoc.update(cobro);
   }
 
   addCobrosDet(cod: CobroDet){
-    //console.table(cod);
-
-    // this.cobrosDetColletion.add(cod)
-    // .then(function(docRef) {
-    //   console.log("Document written ");
-    // })
-    // .catch(function(error) {
-    //     console.error("Error adding document: ", error);
-    // });
 
 
     const db = firebase.firestore();
@@ -161,11 +180,6 @@ export class CobrosService {
 
   }
 
-  // deleteCobrosDet(cobroDet: PedidoDet){
-  //   this.cobroDetDoc = this.db.doc(`pedidos/${cobroDet.uid}`);
-  //   //this.pedidoDoc.delete();
-  //   this.cobroDetDoc.update(cobroDet);
-  // }
 
   deleteCobrosDet(docid: string){
     this.db.collection("cobrosDet").doc(docid).delete().then(function() {
@@ -175,8 +189,8 @@ export class CobrosService {
   });
   }
 
-  getCobrosDet(uid){
-    //Busca todos los detalles de pedidos
+  /* getCobrosDet(uid){
+    //Busca todos los detalles de cobros (cobros registrados)
     this.itemsCollection = this.db.collection('cobrosDet', ref => ref.where("uid", "==", uid));
     this.cobrosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -186,6 +200,42 @@ export class CobrosService {
       })
     }));
     return this.cobrosDet;
+  }//getPedidosDet */
+
+  getCobrosDet(idpedido) {
+    //Busca todos los detalles de cobros (cobros registrados)
+    this.itemsCollection = this.db.collection('cobros', ref => ref.where("idpedido", "==", idpedido).orderBy("fechadepago","asc"));
+    this.cobrosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
+        return data;
+      })
+    }));
+    return this.cobrosDet;
   }//getPedidosDet
+
+  getCobrosRep01(strq){
+    console.log("cobrosS ",strq);
+    this.cobrosColletionrep = this.db.collection("cobros", strq);
+    this.cobrosrep = this.cobrosColletionrep.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Cobro;
+        return data;
+      })
+    }));
+    return this.cobrosrep;
+  }//getCobrosRep
+
+  getCobrosRep02(queryCobrosDet){
+    this.cobrosdetColletionrep = this.db.collection('cobrosDet', queryCobrosDet);
+    this.cobrosdetrep = this.cobrosdetColletionrep.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as CobroDet;
+        return data;
+      })
+    }));
+
+    return this.cobrosdetrep;
+  }//getAveriasRep02
 
 }

@@ -1,11 +1,12 @@
 export interface PedidoDet{
 	uid?				: string;
-	idpedido?	        : string; 
+	cantidadmaterial?   : number;
 	codigodematerial?   : string;
 	descripcionmaterial?: string;
-	cantidadmaterial?   : number;
-	unidaddemedida?     : string;
+	idpedido?	        : string; 
+	indice?             :number;
+	materialpreparado?	:boolean;
 	preciomaterial?	    : number;
 	totalpormaterial?   : number;
-	indice?             :number;
+	unidaddemedida?     : string;
 }

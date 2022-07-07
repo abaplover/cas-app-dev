@@ -1,12 +1,13 @@
 export interface AveriaDet{
 	uid?				 : string;
-	idaveria?	         : string; 
+	aprobado?		     : boolean;
+	cantidadmaterial?    : number;
 	codigodematerial?    : string;
 	descripcionmaterial? : string;
-	cantidadmaterial?    : number;
-	preciomaterial?	     : number;
-	totalpormaterial?    : number;
-	motivoaveria?		 : string;
+	idaveria?	         : string; 
 	indice?              : number;
-	aprobado?		     : boolean;
+	motivoaveria?		 : string;
+	preciomaterial?	     : number;
+	solucion?			 : string;
+	totalpormaterial?    : number;
 }

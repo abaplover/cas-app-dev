@@ -52,6 +52,9 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   totalNeto: number = 0;
   firstTime: boolean = false;
 
+
+  showSpinner = false;
+
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
@@ -69,7 +72,24 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     processing: true,
     dom: 'Bfrtip',
     buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
+      'copy',{extend: 'excelHtml5',
+      text: 'Excel',
+      customizeData: function(data) {
+        //Recorremos todas las filas de la tabla
+        for(var i = 0; i < data.body.length; i++) {
+          //Quitamos los puntos como separador de miles 
+          //y las comas de los decimaleslas cambiamos por puntos
+          data.body[i][9] = data.body[i][9].replace( ".", "-" );
+          data.body[i][9] = data.body[i][9].replace( ",", "." );
+          data.body[i][9] = data.body[i][9].replace( "-", "," );
+          data.body[i][10] = data.body[i][10].replace( ".", "-" );
+          data.body[i][10] = data.body[i][10].replace( ",", "." );
+          data.body[i][10] = data.body[i][10].replace( "-", "," );
+          data.body[i][11] = data.body[i][11].replace( ".", "-" );
+          data.body[i][11] = data.body[i][11].replace( ",", "." );
+          data.body[i][11] = data.body[i][11].replace( "-", "," );
+        }
+      }},'pdf', 'print'
     ]
   };
   //dtOptions: DataTables.Settings = {};
@@ -134,8 +154,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
   }//orgValueChange
   regresar() {
-
     this.opcrep01 = false;
+    this.codCli = null;
   }
 
   onBookChange(event) {
@@ -146,6 +166,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     }
   }
   onSubmitSearch(pf?: NgForm) {
+    this.showSpinner = true;
     let query: any;
     let hora = new Date().getHours();
     hora = 24 - hora;
@@ -175,18 +196,16 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
           q = q.where("condiciondepago", "in", this.conPag)
         }
       }
-      console.log('Query:',q)
       return q;
     }
 
     this.pedidoS.getPedidosRep01(query).subscribe(ped => {
       
       this.Ped_ = ped;
-
       
-      if(this.staTus == ""){ } else {
-           this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
-          }
+      if(this.staTus == "" || typeof this.staTus == "undefined"){ } else {
+          this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
+      }
 
       this.totalRegistro = this.Ped_.length;
 
@@ -199,9 +218,14 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       if(!this.firstTime){
         this.rerender();
       }
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 500);
+      
     })
 
     this.opcrep01 = true;
+    
 
   }//onSubmitSearch
 

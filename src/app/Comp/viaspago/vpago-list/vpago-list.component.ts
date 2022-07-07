@@ -21,7 +21,7 @@ export class VpagoListComponent implements OnInit {
   dataSource: any;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['idvpago', 'descripcion', 'Opc'];
+  displayedColumns: string[] = ['idvpago','nombre', 'descripcion', 'Opc'];
   
   constructor(
     public vpagoService: VpagoService,
@@ -70,7 +70,7 @@ export class VpagoListComponent implements OnInit {
   onDelete($key: string) {
     if(confirm('¿Está seguro de que quiere eliminar este elemento?')) {
       this.vpagoService.deleteVpago($key);
-      this.toastr.warning('Operación Terminada', 'Vpago Eliminada');
+      this.toastr.warning('Operación Terminada', 'Vía de pago Eliminada');
     }
   }
 

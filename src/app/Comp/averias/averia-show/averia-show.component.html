@@ -193,22 +193,24 @@
 													<th scope="col"><mat-label style="font-size:smaller;">CÓDIGO</mat-label></th>
 												<th scope="col"><mat-label style="font-size:smaller;">MATERIAL</mat-label></th>
 												<th scope="col"><mat-label style="font-size:smaller;">MOTIVO</mat-label></th>
-												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANT</mat-label></th>
+												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">CANTIDAD</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">PRECIO</mat-label></th>
 												<th scope="col" style="text-align:right;"><mat-label style="font-size:smaller;">TOTAL</mat-label></th>
 												<th *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA'" scope="col" style="text-align:left;"><mat-label style="font-size:smaller;">RESOLUCIÓN</mat-label></th>
+												<th *ngIf = "existesolucion" style="text-align:left;"><mat-label style="font-size:smaller;">SOLUCIÓN</mat-label></th>
 												</tr>
 											</thead>
 											<tbody>
-												<tr *ngFor="let ave of this.averiaslistDet; index as i">
+												<tr *ngFor="let ave of averiaslistDet; index as i">
 													<td class="col-0">{{ave.codigodematerial}}</td>
 													<td class="col-1">{{ave.descripcionmaterial}}</td>
 													<td class="col-2">{{ave.motivoaveria}}</td>
 													<td class="col-3" style="text-align:right;">{{ave.cantidadmaterial| currency:" ":'symbol':'2.0'}}</td>
 													<td class="col-4" style="text-align:right;">{{ave.preciomaterial | currency:" "}}</td>
 													<td class="col-5" style="text-align:right;">{{ave.totalpormaterial | currency:" "}}</td>
-													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && ave.aprobado" class="col-5" style="text-align:left;">ACEPTDA</td>
+													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && ave.aprobado" class="col-5" style="text-align:left;">ACEPTADA</td>
 													<td *ngIf="averiaService.pestana!='RA' && averiaService.pestana!='MA' && !ave.aprobado" class="col-5" style="text-align:left;">RECHAZADA</td>
+													<td *ngIf="ave.solucion" class="col-5" style="text-align:center;">{{ave.solucion}}</td>
 												</tr>
 											</tbody>
 										</table>

@@ -80,8 +80,17 @@ th.mat-sort-header-sorted {
 th.mat-header-cell {
 	size: 20px;
 }
+
+.mat-column-nombre {
+	width: 300px !important;
+	text-align: left;
+}
 .mat-column-descripcion {
 	width: 300px !important;
+	text-align: left;
+}
+.mat-column-moneda {
+	width: 100px !important;
 	text-align: left;
 }
 .mat-column-Opc {
@@ -158,7 +167,6 @@ table {
 	box-shadow: none;
 	border-color: rgba(175, 173, 173, 0.884);
 }
-
 
 .mat-form-field {
 	font-size: 14px;

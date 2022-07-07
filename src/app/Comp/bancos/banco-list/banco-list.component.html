@@ -25,11 +25,22 @@
 				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;">ID </th>
 				<td mat-cell *matCellDef="let element"> {{element.idbanco}} </td>
 			</ng-container>
-		
+
 			<!-- Name Column -->
+			<ng-container matColumnDef="nombre">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-weight: bold;"> NOMBRE </th>
+				<td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+			</ng-container>
+		
 			<ng-container matColumnDef="descripcion">
 				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;"> DESCRIPCIÓN </th>
 				<td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+			</ng-container>
+
+			<!-- Name Column -->
+			<ng-container matColumnDef="moneda">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: left; font-weight: bold;"> MONEDA </th>
+				<td mat-cell *matCellDef="let element"> {{element.moneda}} </td>
 			</ng-container>
 		
 			<!-- Symbol Column -->
@@ -53,9 +64,10 @@
 				<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
 			</tr>
 		</table>
+		
 		<mat-paginator 
 			#paginator 
-			[pageSizeOptions]="[15, 30, 50]" 
+			[pageSizeOptions]="[15, 30,30, 50]" 
 			showFirstLastButtons
 		></mat-paginator>
 	</div>	

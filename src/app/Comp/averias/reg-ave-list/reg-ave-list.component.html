@@ -60,7 +60,7 @@
 		<!-- Name Column -->
 		<ng-container matColumnDef="Fecha">
 			<th mat-header-cell *matHeaderCellDef style="text-align: center;"> Fecha</th>
-			<td mat-cell *matCellDef="let element"> {{element.fechaaveria.toDate() | date: 'dd/MM/yyyy&nbsp; hh:mm a'}} </td>
+			<td mat-cell *matCellDef="let element"> {{element.fechaaveria.toDate() | date: 'dd/MM/yyyy'}} </td>
 		</ng-container>
 	
 		<!-- Name Column -->
@@ -118,4 +118,9 @@
 			<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
 		</tr>
 	</table>
+	<mat-paginator 
+	  #paginator 
+	  [pageSizeOptions]="[40,60,10,20]" 
+	  showFirstLastButtons
+	></mat-paginator>
 </div>

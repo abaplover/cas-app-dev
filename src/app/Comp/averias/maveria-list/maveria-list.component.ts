@@ -44,6 +44,17 @@ export class MaveriaListComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
 
+        this.dataSource.sortingDataAccessor = (item, property) => {
+          if (property === 'Cliente') {
+            return item.nomcliente;
+          } else if (property === 'Vendedor') {
+            return item.nomvendedor;
+          }
+          else {
+            return item[property];
+          }
+        };
+
       });
   }
 

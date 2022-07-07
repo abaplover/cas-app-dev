@@ -152,7 +152,8 @@ export class PedidoComponent implements OnInit {
       this.mrechazoList = mrz;
     })
 
-    this.pedidoService.enviar = false;
+    //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     //coloca el campo de busqueda de vendedror disabled
     this.pedidoService.disabledFieldVen = true;
 
@@ -290,7 +291,7 @@ onEdit(event, ped){
 
 }//onEdit
 
-  onSubmit(pf?: NgForm){
+  async onSubmit(pf?: NgForm){
     //Nuevo Pedido
     if(this.pedidoService.pedido_.uid == null){
         //set parameter date
@@ -306,7 +307,7 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -351,9 +352,10 @@ onEdit(event, ped){
         }
 
         this.toastr.success('Operación Terminada', 'Pedido Incluido');
+        //Desactiva el boton enviar 
         this.pedidoService.enviar = false;
 
-    }else{ //Actualiza Pedido
+    } else { //Actualiza Pedido
         //set parameter date
         //this.pedidoService.pedido_.fechapedido = new Date(this.pedidoService.pedido_.fechapedido);
         this.pedidoService.pedido_.modificado = new Date;
@@ -363,7 +365,7 @@ onEdit(event, ped){
         this.pedidoService.pedido_.totalmontobruto = this.pedidoService.tmontb;
         this.pedidoService.pedido_.totalmontodescuento = this.pedidoService.tmontd;
         this.pedidoService.pedido_.totalmontoimpuesto = this.pedidoService.tmonti;
-        this.pedidoService.pedido_.totalmontoneto = this.pedidoService.tmontn;
+        this.pedidoService.pedido_.totalmontoneto = await this.roundTo(this.pedidoService.tmontn,2);
         this.pedidoService.pedido_.totalPri = this.pedidoService.totalPri;
         this.pedidoService.pedido_.totalCnt = this.pedidoService.totalCnt;
         this.pedidoService.pedido_.totalPed = this.pedidoService.totalPed;
@@ -419,7 +421,8 @@ onEdit(event, ped){
 
         
         this.toastr.success('Operación Terminada','Pedido Actualizado');
-        this.pedidoService.enviar = false;
+        //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     }
 
     // if(this.pedidoService.txtBtnAccion == "Agregar Pedido"){}else{}
@@ -455,7 +458,8 @@ onEdit(event, ped){
     this.pedidoService.tmonti = 0;
     this.pedidoService.tmontn = 0;
     this.pedidoService.txtBtnAccion = "Enviar Pedido";
-    this.pedidoService.enviar = false;
+    //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
     this.pedidoService.mostrarForm = false;
   }
 
@@ -854,10 +858,17 @@ onEdit(event, ped){
     this.pedidoService.tmontn = (this.pedidoService.tmontb - montoDescAux);
 
     if (this.pedidoService.tmontn <= 0 || this.pedidoService.totalCnt <= 0 || this.pedidoService.tmontb <= 0){
-      this.pedidoService.enviar = false;
+      //Desactiva el boton enviar 
+ this.pedidoService.enviar = false;
       this.pedidoService.readonlyField = false;
     }
 
   }//removeDetRow
+
+
+  async roundTo(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+  };
 
 }//export class PedidoComponent implements OnInit

@@ -2,7 +2,20 @@
 
 <div class="container88">
 	<h3> ESTRUCTURA DE DATOS MAESTROS </h3>
-	<mat-tab-group animationDuration="0ms"> 
+	<mat-tab-group animationDuration="0ms">
+		<!-- Cambia el estatus de los pedidos -->
+		<!-- <mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r"></mat-icon>
+				Cambiar Estatus	
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-cambiar-id></app-cambiar-id>
+				</div>	
+			</div>
+		</mat-tab> -->
+
 		<mat-tab>
 			<ng-template mat-tab-label>
 				<mat-icon class="tab-icon-r">star_border</mat-icon>
@@ -121,6 +134,23 @@
 				</div>
 			</div>
 		</mat-tab>
+		 
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">attach_money</mat-icon>
+				Moneda
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-moneda></app-moneda>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-moneda-list></app-moneda-list>
+				</div>
+			</div>
+		</mat-tab>
 		
 		<mat-tab>
 			<ng-template mat-tab-label>
@@ -152,6 +182,23 @@
 			<div>	
 				<div class="col-md-12 text-center">
 					<app-mrechazo-list></app-mrechazo-list>
+				</div>
+			</div>
+		</mat-tab>
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<mat-icon class="tab-icon-r">receipt</mat-icon>
+				Tipo de Documentos Cobros	
+			</ng-template>
+			<div>
+				<div class="col-md-12"> 
+					<app-tipod-cobros></app-tipod-cobros>
+				</div>	
+			</div>  
+			<div>	
+				<div class="col-md-12 text-center">
+					<app-tipodcobros-list></app-tipodcobros-list>
 				</div>
 			</div>
 		</mat-tab>
