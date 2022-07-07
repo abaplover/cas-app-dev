@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MaveriaListComponent } from './maveria-list.component';
 
@@ -6,7 +6,7 @@ describe('MaveriaListComponent', () => {
   let component: MaveriaListComponent;
   let fixture: ComponentFixture<MaveriaListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MaveriaListComponent ]
     })

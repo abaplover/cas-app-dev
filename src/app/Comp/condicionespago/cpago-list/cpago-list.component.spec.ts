@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CpagoListComponent } from './cpago-list.component';
 
@@ -6,7 +6,7 @@ describe('CpagoListComponent', () => {
   let component: CpagoListComponent;
   let fixture: ComponentFixture<CpagoListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CpagoListComponent ]
     })
