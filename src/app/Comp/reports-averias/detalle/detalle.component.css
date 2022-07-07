@@ -1,0 +1,19 @@
+.campo-width {
+	width: 100%;
+	height: 50px;
+}
+.bars-spinner {
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	display: flex;
+	position: absolute;
+	background: #fafafa;	
+}
+mat-spinner {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: 100px;
+	left: 45vw;
+}

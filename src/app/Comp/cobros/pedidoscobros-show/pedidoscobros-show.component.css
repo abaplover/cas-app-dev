@@ -1,0 +1,140 @@
+td.col-0, th.col-0 {
+	width: 105px; 
+}
+
+td.col-1, th.col-1 {
+	width: 357px; 
+}
+  
+td.col-2, th.col-2 {
+	width: 80px; 
+}
+  
+td.col-3, th.col-3 {
+	width: 80px; 
+}
+  
+td.col-4, th.col-4 {
+	width: 82px; 
+}
+  
+td.col-5, th.col-5 {
+	width: 160px; 
+}
+td.col-6, th.col-6 {
+	width: 25px; 
+}
+.mat-dialog-content {
+	max-height: 100vh;
+	height: 100%;
+	padding: 0 2vw;
+	margin: 0 -2vw;
+}
+/*Centrar H y V, texto en div*/
+.abs-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: left;
+	padding-left: 5px;
+	font-size: 12px;
+}
+.abs-right {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	width: 115px;
+	background: transparents;
+	color: #333;
+	font-size: 12px;
+}
+.abs-center-fecha {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: left;
+	padding-left: 5px;
+	font-size: 11px;
+}
+
+.panel-login {
+	border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+.panel-login>.panel-heading {
+	color: #00415d;
+	background-color: #fff;
+	border-color: #fff;
+	text-align:center;
+}
+.panel-login>.panel-heading a{
+	text-decoration: none;
+	color: #666;
+	font-weight: bold;
+	font-size: 15px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login>.panel-heading a.active{
+	color: #029f5b;
+	font-size: 18px;
+}
+.panel-login>.panel-heading hr{
+	margin-top: 10px;
+	margin-bottom: 0px;
+	clear: both;
+	border: 0;
+	height: 1px;
+	background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+	background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+}
+.panel-login input:hover,
+.panel-login input:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: rgba(175, 173, 173, 0.884);
+}
+.panel-login select:hover,
+.panel-login select:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: rgba(175, 173, 173, 0.884);
+}
+.panel-login textarea:hover,
+.panel-login textarea:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: rgba(175, 173, 173, 0.884);
+}
+
+.panel-login input:hover,
+.panel-login input:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: rgba(175, 173, 173, 0.884);
+}
+
+
+.ng-autocomplete ::ng-deep .autocomplete-container { 
+	/* border-color: #ccc;
+	border-style:ridge;
+	border-width: 1px;
+	height: 30px;
+	box-shadow: none;
+	cursor: pointer;  */
+	width: 307px;
+	min-width: 300px;
+}

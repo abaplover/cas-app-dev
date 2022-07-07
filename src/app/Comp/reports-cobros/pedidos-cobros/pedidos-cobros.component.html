@@ -1,0 +1,186 @@
+<div class="container9" style=" padding:10px;">
+
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+
+	<form id="pedidosCobrosRep" #pedidosCobrosRep="ngForm" *ngIf="!this.opcpedidosCobrosRep">
+		<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				<div id="ndesp" class="card" style="padding:10px;">
+
+						<div class="row">
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Desde</mat-label>
+										<input #ref matInput [matDatepicker]="picker1" [max]="maxDated"
+											name="fdesde"
+											id="fdesde"
+											required
+											(dateChange)="orgValueChange($event)"
+											[(ngModel)]="this.desD"
+										>
+										<mat-datepicker-toggle matSuffix [for]="picker1">
+											<mat-icon matDatepickerToggleIcon>
+												event_note
+											</mat-icon>
+										</mat-datepicker-toggle>
+										<mat-datepicker #picker1></mat-datepicker>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Hasta</mat-label>
+										<input matInput [matDatepicker]="picker" [max]="maxDateh" [min]="minDateh"
+											name="fhasta"
+											id="fhasta"
+											[(ngModel)]="this.hasT"
+											required
+										>
+										<mat-datepicker-toggle matSuffix [for]="picker">
+											<mat-icon matDatepickerToggleIcon>
+												event_note
+											</mat-icon>
+										</mat-datepicker-toggle>
+										<mat-datepicker #picker></mat-datepicker>
+									</mat-form-field>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<!-- este componente permite la busqueda del cliente al escribir -->
+								<div>
+									<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Vendedor</mat-label>
+										<mat-select value=selected
+											name="Vendedor"
+											[(ngModel)]="this.codVen"
+
+										>
+											<mat-option value={{ven.descripcion}} *ngFor = "let ven of vendedorList">
+												{{ven.descripcion}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+								<div class="form-group" style="text-align:right;">
+									<button
+										smat-stroked-button
+                    					class="btn btn-primary"
+										style=" height: 35px !important; margin-right: 2px;"
+										type="reset"
+									>
+										Limpiar
+									</button>
+
+									<button
+										smat-stroked-button
+										id="btnenviarne"
+                    					class="btn btn-primary"
+										name="btnenviarne"
+										style=" height: 35px !important;"
+										type="submit"
+										[disabled]="pedidosCobrosRep.invalid"
+										(click)="onSubmitSearch(pedidosCobrosRep)"
+									>
+										<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i> Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</form><!--Form notificar factura-->
+
+	<div *ngIf="!this.pedidoPend_.idpedido">
+		<button *ngIf="this.opcpedidosCobrosRep"
+		id="back"
+		name="back"
+		class="btn btn-primary btn-space"
+		type="button"
+		(click)="regresar()"
+		>
+		<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Regresar"></i> Nueva Busqueda
+		</button>
+		<br/><br/>
+		<div *ngIf="this.opcpedidosCobrosRep">
+			<app-totales-ped-cobros
+			*ngIf="Ped_"
+			[pedido_]="Ped_"
+			[montousd] = "montototalUSD"
+			[montopendiente] = "montototalPendiente">
+			</app-totales-ped-cobros>
+		</div>
+		<table id="dtableav" datatable [dtOptions]="dtOptionsAv" [dtTrigger]="dtTrigger" class="table table-striped table-bordered row-border hover">
+			<thead>
+			  <tr>
+				<th style="width: 140px;">N° de Pedido</th>
+				<th>Fecha Creac</th>
+				<th>Estatus</th>
+				<th>N° FAC</th>
+				<th>Cond. Pago</th>
+				<th>Fecha Venc</th>
+				<th>Cliente</th>
+				<th>Vendedor</th>
+				<th>Total</th>
+				<th>Abono</th>
+				<th>Cumplimiento Pago</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr *ngFor="let p of Ped_">
+				<td>
+					<a class="btn btn-link" (click)="verdetalles(p)"  data-toggle="tooltip" data-placement="top" title="Detalles del pedido">
+						{{p.idpedido}}
+					</a>
+				</td>
+				<td>{{p.fechapedido.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
+				<td>{{p.status}}</td>
+				<td>{{p.nrofactura}}</td>
+				<td>{{p.condiciondepago}}</td>
+				<td>{{p.fpago.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
+				<td>{{p.nomcliente}}</td>
+				<td>{{p.nomvendedor}}</td>
+				<td>{{p.totalmontoneto | currency:" "}}</td>
+				<td>{{p.montopendiente | currency:" "}}</td>
+				<td>
+					<!-- Si el ultimo pago fue puntual es verde -->
+					<!-- Si la fecha es vencida, o el ultimo registro no fue puntual es rojo -->
+					<!-- Si la fecha no esta vencida y no han registrado un pago es amarillo -->
+					<div [ngClass]="p.pagopuntual ? 'colorGreen' : (p.pagopuntual===false || p.fvencida ? 'colorRed' : (!p.fvencida && p.pagopuntual== null ? 'colorYellow' : 'colorW'))"></div>
+				</td>
+
+			  </tr>
+			</tbody>
+		</table>
+	</div>
+
+
+
+</div><!-- Contenedor -->

@@ -1,0 +1,83 @@
+<div class="container9">
+	<div class="card bg-light mb-3 w-75">
+			<div class="card-body text-info panel panel-login" *ngIf="tipodcobroService.mostrarForm">
+					<form #tipodcobroForm="ngForm" (ngSubmit)="onSubmit(tipodcobroForm)">
+							<!-- TO UPDATE -->
+							<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="tipodcobroService.selectedTipod.$key">
+						
+							<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
+								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+									<div class="form-group">
+										<!-- <mat-label>Id</mat-label> -->
+										<input
+											placeholder="Id" 
+											value=""
+											type="number"
+											name="id"
+											#id="ngModel"
+											[(ngModel)]="tipodcobroService.selectedTipod.id"
+											maxlength="2"
+											[readonly]="tipodcobroService.idFieldReadOnly"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											class="form-control"
+											required
+										/>
+										<div *ngIf="id.invalid && (id.dirty || id.touched)" class="text-danger">
+											<div *ngIf="id.errors.required">
+												<small>Se requiere Id</small>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+									<div class="form-group">
+										<input
+											placeholder="Nombre" 
+											value=""
+											type="text"
+											name="nombre"
+											#nombre="ngModel"
+											[(ngModel)]="tipodcobroService.selectedTipod.nombre"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="text-danger">
+											<div *ngIf="nombre.errors.required">
+												<small>Se requiere un nombre</small>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+									<div class="form-group">
+										<input
+											placeholder="Descripción" 
+											value=""
+											type="text"
+											name="descripcion"
+											#descripcion="ngModel"
+											[(ngModel)]="tipodcobroService.selectedTipod.descripcion"
+											required
+											class="form-control"
+										/>
+										<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+											<div *ngIf="descripcion.errors.required">
+												<small>Se requiere una descripción</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group" style="text-align:right;padding-top: 10px;">
+								<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="tipodcobroForm.invalid">
+									Guardar 
+								</button>
+								<button class="btn-space" mat-stroked-button style="background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(tipodcobroForm)">
+									Reset
+								</button>
+							</div>
+						</form>
+			</div>
+	</div>
+</div>

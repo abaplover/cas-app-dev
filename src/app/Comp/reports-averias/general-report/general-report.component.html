@@ -1,0 +1,206 @@
+<div class="container9" style=" padding:10px;">
+
+
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+
+	<form #generalReport="ngForm" *ngIf="!this.opcgenReport">
+		<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				<div id="ndesp" class="card" style="padding:10px;">
+
+					<div class="row">
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Desde</mat-label>
+									<input #ref matInput [matDatepicker]="picker1" [max]="maxDated" name="fdesde"
+										id="fdesde" required (dateChange)="orgValueChange($event)"
+										[(ngModel)]="this.desD">
+									<mat-datepicker-toggle matSuffix [for]="picker1">
+										<mat-icon matDatepickerToggleIcon>
+											event_note
+										</mat-icon>
+									</mat-datepicker-toggle>
+									<mat-datepicker #picker1></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Hasta</mat-label>
+									<input matInput [matDatepicker]="picker" [max]="maxDateh" [min]="minDateh"
+										name="fhasta" id="fhasta" [(ngModel)]="this.hasT" required>
+									<mat-datepicker-toggle matSuffix [for]="picker">
+										<mat-icon matDatepickerToggleIcon>
+											event_note
+										</mat-icon>
+									</mat-datepicker-toggle>
+									<mat-datepicker #picker></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Status</mat-label>
+									<mat-select value=selected multiple name="status" [(ngModel)]="this.staTus">
+										<mat-option value="ABIERTA">ABIERTA</mat-option>
+										<mat-option value="CERRADA">CERRADA</mat-option>
+										<mat-option value="PROCESADA">PROCESADA</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Vendedor</mat-label>
+									<mat-select value=selected multiple name="vendedor" [(ngModel)]="this.vendedor"
+										(selectionChange)="onBookChange($event)">
+										<mat-option value={{vendedor.descripcion}}
+											*ngFor="let vendedor of vendedorList">
+											{{vendedor.descripcion}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+								<div class="form-group">
+										<mat-form-field appearance="legacy" class="campo-width">
+											<mat-label>Motivo</mat-label>
+											<mat-select value=selected multiple
+												name="motivoAv"
+												[(ngModel)]="this.motivoAv"
+												(selectionChange)="onBookChange($event)"
+											>
+												<mat-option value={{motiv.descripcion}} *ngFor = "let motiv of motivoList">
+													{{motiv.descripcion}}
+												</mat-option>
+											</mat-select>
+										</mat-form-field>
+								</div>
+							</div> -->
+
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div>
+								<app-client-auto-complete (SelectedValue)="SelectedValue($event)">
+								</app-client-auto-complete>
+							</div>
+							<!-- <div class="form-group">
+									<mat-form-field appearance="legacy" class="campo-width">
+										<mat-label>Material</mat-label>
+										<mat-select value=selected
+											name="Material"
+											[(ngModel)]="this.codVen"
+
+										>
+											<mat-option value={{mater.descripcion}} *ngFor = "let mater of materialList">
+												{{mater.descripcion}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div> -->
+						</div>
+					</div>
+					<div class="row">
+						<form>
+
+
+							<label id="date-group-label"> Seleccione su fecha de busqueda.</label>
+							<mat-radio-group aria-labelledby="date-group-label" class="dates-radio-group"
+								[(ngModel)]="fechaSeleccionada">
+								<mat-radio-button class="date-radio-group" *ngFor="let fecha of tiposFecha"
+									[value]="fecha">
+									{{fecha}}
+								</mat-radio-button>
+							</mat-radio-group>
+						</form>
+						<div>
+							Fecha seleccionada es: {{fechaSeleccionada}}
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+							<div class="form-group" style="text-align:right;">
+								<button smat-stroked-button class="btn btn-primary"
+									style=" height: 35px !important; margin-right: 2px;" type="reset">
+									Limpiar
+								</button>
+
+								<button smat-stroked-button id="btnenviarne" class="btn btn-primary" name="btnenviarne"
+									style=" height: 35px !important;" type="submit" [disabled]="generalReport.invalid"
+									(click)="onSubmitSearch(generalReport)">
+									<i class="fas fa-search" data-toggle="tooltip" data-placement="top"
+										title="Buscar"></i> Buscar
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div id="generalReport">
+		<button *ngIf="this.opcgenReport" id="back" name="back" class="btn btn-primary btn-space" type="button"
+			(click)="regresar()">
+			<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Regresar"></i> Nueva Busqueda
+		</button>
+		<br /><br />
+		<div *ngIf="this.opcgenReport">
+			<app-totales-de-averias *ngIf="arrayAveria" [aver_]="arrayAveria" [porcentajeReclamo]="porcentajeReclamo"
+				[totalAveria]="totalAveria">
+			</app-totales-de-averias>
+		</div>
+		<table id="dtableav" datatable [dtOptions]="dtOptionsAv" [dtTrigger]="dtTrigger"
+			class="table table-striped table-bordered row-border hover">
+			<thead>
+				<tr>
+					<th style="width: 140px;">N° de Avería</th>
+					<th>Fecha de Creación</th>
+					<!-- <th>CodCli</th> -->
+					<th style="width: 140px;">Cliente</th>
+					<th>CodVen</th>
+					<th style="width: 140px;">Vendedor</th>
+					<th>Status</th>
+					<!-- <th>Motivo Avería</th> -->
+					<th>Monto Original</th>
+					<th>% Reclamo</th>
+					<th>Total</th>
+					<th>Días</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let av of arrayAveria ,index as i">
+					<td>
+						<a class="btn btn-link" (click)="verdetalles(av)" data-toggle="tooltip" data-placement="top"
+							title="Detalles del avería">
+							{{av.idaveria}}
+						</a>
+					</td>
+					<td>{{av.fechaaveria.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
+					<!-- <td>{{av.idcliente}}</td> -->
+					<td>{{av.nomcliente}}</td>
+					<td>{{av.idvendedor}}</td>
+					<td>{{av.nomvendedor}}</td>
+					<td>{{av.status}}</td>
+					<!-- <td>{{av.motivo}}</td> -->
+					<td>{{av.montoOriginal | currency:" "}}</td>
+					<td>{{av.porcentajeReclamo | currency:" "}}</td>
+					<td>{{av.totalaveria | currency:" "}}</td>
+					<td>{{av.dias}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div><!-- Contenedor -->
