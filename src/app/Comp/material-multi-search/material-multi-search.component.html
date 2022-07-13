@@ -1,0 +1,22 @@
+<div class="form-group" *ngIf="materialesList">
+	<div class="ng-autocomplete" style="width: 100%; height: 50px;">
+	  <ng-autocomplete
+		[data]="materialesList"
+		[searchKeyword]="keywordCli"
+		placeHolder="Material"
+		[itemTemplate]="itemTemplate"
+		[notFoundTemplate]="notFoundTemplate"
+		name="descripcion"
+		(inputChanged)='onChangeSearch($event)'
+		(selected)='selectEvent($event)'
+	  >
+	  </ng-autocomplete>
+	  <ng-template #itemTemplate let-item>
+		<a [innerHTML]="item.descripcion"></a>
+	  </ng-template>
+	  <ng-template #notFoundTemplate let-notFound>
+		<div [innerHTML]="notFound"></div>
+	  </ng-template>
+	</div>
+  </div>
+  

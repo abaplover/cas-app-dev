@@ -55,19 +55,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-							<div class="form-group">
-								<mat-form-field appearance="legacy" class="campo-width">
-									<mat-label>Material</mat-label>
-									<mat-select value=selected name="Material" [(ngModel)]="this.materialAv">
-										<mat-option value={{mater.descripcion}} *ngFor="let mater of materialList">
-											{{mater.descripcion}}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
-							</div>
-						</div>
-
+						
 						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 							<div class="form-group">
 								<mat-form-field appearance="legacy" class="campo-width">
@@ -81,9 +69,6 @@
 								</mat-form-field>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
 						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 							<div class="form-group">
 								<mat-form-field appearance="legacy" class="campo-width">
@@ -113,6 +98,10 @@
 					</div>
 
 					<div class="row">
+						
+					</div>
+
+					<div class="row">
 						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 							<div class="form-group">
 								<mat-form-field appearance="legacy" class="campo-width">
@@ -131,6 +120,14 @@
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 								<app-client-auto-complete (SelectedValue)="SelectedValue($event)"
 									style="width: 200px !important;display: inline-block;"></app-client-auto-complete>
+							</div>
+						</div>
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<app-material-multi-search *ngIf="materialList" 
+								[MaterialesList]="materialList" 
+								(SelectedValue)="selecteMatValue($event)"
+								style="width: 200px !important;display: inline-block;"></app-material-multi-search>								
 							</div>
 						</div>
 					</div>
@@ -165,6 +162,10 @@
 								</button>
 							</div>
 						</div>
+					</div>
+					<div>
+						
+						<!-- <app-material-multi-search></app-material-multi-search> -->
 					</div>
 				</div>
 			</div>

@@ -217,6 +217,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
       this.averiasS.getDetallesResolucion(this.resolucionAv[0]);
     }
 
+    console.log(this.materialAv);
     if (this.materialAv.length > 0) {
       this.averiasS.getDetallesMaterial(this.materialAv);
     }
@@ -270,14 +271,14 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
           } else {
             booleanResolucion = false;
           }
-          
+
           qdet = qdet.where("aprobado", "==", booleanResolucion)
 
-          if(this.resolucionAv.length > 1){
+          if (this.resolucionAv.length > 1) {
             booleanResolucion = [true, false];
             qdet = qdet.where("aprobado", "in", booleanResolucion)
           }
-          
+
         }
       }
 
@@ -518,7 +519,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
               porcentajereclamo: arrayAverias[i].porcentajeReclamo,
               statusaveria: arrayAverias[i].status,
               resolucion: arrayAverias[i].status != 'ABIERTA' ? arrayMateriales[i].aprobado
-              : 'Pendiente',
+                : 'Pendiente',
             }
           );
           //Sale del for porque ya encontro la coincidencia */
@@ -578,6 +579,11 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
   SelectedValue(Value) {
     this.codCli = Value;
   }
+  selecteMatValue(Value) {
+    console.log(Value);
+    this.materialAv = Value;
+  }
+
 
 }
 

@@ -65,6 +65,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { DataTablesModule } from 'angular-datatables';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 //Component
@@ -200,6 +202,7 @@ import { IdsListComponent } from './Comp/cambiarids/ids-list/ids-list.component'
 import { PedidosCobrosComponent } from './Comp/reports-cobros/pedidos-cobros/pedidos-cobros.component';
 import { PedidoscobrosShowComponent } from './Comp/cobros/pedidoscobros-show/pedidoscobros-show.component';
 import { TotalesPedCobrosComponent } from './Comp/totales-ped-cobros/totales-ped-cobros.component';
+import { MaterialMultiSearchComponent } from './Comp/material-multi-search/material-multi-search.component';
 
 
 /* const firebase = require('firebase');
@@ -305,6 +308,7 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     PedidosCobrosComponent,
     PedidoscobrosShowComponent,
     TotalesPedCobrosComponent,
+    MaterialMultiSearchComponent,
 
   ],
   imports: [
@@ -345,7 +349,9 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     NgxPrintModule,
     MatProgressSpinnerModule,
     NgxCurrencyModule,
-    MatRadioModule
+    MatRadioModule,
+    MatChipsModule,
+    MatAutocompleteModule
   ],
   providers: [
     PedidoService,
