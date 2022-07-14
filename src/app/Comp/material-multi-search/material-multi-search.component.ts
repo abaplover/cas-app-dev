@@ -14,8 +14,8 @@ import { Product } from 'src/app/models/product';
 })
 export class MaterialMultiSearchComponent implements OnInit  {
 
-  public keywordCli = "descripcion";
-  public materialesList : Product[];
+  public keywordCli = "descId";
+  public materialesList : any[];
 
   constructor() {
   }
@@ -26,7 +26,13 @@ export class MaterialMultiSearchComponent implements OnInit  {
 
   ngOnInit(): void {
       console.log(this.MaterialesList);
-      this.materialesList = this.MaterialesList;
+      this.materialesList = this.MaterialesList.map(material => {
+          return {
+              ...material,
+              descId: `${material.idmaterial } - ${material.descripcion}`
+          };
+      })
+      // this.materialesList = this.MaterialesList;
   }
 
   onChangeSearch(val: string) {

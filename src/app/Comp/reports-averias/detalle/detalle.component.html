@@ -189,14 +189,14 @@
 				<tr>
 					<th style="width: 70px;">N° de Avería</th>
 					<th style="width: 70px;">Fecha de Creación</th>
-					<th style="width: 70px;">Material</th>
-					<th style="width: 180px;">Descripción</th>
+					<th style="width: 50px;">Estatus</th>
 					<th style="width: 140px;">Cliente</th>
 					<th style="width: 60px;">Vendedor</th>
+					<th style="width: 70px;">Material</th>
+					<th style="width: 180px;">Descripción</th>
 					<th style="width: 100px;">Motivo Avería</th>
-					<th style="width: 50px;">Solución</th>
-					<th style="width: 50px;">Estatus</th>
 					<th style="width: 20px;">Resolución</th>
+					<th style="width: 50px;">Solución</th>			
 					<th style="width: 20px;">Cantidad</th>
 					<th style="width: 20px;">Total</th>
 				</tr>
@@ -210,16 +210,17 @@
 						</a>
 					</td>
 					<td>{{av.fechaaveria.toDate() | date: 'dd/MM/yyyy&nbsp;'}}</td>
-					<td>{{av.codigodematerial}}</td>
-					<td>{{av.descripcionmaterial}}</td>
+					<td>{{av.statusaveria}}</td>
 					<td>{{av.cliente}}</td>
 					<td>{{av.vendedor}}</td>
+					<td>{{av.codigodematerial}}</td>
+					<td>{{av.descripcionmaterial}}</td>
 					<td>{{av.motivoaveria}}</td>
-					<td>{{av.solucion}}</td>
-					<td>{{av.statusaveria}}</td>
-					<td>{{av.resolucion == true ? 'APROBADA' :
-						av.resolucion == false ? 'RECHAZADA':
+					<td>{{av.resolucion === true ? 'APROBADA' :
+						av.resolucion === false ? 'RECHAZADA':
 						av.resolucion}}</td>
+					<td>{{av.solucion}}</td>				
+					
 					<td>{{av.cantidadmaterial}}</td>
 					<td>{{av.totalpormaterial | currency:" "}}</td>
 				</tr>

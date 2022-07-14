@@ -294,7 +294,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
 
       this.Ave_ = averia;
       this.arrayAveria = this.Ave_;
-
+      console.log(queryDet);
       this.averiasS.getAveriasRep02(queryDet).subscribe(averiaDet => {
 
         this.averiasDet_ = averiaDet;
@@ -318,7 +318,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
 
         this.totalRegistroAv = this.averiasDet_.length;
         this.totalAveria = this.roundTo(this.averiasDet_.reduce((total, row) => total + row.totalpormaterial, 0), 2);
-
+        // console.log(this.averiasDet_);
 
         if (!this.firstTime) {
           this.rerender();
@@ -332,6 +332,8 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
 
 
     })
+
+    
 
   }//onSubmitSearch
 
@@ -500,9 +502,11 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
   metodoFor(arrayAverias: any[], arrayMateriales: any[]) {
     this.averiasDet_ = [];
     this.copyArray = [];
+    
     for (let i = 0; i < arrayAverias.length; i++) {
       for (let j = 0; j < arrayMateriales.length; j++) {
         if (arrayMateriales[j].idaveria == arrayAverias[i].uid) {
+          // console.log(arrayAverias[i]);
           this.copyArray.push(
             {
               idaveria: arrayAverias[i].uid,
@@ -518,7 +522,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
               totalpormaterial: arrayMateriales[j].totalpormaterial,
               porcentajereclamo: arrayAverias[i].porcentajeReclamo,
               statusaveria: arrayAverias[i].status,
-              resolucion: arrayAverias[i].status != 'ABIERTA' ? arrayMateriales[i].aprobado
+              resolucion: arrayAverias[i].status != 'ABIERTA' ? arrayMateriales[j].aprobado
                 : 'Pendiente',
             }
           );
@@ -526,6 +530,8 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
         }
       }
     }
+
+
 
   }
 
@@ -550,7 +556,7 @@ export class DetalleComponent implements OnDestroy, OnInit, AfterViewInit {
         this.averiaVer_ = Object.assign({}, this.arrayAveria[i]);
       }
     }
-
+    console.log(this.averiaVer_);
     dialogConfig.data = {
       averiaShow: Object.assign({}, this.averiaVer_)
     };
