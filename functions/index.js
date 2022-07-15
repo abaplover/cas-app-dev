@@ -19,13 +19,16 @@ const db = admin.firestore();
 const transport = nodemailer.createTransport({
 
 	//==========================1============================
-	host: 'smtpout.secureserver.net',
+	host: 'smtp.office365.com',
     port: 465,
-    secure: true,
+    secure: false,
 	auth: {
 		user: "cas@ricamar.com.ve",
 		pass: "CasRicamar228094#*"
-	}
+	},
+        tls: {
+            ciphers: 'SSLv3'
+        }
 	//==========================1============================
 
 	//==========================2============================
