@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, BehaviorSubject, forkJoin, merge } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Pedido } from '../models/pedido';
 import { PedidoDet } from '../models/pedidoDet';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -15,13 +15,13 @@ import * as moment from 'moment';
 })
 export class PedidoService {
 
-  pdfUrl="";
+  pdfUrl = "";
   selectedIndex = 0;
-  matrisDetPedido: PedidoDet[]=[];
-  elementoBorrados: PedidoDet[]=[];
+  matrisDetPedido: PedidoDet[] = [];
+  elementoBorrados: PedidoDet[] = [];
   arrayIdPedidos = []; //Array de ids de los pedidos para cambiar el estatus y poner en funcionamiento el modulo de cobros
 
-  docAdd:number = -1;
+  docAdd: number = -1;
   readonlyField = false;
   disabledFieldVen = false;
   txtBtnAccion = "Crear Pedido";
@@ -31,10 +31,10 @@ export class PedidoService {
   valorAutPed: string;
   valorAutCli: string;
   valorAutVen: string;
-  presAscList: string ="";
+  presAscList: string = "";
   indicadorImpuesto: number;
   indicadorImpuestoDesc: string;
-  
+
 
   totalPri: number = 0;
   totalCnt: number = 0;
@@ -42,17 +42,17 @@ export class PedidoService {
 
   orden: number;
 
-  tmontb: number=0;
-  tmontd: number=0;
-  tmonti: number=0;
-  tmontn: number=0;
+  tmontb: number = 0;
+  tmontd: number = 0;
+  tmonti: number = 0;
+  tmontn: number = 0;
   start_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   today = moment().toDate();
-
+  obsArray: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   pedido_ = {} as Pedido;
   pedidoDet_ = {} as PedidoDet;
-  
+
 
   itemsCollection: AngularFirestoreCollection<PedidoDet>;
   items: Observable<PedidoDet[]>;
@@ -115,9 +115,11 @@ export class PedidoService {
   pedidoDetDoc: AngularFirestoreDocument<PedidoDet>;
   pedidosDetColletion: AngularFirestoreCollection<PedidoDet>;
 
-  pedidosPendientes: Observable<Pedido[]>;
+  pedidosPendientes: Observable<Pedido[]> = this.obsArray.asObservable();
+  pedidosContado: Observable<Pedido[]> = this.obsArray.asObservable();
   pedidosPendientesDocE: AngularFirestoreDocument<Pedido>;
   pedidosPendientesColletionE: AngularFirestoreCollection<Pedido>;
+  pedidosPendientesColletionC: AngularFirestoreCollection<Pedido>;
 
   pedidosVencido: Observable<Pedido[]>;
   pedidosDocVencido: AngularFirestoreDocument<Pedido>;
@@ -129,22 +131,21 @@ export class PedidoService {
 
   db2 = firebase.firestore();
 
-  constructor(public db: AngularFirestore) 
-  { 
+  constructor(public db: AngularFirestore) {
 
     //Busca todos los pedidos
-    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO','ENTREGADO','ELIMINADO','COBRADO']).orderBy("creado", "desc").limit(150));
+    this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO', 'ENTREGADO', 'ELIMINADO', 'COBRADO']).orderBy("creado", "desc").limit(150));
     this.pedidos = this.pedidosColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
+        const data = a.payload.doc.data() as Pedido;
         return data;
       })
     }));
-    
+
     //Busca todos los pedidos con estatus ACTIVO
     this.pedidosColletionA = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO']).orderBy("creado", "desc").limit(50));
     this.pedidosA = this.pedidosColletionA.snapshotChanges().pipe(map(changes => {
-     return changes.map(a => {
+      return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
         //data.uid = a.payload.doc.id;
         return data;
@@ -176,7 +177,7 @@ export class PedidoService {
     this.pedidosD = this.pedidosColletionD.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
-       //data.uid = a.payload.doc.id;
+        //data.uid = a.payload.doc.id;
         return data;
       })
     }));
@@ -192,8 +193,8 @@ export class PedidoService {
     }));
 
 
-     // //Busca todos los detalles de pedidos
-     this.pedidosDetColletion = this.db.collection('pedidosDet');
+    // //Busca todos los detalles de pedidos
+    this.pedidosDetColletion = this.db.collection('pedidosDet');
 
   }//constructor
 
@@ -213,22 +214,46 @@ export class PedidoService {
     return this.pedidosCobrados;
   }
 
+  getPedidosContado() {
+    this.pedidosPendientesColletionC = this.db.collection('pedidos', ref =>
+      ref.where("status", 'in', ['FACTURADO'])
+        // .where("ffactura", ">=", this.today) //Fecha de vencimiento
+        .where("condiciondepago", "==", "Contado")
+        // .orderBy("fpago", "desc")
+        // .orderBy("creado", "desc")
+    );
+
+    this.pedidosContado = this.pedidosPendientesColletionC
+      .snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(pedido => {
+          let data = pedido.payload.doc.data() as Pedido;
+          return data;
+        })
+      }));
+
+    return this.pedidosContado;
+  }
   getPedidosPendientes() {
     //Busca todos los pedidos pendientes por pagar
     this.pedidosPendientesColletionE = this.db.collection('pedidos', ref =>
       ref.where("status", 'in', ['ENTREGADO'])
-      .where("fpago",">=",this.today) //Fecha de vencimiento
-      .orderBy("fpago", "desc")
-      .orderBy("creado", "desc").limit(300)
+        .where("fpago", ">=", this.today) //Fecha de vencimiento
+        .orderBy("fpago", "desc")
+        .orderBy("creado", "desc")
     );
-    this.pedidosPendientes = this.pedidosPendientesColletionE.snapshotChanges().pipe(map(changes => {
+
+    this.pedidosPendientes = this.pedidosPendientesColletionE
+    .snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
+
         const data = a.payload.doc.data() as Pedido;
         return data;
       })
     }));
 
     return this.pedidosPendientes;
+
   }
 
   getPedidosPagoVencido() {
@@ -236,7 +261,7 @@ export class PedidoService {
     //Busca todos los cobros con estatus - VENCIDO
     var hoy = new Date();
     this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
-    .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "desc").orderBy("creado", "desc").limit(300));
+      .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "desc").orderBy("creado", "desc").limit(300));
     this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
@@ -247,14 +272,14 @@ export class PedidoService {
     return this.pedidosVencido;
   }
 
-    //Luego hay que unificar estos metodos para que sea uno solo y en lugar de 
-    //llamar a la variable pedidos en los componentes se llama al metodo
-  getPedidosCobros() { 
+  //Luego hay que unificar estos metodos para que sea uno solo y en lugar de 
+  //llamar a la variable pedidos en los componentes se llama al metodo
+  getPedidosCobros() {
     //Busca todos los pedidos
-    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("statuscobro", '==','ABONADO').orderBy("creado", "desc"));
+    this.pedidosColletion2 = this.db.collection('pedidos', ref => ref.where("statuscobro", '==', 'ABONADO').orderBy("creado", "desc"));
     this.pedidos2 = this.pedidosColletion2.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
+        const data = a.payload.doc.data() as Pedido;
         return data;
       })
     }));
@@ -262,7 +287,7 @@ export class PedidoService {
     return this.pedidos2;
   }
 
-  getPedidosReporteCobros(strq) { 
+  getPedidosReporteCobros(strq) {
     this.pedidosCobColletion = this.db.collection("pedidos", strq);
     this.pedidosCob = this.pedidosCobColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -274,8 +299,8 @@ export class PedidoService {
   }
 
   getSpecificPedido(idpedido) {
-    this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido","==",idpedido));
-    return this.pedidoColletionCobro.snapshotChanges().pipe( map (changes => {
+    this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido", "==", idpedido));
+    return this.pedidoColletionCobro.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
         return data;
@@ -285,8 +310,8 @@ export class PedidoService {
   }
 
   getPedidoCambioId(idpedido) {
-    this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido","==",idpedido).where("status","in",['ENTREGADO']));
-    return this.pedidoColletionCobro.snapshotChanges().pipe( map (changes => {
+    this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido", "==", idpedido).where("status", "in", ['ENTREGADO']));
+    return this.pedidoColletionCobro.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
         return data;
@@ -296,8 +321,7 @@ export class PedidoService {
   }
 
 
-  getPedidosRep01(strq)
-  {  
+  getPedidosRep01(strq) {
     this.pedidosColletionrep = this.db.collection("pedidos", strq);
     this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -308,8 +332,7 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep
 
-  getPedidosRep02(strq)
-  {
+  getPedidosRep02(strq) {
     this.pedidosColletionrep = this.db.collection('pedidos', strq);
     this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -321,8 +344,7 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep02
 
-  getPedidosRep03(strq)
-  {
+  getPedidosRep03(strq) {
     this.pedidosColletionrep = this.db.collection('pedidos', strq);
     this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -334,8 +356,7 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep03
 
-  getPedidosRep04(strq)
-  {
+  getPedidosRep04(strq) {
     this.pedidosColletionrep = this.db.collection('pedidos', strq);
     this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -347,41 +368,35 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep04
 
-  getPedidos()
-  {
+  getPedidos() {
     return this.pedidos;
   }
 
-  getpedFact(cli?:string)
-  {
+  getpedFact(cli?: string) {
 
     //Busca Pedidos Facturados en periodo ejemplo 60 meses atras o 5 Anos
     var aux = new Date();
-    const ahora = new Date(aux.setMonth(aux.getMonth()-60));
-    this.pedFacColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO','COBRADO']).where("fentrega", ">=", ahora).where("idcliente", "==", cli));
+    const ahora = new Date(aux.setMonth(aux.getMonth() - 60));
+    this.pedFacColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ENTREGADO', 'COBRADO']).where("fentrega", ">=", ahora).where("idcliente", "==", cli));
     this.pedFac = this.pedFacColletion.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as Pedido; 
+        const data = a.payload.doc.data() as Pedido;
         return data;
       })
     }));
 
     return this.pedFac;
   }
-  getPedidosA()
-  {
+  getPedidosA() {
     return this.pedidosA;
   }
-  getPedidosF()
-  {
+  getPedidosF() {
     return this.pedidosF;
   }
-  getPedidosD()
-  {
+  getPedidosD() {
     return this.pedidosD;
   }
-  getPedidosE()
-  {
+  getPedidosE() {
     return this.pedidosE;
   }
 
@@ -395,7 +410,7 @@ export class PedidoService {
       var docRef = this.db.collection("pedidos").doc("--stats--");
       docRef.get().toPromise()
         .then(doc => {
-          const ordern = doc.data().order+1; //Numero de pedidos + 1
+          const ordern = doc.data().order + 1; //Numero de pedidos + 1
           //console.log(ordern);
           resolve(ordern);
         }).catch(function (err) {
@@ -404,9 +419,8 @@ export class PedidoService {
         });
     })
   }
-  
-  addPedidos(ped: Pedido,pedNro?:number)
-  {  
+
+  addPedidos(ped: Pedido, pedNro?: number) {
     //ID del documento geerado por firebase, es diferente al uid del pedido correlativo
     ped.idpedido = pedNro;
     //ped.uid=pedNro; /*ID Correlativo para el pedido */
@@ -414,19 +428,19 @@ export class PedidoService {
     const ref = db.collection('pedidos').doc(); /*Referencia de la coleccion*/
     const id = ref.id; /*ID Autogenerado*/
     this.docAdd = pedNro; /*Guardamos el Id Para los detalles del pedido*/
-    ped.uid=id;
+    ped.uid = id;
     ref.set(ped) /* Guardamos el documento en la coleccion */
-    .then(docRef =>{
-      //console.log("Document written: ",this.docAdd);
-    }).catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+      .then(docRef => {
+        //console.log("Document written: ",this.docAdd);
+      }).catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
 
 
     var washingtonRef = db.collection('pedidos').doc('--stats--');
     // Atomically increment the population of the city by 50.
     washingtonRef.update({
-        order: firebase.firestore.FieldValue.increment(1)
+      order: firebase.firestore.FieldValue.increment(1)
     });
 
     //   //Anterior donde se crea el documento con un id personalizado y el id del documento es el id del pedido
@@ -439,8 +453,7 @@ export class PedidoService {
     //   });  
   }
 
-  deletePedidos(pedido: Pedido)
-  {
+  deletePedidos(pedido: Pedido) {
     this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
     //this.pedidoDoc.delete();
     this.pedidoDoc.update(pedido);
@@ -465,22 +478,22 @@ export class PedidoService {
     }) */
     var pedidosEnt;
 
-    this.pedidosE.subscribe(pedidos=>{
+    this.pedidosE.subscribe(pedidos => {
       pedidosEnt = pedidos;
     });
-    
+
     setTimeout(() => {
-      for(let i = 0; i< pedidosEnt.length;i++) {
-  
+      for (let i = 0; i < pedidosEnt.length; i++) {
+
         const uidPed = pedidosEnt[i].uid;
         var pedDetRef = this.db.collection('pedidos').doc(uidPed);
-          //Cambiamos el check a false
-          pedDetRef.update({
-            status: "ENTREGADO"
-          }); 
+        //Cambiamos el check a false
+        pedDetRef.update({
+          status: "ENTREGADO"
+        });
       }
       setTimeout(() => {
-        console.log("length ",pedidosEnt);
+        console.log("length ", pedidosEnt);
       }, 2000);
 
     }, 5000);
@@ -490,60 +503,56 @@ export class PedidoService {
     }, 5000); */
 
 
-      /* pedtoChange.valueChanges().subscribe((ped:any) => {
-          //Guardamos el id en una variable
-          const uidPed = ped[0].uid;
-          console.log("uidPed ",uidPed,ped);
-          //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
-          var pedDetRef = this.db.collection('pedidos').doc(uidPed);
-          //Cambiamos el check a false
-          pedDetRef.update({
-            status: "X"
-          });
-      }); */
+    /* pedtoChange.valueChanges().subscribe((ped:any) => {
+        //Guardamos el id en una variable
+        const uidPed = ped[0].uid;
+        console.log("uidPed ",uidPed,ped);
+        //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
+        var pedDetRef = this.db.collection('pedidos').doc(uidPed);
+        //Cambiamos el check a false
+        pedDetRef.update({
+          status: "X"
+        });
+    }); */
   }
 
-  updatePedidos(pedido: Pedido,anularN?:number)
-  {
+  updatePedidos(pedido: Pedido, anularN?: number) {
     this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
     this.pedidoDoc.update(pedido);
 
-    if (anularN==9001)
-    { 
+    if (anularN == 9001) {
       var cityRef = this.db.collection('pedidos').doc(pedido.uid.toString());
       var removeCapital = cityRef.update({
-          ffactura: firebase.firestore.FieldValue.delete(),
-          tipodoc: firebase.firestore.FieldValue.delete(),
-          nrofactura: firebase.firestore.FieldValue.delete()
+        ffactura: firebase.firestore.FieldValue.delete(),
+        tipodoc: firebase.firestore.FieldValue.delete(),
+        nrofactura: firebase.firestore.FieldValue.delete()
       });
     }
-    if (anularN==9002)
-    { 
+    if (anularN == 9002) {
       var cityRef = this.db.collection('pedidos').doc(pedido.uid.toString());
       var removeCapital = cityRef.update({
-          ftentrega: firebase.firestore.FieldValue.delete(),
-          fdespacho: firebase.firestore.FieldValue.delete(),
-          transporte: firebase.firestore.FieldValue.delete()
+        ftentrega: firebase.firestore.FieldValue.delete(),
+        fdespacho: firebase.firestore.FieldValue.delete(),
+        transporte: firebase.firestore.FieldValue.delete()
       });
     }
 
     //Si anula la preparacion de pedido
-    if (anularN==9003)
-    {
+    if (anularN == 9003) {
       var pedRef = this.db.collection('pedidos').doc(pedido.uid.toString());
       pedRef.update({
-          fpreparacion: firebase.firestore.FieldValue.delete(),
-          nombrealmacenista: firebase.firestore.FieldValue.delete(),
-          nrobultos: firebase.firestore.FieldValue.delete()
+        fpreparacion: firebase.firestore.FieldValue.delete(),
+        nombrealmacenista: firebase.firestore.FieldValue.delete(),
+        nrobultos: firebase.firestore.FieldValue.delete()
       });
 
       //Busca en la tabla/coleccion pedidosDet si hay alguno que coincida con el uid del pedido
-      var coincideDetail = this.db.collection('pedidosDet', ref => ref.where('idpedido','==',pedido.uid.toString()));
+      var coincideDetail = this.db.collection('pedidosDet', ref => ref.where('idpedido', '==', pedido.uid.toString()));
 
-        //Ahora que conocemos que hay alguno/s que coincide, solicitamos el id de ese material(pedidoDet)
-        coincideDetail.valueChanges().subscribe((material:PedidoDet[]) => {
+      //Ahora que conocemos que hay alguno/s que coincide, solicitamos el id de ese material(pedidoDet)
+      coincideDetail.valueChanges().subscribe((material: PedidoDet[]) => {
         //Por cada material que coincida con el id del pedido
-        for (let i = 0; i< material.length;i++) {
+        for (let i = 0; i < material.length; i++) {
           //Guardamos el id en una variable
           const idDet = material[i].uid;
           //Ahora buscamos en la tabla pedidosDet el id que obtuvimos
@@ -559,8 +568,7 @@ export class PedidoService {
 
 
   //detalles pedido
-  getPedidosDet(uid)
-  {
+  getPedidosDet(uid) {
     //Busca todos los detalles de pedidos
     this.itemsCollection = this.db.collection('pedidosDet', ref => ref.where("idpedido", "==", uid).orderBy("indice", "asc"));
     this.pedidosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
@@ -572,9 +580,8 @@ export class PedidoService {
     }));
     return this.pedidosDet;
   }//getPedidosDet
-  
-  getPedidosDetAUX()
-  {
+
+  getPedidosDetAUX() {
     //Busca todos los detalles de pedidos
     this.itemsCollection = this.db.collection('pedidosDet', ref => ref.orderBy("preciomaterial", "asc"));
     this.pedidosDet = this.itemsCollection.snapshotChanges().pipe(map(changes => {
@@ -587,30 +594,27 @@ export class PedidoService {
     return this.pedidosDet;
   }//getPedidosDet
 
-  addPedidosDet(ped: PedidoDet)
-  {
+  addPedidosDet(ped: PedidoDet) {
     this.pedidosDetColletion.add(ped)
-    .then(function(docRef) {
-    })
-    .catch(function(error) {
+      .then(function (docRef) {
+      })
+      .catch(function (error) {
         console.error("Error adding document: ", error);
-    });
+      });
   }
 
-  deletePedidosDet(ped: PedidoDet)
-  {
+  deletePedidosDet(ped: PedidoDet) {
     this.pedidoDetDoc = this.db.doc(`pedidosDet/${ped.uid}`);
     this.pedidoDetDoc.delete();
   }
 
-  updatePedidosDet(ped: PedidoDet)
-  {
+  updatePedidosDet(ped: PedidoDet) {
     this.pedidoDetDoc = this.db.doc(`pedidosDet/${ped.uid}`);
     this.pedidoDetDoc.update(ped);
   }
-  
 
-  
+
+
 
 
 }

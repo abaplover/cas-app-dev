@@ -19,16 +19,13 @@ const db = admin.firestore();
 const transport = nodemailer.createTransport({
 
 	//==========================1============================
-	host: 'smtp.office365.com',
+	host: 'smtp.gmail.com',
     port: 465,
-    secure: false,
+    secure: true,
 	auth: {
-		user: "cas@ricamar.com.ve",
-		pass: "CasRicamar228094#*"
-	},
-        tls: {
-            ciphers: 'SSLv3'
-        }
+		user: "CasRicamar@gmail.com",
+		pass: "owwvyibtxdaaxbmh"
+	}
 	//==========================1============================
 
 	//==========================2============================
@@ -1469,7 +1466,7 @@ function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdf
 function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,nomv,codeBlock_,companyBkl_,clientedir_,observ_,pdfurl_,pdfname_,pdfb64_,asunto,bodytxt,saludo_,idaveria_,bodyFecha_,txta,txtr,txtc,nrodocfat,strtxtr,strtxtc)
 {
 	return transport.sendMail({
-		from: "CAS-Ricamar<CasRicamar@gmail.com>",
+		from: "CAS-Ricamar<cas@ricamar.com.ve>",
 		to: email,
 		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
 		subject: `${asunto} ${idaveria_}`,
