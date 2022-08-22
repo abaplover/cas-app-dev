@@ -184,6 +184,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	const ffactura_ = newValue.ffactura;
 	const nrofactura_ = newValue.nrofactura;
 	const fentrega_ = newValue.fentrega;
+	const fpreparacion = newValue.fpreparacion;
 	const lastaction_ = newValue.lastaction;
 	const idpedido_ = newValue.idpedido;
 	const status_ = newValue.status;
@@ -345,6 +346,13 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		asunto = "Confirmación de Entrega, Nro ";
 		bodytxt = "Confirmación de Entrega";
 		bodyFecha_ = "Fecha de entrega:  " + fectentrega_ + "<br />Fecha de Vencimiento: " + fechapago2;
+		enviar = true;
+	}
+
+	if (typeof fpreparacion !== "undefined" && typeof fpreparacion !== "undefined" && lastaction_ === "Crear NPrep"){
+		asunto = "Confirmación de Almacén, Nro ";
+		bodytxt = "Confirmación de Almacén";
+		bodyFecha_ = "Documento: Nota de Entrega / Factura" + " N°: " +nrofactura_;
 		enviar = true;
 	}
 

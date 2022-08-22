@@ -216,9 +216,9 @@ export class PedidoService {
 
   getPedidosContado() {
     this.pedidosPendientesColletionC = this.db.collection('pedidos', ref =>
-      ref.where("status", 'in', ['FACTURADO'])
+      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'ENTREGADO'])
         // .where("ffactura", ">=", this.today) //Fecha de vencimiento
-        .where("condiciondepago", "==", "Contado")
+        .where("condiciondepago", "==", "Prepago")
         // .orderBy("fpago", "desc")
         // .orderBy("creado", "desc")
     );
