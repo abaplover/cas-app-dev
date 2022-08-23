@@ -1145,7 +1145,9 @@ materialChecked(pedido,event) {
 
   selectEventPed(elemento){
 
+    if(this.almacenistS.almacenistaData[0])
     this.almacenistaName = this.almacenistS.almacenistaData[0].nombre;
+
     this.pedido_ =  Object.assign({}, elemento);
 
     //this.pedido_.fpreparacion = new Date;
