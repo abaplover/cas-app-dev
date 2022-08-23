@@ -91,7 +91,6 @@ export class GcobroListComponent implements OnInit {
 
   cargarDatos() {
 
-
     this.pedidoS.getPedidosPendientes().subscribe(pedidosP => {
       this.cobroslist = pedidosP;
 
@@ -100,6 +99,11 @@ export class GcobroListComponent implements OnInit {
         console.log(this.cobroslist);
         this.cobroslist.push(...pedidos);
 
+        this.pedidoS.getPedidosPrepago().subscribe(pedidosPrepago => {
+
+          this.cobroslist = [];
+          this.cobroslist.push(...pedidosPrepago);
+        })
         //ELEMENT_DATA
         this.dataSource = new MatTableDataSource(this.cobroslist);
         this.dataSource.sort = this.sort;

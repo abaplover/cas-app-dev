@@ -120,6 +120,7 @@ export class PedidoService {
   pedidosPendientesDocE: AngularFirestoreDocument<Pedido>;
   pedidosPendientesColletionE: AngularFirestoreCollection<Pedido>;
   pedidosPendientesColletionC: AngularFirestoreCollection<Pedido>;
+  pedidosPendientesColletionP: AngularFirestoreCollection<Pedido>;
 
   pedidosVencido: Observable<Pedido[]>;
   pedidosDocVencido: AngularFirestoreDocument<Pedido>;
@@ -216,14 +217,34 @@ export class PedidoService {
 
   getPedidosContado() {
     this.pedidosPendientesColletionC = this.db.collection('pedidos', ref =>
-      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'ENTREGADO'])
+      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO', 'ENTREGADO'])
+        // .where("ffactura", ">=", this.today) //Fecha de vencimiento
+        .where("condiciondepago", "==", "Contado")
+        // .orderBy("fpago", "desc")
+        // .orderBy("creado", "desc")
+    );
+
+    this.pedidosContado = this.pedidosPendientesColletionC
+      .snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(pedido => {
+          let data = pedido.payload.doc.data() as Pedido;
+          return data;
+        })
+      }));
+
+    return this.pedidosContado;
+  }
+  getPedidosPrepago() {
+    this.pedidosPendientesColletionP = this.db.collection('pedidos', ref =>
+      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO','ENTREGADO'])
         // .where("ffactura", ">=", this.today) //Fecha de vencimiento
         .where("condiciondepago", "==", "Prepago")
         // .orderBy("fpago", "desc")
         // .orderBy("creado", "desc")
     );
 
-    this.pedidosContado = this.pedidosPendientesColletionC
+    this.pedidosContado = this.pedidosPendientesColletionP
       .snapshotChanges()
       .pipe(map(changes => {
         return changes.map(pedido => {
