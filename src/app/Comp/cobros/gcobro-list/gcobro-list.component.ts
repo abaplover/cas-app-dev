@@ -95,20 +95,25 @@ export class GcobroListComponent implements OnInit {
       this.cobroslist = pedidosP;
 
       this.pedidoS.getPedidosContado().subscribe(pedidos => {
-        console.log(pedidos);
-        console.log(this.cobroslist);
         this.cobroslist.push(...pedidos);
 
         this.pedidoS.getPedidosPrepago().subscribe(pedidosPrepago => {
 
-          this.cobroslist = [];
           this.cobroslist.push(...pedidosPrepago);
+
+          let tempList = this.cobroslist.map(e => e['idpedido'])
+                                        .map((e, i, final) => final.indexOf(e) === i && i)
+                                        .filter((e) => this.cobroslist[e]).map(e => this.cobroslist[e]);
+      
+          this.cobroslist = [...tempList];         
+
+          this.dataSource = new MatTableDataSource(this.cobroslist);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.showSpinner = false;
         })
         //ELEMENT_DATA
-        this.dataSource = new MatTableDataSource(this.cobroslist);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.showSpinner = false;
+
       });
 
     })
