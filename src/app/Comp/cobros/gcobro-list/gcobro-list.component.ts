@@ -105,7 +105,9 @@ export class GcobroListComponent implements OnInit {
                                         .map((e, i, final) => final.indexOf(e) === i && i)
                                         .filter((e) => this.cobroslist[e]).map(e => this.cobroslist[e]);
       
-          this.cobroslist = [...tempList];         
+          this.cobroslist = [...tempList];
+          
+          this.cobroslist = this.cobroslist.filter(cobros => !cobros.statuscobro || cobros.statuscobro == "ABONADO")
 
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
@@ -267,9 +269,13 @@ export class GcobroListComponent implements OnInit {
         Number(this.cobro_.montodepago));
 
       if (this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago))) {
-        this.pedidoPend_.status = "COBRADO";
+        // this.pedidoPend_.status = "COBRADO";
+        this.pedidoPend_.statuscobro = "COMPLETADO";
+
       } else {
-        this.pedidoPend_.status = "ENTREGADO";
+        // this.pedidoPend_.status = "ENTREGADO";
+        this.pedidoPend_.statuscobro = "ABONADO";
+
       }
 
       this.cobro_.fechadepago = moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
@@ -282,8 +288,7 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
-      this.pedidoPend_.statuscobro = "ABONADO";
-
+      
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
       this.pedidoPend_.pagopuntual = true;
