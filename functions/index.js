@@ -363,6 +363,9 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		enviar = true;
 	}
 
+	if(lastaction_ == "COBRO")
+		enviar = false;
+
 	if (enviar){
 		enviar = false;
 		return sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,nomv,cond,codeBlock_,companyBkl_,clientedir_,totalmontobruto_,totalmontodescuento_,totalmontoimpuesto_,totalmontoneto_,observ_,pdfurl_,pdfname_,pdfb64_,asunto,bodytxt,fechapago,saludo_,idpedido_,bodyFecha_);

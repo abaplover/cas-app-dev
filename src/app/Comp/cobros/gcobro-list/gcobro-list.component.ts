@@ -94,6 +94,8 @@ export class GcobroListComponent implements OnInit {
     this.pedidoS.getPedidosPendientes().subscribe(pedidosP => {
       this.cobroslist = pedidosP;
 
+      console.log(this.cobroslist);
+
       this.pedidoS.getPedidosContado().subscribe(pedidos => {
         this.cobroslist.push(...pedidos);
 
@@ -104,10 +106,12 @@ export class GcobroListComponent implements OnInit {
           let tempList = this.cobroslist.map(e => e['idpedido'])
                                         .map((e, i, final) => final.indexOf(e) === i && i)
                                         .filter((e) => this.cobroslist[e]).map(e => this.cobroslist[e]);
-      
+
           this.cobroslist = [...tempList];
-          
-          this.cobroslist = this.cobroslist.filter(cobros => !cobros.statuscobro || cobros.statuscobro == "ABONADO")
+
+          this.cobroslist = this.cobroslist.filter(
+                            cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
+                                  ||  (cobros.montopendiente));
 
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
@@ -277,6 +281,8 @@ export class GcobroListComponent implements OnInit {
         this.pedidoPend_.statuscobro = "ABONADO";
 
       }
+
+      this.pedidoPend_.lastaction = "COBRO";
 
       this.cobro_.fechadepago = moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
 

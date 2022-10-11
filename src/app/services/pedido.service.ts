@@ -220,6 +220,7 @@ export class PedidoService {
       ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO', 'ENTREGADO'])
         // .where("ffactura", ">=", this.today) //Fecha de vencimiento
         .where("condiciondepago", "==", "Contado")
+        // .where("montopendiente", ">", "0")
         // .orderBy("fpago", "desc")
         // .orderBy("creado", "desc")
     );
@@ -260,6 +261,7 @@ export class PedidoService {
     this.pedidosPendientesColletionE = this.db.collection('pedidos', ref =>
       ref.where("status", 'in', ['ENTREGADO'])
         .where("fpago", ">=", this.today) //Fecha de vencimiento
+        // .where("montopendiente", "<", 0)
         .orderBy("fpago", "desc")
         .orderBy("creado", "desc")
     );

@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CobrosService } from 'src/app/services/cobros.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -29,53 +29,53 @@ import { AlertsService } from 'src/app/services/alerts.service';
 })
 export class GcobrovListComponent implements OnInit {
   txtComentario = "";
-  mostrardiv:boolean=false;
-  pedIndex: number=-990;
-  idpedidoEli: string="";
+  mostrardiv: boolean = false;
+  pedIndex: number = -990;
+  idpedidoEli: string = "";
   fechapedidoEli: Date;
-  clientepedidoEli: string="";
+  clientepedidoEli: string = "";
   montodepago = null;
-  disableBSF =  false;
-  maxDate= moment(new Date()).format('YYYY-MM-DD');
+  disableBSF = false;
+  maxDate = moment(new Date()).format('YYYY-MM-DD');
   today = moment().toDate();
-  
+
   //var
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['idpedido', 'nrofactura','condiciondepago', 'fpago','nomcliente','nomvendedor', 'Subtotal','montopendiente','abono','Opc'];
-  
+  displayedColumns: string[] = ['idpedido', 'nrofactura', 'condiciondepago', 'fpago', 'nomcliente', 'nomvendedor', 'Subtotal', 'montopendiente', 'abono', 'Opc'];
+
   pedidoPend_ = {} as Pedido;
   cobro_ = {} as Cobro;
   cobroDet_ = {} as CobroDet;
   MostrarCob: string;
-  vp_efectivo=true;
-  pagototal=true;
-  pagoparcialpagado:number;
+  vp_efectivo = true;
+  pagototal = true;
+  pagoparcialpagado: number;
 
-  ver:boolean;
+  ver: boolean;
   public vpagoList: Vpago[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
   public bancoList: Banco[]; //arreglo vacio
   cobroslist = [];
-  matrisDetCobro: Cobro[]=[];
+  matrisDetCobro: Cobro[] = [];
   pedidoCobro: Pedido[];
 
   showSpinner = false;
 
-  sendemail=false;
+  sendemail = false;
   importeremanente = 0;
   visual = false;
 
   constructor(
     public cobroService: CobrosService,
     public alertsService: AlertsService,
-    public loginS      : FirebaseloginService,
-    private toastr     : ToastrService,
-    public vpagoS      : VpagoService,
-    public tipodcobroS : TipodcobrosService,
-    public bancoS      : BancoService,
-    public pedidoS     : PedidoService,
+    public loginS: FirebaseloginService,
+    private toastr: ToastrService,
+    public vpagoS: VpagoService,
+    public tipodcobroS: TipodcobrosService,
+    public bancoS: BancoService,
+    public pedidoS: PedidoService,
   ) { }
 
   ngOnInit(): void {
@@ -87,7 +87,10 @@ export class GcobrovListComponent implements OnInit {
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
       this.cobroslist = cobros;
-      
+
+      this.cobroslist = this.cobroslist.filter(cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
+        || (cobros.montopendiente));      
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
@@ -95,7 +98,7 @@ export class GcobrovListComponent implements OnInit {
       this.showSpinner = false;
     })
 
-    this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
+    this.vpagoS.getVpagos().valueChanges().subscribe(vps => {
       this.vpagoList = vps;
     })
 
@@ -103,7 +106,7 @@ export class GcobrovListComponent implements OnInit {
       this.tipodocList = tipdoc;
     });
 
-    this.bancoS.getBancos().valueChanges().subscribe(bc =>{
+    this.bancoS.getBancos().valueChanges().subscribe(bc => {
       this.bancoList = bc;
     })
 
@@ -113,7 +116,7 @@ export class GcobrovListComponent implements OnInit {
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
       this.cobroslist = cobros;
-        
+
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
@@ -121,7 +124,7 @@ export class GcobrovListComponent implements OnInit {
       this.showSpinner = false;
     })
 
-    this.vpagoS.getVpagos().valueChanges().subscribe(vps =>{
+    this.vpagoS.getVpagos().valueChanges().subscribe(vps => {
       this.vpagoList = vps;
     })
 
@@ -129,54 +132,54 @@ export class GcobrovListComponent implements OnInit {
       this.tipodocList = tipdoc;
     });
 
-    this.bancoS.getBancos().valueChanges().subscribe(bc =>{
+    this.bancoS.getBancos().valueChanges().subscribe(bc => {
       this.bancoList = bc;
     });
   }
-    
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
-  checkValue(){
+  checkValue() {
   }
 
 
   tipodocSelected(val) {
     if (val == "GE01" || val == "SP01" || val == "DC01") {
-      this.vp_efectivo=true;
-      this.cobro_.moneda ="USD";
+      this.vp_efectivo = true;
+      this.cobro_.moneda = "USD";
       this.disableBSF = true;
     }
   }
 
   vpagoselected(val) {
     //si no es efectivo
-    if (val.substr(0,3)!="EFE"){ 
-      this.vp_efectivo=false;
+    if (val.substr(0, 3) != "EFE") {
+      this.vp_efectivo = false;
     } else {
       this.cobro_.banco = "";
       //this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
+      this.vp_efectivo = true;
     }
 
-    if (val.substr(0,3)=="OLD"){ // quitar
+    if (val.substr(0, 3) == "OLD") { // quitar
       this.cobro_.banco = "";
       //this.cobro_.nroreferencia="";
-      this.vp_efectivo=true;
+      this.vp_efectivo = true;
     }
   }//vpagoselected
 
   bancoselected(val) {
     //Buscamos en la lista de bancos el que coincida con el nombre del banco seleccionado
     // y determinamos su moneda
-    let bancoSelected = this.bancoList.find( banco => banco.nombre == val);
+    let bancoSelected = this.bancoList.find(banco => banco.nombre == val);
     this.cobro_.moneda = bancoSelected.moneda;
 
-    if ( this.cobro_.moneda !== "BSF") this.disableBSF = true;
+    if (this.cobro_.moneda !== "BSF") this.disableBSF = true;
     else this.disableBSF = false;
-    
+
   }
 
   monedaSelected(tipomoneda) {
@@ -186,10 +189,10 @@ export class GcobrovListComponent implements OnInit {
 
   //Select tipo de pago
   tpagoselected(val) {
-  
+
     if (val == "TOTAL") {
-      this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto-this.pagoparcialpagado).toFixed(2));
-      this.montodepago =  this.cobro_.montodepago;
+      this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto - this.pagoparcialpagado).toFixed(2));
+      this.montodepago = this.cobro_.montodepago;
       this.pedidoPend_.status = "COBRADO"
       this.pagototal = true;
     }
@@ -200,9 +203,9 @@ export class GcobrovListComponent implements OnInit {
     }
   }
 
-  async timestampConvert(fec){
-    let dateObject = new Date(fec.seconds*1000);
-    let mes_ = dateObject.getMonth()+1;
+  async timestampConvert(fec) {
+    let dateObject = new Date(fec.seconds * 1000);
+    let mes_ = dateObject.getMonth() + 1;
     let ano_ = dateObject.getFullYear();
     let dia_ = dateObject.getDate();
     return dateObject;
@@ -210,7 +213,7 @@ export class GcobrovListComponent implements OnInit {
 
   //Se ejecuta cuando ingresan un monto
   montoChanged(monto) {
-    console.log("monto ",monto, Number(monto));
+    console.log("monto ", monto, Number(monto));
     let montostring = monto;
     if (Number(montostring) > (this.importeremanente)) {
       this.montodepago = null;
@@ -219,49 +222,49 @@ export class GcobrovListComponent implements OnInit {
     }
   }
 
-  onCancelar(pf?: NgForm ){
-    if(pf != null) pf.reset();
-    this.cobroslist=[];
+  onCancelar(pf?: NgForm) {
+    if (pf != null) pf.reset();
+    this.cobroslist = [];
     this.cobro_ = {} as Cobro;
     this.pedidoPend_ = {} as Pedido;
     this.MostrarCob = 'display:none;';
     this.pagoparcialpagado = 0;
-    this.ver=false;
+    this.ver = false;
     this.cargarDatos(); //Se vuelven a cargar los datos de la tabla
   }//onCancelar
 
-  async verdetalles($event,elemento){
+  async verdetalles($event, elemento) {
     this.showSpinner = true;
     this.ver = true;
     this.visual = true;
 
-    this.pedidoPend_ =  Object.assign({}, elemento);
+    this.pedidoPend_ = Object.assign({}, elemento);
 
     this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
     let idpedido = this.pedidoPend_.idpedido.toString();
 
-    if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
+    if (elemento.fpago != null && typeof elemento.fpago != "undefined") {
       this.pedidoPend_.fpago = await this.timestampConvert(elemento.fpago);
     }
 
-    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet=>{
+    this.cobroService.getCobrosDet(idpedido).subscribe(async cobrosDet => {
 
       this.matrisDetCobro = cobrosDet;
       this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
 
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
-        if(this.matrisDetCobro[i].fechadepago) {
+        if (this.matrisDetCobro[i].fechadepago) {
           this.matrisDetCobro[i].fechadepago = await this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
 
-        if(this.matrisDetCobro[i].modificado) {
+        if (this.matrisDetCobro[i].modificado) {
           this.matrisDetCobro[i].modificado = await this.timestampConvert(this.matrisDetCobro[i].modificado);
         }
 
-        if(this.matrisDetCobro[i].status == "ACTIVO"){
-          if (this.matrisDetCobro[i].montodepago>0) {
+        if (this.matrisDetCobro[i].status == "ACTIVO") {
+          if (this.matrisDetCobro[i].montodepago > 0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
             this.pagoparcialpagado += 0;
@@ -269,18 +272,18 @@ export class GcobrovListComponent implements OnInit {
         }
       }
 
-      if ( this.pagoparcialpagado > 0 ) {
-        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
-      
+      if (this.pagoparcialpagado > 0) {
+        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado, 2)
+
         this.showSpinner = false;
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
         this.showSpinner = false;
       }
-              
-    }) 
-    
-    if (this.pedidoPend_.idpedido){
+
+    })
+
+    if (this.pedidoPend_.idpedido) {
       this.MostrarCob = 'display:block;';
     }
   }//verdetalles
@@ -291,10 +294,10 @@ export class GcobrovListComponent implements OnInit {
     this.pagoparcialpagado = 0; //reiniciamos el pago parcial para que no se embasure
     this.visual = false; //No es la parte de visualizacion
 
-    this.pedidoPend_ =  Object.assign({}, elemento);
+    this.pedidoPend_ = Object.assign({}, elemento);
     let idpedido = this.pedidoPend_.idpedido.toString();
 
-    if (elemento.fpago != null && typeof elemento.fpago != "undefined"){
+    if (elemento.fpago != null && typeof elemento.fpago != "undefined") {
       this.pedidoPend_.fpago = await this.timestampConvert(elemento.fpago);
     }
 
@@ -307,10 +310,10 @@ export class GcobrovListComponent implements OnInit {
 
       //Calculamos el monto total pagado
       for (let i in this.matrisDetCobro) {
-        if(this.matrisDetCobro[i].fechadepago) {
+        if (this.matrisDetCobro[i].fechadepago) {
           this.matrisDetCobro[i].fechadepago = await this.timestampConvert(this.matrisDetCobro[i].fechadepago);
         }
-        if(this.matrisDetCobro[i].status == "ACTIVO") {
+        if (this.matrisDetCobro[i].status == "ACTIVO") {
           if (this.matrisDetCobro[i].montodepago > 0) {
             this.pagoparcialpagado += Number(this.matrisDetCobro[i].montodepago);
           } else {
@@ -319,14 +322,14 @@ export class GcobrovListComponent implements OnInit {
         }
       }
 
-      if ( this.pagoparcialpagado > 0 ) {
-        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado,2)
+      if (this.pagoparcialpagado > 0) {
+        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado, 2)
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
       }
-              
-    }) 
-    
+
+    })
+
     if (this.pedidoPend_.idpedido) {
       this.MostrarCob = 'display:block;';
     }
@@ -336,7 +339,7 @@ export class GcobrovListComponent implements OnInit {
   moForm() {
     if (this.cobroService.mostrarForm) {
       this.cobroService.mostrarForm = false;
-    }else{
+    } else {
       this.cobroService.mostrarForm = true;
     }
 
@@ -344,21 +347,21 @@ export class GcobrovListComponent implements OnInit {
   }//moForm
 
   async onSubmit(pf?: NgForm) {
-    if(this.pedidoPend_.idpedido != null) {
-      
-      let thisHour =  moment().hour();
+    if (this.pedidoPend_.idpedido != null) {
+
+      let thisHour = moment().hour();
       let thisMinute = moment().minutes();
 
-      this.cobro_.fechadepago =  moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
-      
+      this.cobro_.fechadepago = moment(this.cobro_.fechadepago).utcOffset("-04:00").add(moment.duration(`${thisHour}:${thisMinute}:00`)).toDate();
+
       if (this.montodepago) {
-        this.cobro_.montodepago = await this.roundTo(Number(this.montodepago),2);
+        this.cobro_.montodepago = await this.roundTo(Number(this.montodepago), 2);
       } else {
         this.cobro_.montodepago = 0;
       }
 
-      this.pedidoPend_.totalmontoneto = await this.roundTo(Number(this.pedidoPend_.totalmontoneto),2);
-      this.pagoparcialpagado = await this.roundTo(Number(this.pagoparcialpagado),2);
+      this.pedidoPend_.totalmontoneto = await this.roundTo(Number(this.pedidoPend_.totalmontoneto), 2);
+      this.pagoparcialpagado = await this.roundTo(Number(this.pagoparcialpagado), 2);
 
       // console.log("Cobrado (true)/Negado (false): ",
       //   this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago)),
@@ -367,8 +370,8 @@ export class GcobrovListComponent implements OnInit {
       //   Number(this.cobro_.montodepago));
 
       if (this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago))) {
-             
-        this.pedidoPend_.status="COBRADO";
+
+        this.pedidoPend_.status = "COBRADO";
 
       }
       //  else {
@@ -385,8 +388,8 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
-      this.pedidoPend_.statuscobro="ABONADO"; // Se asigna estatus de cobro "ABONADO sin importar que este cobrado"
-      
+      this.pedidoPend_.statuscobro = "ABONADO"; // Se asigna estatus de cobro "ABONADO sin importar que este cobrado"
+
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
       this.pedidoPend_.pagopuntual = false;
@@ -399,12 +402,12 @@ export class GcobrovListComponent implements OnInit {
       this.toastr.success('Operación Terminada', 'Registro Actualizado');
       this.onCancelar(pf);
     }
-    
+
   }
 
   eliminarCobro(posicionArray) {
-    
-    if(confirm('¿Está seguro de que quiere eliminar este elemento?')) {
+
+    if (confirm('¿Está seguro de que quiere eliminar este elemento?')) {
 
       let cobroDelete = {} as Cobro;
       cobroDelete = this.matrisDetCobro[posicionArray];
@@ -414,9 +417,9 @@ export class GcobrovListComponent implements OnInit {
       cobroDelete.status = "ELIMINADO";
       cobroDelete.modificadopor = this.loginS.getCurrentUser().email;
       cobroDelete.modificado = new Date;
-  
+
       this.pedidoPend_.montopendiente = this.importeremanente + cobroDelete.montodepago;
-  
+
       this.cobroService.updatecobros(cobroDelete);
       this.pedidoS.updatePedidos(this.pedidoPend_);
 
