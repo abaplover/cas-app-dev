@@ -5,6 +5,7 @@ import { PedidoDet } from 'src/app/models/pedidoDet';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TransportePedidos } from 'src/app/models/transporte-pedidos';
 import { animate, state,style,transition,trigger } from '@angular/animations';
 
 //  Service
@@ -18,6 +19,7 @@ import { UmedidaService } from '../../../services/umedida.service';
 import { IimpuestoService } from '../../../services/iimpuesto.service';
 import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
 import { TipodService } from 'src/app/services/tipod.service';
+import { TransportePedidosService } from 'src/app/services/transporte-pedidos.service';
 // Class
 import { Client } from '../../../models/client';
 import { Vendedor } from '../../../models/vendedor';
@@ -71,6 +73,7 @@ export class PedidoNdComponent implements OnInit {
   opcnf = false;
   opcnd = false;
   opcne = false;
+  hasTransporte = false;
   estadoElement= "estado1";
   currencyPipeVEF='VEF';
   currencyPipeUSD='USD';
@@ -99,7 +102,7 @@ export class PedidoNdComponent implements OnInit {
   zonVen='';
   public URLPublica: any;
   public dempresaList: Datoemp[]; //arreglo vacio
-
+  public TransportePedido: TransportePedidos;
   public pedidoslist: Pedido[];
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -145,7 +148,8 @@ export class PedidoNdComponent implements OnInit {
     public tipodS       : TipodService,
     private dialogo     : MatDialog,
     private afStorage:AngularFireStorage,
-    public datoempresaS : DatoempService
+    public datoempresaS : DatoempService,
+    public transportePedS: TransportePedidosService
   )
   {
     const currentYear = new Date().getFullYear();
@@ -903,8 +907,16 @@ downloadEtiquetas() {
     return dateObject;
   }
 
-  selectEventPed(elemento){
+  async selectEventPed(elemento){
     this.pedido_ =  Object.assign({}, elemento);
+
+    if(this.pedido_.transporteId)
+    this.TransportePedido = await this.transportePedS.getOne(this.pedido_.transporteId);
+    console.log(this.TransportePedido);
+    if(this.TransportePedido){
+      this.pedido_.compania = this.TransportePedido.compania;
+      this.hasTransporte = true;
+    }
 
     //Verifica que el pedido haya pasado por el proceso de almacen
     if (this.pedido_.nrobultos) this.someticket = true;

@@ -247,21 +247,56 @@
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 										<div class="input-group input-group-sm mb-3">
 											<div class="input-group-prepend" style="width: 135px;">
-												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Compañia</span>
 											</div>
 											<select
+												*ngIf="!this.hasTransport"
 												value=selected
-												aria-placeholder="Transporte"
+												aria-placeholder="Compañia"
 												required
-												name="transporte"
-												#transporte="ngModel"
-												[(ngModel)]="this.pedido_.transporte"
+												name="Compania"
+												#Compania="ngModel"
+												[(ngModel)]="this.pedido_.compania"
 												class="form-control"
 											>
 												<option value={{tra.descripcion}}  *ngFor = "let tra of transporteList">
 													{{tra.idtransporte+" - "+tra.descripcion}}
 												</option>
 											</select>
+											
+											<input
+													*ngIf="this.hasTransport"
+													type="text"
+													style="font-size: 14px"
+													
+													name="compania"
+													id="compania"
+													#compania="ngModel"
+													[(ngModel)]="this.pedido_.compania"
+													readonly
+													class="form-control"
+												/>
+
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 135px;">
+												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
+											</div>
+											<input
+													type="text"
+													style="font-size: 14px"
+													
+													name="transporteId"
+													id="transporteId"
+													#transporteId="ngModel"
+													[(ngModel)]="this.pedido_.transporteId"
+													readonly
+													class="form-control"
+												/>
 										</div>
 									</div>
 								</div>
@@ -308,7 +343,7 @@
 											</div>
 										</div>
 									</div> -->
-									<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+									<!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
 										<div class="input-group input-group-sm mb-3">
 											<div class="input-group-prepend" style="width: 135px;">
 												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Vencimiento</span>
@@ -316,7 +351,7 @@
 											<div class="abs-center">
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>

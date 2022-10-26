@@ -1,6 +1,6 @@
 <div class="container9">
 	<div class="card bg-light mb-3 w-75">
-			<!-- <div class="card-header">
+		<!-- <div class="card-header">
 				<div class="row" style="text-align:right;"> 
 					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align:left">
 						<h2 class="text-left">Datos de la Empresa</h2>
@@ -12,209 +12,175 @@
 					</div>
 				</div>
 			</div> -->
-			<div class="card-body text-info panel panel-login" *ngIf="datoempService.mostrarForm">
-					<form #datoempForm="ngForm" (ngSubmit)="onSubmit(datoempForm)">
-							<!-- TO UPDATE -->
-							<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="datoempService.selectedDatoemp.$key">
-						
-							<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
-								<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-									<div class="form-group">
-										<!-- <mat-label>Id</mat-label> -->
-										<input
-											placeholder="Id" 
-											value=""
-											type="text"
-											name="idempresa"
-											id="idempresa"
-											#idempresa="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.idempresa"
-											maxlength="2"
-											required
-											class="form-control"
-										/>
-										<div *ngIf="idempresa.invalid && (idempresa.dirty || idempresa.touched)" class="text-danger">
-											<div *ngIf="idempresa.errors.required">
-												<small>Se requiere Id</small>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
-									<div class="form-group">
-										<!-- <mat-label>Descripción</mat-label> -->
-										<input
-											placeholder="Descripción" value=""
-											type="text"
-											name="descripcion"
-											#descripcion="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.descripcion"
-											required
-											class="form-control"
-										/>
-										<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
-											<div *ngIf="descripcion.errors.required">
-												<small>Se requiere una descripción</small>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-									<div class="form-group">
-										<!-- <mat-label>Dirección</mat-label> -->
-										<input
-											placeholder="Dirección" 
-											value=""
-											type="text"
-											name="direccion"
-											#direccion="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.direccion"
-											required
-											class="form-control"
-										/>
-										<div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)" class="text-danger">
-											<div *ngIf="direccion.errors.required">
-												<small>Se requiere una dirección</small>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-									<div class="form-group">
-										<!-- <mat-label>Rif</mat-label> -->
-										<input
-											placeholder="J123456789" value=""
-											type="text"
-											name="rif"
-											#rif="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.rif"
-											required
-											class="form-control"
-											pattern="[J]{1}[0-9]{9,9}"
-										/>
-										<div *ngIf="rif.invalid && (rif.dirty || rif.touched)" class="text-danger">
-											<div *ngIf="rif.errors.required">
-												<small>Se requiere un nro de rif</small>
-											</div>
-											<div *ngIf="rif.errors?.pattern">
-												<small>Por favor ingrese un rif válido</small>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
-									<div class="form-group">
-										<!-- <mat-label>Email</mat-label> -->
-										<input
-											placeholder="Email" 
-											value=""
-											type="email"
-											name="email"
-											#email="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.email"
-											required
-											email="true"
-											class="form-control"
-											pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}"
-											        
-										/>
-										<div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
-											<div *ngIf="email.errors.required">
-												<small>Se requiere un email</small>
-											</div>
-											<div *ngIf="email.errors?.pattern">
-												<small>Por favor ingrese una dirección de correo válida</small>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>		
-							<div class="row"> <!--Div para alinear 2 campos uno a lado de otro-->
-								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-									<div class="form-group">
-										<!-- <mat-label>Teléfono Fijo</mat-label> -->
-										<input
-											placeholder="0212-1234567" 
-											value=""
-											type="text"
-											name="telefonoFijo"
-											#telefonoFijo="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.telefonoFijo"
-											required
-											class="form-control"
-											pattern="^[0-9-]{4,5}[0-9]{7,7}$"
-										/>
-										<div *ngIf="telefonoFijo.invalid && (telefonoFijo.dirty || telefonoFijo.touched)" class="text-danger">
-											<div *ngIf="telefonoFijo.errors.required">
-												<small>Se requiere un teléfono fijo</small>
-											</div>
-											<div *ngIf="telefonoFijo.errors?.pattern">
-												<small>Teléfono fijo inválido (0212-1234567)</small>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-									<div class="form-group">
-										<!-- <mat-label>Teléfono Celular 1</mat-label> -->
-										<input
-											placeholder="0414-1234567" value=""
-											type="text"
-											name="telefonocel1"
-											#telefonocel1="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.telefonocel1"
-											required
-											class="form-control"
-											pattern="^[0-9-]{4,5}[0-9]{7,7}$"
-										/>
-										<div *ngIf="telefonocel1.invalid && (telefonocel1.dirty || telefonocel1.touched)" class="text-danger">
-											<div *ngIf="telefonocel1.errors.required">
-												<small>Se requiere un teléfono celular</small>
-											</div>
-											<div *ngIf="telefonocel1.errors?.pattern">
-												<small>Teléfono celular inválido (0414-1234567)</small>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-									<div class="form-group">
-										<!-- <mat-label>Teléfono Celular 2</mat-label> -->
-										<input
-											placeholder="0414-1234567" value=""
-											type="text"
-											name="telefonocel2"
-											#telefonocel2="ngModel"
-											[(ngModel)]="datoempService.selectedDatoemp.telefonocel2"
-											pattern="^[0-9-]{4,5}[0-9]{7,7}$"
-											class="form-control"
-											required
-										/>
-										<div *ngIf="telefonocel2.invalid && (telefonocel2.dirty || telefonocel2.touched)" class="text-danger">
-											<div *ngIf="telefonocel2.errors.required">
-												<small>Se requiere un teléfono celular</small>
-											</div>
-											<div *ngIf="telefonocel2.errors?.pattern">
-												<small>Teléfono celular inválido (0414-1234567)</small>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+		<div class="card-body text-info panel panel-login" *ngIf="datoempService.mostrarForm">
+			<form #datoempForm="ngForm" (ngSubmit)="onSubmit(datoempForm)">
+				<!-- TO UPDATE -->
+				<input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="datoempService.selectedDatoemp.$key">
 
-							<div class="form-group" style="text-align:right;padding-top: 10px;">
-								<button class="btn-space" smat-stroked-button style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="submit" [disabled]="datoempForm.invalid">
-									Guardar 
-								</button>
-								<button class="btn-space" smat-stroked-button style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;" type="reset" (click)="resetForm(datoempForm)">
-									Reset
-								</button>
+				<div class="row">
+					<!--Div para alinear 2 campos uno a lado de otro-->
+					<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+						<div class="form-group">
+							<!-- <mat-label>Id</mat-label> -->
+							<input placeholder="Id" value="" type="text" name="idempresa" id="idempresa"
+								#idempresa="ngModel" [(ngModel)]="datoempService.selectedDatoemp.idempresa"
+								maxlength="2" required class="form-control" />
+							<div *ngIf="idempresa.invalid && (idempresa.dirty || idempresa.touched)"
+								class="text-danger">
+								<div *ngIf="idempresa.errors.required">
+									<small>Se requiere Id</small>
+								</div>
 							</div>
-						</form>
-			</div>
+						</div>
+					</div>
+					<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+						<div class="form-group">
+							<!-- <mat-label>Descripción</mat-label> -->
+							<input placeholder="Descripción" value="" type="text" name="descripcion"
+								#descripcion="ngModel" [(ngModel)]="datoempService.selectedDatoemp.descripcion" required
+								class="form-control" />
+							<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
+								class="text-danger">
+								<div *ngIf="descripcion.errors.required">
+									<small>Se requiere una descripción</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						<div class="form-group">
+							<!-- <mat-label>Dirección</mat-label> -->
+							<input placeholder="Dirección" value="" type="text" name="direccion" #direccion="ngModel"
+								[(ngModel)]="datoempService.selectedDatoemp.direccion" required class="form-control" />
+							<div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)"
+								class="text-danger">
+								<div *ngIf="direccion.errors.required">
+									<small>Se requiere una dirección</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<!-- <mat-label>Rif</mat-label> -->
+							<input placeholder="J123456789" value="" type="text" name="rif" #rif="ngModel"
+								[(ngModel)]="datoempService.selectedDatoemp.rif" required class="form-control"
+								pattern="[J]{1}[0-9]{9,9}" />
+							<div *ngIf="rif.invalid && (rif.dirty || rif.touched)" class="text-danger">
+								<div *ngIf="rif.errors.required">
+									<small>Se requiere un nro de rif</small>
+								</div>
+								<div *ngIf="rif.errors?.pattern">
+									<small>Por favor ingrese un rif válido</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+						<div class="form-group">
+							<!-- <mat-label>Email</mat-label> -->
+							<input placeholder="Email" value="" type="email" name="email" #email="ngModel"
+								[(ngModel)]="datoempService.selectedDatoemp.email" required email="true"
+								class="form-control"
+								pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" />
+							<div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+								<div *ngIf="email.errors.required">
+									<small>Se requiere un email</small>
+								</div>
+								<div *ngIf="email.errors?.pattern">
+									<small>Por favor ingrese una dirección de correo válida</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<!--Div para alinear 2 campos uno a lado de otro-->
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<!-- <mat-label>Teléfono Fijo</mat-label> -->
+							<input placeholder="0212-1234567" value="" type="text" name="telefonoFijo"
+								#telefonoFijo="ngModel" [(ngModel)]="datoempService.selectedDatoemp.telefonoFijo"
+								required class="form-control" pattern="^[0-9-]{4,5}[0-9]{7,7}$" />
+							<div *ngIf="telefonoFijo.invalid && (telefonoFijo.dirty || telefonoFijo.touched)"
+								class="text-danger">
+								<div *ngIf="telefonoFijo.errors.required">
+									<small>Se requiere un teléfono fijo</small>
+								</div>
+								<div *ngIf="telefonoFijo.errors?.pattern">
+									<small>Teléfono fijo inválido (0212-1234567)</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<!-- <mat-label>Teléfono Celular 1</mat-label> -->
+							<input placeholder="0414-1234567" value="" type="text" name="telefonocel1"
+								#telefonocel1="ngModel" [(ngModel)]="datoempService.selectedDatoemp.telefonocel1"
+								required class="form-control" pattern="^[0-9-]{4,5}[0-9]{7,7}$" />
+							<div *ngIf="telefonocel1.invalid && (telefonocel1.dirty || telefonocel1.touched)"
+								class="text-danger">
+								<div *ngIf="telefonocel1.errors.required">
+									<small>Se requiere un teléfono celular</small>
+								</div>
+								<div *ngIf="telefonocel1.errors?.pattern">
+									<small>Teléfono celular inválido (0414-1234567)</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<!-- <mat-label>Teléfono Celular 2</mat-label> -->
+							<input placeholder="0414-1234567" value="" type="text" name="telefonocel2"
+								#telefonocel2="ngModel" [(ngModel)]="datoempService.selectedDatoemp.telefonocel2"
+								pattern="^[0-9-]{4,5}[0-9]{7,7}$" class="form-control" required />
+							<div *ngIf="telefonocel2.invalid && (telefonocel2.dirty || telefonocel2.touched)"
+								class="text-danger">
+								<div *ngIf="telefonocel2.errors.required">
+									<small>Se requiere un teléfono celular</small>
+								</div>
+								<div *ngIf="telefonocel2.errors?.pattern">
+									<small>Teléfono celular inválido (0414-1234567)</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<input placeholder="Representante de Ricamar" name="representante" #representante="ngModel" class="form-control"
+								[(ngModel)]="datoempService.selectedDatoemp.representante" />
+						</div>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<input placeholder="Cedula" name="cedula" class="form-control" #cedula="ngModel"
+								[(ngModel)]="datoempService.selectedDatoemp.cedula" />
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" style="text-align:right;padding-top: 10px;">
+					<button class="btn-space" smat-stroked-button
+						style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;"
+						type="submit" [disabled]="datoempForm.invalid">
+						Guardar
+					</button>
+					<button class="btn-space" smat-stroked-button
+						style=" background-color:#bcc0c252; width: 250px !important;height: 35px !important;"
+						type="reset" (click)="resetForm(datoempForm)">
+						Reset
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>

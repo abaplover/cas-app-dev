@@ -38,6 +38,7 @@ var topUserPostsRef = firebase.database().ref('zonaventas/').orderByChild('idzve
     this.zventaList.push({
       idzventa: zventa.idzventa,
       descripcion: zventa.descripcion,
+      porcentaje: zventa.porcentaje
     });
   }
 
@@ -45,7 +46,8 @@ var topUserPostsRef = firebase.database().ref('zonaventas/').orderByChild('idzve
   {
     this.zventaList.update(zventa.$key, {
       idzventa: zventa.idzventa,
-      descripcion: zventa.descripcion
+      descripcion: zventa.descripcion,
+      porcentaje: zventa.porcentaje
     });
   }
 

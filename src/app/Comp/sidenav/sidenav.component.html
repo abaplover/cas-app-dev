@@ -186,9 +186,27 @@
                       matTooltipPosition="right" 
                     >
                       <button mat-icon-button (click)="navegar('pedidos')">
-                        <i class="fas fa-truck fa-2x"></i>
+                        <i class="fa fa-file-alt fa-2x"></i>
                       </button> 
                       <!-- Gestión de pedidos -->
+                    </a>
+                    <mat-divider></mat-divider>
+                    <a mat-button 
+                      [class]="this.pillstransportepedidos" 
+                      id="pills-transportepedidos" 
+                      data-toggle="pill" 
+                      (click)="navegar('transporte-pedidos')" 
+                      role="tab" 
+                      aria-controls="v-pills-transportepedidos" 
+                      aria-selected="true"
+                      matTooltip="Gestión de transporte de pedidos"
+                      aria-label="Muetra el texto del btn al pasar el mouse"
+                      matTooltipPosition="right" 
+                    >
+                      <button mat-icon-button (click)="navegar('transporte-pedidos')">
+                        <i class="fa fa-truck fa-2x"></i>
+                      </button> 
+                      <!-- Gestión de transporte de pedidos -->
                     </a>
                     <mat-divider></mat-divider>
                     <a mat-button 
@@ -204,7 +222,7 @@
                       matTooltipPosition="right"
                     >
                       <button mat-icon-button (click)="navegar('cobros')">
-                        <i class="fas fa-file-alt fa-2x"></i>
+                        <i class="fas fa-usd fa-2x"></i>
                       </button>
                       <!-- Gestión de Cobros -->
                     </a>

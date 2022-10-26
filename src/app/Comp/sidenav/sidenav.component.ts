@@ -28,7 +28,8 @@ export class SidenavComponent implements OnInit {
 
   fillerNav = [
     { name: 'Inicio', route: 'home', icon: 'home' },
-    { name: 'Gestión de pedidos', route: 'pedidos', icon: 'local_shipping' },
+    { name: 'Gestión de pedidos', route: 'pedidos', icon: 'shop' },
+    { name: 'Gestión de transportes', route: 'transporte-pedidos', icon: 'local_shipping' },
     { name: 'Gestión de Cobros', route: 'cobros', icon: 'payment' },
     { name: 'Gestión de Averías', route: 'averias', icon: 'broken_image' },
     { name: 'Datos Maestros', route: 'maestros', icon: 'domain' },
@@ -43,16 +44,17 @@ export class SidenavComponent implements OnInit {
 
 
 
-  pillshome          = "nav-link active";
-  pillspedidos       = "nav-link";
-  pillscobros        = "nav-link";
-  pillsaverias       = "nav-link";
-  pillsmaestros      = "nav-link";
-  pillsestructe      = "nav-link";
-  pillsestrustm      = "nav-link";
-  pillsreportes      = "nav-link";
-  pillsreportesave   = "nav-link";
-  pillsreportescobros   = "nav-link";
+  pillshome                     = "nav-link active";
+  pillspedidos                  = "nav-link";
+  pillstransportepedidos        = "nav-link";
+  pillscobros                   = "nav-link";
+  pillsaverias                  = "nav-link";
+  pillsmaestros                 = "nav-link";
+  pillsestructe                 = "nav-link";
+  pillsestrustm                 = "nav-link";
+  pillsreportes                 = "nav-link";
+  pillsreportesave              = "nav-link";
+  pillsreportescobros           = "nav-link";
 
   allowNewCounter = false;
   constructor(
@@ -90,49 +92,55 @@ export class SidenavComponent implements OnInit {
 
   
   changeclass(btn: string){
+    console.log(btn);
     if (btn=='home'){
       this.pillshome = "nav-link active";
-      this.pillscobros = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillspedidos = this.pillsreportesave = this.pillsreportescobros = "nav-link";
+      this.pillscobros = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillspedidos = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
     }
     if (btn=='cobros'){
       this.pillscobros = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillspedidos = this.pillsreportesave = this.pillsreportescobros = "nav-link";
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillspedidos = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
     }
     if (btn=='pedidos'){
       this.pillspedidos = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
+    }if (btn=='transporte-pedidos'){
+      this.pillstransportepedidos = "nav-link active";
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillsaverias = this.pillsreportes = this.pillscobros = this.pillspedidos = this.pillsreportesave = this.pillsreportescobros  = "nav-link";
     }
     if (btn=='averias'){
       this.pillsaverias = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
     }
     if (btn=='maestros'){
       this.pillsmaestros = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsaverias = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
-      this.snavp.close();
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsaverias = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
+      // this.snavp.close();
     }
     if (btn=='estrucempresa'){
       this.pillsestructe = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsaverias = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
-      this.snavp.close();
+      this.pillshome = this.pillsestrustm = this.pillsaverias = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
+      // this.snavp.close();
     }
     if (btn=='estrucdm'){
       this.pillsestrustm = "nav-link active";
-      this.pillshome = this.pillsaverias = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
-      this.snavp.close();
+      this.pillshome = this.pillsaverias = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsreportes = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
+      // this.snavp.close();
     }
     if (btn=='reports'){
       this.pillsreportes = "nav-link active";
-      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = "nav-link";
+      this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = this.pillsreportesave = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
     }
     if (btn=='reports-averias'){
       this.pillsreportesave = "nav-link active";
-      this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = this.pillsreportescobros = "nav-link";
+      this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = this.pillsreportescobros = this.pillstransportepedidos = "nav-link";
     }
     if (btn=='reports-cobros'){
       this.pillsreportescobros = "nav-link active";
-      this.pillsreportesave = this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = "nav-link";
+      this.pillsreportesave = this.pillsreportes=this.pillshome = this.pillsestrustm = this.pillsestructe = this.pillsmaestros = this.pillspedidos = this.pillsaverias = this.pillscobros = this.pillstransportepedidos = "nav-link";
     }
+
+    console.log(this.pillstransportepedidos);
   }
 
   navegar(url: string){

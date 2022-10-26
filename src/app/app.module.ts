@@ -203,7 +203,11 @@ import { PedidosCobrosComponent } from './Comp/reports-cobros/pedidos-cobros/ped
 import { PedidoscobrosShowComponent } from './Comp/cobros/pedidoscobros-show/pedidoscobros-show.component';
 import { TotalesPedCobrosComponent } from './Comp/totales-ped-cobros/totales-ped-cobros.component';
 import { MaterialMultiSearchComponent } from './Comp/material-multi-search/material-multi-search.component';
-
+import { TransportePedidosComponent } from './Comp/transporte-pedidos/transporte-pedidos.component';
+import { TabTransportePedidosComponent } from './Comp/tab-transporte-pedidos/tab-transporte-pedidos.component';
+// import { NuevotransportepedidoComponent } from './Comp/transporte-pedidos/nuevotransportepedido/nuevotransportepedido.component';
+import { TransportePedidosShowComponent } from './Comp/transporte-pedidos/transporte-pedidos-show/transporte-pedidos-show.component';
+import { NuevotransportepedidoComponent } from './Comp/transporte-pedidos/nuevotransportepedido/nuevotransportepedido.component';
 
 /* const firebase = require('firebase');
 firebase.firestore().settings({experimentalForceLongPolling: true}); */
@@ -309,6 +313,10 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     PedidoscobrosShowComponent,
     TotalesPedCobrosComponent,
     MaterialMultiSearchComponent,
+    TransportePedidosComponent,
+    TabTransportePedidosComponent,
+    NuevotransportepedidoComponent,
+    TransportePedidosShowComponent,
 
   ],
   imports: [

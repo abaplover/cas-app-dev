@@ -363,7 +363,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 		enviar = true;
 	}
 
-	if(lastaction_ == "COBRO")
+	if(lastaction_ === "COBRO")
 		enviar = false;
 
 	if (enviar){
@@ -1902,3 +1902,16 @@ function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,no
 
 	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
 }//sendpedidomail
+
+exports.scheduledFunction = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
+	
+	const queryCobrado = db.collection('pedidos')
+							   .where('status', '==', 'ENTREGADO')
+							   .where('statuscobro','==', 'COMPLETADO');
+
+	const pedidosCobrados = await queryCobrado.get();
+
+	pedidosCobrados.forEach(snapshot => snapshot.ref.update({ status: 'COBRADO'}));
+
+	return null;
+  });

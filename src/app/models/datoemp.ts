@@ -10,4 +10,6 @@ export class Datoemp {
 	email        : string;
 	imglogob64?   : string;
 	status		 : string;
+	representante: string;
+	cedula: string;
 }

@@ -37,7 +37,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+							<div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
 								<div class="form-group">
 									<!-- <mat-label>Descripción</mat-label> -->
 									<input
@@ -53,6 +53,26 @@
 									<div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
 										<div *ngIf="descripcion.errors.required">
 											<small>Se requiere una descripción</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+								<div class="form-group">
+									<!-- <mat-label>Descripción</mat-label> -->
+									<input
+										placeholder="Porcentaje" 
+										value=""
+										type="number"
+										name="porcentaje"
+										#porcentaje="ngModel"
+										[(ngModel)]="zventaService.selectedZventa.porcentaje"
+										required
+										class="form-control"
+								  	/>
+									<div *ngIf="porcentaje.invalid && (porcentaje.dirty || porcentaje.touched)" class="text-danger">
+										<div *ngIf="porcentaje.errors.required">
+											<small>Se requiere un porcentaje</small>
 										</div>
 									</div>
 								</div>

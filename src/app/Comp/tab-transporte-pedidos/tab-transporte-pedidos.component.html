@@ -1,0 +1,19 @@
+<div class="container88">
+	<mat-tab-group animationDuration="0ms" [selectedIndex]="this.tabRef.selectedIndex" (selectedTabChange)="onTabChanged($event);"> 
+
+		<mat-tab>
+			<ng-template mat-tab-label>
+				<button mat-menu-item><i class="fas fa-cart-plus"></i></button> Nuevo transporte
+			</ng-template>
+			<div>
+				<div class="col-md-12">
+					<app-nuevotransportepedido></app-nuevotransportepedido>
+					<app-transporte-pedidos></app-transporte-pedidos>
+				</div>	
+			</div>  
+		</mat-tab>
+	
+	</mat-tab-group>
+</div>
+
+<!---->

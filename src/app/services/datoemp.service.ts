@@ -33,7 +33,9 @@ export class DatoempService {
       telefonocel2: datoemp.telefonocel2,
       email: datoemp.email,
       imglogob64: '',
-      status: "Activo"
+      status: "Activo",
+      representante: datoemp.representante,
+      cedula: datoemp.cedula
     });
   }
 
@@ -48,7 +50,9 @@ export class DatoempService {
       telefonocel1: datoemp.telefonocel1,
       telefonocel2: datoemp.telefonocel2,
       email: datoemp.email,
-      status: "Activo"
+      status: "Activo",
+      representante: datoemp.representante,
+      cedula: datoemp.cedula
 
     });
   }

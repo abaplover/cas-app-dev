@@ -42,6 +42,7 @@ export interface Pedido {
   nrofactura?: string;
   observacion?: string;
   pagopuntual?            :boolean; //Indica si el pedido se pagó de forma puntual o no
+  porcentaje?: number;
   pdfb64?: string;
   pdfname?: string;
   pdfurl?: string;
@@ -60,6 +61,8 @@ export interface Pedido {
   totalPed?: number;
   totalpormaterial?: number;
   totalPri?: number;
+  transporteId?: string;
   transporte?: string;
+  compania?: string;
   unidaddemedida?: string;
 }

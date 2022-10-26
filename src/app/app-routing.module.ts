@@ -17,6 +17,7 @@ import { TabcobrosComponent } from "./Comp/tabcobros/tabcobros.component";
 import { SidenavComponent } from './Comp/sidenav/sidenav.component';
 import { ReportsAveriasComponent } from './Comp/reports-averias/reports-averias.component';
 import { ReportsCobrosComponent } from './Comp/reports-cobros/reports-cobros.component';
+import { TabTransportePedidosComponent } from './Comp/tab-transporte-pedidos/tab-transporte-pedidos.component';
 
 const routes: Routes = [
   { path:'home' ,component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'ayuda', component:AyudaComponent},
   { path: 'login', component:LoginComponent},
   { path: 'pedidos', component:TabpedidosComponent},
+  { path: 'transporte-pedidos', component:TabTransportePedidosComponent},
   { path: 'cobros', component: TabcobrosComponent},
   { path: 'averias', component:AveriasComponent },
   { path: 'maestros', component:MaestrosComponent },
