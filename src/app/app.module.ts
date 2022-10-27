@@ -208,6 +208,7 @@ import { TabTransportePedidosComponent } from './Comp/tab-transporte-pedidos/tab
 // import { NuevotransportepedidoComponent } from './Comp/transporte-pedidos/nuevotransportepedido/nuevotransportepedido.component';
 import { TransportePedidosShowComponent } from './Comp/transporte-pedidos/transporte-pedidos-show/transporte-pedidos-show.component';
 import { NuevotransportepedidoComponent } from './Comp/transporte-pedidos/nuevotransportepedido/nuevotransportepedido.component';
+import { TransportePedidosCerradosComponent } from './Comp/transporte-pedidos/transporte-pedidos-cerrados/transporte-pedidos-cerrados.component';
 
 /* const firebase = require('firebase');
 firebase.firestore().settings({experimentalForceLongPolling: true}); */
@@ -317,6 +318,7 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     TabTransportePedidosComponent,
     NuevotransportepedidoComponent,
     TransportePedidosShowComponent,
+    TransportePedidosCerradosComponent,
 
   ],
   imports: [

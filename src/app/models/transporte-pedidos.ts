@@ -1,7 +1,6 @@
 import { Pedido} from './pedido'
 
 export class TransportePedidos{
-	$key		: string;
 	id?			: string;
 	fecha?		: string;
 	compania?	: string;
@@ -12,6 +11,6 @@ export class TransportePedidos{
 	estatus?		: string;
 	fechaCierre?	: string;
 	totalUSD?	: number;
-	totalBsF?	: number		
+	totalBsF?	: number;		
 	pedido?		: any;
 }

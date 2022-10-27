@@ -31,7 +31,7 @@ import { P } from '@angular/cdk/keycodes';
 })
 export class TransportePedidosComponent implements OnInit {
 
-  transporteVer = {} as TransportePedidos;
+  transporteVer: TransportePedidos = { totalUSD: 0.00, totalBsF: 0.00 };
   txtComentario = "";
   mostrardiv: boolean = false;
   pedIndex: number = -990;
@@ -74,7 +74,8 @@ export class TransportePedidosComponent implements OnInit {
     this.getTransportes();
 
     this.pedidoService.getPedidosPreparados().subscribe(pedidos => {
-      this.pedidosPreparados = pedidos.filter(pedido => !pedido.transporteId )
+      console.log(pedidos);
+      this.pedidosPreparados = pedidos.filter(pedido => !pedido.transporteId);
       //ELEMENT_DATA
     })
     this.transporteS.getTransportes().valueChanges().subscribe(tra => {
@@ -100,7 +101,7 @@ export class TransportePedidosComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.transportePedidosList);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    
+
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -131,64 +132,17 @@ export class TransportePedidosComponent implements OnInit {
     return dateObject.getFullYear() + "-" + m3s + "-" + d1a;
   }//timestampConvert
 
-  mostrarOcultar(event, pedi) {
-    this.mostrardiv = true;
-    this.pedIndex = pedi;
-    this.idpedidoEli = this.pedidoslist[this.pedIndex].uid;
-    this.fechapedidoEli = this.pedidoslist[this.pedIndex].fechapedido;
-    this.clientepedidoEli = this.pedidoslist[this.pedIndex].nomcliente;
-    this.pedidoService.mostrarForm = false;
-  }
-
-  onCancelar(pf?: NgForm) {
-    if (pf != null) pf.reset();
-    this.idpedidoEli = "";
-    this.clientepedidoEli = "";
-    this.mostrardiv = false;
-  }
-
-  onDelete(event) {
-    //this.pedidoService.pedido_ =  Object.assign({}, ped);
-    if (this.txtComentario != "") {
-      if (this.pedIndex != -990) {
-        this.pedidoslist[this.pedIndex].status = "ELIMINADO";
-        this.pedidoslist[this.pedIndex].modificadopor = this.loginS.getCurrentUser().email;
-        this.pedidoslist[this.pedIndex].motivorechazo = this.txtComentario;
-        this.pedidoService.deletePedidos(this.pedidoslist[this.pedIndex]);
-        this.toastr.show('Pedido Eliminado', 'Operación Terminada');
-        this.mostrardiv = false;
-      }
-    }
-  }
-
-  onEdit(event, ped) {
-
-  }//onEdit
-
-  moForm() {
-    //this.estadoElement = this.estadoElement === 'estado1' ? 'estado2' : 'estado1';
-
-    if (this.transportePedS.mostrarForm) {
-      this.transportePedS.mostrarForm = false;
-    } else {
-      this.transportePedS.mostrarForm = true;
-    }
-
-
-    this.transportePedS.txtBtnAccion = "Crear Transporte";
-
-  }//moForm
-
   async openDialog(event, transporte) {
-    console.log(transporte);
+
     const dialogConfig = new MatDialogConfig;
-    dialogConfig.autoFocus = true;
     dialogConfig.maxWidth = "100%"
-    dialogConfig.width = "95%";
-    dialogConfig.height = "95%"
+    dialogConfig.maxHeight = "100%";
+    dialogConfig.minHeight = "100%";
+    dialogConfig.width = "100%";
+    dialogConfig.height = "100%";
 
     this.transporteVer = Object.assign({}, transporte);
-
+    console.log(this.pedidosPreparados);
     dialogConfig.data = {
       transportePedido: Object.assign({}, this.transporteVer),
       accion: event,
@@ -201,24 +155,25 @@ export class TransportePedidosComponent implements OnInit {
     const diagRef = this.dialogo.open(TransportePedidosShowComponent, dialogConfig);
 
     diagRef.afterClosed().subscribe(result => {
-      if(result)
-      switch (result.event) {
-        case 'CREATE':
-          this.createTransporte(result.data);
-          this.getTransportes();
-          break;
-        case 'EDIT':
-          this.UpdateTransporte(result.data);
-          this.getTransportes();
-          break;
-        case 'DELETE':
-          this.deleteTransporte(result.data);
-          this.getTransportes();
-        case 'CLOSE':
-          this.closeTransporte(result.data);
-          this.getTransportes();
-        break;
-      }
+      if (result)
+        switch (result.event) {
+          case 'CREATE':
+            this.createTransporte(result.data);
+            this.getTransportes();
+            break;
+          case 'EDIT':
+            this.UpdateTransporte(result.data);
+            this.verificarPedEliminados(result.data);
+            this.getTransportes();
+            break;
+          case 'DELETE':
+            this.deleteTransporte(result.data);
+            this.getTransportes();
+          case 'CLOSE':
+            this.closeTransporte(result.data);
+            this.getTransportes();
+            break;
+        }
     })
 
   }
@@ -228,8 +183,8 @@ export class TransportePedidosComponent implements OnInit {
     return transporteId["order"];
   }
 
-  async createTransporte(transporteInfo){
-    
+  async createTransporte(transporteInfo) {
+
     let transporteId = await this.getId();
     this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
     this.transportePedidos = transporteInfo.transportePedido;
@@ -238,7 +193,7 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedidos.estatus = 'ACTIVO';
     this.transportePedS.create(this.transportePedidos);
   }
-  UpdateTransporte(transporteInfo){
+  UpdateTransporte(transporteInfo) {
 
     this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
     this.transportePedidos = transporteInfo.transportePedido;
@@ -246,14 +201,14 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
   }
 
-  deleteTransporte(transporteInfo){
+  deleteTransporte(transporteInfo) {
     this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
-    
+
     this.transportePedS.delete(this.transportePedidos.id, this.transportePedidos);
   }
-  closeTransporte(transporteInfo){
+  closeTransporte(transporteInfo) {
     this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
@@ -261,9 +216,24 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedidos.estatus = 'CERRADO';
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
   }
-  // openDialog(action, obj){
 
-  // }
+  verificarPedEliminados(transporteInfo) {
+    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+    console.log(this.listaDetallePedido);
+
+    this.listaDetallePedido.map(async (pedido) => { //iteracion de pedidos en el transporte
+
+      if (pedido.modStatus.deleted) { // Se buscan los pedidos con estatus eliminado
+        let IsRef = await this.transportePedS.CheckPedidoRef(pedido, transporteInfo.transportePedido); //Se determina si el pedido sigue referencia al transporte
+
+        if (IsRef) { 
+          this.transportePedS.UpdatePedido(pedido, ''); // Se actualizan los pedidos eliminando la referencia al transporte
+          console.log('Done');
+        }
+      }
+
+    })
+  }
 
 
 }

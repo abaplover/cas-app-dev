@@ -332,6 +332,13 @@ export class PedidoService {
 
   }
 
+  getPedidoById(idpedido){
+    let pedidoDbRef = this.db.collection('pedidos', ref => ref.where('idpedido', '==', idpedido))
+    return new Promise<any>((resolve) => {
+      pedidoDbRef.valueChanges().subscribe(pedido => resolve(pedido))
+    });
+  }
+
   getPedidoCambioId(idpedido) {
     this.pedidoColletionCobro = this.db.collection('pedidos', ref => ref.where("idpedido", "==", idpedido).where("status", "in", ['ENTREGADO']));
     return this.pedidoColletionCobro.snapshotChanges().pipe(map(changes => {

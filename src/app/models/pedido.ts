@@ -65,4 +65,5 @@ export interface Pedido {
   transporte?: string;
   compania?: string;
   unidaddemedida?: string;
+  modStatus?: any;
 }

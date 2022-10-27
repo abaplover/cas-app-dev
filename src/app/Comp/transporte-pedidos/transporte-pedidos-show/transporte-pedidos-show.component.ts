@@ -32,10 +32,12 @@ export class TransportePedidosShowComponent implements OnInit {
   public transporteList: Transporte[] = []; //arreglo vacio
 
   btnEnviar = false;
-
+  addOperation = 'AGREGAR';
+  delOperation = 'ELIMINAR';
   constructor(
     private dialogRef: MatDialogRef<TransportePedidosShowComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
+
 
     this.transportePedido_ = data.transportePedido;
     this.listaDetallePedido = data.transportePedido.pedido;
@@ -44,6 +46,8 @@ export class TransportePedidosShowComponent implements OnInit {
     this.vendedorList = data.vendedorList;
     this.zventaList = data.zventaList;
     this.accion = data.accion;
+
+    console.log(this.transportePedido_);
 
     if (!this.listaDetallePedido)
       this.listaDetallePedido = [];
@@ -78,13 +82,13 @@ export class TransportePedidosShowComponent implements OnInit {
       this.btnEnviar = true;
     }
 
-    if(this.accion === 'CLOSE'){
+    if (this.accion === 'CLOSE') {
       this.btnText = 'Cerrar transporte';
       this.showButton = true;
       this.btnEnviar = true;
       this.readonly = true;
       this.close = true;
-      
+
     }
     console.log(this.close);
   }
@@ -128,13 +132,21 @@ export class TransportePedidosShowComponent implements OnInit {
     let dateObject = new Date(fec.seconds * 1000);
     this.detallePedido.fpreparacion = dateObject;
     console.log(fec);
-  }
-  async roundTo(num: number, places: number) {
+  };
+  roundTo(num: number, places: number): number {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
 
   agregardetalles() {
+
+    this.actualizarTotales(this.addOperation, this.detallePedido);
+    console.log(this.transportePedido_);
+    if (this.edit)
+      this.detallePedido.modStatus = { style: "background-color: #00ff00" };
+
+    if (this.create)
+      this.detallePedido.modStatus = { style: "background-color:transparent" };
 
     if (this.detallePedido && !this.listaDetallePedido.includes(this.detallePedido))
       this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
@@ -153,8 +165,41 @@ export class TransportePedidosShowComponent implements OnInit {
 
   }//onChangeSearch
   removeDetRow(i) {
-    this.listaDetallePedido.splice(i, 1);
-    console.log(i);
+    // this.listaDetallePedido.splice(i, 1);
+
+    if (!this.listaDetallePedido[i].modStatus.deleted) {
+      this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
+      this.listaDetallePedido[i].modStatus = { style: "background-color:#ff3300", deleted: true };
+    }
+
+  }
+
+  actualizarTotales(operacion, transportePed) {
+
+    if (operacion === this.addOperation) {
+      if (this.transportePedido_.totalUSD)
+        this.transportePedido_.totalUSD = this.transportePedido_.totalUSD + transportePed.totalmontoneto;
+
+      if (!this.transportePedido_.totalUSD)
+        this.transportePedido_.totalUSD = transportePed.totalmontoneto;
+
+      if (this.transportePedido_.totalBsF)
+        this.transportePedido_.totalBsF = this.transportePedido_.totalBsF +
+          this.roundTo((this.transportePedido_.totalUSD * this.transportePedido_.tasa), 2);
+
+      if (!this.transportePedido_.totalBsF)
+        this.transportePedido_.totalBsF = this.roundTo((this.transportePedido_.totalUSD * this.transportePedido_.tasa), 2);
+    }
+
+    if (operacion === this.delOperation) {
+      this.transportePedido_.totalUSD = this.transportePedido_.totalUSD - transportePed.totalmontoneto;
+
+      // if (this.transportePedido_.totalUSD > 0)
+      this.transportePedido_.totalBsF = this.transportePedido_.totalBsF - (this.roundTo(transportePed.totalmontoneto * this.transportePedido_.tasa, 2));
+
+
+    }
+
   }
 
 }

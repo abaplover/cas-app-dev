@@ -63,7 +63,7 @@ export class NuevotransportepedidoComponent implements OnInit {
   currencyPipeVEF = 'VEF';
   currencyPipeUSD = 'USD';
   currencyPipe: String;
-  transportePedido_: TransportePedidos = { $key: '', compania: '', fecha: '', chofer: '', vehiculo: '', placa: '' };
+  transportePedido_: TransportePedidos = { compania: '', fecha: '', chofer: '', vehiculo: '', placa: '' };
   //pdfURL: Observable<string>;
   UploadValue: number;
   public URLPublica: any;
@@ -167,7 +167,7 @@ export class NuevotransportepedidoComponent implements OnInit {
     this.transportePedidos.estatus = 'ACTIVO';
     this.transportePedService.create(this.transportePedidos);
 
-    this.transportePedido_ = { $key: '', compania: '', fecha: '', chofer: '', vehiculo: '', placa: '' };
+    this.transportePedido_ = { compania: '', fecha: '', chofer: '', vehiculo: '', placa: '' };
     this.detallePedido = {};
     this.listaDetallePedido = [];
     this.transportePedService.mostrarForm = false;

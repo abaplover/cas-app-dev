@@ -1,6 +1,6 @@
-<mat-dialog-content style="width: 100%; height: 200%;">
+<mat-dialog-content>
 
-	<div class="card bg-light mb-5" style="padding-top: 0; margin-top: 0; height: 150%;">
+	<div class="card bg-light mb-5" >
 		<div class="card-body text-info panel panel-login" style="border-style: solid; border-width: 0px; ">
 			<!--<form #pedidoForm="ngForm" (ngSubmit)="onSubmit(pedidoForm)">-->
 			<form #pedidoForm="ngForm" #pForm (ngSubmit)="agregardetalles()">
@@ -8,7 +8,7 @@
 				<div class="row">
 					<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
 						<div class="card">
-							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 260px;">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px;">
 								<div class="row" style="height: 45px;">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 										<div class="input-group input-group-sm mb-3">
@@ -96,7 +96,7 @@
 						</div>
 					</div>
 
-					<div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="card">
 							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 190px; ">
 								<div class="row">
@@ -150,19 +150,58 @@
 
 							</div>
 						</div>
+
 					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 120px; ">
+								<div class="row">
+									<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;"
+													id="inputGroup-sizing-sm">Total USD</span>
+											</div>
+											<input class="form-control" aria-label="Small"
+												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
+												name="totalUSD" id="totalUSD" #totalUSD="ngModel"
+												[(ngModel)]="this.transportePedido_.totalUSD" readonly class="form-control"
+												aria-label="Small" />
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;"
+													id="inputGroup-sizing-sm">Total BsF</span>
+											</div>
+											<input class="form-control" aria-label="Small"
+												aria-describedby="inputGroup-sizing-sm" placeholder="" type="text"
+												name="totalBsF" id="totalBsF" #totalBsF="ngModel"
+												[(ngModel)]="this.transportePedido_.totalBsF" class="form-control"
+												aria-label="Small" readonly />
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
 				</div>
 				<!--Fila cabecera-->
 
 				<div class="row" style="height: 5px;"></div>
 				<div class="row">
-					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 						<div class="card" *ngIf="this.create || this.edit">
 							<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
 								<div class="row">
 									<div class="col-sm-11 col-md-11 col-lg-11 col-xl-11" style="padding-right: 1px;">
 										<div class="row">
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1" style="padding-right: 1px;">
+											<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" style="padding-right: 1px;">
 												<mat-label style="font-size:smaller; font-weight: bold;">N° DOC.
 												</mat-label>
 												<div class="ng-autocomplete" style="width: 100%;">
@@ -182,7 +221,7 @@
 												</div>
 	
 											</div>
-											<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"
+											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
 												style="padding-left: 1px; padding-right: 1px;">
 												<mat-label style="font-size:smaller; font-weight: bold; ">Fecha
 												</mat-label>
@@ -320,9 +359,9 @@
 														</tr>
 													</thead>
 													<tbody class="thead-secondary table-secondary" style="background-color: transparent;">
-														<tr *ngFor="let ped of this.listaDetallePedido; index as i">
+														<tr *ngFor="let ped of this.listaDetallePedido; index as i" [style]="ped.modStatus.style">
 															<td class="col-0" scope="row">{{ped.nrofactura}}</td>
-															<td class="col-0" scope="row">{{ped.fdespacho}}</td>
+															<td class="col-0" scope="row">{{ped.fdespacho.toDate() | date:'dd/MM/yyyy' }}</td>
 															<td class="col-0" scope="row">{{ped.idcliente}}</td>
 															<td class="col-1" style="text-align: left;">
 																{{ped.nomcliente}}</td>

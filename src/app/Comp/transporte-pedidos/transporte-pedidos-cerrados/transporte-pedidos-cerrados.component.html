@@ -1,7 +1,4 @@
 <div>
-	<button class="btn btn-secondary btn-space" type="" (click)="openDialog('CREATE', $event)">
-		<i class="fas fa-plus size:3x"></i> Crear
-	</button>
 	<mat-form-field>
 		<mat-label>Buscar por</mat-label>
 		<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
@@ -70,16 +67,6 @@
 				<a class="btn btn-light btn-sm" (click)="openDialog('READ',element)"  data-toggle="tooltip" data-placement="top" title="Visualizar transporte">
 					<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Visualizar transporte"></i>
 				</a>
-				<button class="btn btn-light btn-sm" (click)="openDialog('EDIT',element)" [disabled]="element.estatus != 'ACTIVO'"  data-toggle="tooltip" data-placement="top" title="Editar transporte">
-					<i class="far fa-edit"  data-toggle="tooltip" data-placement="top" title="Editar transporte"></i>
-				</button>
-				<button class="btn btn-light btn-sm" (click)="openDialog('DELETE',element)" style="color: red;"  data-toggle="tooltip" data-placement="top" title="Eliminar transporte">
-				<i class="far fa-trash-alt"  data-toggle="tooltip" data-placement="top" title="Eliminar transporte"></i>
-				</button>
-				<button class="btn btn-light btn-sm" (click)="openDialog('CLOSE',element)" style="color: green;"  data-toggle="tooltip" data-placement="top" title="Eliminar transporte">
-					<i class="fa fa-check"  data-toggle="tooltip" data-placement="top" title="Cerrar transporte"></i>
-					</button>
-
 			</td>
 		</ng-container>
 

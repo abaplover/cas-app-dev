@@ -18,6 +18,7 @@ export class TransportePedidosService {
   transportePedidosRef: AngularFirestoreCollection<TransportePedidos>;
   tranportePedidosCountRef: AngularFirestoreCollection<any>;
   transportesActivosRef: AngularFirestoreCollection<TransportePedidos>;
+  transportesCerradosRef: AngularFirestoreCollection<TransportePedidos>;
 
   dataList: AngularFireList<TransportePedidos>;
 
@@ -29,6 +30,11 @@ export class TransportePedidosService {
       query = query.where('estatus', '==', 'ACTIVO');
       return query;
     });
+    this.transportesCerradosRef = db.collection(this.dbPath, ref => {
+      let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+      query = query.where('estatus', '==', 'CERRADO');
+      return query;
+    })
 
   }
 
@@ -38,10 +44,16 @@ export class TransportePedidosService {
     });
   }
 
-  getOne(id){
+  getOne(id) {
     return new Promise<any>((resolve) => {
       this.transportesActivosRef.doc(`${id}`).valueChanges().subscribe(transporte => resolve(transporte))
     });
+  }
+
+  getClosed() {
+    return new Promise<any>((resolve) => {
+      this.transportesCerradosRef.valueChanges().subscribe(transportes => resolve(transportes));
+    })
   }
 
   create(transportePedidos: TransportePedidos): any {
@@ -71,8 +83,21 @@ export class TransportePedidosService {
   UpdatePedidos(Pedidos, transporteId) {
     if (Pedidos.length > 0)
       Pedidos.map((pedido) => {
-        pedido.transporteId = transporteId;
-        this.PedidoS.updatePedidos(pedido);
+        this.UpdatePedido(pedido, transporteId);
       });
+  }
+  UpdatePedido(Pedido, transporteId) {
+    Pedido.transporteId = transporteId;
+    this.PedidoS.updatePedidos(Pedido);
+  }
+
+  async CheckPedidoRef(pedido, transporte) {
+
+    let pedido_ = await this.PedidoS.getPedidoById(pedido.idpedido);
+    if (!pedido_[0].transporteId || pedido_[0].transporteId != transporte.id)
+      return false; //Pedido no esta referenciado al transporte
+
+    if (pedido_[0].transporteId == transporte.id)
+      return true;
   }
 }
