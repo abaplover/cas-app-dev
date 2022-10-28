@@ -96,11 +96,14 @@ export class TransportePedidosComponent implements OnInit {
     })
   }
 
-  async getTransportes() {
-    this.transportePedidosList = await this.transportePedS.getAll();
-    this.dataSource = new MatTableDataSource(this.transportePedidosList);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  getTransportes() {
+    this.transportePedS.getAll().subscribe(transportes => {
+      this.transportePedidosList = transportes;
+      this.dataSource = new MatTableDataSource(this.transportePedidosList);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
+
 
   }
   applyFilter(event: Event) {
@@ -226,7 +229,7 @@ export class TransportePedidosComponent implements OnInit {
       if (pedido.modStatus.deleted) { // Se buscan los pedidos con estatus eliminado
         let IsRef = await this.transportePedS.CheckPedidoRef(pedido, transporteInfo.transportePedido); //Se determina si el pedido sigue referencia al transporte
 
-        if (IsRef) { 
+        if (IsRef) {
           this.transportePedS.UpdatePedido(pedido, ''); // Se actualizan los pedidos eliminando la referencia al transporte
           console.log('Done');
         }

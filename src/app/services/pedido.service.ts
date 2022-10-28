@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, forkJoin, merge } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { Action } from 'rxjs/internal/scheduler/Action';
 import { AngularFireDatabase } from '@angular/fire/database';
 import * as firebase from 'firebase';
 import * as moment from 'moment';
-
+import { TransportePedidosService } from './transporte-pedidos.service';
 
 @Injectable({
   providedIn: 'root'
@@ -132,7 +132,9 @@ export class PedidoService {
 
   db2 = firebase.firestore();
 
-  constructor(public db: AngularFirestore) {
+  constructor(public db: AngularFirestore, 
+    private injector : Injector
+    ) {
 
     //Busca todos los pedidos
     this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO', 'ENTREGADO', 'ELIMINADO', 'COBRADO']).orderBy("creado", "desc").limit(150));
@@ -594,6 +596,13 @@ export class PedidoService {
         }
       });
     }
+
+    if(pedido.lastaction === 'Crear NE')
+    {
+      let transportePedidosService = this.injector.get(TransportePedidosService);
+      transportePedidosService.updatePedidoTransporte(pedido, pedido.transporteId);
+    }
+
   };
 
 

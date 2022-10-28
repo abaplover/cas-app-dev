@@ -4,7 +4,9 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { TransportePedidos } from '../models/transporte-pedidos';
 import { PedidoService } from './pedido.service';
 import * as firebase from 'firebase';
-import { resolve } from 'dns';
+import { Observable, BehaviorSubject, forkJoin, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Pedido } from '../models/pedido';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,8 @@ export class TransportePedidosService {
   transportesCerradosRef: AngularFirestoreCollection<TransportePedidos>;
 
   dataList: AngularFireList<TransportePedidos>;
+  transportePedidosActivos: Observable<TransportePedidos[]>;
+  transportePedidosCerrados: Observable<TransportePedidos[]>;
 
   constructor(private db: AngularFirestore, private PedidoS: PedidoService) {
     this.transportePedidosRef = db.collection(this.dbPath);
@@ -34,26 +38,36 @@ export class TransportePedidosService {
       let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
       query = query.where('estatus', '==', 'CERRADO');
       return query;
-    })
+    });
+
+    this.transportePedidosActivos = this.transportesActivosRef.snapshotChanges().pipe(map(changes => {
+      return changes.map(results => {
+        const data = results.payload.doc.data() as TransportePedidos;
+        return data;
+      })
+    }))
+
+    this.transportePedidosCerrados = this.transportesCerradosRef.snapshotChanges().pipe(map(changes => {
+      return changes.map(results => {
+        const data = results.payload.doc.data() as TransportePedidos;
+        return data;
+      })
+    }))
 
   }
 
   getAll() {
-    return new Promise<any>((resolve) => {
-      this.transportesActivosRef.valueChanges().subscribe(transportes => resolve(transportes))
-    });
+    return this.transportePedidosActivos;
   }
 
   getOne(id) {
     return new Promise<any>((resolve) => {
       this.transportesActivosRef.doc(`${id}`).valueChanges().subscribe(transporte => resolve(transporte))
-    });
+    }); 
   }
 
   getClosed() {
-    return new Promise<any>((resolve) => {
-      this.transportesCerradosRef.valueChanges().subscribe(transportes => resolve(transportes));
-    })
+    return this.transportePedidosCerrados;
   }
 
   create(transportePedidos: TransportePedidos): any {
@@ -99,5 +113,13 @@ export class TransportePedidosService {
 
     if (pedido_[0].transporteId == transporte.id)
       return true;
+  }
+
+  async updatePedidoTransporte(pedido: Pedido, transporteId) {
+    let transporte = await this.getOne(transporteId);
+    const PedidoIndex = transporte.pedido.findIndex(ped => ped.idpedido == pedido.idpedido);
+    transporte[PedidoIndex] = pedido;
+    this.update(transporteId, transporte);
+
   }
 }

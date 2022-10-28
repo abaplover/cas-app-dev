@@ -14,28 +14,30 @@ import { TransportePedidosShowComponent } from '../transporte-pedidos-show/trans
   styleUrls: ['./transporte-pedidos-cerrados.component.css']
 })
 export class TransportePedidosCerradosComponent implements OnInit {
-  
+
   transporteVer = {} as TransportePedidos;
   transportePedidosList = [];
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['id', 'fecha', 'chofer', 'compania', 'placa', 'estatus', 'Opc'];
-  
+
   constructor(private transportesPedS: TransportePedidosService,
-              private dialogo: MatDialog,) { }
+    private dialogo: MatDialog,) { }
 
   ngOnInit(): void {
     this.getTransportes();
   }
 
-  async getTransportes() {
-    this.transportePedidosList = await this.transportesPedS.getClosed();
-    console.log(this.transportePedidosList);
-    this.dataSource = new MatTableDataSource(this.transportePedidosList);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    
+  getTransportes() {
+    this.transportesPedS.getClosed().subscribe(transportes => {
+      
+      this.transportePedidosList = transportes;
+      this.dataSource = new MatTableDataSource(this.transportePedidosList);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
+
   }
 
   applyFilter(event: Event) {

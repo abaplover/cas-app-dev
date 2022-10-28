@@ -10,7 +10,10 @@ export class TransportePedidos{
 	tasa?		: number;
 	estatus?		: string;
 	fechaCierre?	: string;
+	totalPedidos?: number;
 	totalUSD?	: number;
-	totalBsF?	: number;		
+	totalBsF?	: number;	
+	comisionUSD? : number;
+	comisionBsF?: number;	
 	pedido?		: any;
 }
