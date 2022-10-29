@@ -108,7 +108,7 @@
 											</div>
 											<input class="form-control" aria-label="Small"
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
-												name="tasa" id="tasa" #tasa="ngModel"
+												name="tasa" id="tasa" #tasa="ngModel" required
 												[(ngModel)]="this.transportePedido_.tasa" [readonly]="this.readonly"
 												class="form-control" aria-label="Small" />
 										</div>
@@ -364,9 +364,9 @@
 												<mat-label style="font-size:smaller; font-weight: bold; ">Total
 												</mat-label>
 												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="totalmontoneto"
+													<input type="text" name="totalPorcentaje"
 														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.totalmontoneto" readonly=true
+														[(ngModel)]="this.detallePedido.totalPorcentaje" readonly=true
 														class="form-control" />
 												</div>
 											</div>
@@ -434,8 +434,8 @@
 														<tr *ngFor="let ped of this.listaDetallePedido; index as i"
 															[style]="ped.modStatus.style">
 															<td class="col-0" scope="row">{{ped.nrofactura}}</td>
-															<td class="col-0" scope="row">{{ped.fechapedido.toDate() | date:'MM/dd/yyyy'}}</td>
-															<td class="col-0" scope="row">{{ped.fentrega}}</td>
+															<td class="col-0" scope="row">{{ped.fechapedido | date:'MM/dd/yyyy'}}</td>
+															<td class="col-0" scope="row">{{ped.fentrega | date:'MM/dd/yyyy'}}</td>
 															<td class="col-0" scope="row">{{ped.listaprecio}}</td>
 															<td class="col-0" scope="row">{{ped.idcliente}}</td>
 															<td class="col-1" style="text-align: left;">
@@ -447,7 +447,7 @@
 															<td class="col-0" style="text-align: right;">
 																{{ped.porcentaje}}</td>
 															<td class="col-0" style="text-align: right;">
-																{{ped.totalmontoneto | currency:" "}}</td>
+																{{ped.totalPorcentaje | currency:" "}}</td>
 															<td class="col-0" style="text-align: right;">
 																{{ped.nrobultos}}</td>
 															<th class="col-0" style="cursor: pointer;" scope="col"

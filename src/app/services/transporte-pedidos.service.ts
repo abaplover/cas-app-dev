@@ -63,29 +63,29 @@ export class TransportePedidosService {
   getOne(id) {
     return new Promise<any>((resolve) => {
       this.transportesActivosRef.doc(`${id}`).valueChanges().subscribe(transporte => resolve(transporte))
-    }); 
+    });
   }
 
   getClosed() {
     return this.transportePedidosCerrados;
   }
 
-  create(transportePedidos: TransportePedidos): any {
+  create(transportePedidos: TransportePedidos, pedidos): any {
 
     const key = transportePedidos.id;
     this.transportePedidosRef.doc(`${transportePedidos.id}`).set({ ...transportePedidos });
     this.transportePedidosRef.doc(this.countPath).update({
       order: firebase.firestore.FieldValue.increment(1)
     });
-    this.UpdatePedidos(transportePedidos.pedido, transportePedidos.id);
+    this.UpdatePedidos(pedidos, transportePedidos.id);
   }
 
   update(id: string, transportePedidos: TransportePedidos): Promise<void> {
     return this.transportePedidosRef.doc(`${id}`).update(transportePedidos);
   }
 
-  delete(id: string, transportePedidos: TransportePedidos): Promise<void> {
-    this.UpdatePedidos(transportePedidos.pedido, '');
+  delete(id: string, transportePedidos): Promise<void> {
+    this.UpdatePedidos(transportePedidos, '');
     return this.transportePedidosRef.doc(`${id}`).delete();
   }
   getNextId() {
@@ -97,6 +97,7 @@ export class TransportePedidosService {
   UpdatePedidos(Pedidos, transporteId) {
     if (Pedidos.length > 0)
       Pedidos.map((pedido) => {
+
         this.UpdatePedido(pedido, transporteId);
       });
   }

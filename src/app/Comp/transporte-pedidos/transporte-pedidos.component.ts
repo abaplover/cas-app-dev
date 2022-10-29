@@ -8,13 +8,11 @@ import { TransportePedidosService } from 'src/app/services/transporte-pedidos.se
 import { TransporteService } from 'src/app/services/transporte.service';
 import { ZventaService } from 'src/app/services/zventa.service';
 import { VendedorService } from 'src/app/services/vendedor.service';
-import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
 import { MrechazoService } from 'src/app/services/mrechazo.service';
 
 import { Mrechazo } from '../../models/mrechazo';
-import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TransportePedidosShowComponent } from './transporte-pedidos-show/transporte-pedidos-show.component';
 import { ClientService } from 'src/app/services/client.service';
@@ -22,7 +20,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Zventa } from 'src/app/models/zventa';
 import { Transporte } from 'src/app/models/transporte';
 import { Vendedor } from 'src/app/models/vendedor';
-import { P } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-transporte-pedidos',
@@ -49,7 +46,7 @@ export class TransportePedidosComponent implements OnInit {
   public pedidosPreparados: Pedido[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
   public transportePedidos: TransportePedidos;
-  public listaDetallePedido: Pedido[] = [];
+  public listaDetallePedido: any[] = [];
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
@@ -74,7 +71,7 @@ export class TransportePedidosComponent implements OnInit {
     this.getTransportes();
 
     this.pedidoService.getPedidosPreparados().subscribe(pedidos => {
-      console.log(pedidos);
+
       this.pedidosPreparados = pedidos.filter(pedido => !pedido.transporteId);
       //ELEMENT_DATA
     })
@@ -145,9 +142,16 @@ export class TransportePedidosComponent implements OnInit {
     dialogConfig.height = "100%";
 
     this.transporteVer = Object.assign({}, transporte);
-    console.log(this.pedidosPreparados);
+
+    if (this.transporteVer.pedido) {
+      this.pedidoslistDet = await this.getPedidosDetalles(this.transporteVer.pedido);
+      await this.combinarDetalle();
+    }
+
+
     dialogConfig.data = {
       transportePedido: Object.assign({}, this.transporteVer),
+      detallePedidos: this.pedidoslistDet,
       accion: event,
       pedidosPreparados: this.pedidosPreparados,
       zventaList: this.zventaList,
@@ -189,53 +193,98 @@ export class TransportePedidosComponent implements OnInit {
   async createTransporte(transporteInfo) {
 
     let transporteId = await this.getId();
-    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+    this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
     this.transportePedidos.id = transporteId + 1;
     this.transportePedidos.estatus = 'ACTIVO';
-    this.transportePedS.create(this.transportePedidos);
-  }
-  UpdateTransporte(transporteInfo) {
 
-    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+    this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
+
+    this.transportePedS.create(this.transportePedidos, this.pedidoslistDet);
+  }
+  async UpdateTransporte(transporteInfo) {
+
+    this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
+    this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
+
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
+    this.actualizarReferenciaPedidos(transporteInfo)
   }
-
-  deleteTransporte(transporteInfo) {
-    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+  async deleteTransporte(transporteInfo) {
+    this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
+    this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
 
-    this.transportePedS.delete(this.transportePedidos.id, this.transportePedidos);
+    this.transportePedS.delete(this.transportePedidos.id, this.pedidoslistDet);
   }
   closeTransporte(transporteInfo) {
-    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+    this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
 
     this.transportePedidos.estatus = 'CERRADO';
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
   }
-
   verificarPedEliminados(transporteInfo) {
-    this.listaDetallePedido = transporteInfo.transportePedidoDetalle;
+    this.listaDetallePedido = transporteInfo.listaPedidos;
     console.log(this.listaDetallePedido);
 
     this.listaDetallePedido.map(async (pedido) => { //iteracion de pedidos en el transporte
 
       if (pedido.modStatus.deleted) { // Se buscan los pedidos con estatus eliminado
-        let IsRef = await this.transportePedS.CheckPedidoRef(pedido, transporteInfo.transportePedido); //Se determina si el pedido sigue referencia al transporte
+        const ped_ = this.pedidoslistDet.find(ped => ped.uid == pedido.uid);
+        let IsRef = await this.transportePedS.CheckPedidoRef(ped_, transporteInfo.transportePedido); //Se determina si el pedido sigue referencia al transporte
 
         if (IsRef) {
-          this.transportePedS.UpdatePedido(pedido, ''); // Se actualizan los pedidos eliminando la referencia al transporte
-          console.log('Done');
+          this.transportePedS.UpdatePedido(ped_, ''); // Se actualizan los pedidos eliminando la referencia al transporte
+
         }
       }
 
     })
+  }
+
+  actualizarReferenciaPedidos(transporteInfo) {
+    this.listaDetallePedido = transporteInfo.listaPedidos;
+
+    this.listaDetallePedido.map(async (pedido) => { //iteracion de pedidos en el transporte
+
+      if (pedido.modStatus.modified) { // Se buscan los pedidos con estatus eliminado
+        const ped_ = this.pedidoslistDet.find(ped => ped.uid == pedido.uid);
+        let IsRef = await this.transportePedS.CheckPedidoRef(ped_, transporteInfo.transportePedido); //Se determina si el pedido no tiene referencia
+
+        if (!IsRef) {
+          this.transportePedS.UpdatePedido(ped_, transporteInfo.transportePedido.id); // Se actualizan los pedidos agregando la referencia al transporte
+
+        }
+      }
+
+    })
+  }
+
+  async getPedidosDetalles(pedidos) {
+
+    let uidArray = pedidos.map(ped => ped.uid);
+
+    return await this.pedidoService.getPedidosByIDs(uidArray);
+  }
+  async combinarDetalle() {
+    this.pedidoslistDet.map(ped_ => {
+      const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
+      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
+      const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
+      ped_.porcentaje = porcentaje.porcentaje;
+      ped_.modStatus = pedido.modStatus;
+      if (ped_.fechapedido.seconds)
+        ped_.fechapedido = new Date(ped_.fechapedido.seconds * 1000);
+      if (ped_.fentrega)
+        ped_.fentrega = new Date(ped_.fentrega.seconds * 1000);
+      ped_.totalPorcentaje = pedido.totalPorcentaje;
+    });
   }
 
 

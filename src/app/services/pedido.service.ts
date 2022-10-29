@@ -130,11 +130,13 @@ export class PedidoService {
   pedidosDocCobrados: AngularFirestoreDocument<Pedido>;
   pedidosCollectionCobrados: AngularFirestoreCollection<Pedido>;
 
+  pedidosCollectionRef: AngularFirestoreCollection<Pedido>;
+
   db2 = firebase.firestore();
 
-  constructor(public db: AngularFirestore, 
-    private injector : Injector
-    ) {
+  constructor(public db: AngularFirestore,
+    private injector: Injector
+  ) {
 
     //Busca todos los pedidos
     this.pedidosColletion = this.db.collection('pedidos', ref => ref.where("status", 'in', ['ACTIVO', 'FACTURADO', 'DESPACHADO', 'ENTREGADO', 'ELIMINADO', 'COBRADO']).orderBy("creado", "desc").limit(150));
@@ -222,9 +224,9 @@ export class PedidoService {
       ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO', 'ENTREGADO'])
         // .where("ffactura", ">=", this.today) //Fecha de vencimiento
         .where("condiciondepago", "==", "Contado")
-        // .where("montopendiente", ">", "0")
-        // .orderBy("fpago", "desc")
-        // .orderBy("creado", "desc")
+      // .where("montopendiente", ">", "0")
+      // .orderBy("fpago", "desc")
+      // .orderBy("creado", "desc")
     );
 
     this.pedidosContado = this.pedidosPendientesColletionC
@@ -240,11 +242,11 @@ export class PedidoService {
   }
   getPedidosPrepago() {
     this.pedidosPendientesColletionP = this.db.collection('pedidos', ref =>
-      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO','ENTREGADO'])
+      ref.where("status", 'in', ['FACTURADO', 'DESPACHADO', 'PREPARADO', 'ENTREGADO'])
         // .where("ffactura", ">=", this.today) //Fecha de vencimiento
         .where("condiciondepago", "==", "Prepago")
-        // .orderBy("fpago", "desc")
-        // .orderBy("creado", "desc")
+      // .orderBy("fpago", "desc")
+      // .orderBy("creado", "desc")
     );
 
     this.pedidosContado = this.pedidosPendientesColletionP
@@ -269,13 +271,13 @@ export class PedidoService {
     );
 
     this.pedidosPendientes = this.pedidosPendientesColletionE
-    .snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
+      .snapshotChanges().pipe(map(changes => {
+        return changes.map(a => {
 
-        const data = a.payload.doc.data() as Pedido;
-        return data;
-      })
-    }));
+          const data = a.payload.doc.data() as Pedido;
+          return data;
+        })
+      }));
 
     return this.pedidosPendientes;
 
@@ -334,7 +336,7 @@ export class PedidoService {
 
   }
 
-  getPedidoById(idpedido){
+  getPedidoById(idpedido) {
     let pedidoDbRef = this.db.collection('pedidos', ref => ref.where('idpedido', '==', idpedido))
     return new Promise<any>((resolve) => {
       pedidoDbRef.valueChanges().subscribe(pedido => resolve(pedido))
@@ -399,6 +401,18 @@ export class PedidoService {
 
     return this.pedidosrep;
   }//getPedidosRep04
+
+  getPedidosByIDs(pedidos) {
+    this.pedidosCollectionRef =
+      this.db.collection('pedidos', ref => ref.where("uid", 'in', pedidos));
+
+    return new Promise<any>((resolve) => {
+      this.db.collection('pedidos', ref => ref.where("uid", 'in', pedidos))
+        .valueChanges().subscribe(pedidos => {
+          resolve(pedidos)
+        });
+    });
+  }
 
   getPedidos() {
     return this.pedidos;
@@ -548,8 +562,13 @@ export class PedidoService {
     }); */
   }
 
-  updatePedidos(pedido: Pedido, anularN?: number) {
-    this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
+  updatePedidos(pedido?: Pedido, anularN?: number, uid?) {
+    if (pedido)
+      this.pedidoDoc = this.db.doc(`pedidos/${pedido.uid}`);
+
+    if (uid)
+      this.pedidoDoc = this.db.doc(`pedidos/${uid}`);
+
     this.pedidoDoc.update(pedido);
 
     if (anularN == 9001) {
@@ -597,8 +616,7 @@ export class PedidoService {
       });
     }
 
-    if(pedido.lastaction === 'Crear NE')
-    {
+    if (pedido.lastaction === 'Crear NE') {
       let transportePedidosService = this.injector.get(TransportePedidosService);
       transportePedidosService.updatePedidoTransporte(pedido, pedido.transporteId);
     }

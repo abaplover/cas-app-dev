@@ -165,7 +165,7 @@ export class NuevotransportepedidoComponent implements OnInit {
     this.transportePedidos.pedido = this.listaDetallePedido;
     this.transportePedidos.id = transporteId + 1;
     this.transportePedidos.estatus = 'ACTIVO';
-    this.transportePedService.create(this.transportePedidos);
+    // this.transportePedService.create(this.transportePedidos);
 
     this.transportePedido_ = { compania: '', fecha: '', chofer: '', vehiculo: '', placa: '' };
     this.detallePedido = {};

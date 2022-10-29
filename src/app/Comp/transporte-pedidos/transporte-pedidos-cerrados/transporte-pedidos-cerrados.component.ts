@@ -4,9 +4,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TransportePedidos } from 'src/app/models/transporte-pedidos';
+import { Vendedor } from 'src/app/models/vendedor';
+import { Zventa } from 'src/app/models/zventa';
+import { PedidoService } from 'src/app/services/pedido.service';
 
 
 import { TransportePedidosService } from 'src/app/services/transporte-pedidos.service';
+import { VendedorService } from 'src/app/services/vendedor.service';
+import { ZventaService } from 'src/app/services/zventa.service';
 import { TransportePedidosShowComponent } from '../transporte-pedidos-show/transporte-pedidos-show.component';
 @Component({
   selector: 'app-transporte-pedidos-cerrados',
@@ -14,24 +19,37 @@ import { TransportePedidosShowComponent } from '../transporte-pedidos-show/trans
   styleUrls: ['./transporte-pedidos-cerrados.component.css']
 })
 export class TransportePedidosCerradosComponent implements OnInit {
-
+  public zventaList: Zventa[];
+  // public transporteList: Transporte[] = []; //arreglo vacio
+  public vendedorList: Vendedor[]; //arreglo vacio
   transporteVer = {} as TransportePedidos;
   transportePedidosList = [];
   dataSource: any;
+  pedidoslistDet = [];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
   displayedColumns: string[] = ['id', 'fecha', 'chofer', 'compania', 'placa', 'estatus', 'Opc'];
 
-  constructor(private transportesPedS: TransportePedidosService,
+  constructor(
+    private transportesPedS: TransportePedidosService,
+    public pedidoService: PedidoService,
+    public zventas: ZventaService,
+    public vendedorS: VendedorService,
     private dialogo: MatDialog,) { }
 
   ngOnInit(): void {
+    this.zventas.getZventas().valueChanges().subscribe(zonas => {
+      this.zventaList = zonas;
+    })
+    this.vendedorS.getVendedors().valueChanges().subscribe(vendedor => {
+      this.vendedorList = vendedor;
+    });
     this.getTransportes();
   }
 
   getTransportes() {
     this.transportesPedS.getClosed().subscribe(transportes => {
-      
+
       this.transportePedidosList = transportes;
       this.dataSource = new MatTableDataSource(this.transportePedidosList);
       this.dataSource.sort = this.sort;
@@ -58,12 +76,39 @@ export class TransportePedidosCerradosComponent implements OnInit {
 
     this.transporteVer = Object.assign({}, transporte);
 
+    if (this.transporteVer.pedido) {
+      this.pedidoslistDet = await this.getPedidosDetalles(this.transporteVer.pedido);
+      await this.combinarDetalle();
+    }
+
     dialogConfig.data = {
       transportePedido: Object.assign({}, this.transporteVer),
+      detallePedidos: this.pedidoslistDet,
       accion: event
     };
 
     const diagRef = this.dialogo.open(TransportePedidosShowComponent, dialogConfig);
+  }
+
+  async getPedidosDetalles(pedidos) {
+
+    let uidArray = pedidos.map(ped => ped.uid);
+
+    return await this.pedidoService.getPedidosByIDs(uidArray);
+  }
+  async combinarDetalle() {
+    this.pedidoslistDet.map(ped_ => {
+      const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
+      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
+      const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
+      ped_.porcentaje = porcentaje.porcentaje;
+      ped_.modStatus = pedido.modStatus;
+      if (ped_.fechapedido.seconds)
+        ped_.fechapedido = new Date(ped_.fechapedido.seconds * 1000);
+      if (ped_.fentrega)
+        ped_.fentrega = new Date(ped_.fentrega.seconds * 1000);
+      ped_.totalPorcentaje = pedido.totalPorcentaje;
+    });
   }
 
 }

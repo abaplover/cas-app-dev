@@ -25,6 +25,7 @@ export class TransportePedidosShowComponent implements OnInit {
   transportePedido_: any;
   public keywordPed = "nrofactura";
   public listaDetallePedido: Pedido[] = [];
+  listaPedidosTransportes: any[] = [];
   pedidosPreparados: Pedido[];
   vendedorList: any[];
   zventaList: any[];
@@ -40,10 +41,11 @@ export class TransportePedidosShowComponent implements OnInit {
     private dialogRef: MatDialogRef<TransportePedidosShowComponent>,
     private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) data) {
-
+    console.log(data);
     this.transportePedido_ = data.transportePedido;
-    this.listaDetallePedido = data.transportePedido.pedido;
+    this.listaPedidosTransportes = data.transportePedido.pedido;
     this.pedidosPreparados = data.pedidosPreparados;
+    this.listaDetallePedido = data.detallePedidos;
     this.transporteList = data.transporteList;
     this.vendedorList = data.vendedorList;
     this.zventaList = data.zventaList;
@@ -51,6 +53,9 @@ export class TransportePedidosShowComponent implements OnInit {
 
     if (!this.listaDetallePedido)
       this.listaDetallePedido = [];
+
+    if (!this.listaPedidosTransportes)
+      this.listaPedidosTransportes = [];
 
     if (this.accion === 'CREATE') {
       this.create = true;
@@ -90,7 +95,7 @@ export class TransportePedidosShowComponent implements OnInit {
       this.close = true;
 
     }
-    
+
   }
 
   ngOnInit(): void {
@@ -106,7 +111,8 @@ export class TransportePedidosShowComponent implements OnInit {
       event: this.accion,
       data: {
         transportePedido: this.transportePedido_,
-        transportePedidoDetalle: this.listaDetallePedido
+        transportePedidoDetalle: this.listaDetallePedido,
+        listaPedidos: this.listaPedidosTransportes
       }
     });
   }
@@ -129,8 +135,10 @@ export class TransportePedidosShowComponent implements OnInit {
       this.timestampConvert(this.detallePedido.fentrega, 2);
 
     let montoneto = await this.roundTo(((elemento.totalmontobruto * this.detallePedido.porcentaje) / 100), 2);
+    console.log(montoneto);
+
     if (this.detallePedido.porcentaje)
-      this.detallePedido.totalmontoneto = montoneto;
+      this.detallePedido.totalPorcentaje = montoneto;
 
   }//selectEvent
   timestampConvert(fec, col?: number) {
@@ -155,15 +163,23 @@ export class TransportePedidosShowComponent implements OnInit {
   agregardetalles() {
 
     this.actualizarTotales(this.addOperation, this.detallePedido);
-    console.log(this.transportePedido_);
+
     if (this.edit)
-      this.detallePedido.modStatus = { style: "background-color: #00ff00" };
+      this.detallePedido.modStatus = { style: "background-color: #00ff00", modified: true };
 
     if (this.create)
       this.detallePedido.modStatus = { style: "background-color:transparent" };
 
-    if (this.detallePedido && !this.listaDetallePedido.includes(this.detallePedido))
+    if (this.detallePedido && !this.listaDetallePedido.includes(this.detallePedido)) {
       this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
+      this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
+        uid: this.detallePedido.uid,
+        totalPorcentaje: this.detallePedido.totalPorcentaje,
+        modStatus: this.detallePedido.modStatus
+      }];
+      console.log(this.listaPedidosTransportes);
+    }
+
 
     if (!this.btnEnviar)
       this.btnEnviar = true;
@@ -184,11 +200,13 @@ export class TransportePedidosShowComponent implements OnInit {
     if (this.create) {
       this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
       this.listaDetallePedido.splice(i, 1);
+      this.listaPedidosTransportes.splice(i, 1);
     }
 
     if (this.edit && !this.listaDetallePedido[i].modStatus.deleted) {
       this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
       this.listaDetallePedido[i].modStatus = { style: "background-color:#ff3300", deleted: true };
+      this.listaPedidosTransportes[i].modStatus = { style: "background-color:#ff3300", deleted: true };
     }
 
   }
@@ -204,10 +222,10 @@ export class TransportePedidosShowComponent implements OnInit {
         this.transportePedido_.totalPedidos = 1;
 
       if (this.transportePedido_.comisionUSD)
-        this.transportePedido_.comisionUSD = this.roundTo(this.transportePedido_.comisionUSD + transportePed.totalmontoneto, 2);
+        this.transportePedido_.comisionUSD = this.roundTo(this.transportePedido_.comisionUSD + transportePed.totalPorcentaje, 2);
 
       if (!this.transportePedido_.comisionUSD)
-        this.transportePedido_.comisionUSD = transportePed.totalmontoneto;
+        this.transportePedido_.comisionUSD = transportePed.totalPorcentaje;
 
       if (this.transportePedido_.comisionBsF)
         this.transportePedido_.comisionBsF =
@@ -242,7 +260,6 @@ export class TransportePedidosShowComponent implements OnInit {
 
       this.transportePedido_.comisionBsF = this.roundTo(
         this.transportePedido_.comisionBsF - (transportePed.totalmontoneto * this.transportePedido_.tasa), 2);
-
 
     }
 
