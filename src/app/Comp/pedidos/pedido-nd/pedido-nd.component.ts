@@ -767,6 +767,8 @@ downloadEtiquetas() {
       this.pedido_.ftentrega.setHours(ahora.getHours());
       this.pedido_.ftentrega.setMinutes(ahora.getMinutes());
 
+      this.pedido_.fentrega = null;
+
       //console.log("fdes: ",this.pedido_.fdespacho)
       //console.log("ftentre: ",this.pedido_.ftentrega)
 
@@ -844,6 +846,7 @@ downloadEtiquetas() {
   }
 
   moForm(opc?: number){
+    console.log(opc);
     if (opc==1){
       this.opcnf = true;
       this.opcnd = false;

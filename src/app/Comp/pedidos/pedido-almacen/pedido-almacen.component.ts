@@ -785,6 +785,7 @@ onSubmitAlmacen(pf?: NgForm, url?:string){
       this.elementosCheckeados = []; // vacia la instancia
 
       this.pedido_.lastaction = "Crear NPrep";
+      console.log(this.pedido_);
       //Update Pedido - Notificacion de Preparación
       this.pedidoService.updatePedidos(this.pedido_);
       this.toastr.success('Operación Terminada', 'Notificación de preparación creada.');
@@ -1099,13 +1100,13 @@ materialChecked(pedido,event) {
       this.opcne = false;
 
       if (this.pedido_.fdespacho == null || typeof this.pedido_.fdespacho === "undefined"){
-        this.pedido_.fdespacho =  new Date();
+        // this.pedido_.fdespacho =  new Date();
       }else{
         this.pedido_.fdespacho = this.pedido_.fdespacho;
       }
 
       if (this.pedido_.ftentrega == null || typeof this.pedido_.ftentrega === "undefined"){
-        this.pedido_.ftentrega =  new Date();
+        // this.pedido_.ftentrega =  new Date();
       }else{
         this.pedido_.ftentrega = this.pedido_.ftentrega;
       }
@@ -1119,7 +1120,7 @@ materialChecked(pedido,event) {
       this.opcne = true;
 
       if (this.pedido_.fentrega == null || typeof this.pedido_.fentrega === "undefined"){
-        this.pedido_.fentrega =  new Date();
+        // this.pedido_.fentrega =  new Date();
       }else{
         this.pedido_.fentrega = this.pedido_.fentrega;
       }
