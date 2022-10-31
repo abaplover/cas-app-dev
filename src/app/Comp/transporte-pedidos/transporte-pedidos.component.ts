@@ -55,10 +55,10 @@ export class TransportePedidosComponent implements OnInit {
   constructor(
     public pedidoService: PedidoService,
     public loginS: FirebaseloginService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     public mrechazoS: MrechazoService,
     private dialogo: MatDialog,
-    private clienteS: ClientService,
+    // private clienteS: ClientService,
     public transportePedS: TransportePedidosService,
     public transporteS: TransporteService,
     public zventas: ZventaService,
@@ -148,7 +148,6 @@ export class TransportePedidosComponent implements OnInit {
       await this.combinarDetalle();
     }
 
-
     dialogConfig.data = {
       transportePedido: Object.assign({}, this.transporteVer),
       detallePedidos: this.pedidoslistDet,
@@ -181,7 +180,9 @@ export class TransportePedidosComponent implements OnInit {
             this.getTransportes();
             break;
         }
-    })
+
+      this.limpiarTodo();
+    });
 
   }
 
@@ -204,7 +205,6 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedS.create(this.transportePedidos, this.pedidoslistDet);
   }
   async UpdateTransporte(transporteInfo) {
-
     this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
@@ -213,6 +213,7 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
     this.actualizarReferenciaPedidos(transporteInfo)
   }
+
   async deleteTransporte(transporteInfo) {
     this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
@@ -221,6 +222,7 @@ export class TransportePedidosComponent implements OnInit {
 
     this.transportePedS.delete(this.transportePedidos.id, this.pedidoslistDet);
   }
+
   closeTransporte(transporteInfo) {
     this.listaDetallePedido = transporteInfo.listaPedidos;
     this.transportePedidos = transporteInfo.transportePedido;
@@ -231,7 +233,6 @@ export class TransportePedidosComponent implements OnInit {
   }
   verificarPedEliminados(transporteInfo) {
     this.listaDetallePedido = transporteInfo.listaPedidos;
-    console.log(this.listaDetallePedido);
 
     this.listaDetallePedido.map(async (pedido) => { //iteracion de pedidos en el transporte
 
@@ -241,14 +242,13 @@ export class TransportePedidosComponent implements OnInit {
 
         if (IsRef) {
           this.transportePedS.UpdatePedido(ped_, ''); // Se actualizan los pedidos eliminando la referencia al transporte
-
         }
       }
-
-    })
+    });
   }
 
   actualizarReferenciaPedidos(transporteInfo) {
+
     this.listaDetallePedido = transporteInfo.listaPedidos;
 
     this.listaDetallePedido.map(async (pedido) => { //iteracion de pedidos en el transporte
@@ -259,7 +259,6 @@ export class TransportePedidosComponent implements OnInit {
 
         if (!IsRef) {
           this.transportePedS.UpdatePedido(ped_, transporteInfo.transportePedido.id); // Se actualizan los pedidos agregando la referencia al transporte
-
         }
       }
 
@@ -269,22 +268,40 @@ export class TransportePedidosComponent implements OnInit {
   async getPedidosDetalles(pedidos) {
 
     let uidArray = pedidos.map(ped => ped.uid);
-
     return await this.pedidoService.getPedidosByIDs(uidArray);
+
   }
   async combinarDetalle() {
+
     this.pedidoslistDet.map(ped_ => {
+
       const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
       const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
+
       ped_.porcentaje = porcentaje.porcentaje;
       ped_.modStatus = pedido.modStatus;
+
       if (ped_.fechapedido.seconds)
         ped_.fechapedido = new Date(ped_.fechapedido.seconds * 1000);
+
       if (ped_.fentrega)
         ped_.fentrega = new Date(ped_.fentrega.seconds * 1000);
+
+      if (ped_.ftentrega)
+        ped_.ftentrega = new Date(ped_.ftentrega.seconds * 1000);
+
+      if (ped_.fdespacho)
+        ped_.fdespacho = new Date(ped_.fdespacho.seconds * 1000);
+        
       ped_.totalPorcentaje = pedido.totalPorcentaje;
     });
+  }
+
+  limpiarTodo() {
+    this.listaDetallePedido = [];
+    this.transportePedidos = {};
+    this.pedidoslistDet = [];
   }
 
 

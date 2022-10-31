@@ -41,6 +41,7 @@ export class TransportePedidosShowComponent implements OnInit {
     private dialogRef: MatDialogRef<TransportePedidosShowComponent>,
     private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) data) {
+    
     console.log(data);
     this.transportePedido_ = data.transportePedido;
     this.listaPedidosTransportes = data.transportePedido.pedido;
@@ -58,6 +59,7 @@ export class TransportePedidosShowComponent implements OnInit {
       this.listaPedidosTransportes = [];
 
     if (this.accion === 'CREATE') {
+      this.listaDetallePedido = [];
       this.create = true;
       this.btnText = 'Crear transporte';
       this.showButton = true;
@@ -81,21 +83,20 @@ export class TransportePedidosShowComponent implements OnInit {
 
     if (this.accion === 'DELETE') {
       this.btnText = 'Eliminar transporte';
-      this.showButton = true;
-      this.readonly = true;
-      this.delete = true;
-      this.btnEnviar = true;
+      this.showButton   = true;
+      this.readonly     = true;
+      this.delete       = true;
+      this.btnEnviar    = true;
     }
 
     if (this.accion === 'CLOSE') {
-      this.btnText = 'Cerrar transporte';
-      this.showButton = true;
-      this.btnEnviar = true;
-      this.readonly = true;
-      this.close = true;
+      this.btnText        = 'Cerrar transporte';
+      this.showButton     = true;
+      this.btnEnviar      = true;
+      this.readonly       = true;
+      this.close          = true;
 
     }
-
   }
 
   ngOnInit(): void {
@@ -115,6 +116,7 @@ export class TransportePedidosShowComponent implements OnInit {
         listaPedidos: this.listaPedidosTransportes
       }
     });
+    this.limpiarTodo();
   }
 
   resetForm(pedidoForm) {
@@ -135,7 +137,6 @@ export class TransportePedidosShowComponent implements OnInit {
       this.timestampConvert(this.detallePedido.fentrega, 2);
 
     let montoneto = await this.roundTo(((elemento.totalmontobruto * this.detallePedido.porcentaje) / 100), 2);
-    console.log(montoneto);
 
     if (this.detallePedido.porcentaje)
       this.detallePedido.totalPorcentaje = montoneto;
@@ -162,8 +163,6 @@ export class TransportePedidosShowComponent implements OnInit {
 
   agregardetalles() {
 
-    this.actualizarTotales(this.addOperation, this.detallePedido);
-
     if (this.edit)
       this.detallePedido.modStatus = { style: "background-color: #00ff00", modified: true };
 
@@ -171,13 +170,13 @@ export class TransportePedidosShowComponent implements OnInit {
       this.detallePedido.modStatus = { style: "background-color:transparent" };
 
     if (this.detallePedido && !this.listaDetallePedido.includes(this.detallePedido)) {
+      this.actualizarTotales(this.addOperation, this.detallePedido);
       this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
       this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
         uid: this.detallePedido.uid,
         totalPorcentaje: this.detallePedido.totalPorcentaje,
         modStatus: this.detallePedido.modStatus
       }];
-      console.log(this.listaPedidosTransportes);
     }
 
 
@@ -195,7 +194,6 @@ export class TransportePedidosShowComponent implements OnInit {
 
   }//onChangeSearch
   removeDetRow(i) {
-    // this.listaDetallePedido.splice(i, 1);
     this.transportePedido_.totalPedidos = this.transportePedido_.totalPedidos - 1;
     if (this.create) {
       this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
@@ -251,7 +249,6 @@ export class TransportePedidosShowComponent implements OnInit {
 
     if (operacion === this.delOperation) {
 
-      console.log(transportePed.totalmontobruto);
       this.transportePedido_.totalUSD = this.roundTo(this.transportePedido_.totalUSD - transportePed.totalmontobruto, 2);
       this.transportePedido_.comisionUSD = this.transportePedido_.comisionUSD - transportePed.totalmontoneto;
 
@@ -262,6 +259,25 @@ export class TransportePedidosShowComponent implements OnInit {
         this.transportePedido_.comisionBsF - (transportePed.totalmontoneto * this.transportePedido_.tasa), 2);
 
     }
+
+  }
+
+  onTasaUpdate(tasa) {
+
+    if (tasa) {
+      if (this.transportePedido_.comisionBsF)
+        this.transportePedido_.comisionBsF = this.transportePedido_.comisionUSD * tasa;
+
+      if (this.transportePedido_.totalBsF)
+        this.transportePedido_.totalBsF = this.transportePedido_.totalUSD * tasa;
+    }
+  }
+
+  limpiarTodo() {
+    this.transportePedido_ = [];
+    this.listaDetallePedido = [];
+    this.listaPedidosTransportes = [];
+    this.detallePedido = {};
 
   }
 

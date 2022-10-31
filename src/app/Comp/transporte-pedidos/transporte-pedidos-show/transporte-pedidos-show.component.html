@@ -109,7 +109,9 @@
 											<input class="form-control" aria-label="Small"
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
 												name="tasa" id="tasa" #tasa="ngModel" required
-												[(ngModel)]="this.transportePedido_.tasa" [readonly]="this.readonly"
+												[(ngModel)]="this.transportePedido_.tasa" 
+												(ngModelChange)="onTasaUpdate($event)"
+												[readonly]="this.readonly"
 												class="form-control" aria-label="Small" />
 										</div>
 									</div>
