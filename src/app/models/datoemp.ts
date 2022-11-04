@@ -4,6 +4,7 @@ export class Datoemp {
 	rif          : string;
 	descripcion	 : string;
 	direccion    : string;
+	ciudad		 : string;
 	telefonoFijo : string;
 	telefonocel1 : string;
 	telefonocel2 : string;

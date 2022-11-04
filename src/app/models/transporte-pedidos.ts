@@ -7,6 +7,7 @@ export class TransportePedidos {
 	chofer?: string;
 	vehiculo?: string;
 	placa?: string;
+	cedula?:string;
 	tasa?: number;
 	estatus?: string;
 	fechaCierre?: string;

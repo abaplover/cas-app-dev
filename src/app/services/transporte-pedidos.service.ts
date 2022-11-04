@@ -11,12 +11,17 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
 import { AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 
+//Services
+import { DatoempService } from './datoemp.service';
+import { ClientService } from './client.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TransportePedidosService {
   private dbPath = "transportePedidos";
   private countPath = "--stats--";
+  totalBultos = 0;
   mostrarForm: boolean = false;
   txtBtnAccion: string = "";
 
@@ -29,7 +34,12 @@ export class TransportePedidosService {
   transportePedidosActivos: Observable<TransportePedidos[]>;
   transportePedidosCerrados: Observable<TransportePedidos[]>;
 
-  constructor(private db: AngularFirestore, private PedidoS: PedidoService) {
+  constructor(
+    private db: AngularFirestore,
+    private PedidoS: PedidoService,
+    private datoEmpresaS: DatoempService,
+    private clienteS: ClientService
+  ) {
     this.transportePedidosRef = db.collection(this.dbPath);
     this.tranportePedidosCountRef = db.collection(this.countPath);
     this.transportesActivosRef = db.collection(this.dbPath, ref => {
@@ -130,38 +140,95 @@ export class TransportePedidosService {
   async generarImpresionPdf(transportePedido: TransportePedidos, pedidoDetails) {
 
     //['FACT. N', 'MONTO', 'CLIENTE', 'R.I.F', 'FLETE DESTINO', 'FLETE ORIGEN', 'CIUDAD DESTINO', 'BULTOS'],
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    
+      // These options are needed to round to whole numbers if that's what you want.
+      //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+      //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+    });
+    const fechaTransporte = new Date(transportePedido.fecha);
 
+    let datosEmpresa = await new Promise<any>((resolve) => {
+      this.datoEmpresaS.getDatoemps().valueChanges().subscribe(datos => resolve(datos));
+    });
+
+    let clienteInfo = await new Promise<any>((resolve) => {
+      this.clienteS.getClients().valueChanges().subscribe(cliente => resolve(cliente));
+    })
+
+    console.log(clienteInfo);
     var ticketDefinition = {
+      pageOrientation: 'landscape',
+      footer: {
+        columns: [
+          // 'Left part',
+          { text: 'Por el Cliente:____________________________________________', alignment: 'center', bold: true },
+          { text: 'Por IMPORTADORA RICAMAR, C.A.:________________________', alignment: 'justify', bold: true },
+        ],
+
+      },
       content: [
-        { text: 'Guia de despacho' },
         {
-          width: 800,
+          columns: [
+            {
+              width: 150,
+              image: datosEmpresa[0].imglogob64,
+              height: 25,
+              margin: [0, 10, 0, 0]
+            },
+            {
+              table: {
+                style: {
+                  fontSize: 5,
+                  margin: [50, 0, 0, 0],
+                },
+                body: [
+                  [
+                    {
+                      text: datosEmpresa[0].direccion, fontSize: 8, alignment: 'center'
+                    }
+                  ]
+                ]
+              },
+              margin: [50, 0, 0, 0],
+              width: 300,
+            },
+            { text: 'GUIA DE CARGA', alignment: 'center', bold: true, fontSize: 12 },
+
+          ], columnGap: 10
+        },
+        { margin: [0, 0, 0, 5], 
+          padding: [10, 20], 
+          text: `${datosEmpresa[0].rif[0]}-${datosEmpresa[0].rif.substring(1, datosEmpresa[0].rif.length)}`, 
+          fontSize: 10, 
+          bold: true },
+        {
+          width: 900,
           table: {
+            fontSize: 10,
             style: {
               fontSize: 10
             },
             body: [
-              // [{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''}],
-              [{ text: 'Ciudad:     ', colSpan: 2 },
-              { text: ''},
-              { text: 'Fecha   de   del 20  ', colSpan: 2 },
-              { text: ''},
-              { text: 'Representante', colSpan: 2},
-              { text: ''},
-              { text: 'C.I', colSpan: 2 },
+              [{ text: `Ciudad: ${datosEmpresa[0].ciudad}`, fontSize: 10, colSpan: 2, bold:true },
+              { text: '' },
+              { text: `Fecha: ${fechaTransporte.toLocaleDateString('en-GB')}`, fontSize: 10, colSpan: 2, bold:true },
+              { text: '' },
+              { text: 'Representante: ' + datosEmpresa[0].representante, fontSize: 10, colSpan: 2, bold:true },
+              { text: '' },
+              { text: 'C.I. ' + + datosEmpresa[0].cedula, fontSize: 10, colSpan: 2, bold:true },
               { text: 'C.I', },
-              // { text: 'C.I', },
-              // { text: 'C.I', },
-              // // { text: 'C.I', },
               ],
               [
-                { text: 'Nombre de la empresa Obligatorio:', colSpan:8 }
+                { text: 'Nombre de la empresa Obligatorio: ' + datosEmpresa[0].descripcion, fontSize: 10, colSpan: 8, bold: true }
               ],
               [
-                { text: 'Vehiculo: ' + transportePedido.vehiculo, colSpan: 2 }, {text: 'Disappear'},
-                { text: 'Placa N.: ' + transportePedido.placa,colSpan: 2 }, {text: 'Disappear'},
-                { text: 'Chofer: ' + transportePedido.chofer,colSpan: 2 }, {text: 'Disappear'},
-                { text: 'C.I  ',colSpan: 2 }, {text: 'Disappear'}
+                { text: 'Vehiculo: ' + transportePedido.vehiculo, fontSize: 10, colSpan: 2, bold:true }, { text: 'Disappear' },
+                { text: 'Placa N°: ' + transportePedido.placa, fontSize: 10, colSpan: 2, bold:true }, { text: 'Disappear' },
+                { text: 'Chofer: ' + transportePedido.chofer, fontSize: 10, colSpan: 2, bold:true }, { text: 'Disappear' },
+                { text: `C.I. ${transportePedido.cedula}`, colSpan: 2 }, { text: 'Disappear' }
               ],
               [
                 {
@@ -169,185 +236,56 @@ export class TransportePedidosService {
                     style: {
                       fontSize: 10
                     },
-                    widths: ['*', '*', 150, '*', '*', '*', '*', '*'],
-                    // body: [ {text: 'test', colSpan: 8}]
+                    widths: [50, '*', 150, '*', '*', '*', 100, 40],
                     body: [
-                      [{ text: 'FACT. N', style: { fontSize: 10 } },
-                      { text: 'MONTO', style: { fontSize: 10 } },
-                      { text: 'CLIENTE', style: { fontSize: 10, width: 200 } },
-                      { text: 'R.I.F', style: { fontSize: 10 } },
-                      { text: 'FLETE DESTINO', style: { fontSize: 10 } },
-                      { text: 'FLETE ORIGEN', style: { fontSize: 10 } },
-                      { text: 'CIUDAD DESTINO', style: { fontSize: 10 } },
-                      { text: 'BULTOS', style: { fontSize: 10 } }]
+                      [{ text: 'FACT. N°', style: { fontSize: 11, bold: true } },
+                      { text: 'MONTO', style: { fontSize: 11, bold: true } },
+                      { text: 'CLIENTE', style: { fontSize: 11, bold: true, width: 200 } },
+                      { text: 'R.I.F', style: { fontSize: 11, bold: true } },
+                      { text: 'FLETE DESTINO', style: { fontSize: 11, bold: true } },
+                      { text: 'FLETE ORIGEN', style: { fontSize: 11, bold: true } },
+                      { text: 'CIUDAD DESTINO', style: { fontSize: 11, bold: true } },
+                      { text: 'BULTOS', style: { fontSize: 11, bold: true } }]
                     ]
-                  }, 
-                  colSpan:8
+                  },
+                  colSpan: 8
                 }
               ]
             ]
-
           }
-
         },
       ],
     };
     let spaceBottom = 260;
-
-    //for (let i = 1; i<=numeroBultos;i++) {
-
-    
+    // let totalBultos = 0;
 
     pedidoDetails.forEach(pedido => {
-      ticketDefinition.content[1].table.body[3][0]['table'].body.push([
+      this.totalBultos = this.totalBultos + pedido.nrobultos;
+
+      let clienteDetalle = clienteInfo.find(cliente => cliente.idcliente == pedido.idcliente);
+      console.log(formatter.format(pedido.totalmontobruto));
+      ticketDefinition.content[2].table.body[3][0]['table'].body.push([
         pedido.nrofactura,
-        pedido.totalmontobruto,
+        formatter.format(pedido.totalmontobruto),
         pedido.nomcliente,
+        // '',
+        `${clienteDetalle.rif[0]}-${clienteDetalle.rif.substring(1, clienteDetalle.rif.length)}`,
         '',
         '',
-        '',
-        '',
+        // '',
+        clienteDetalle.zona,
         pedido.nrobultos
       ])
 
     });
-    console.log(ticketDefinition.content[1].table.body[3][0]['table']);
-    setTimeout(function(){
-      
+    ticketDefinition.content[2].table.body[3][0]['table'].body.push([
+      {
+        margin:[0,0,25,0],text: 'TOTAL: ' + this.totalBultos, alignment: 'right', colSpan: 8, bold: true,
+        decoration:'underline'
+      }
+    ]);
+    console.log(ticketDefinition.content[2].table.body[3][0]['table'].body)
 
-    }, 900)
-    
-
-    // for (let i = 1; i<=numeroBultos; i++) {
-    //   ticketDefinition.content.push(
-    //     {
-    //       columns: [
-    //         {
-    //           width: 100,
-    //           image: this.dempresaList[0].imglogob64,
-    //           height: 15,
-    //         },
-    //         {
-    //           width: 360,
-    //           text: this.today,style: "boldtxt", alignment: 'left', fontSize: 10,margin:[268,0,0,0],
-    //         }
-    //       ],
-    //     },
-    //     //Datos de la empresa
-    //     {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
-    //     {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
-
-    //     {
-    //       columns:
-    //       [
-    //         { //Columna en blanco para alinear texto
-    //           width: 165,
-    //           text: '',
-    //           height: 5,
-    //         },
-    //         //Datos del cliente
-    //         {
-    //             width: 245,
-    //             table:
-    //             {
-    //                 widths: [245, 135],
-    //                 body: [
-    //                   [
-    //                     {text: 'Cliente: '+nombreCliente, style:"righttxt", border: [false, false, false, false]},
-    //                   ],
-    //                   [
-    //                     {text: 'Dirección: '+dirCliente, style:"righttxt", border: [false, false, false, false]},
-    //                   ],
-    //                 ]
-    //               }
-    //         }
-    //       ],
-    //       // optional space between columns
-    //       columnGap: 5
-    //     },
-
-    //     //Esta es la linea superior
-    //     {
-    //       table : {
-    //           headerRows : 1,
-    //           widths: [420],
-    //           body : [
-    //                   [''],
-    //                   ['']
-    //                   ]
-    //       },
-    //       layout : 'headerLineOnly'
-    //     },
-
-    //     //Detalle de pedido y numero de eqitueta
-    //     {
-    //       columns:
-    //       [
-    //         {
-    //           width: 200,
-    //           table:
-    //           {
-    //               widths: [200, 135],       
-    //               body: [
-    //                 [
-    //                   {text: 'N° Pedido: '+docAdd, fontSize: 10,border: [false, false, false, false],margin:[-6,0,0,0]},
-    //                 ],
-    //                 [
-    //                   {text: 'N° Factura/Not: '+pedidoNrofactura, fontSize: 10, border: [false, false, false, false],margin:[-6,0,0,0]},
-    //                 ],
-    //               ]
-    //             }
-    //         },
-    //         //Datos del cliente
-    //         {
-    //             width: 200,          
-    //             table:
-    //             {
-    //                 widths: [190, 135],
-    //                 body: [
-    //                   [
-    //                     {text: i+' / '+ numeroBultos, style:"numerosEtiquetas", border: [false, false, false, false]},
-    //                   ],
-    //                 ]
-    //               }
-    //         }
-    //       ],
-    //       // optional space between columns
-    //       columnGap: 5
-    //     },
-
-    //     { text:'Esta etiqueta representa un precinto de seguridad. No recibir si se encuentra violentado y contactar a su asesor comercial o directamente a la empresa.',style: "centerText",fontSize: 10,border: [true, false, true, false]},
-
-    //     //Esta es la linea inferior
-    //     {
-    //       table : {
-    //           headerRows : 1,
-    //           widths: [420],
-    //           body : [
-    //                   [''],
-    //                   ['']
-    //                   ],
-    //       },
-    //       layout : 'headerLineOnly'
-    //     },
-
-    //     //Codigo de barras
-    //     {
-    //       // image : this.textToBase64Barcode(docAdd),alignment: "center"
-    //     },
-    //     { 
-    //       text: '',
-    //       pageBreak: 'before',
-    //     },
-    //   )
-    // }
-    //Elimina el ultimo salto de pagina porque deja una pagina en blanco al final
-    // ticketDefinition.content.splice(ticketDefinition.content.length - 1, 1);
-
-    /* const pdfDocGenerator1 = pdfMake.createPdf(ticketDefinition);
-    pdfDocGenerator1.getBlob((blob) => {
-      var file = blob; */
-    //si se va a generar en string base64
     const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition).open();
 
     // pdfDocGenerator0.getBase64((data) => {
@@ -357,24 +295,7 @@ export class TransportePedidosService {
 
     //  const fileName = `Etiquetas pedido N° ${docAdd}`;
 
-    //  const idfile = fileName +'.pdf';
-    /*  this.pedido_.pdfname = idfile;
-     this.pedido_.pdfb64 = file; */
-    //  const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
-    //  const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
-    //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
 
-    //   task.snapshotChanges().pipe(
-    //      finalize(() => {
-    //        this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
-    //          fileRef.getDownloadURL().subscribe(downloadURL => {
-    //            this.pedido_.ticketurl=downloadURL;
-    //            this.URLPublica = downloadURL;
-    //            this.onSubmitAlmacen(pf,this.URLPublica);
-    //          });
-
-    //    })
-    //  ).subscribe();
 
 
     //  });//pdfDocGenerator

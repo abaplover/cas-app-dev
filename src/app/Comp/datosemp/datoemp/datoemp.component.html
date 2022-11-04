@@ -64,6 +64,21 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+						<div class="form-group">
+							<!-- <mat-label>Dirección</mat-label> -->
+							<input placeholder="Ciudad" value="" type="text" name="ciudad" #ciudad="ngModel"
+								[(ngModel)]="datoempService.selectedDatoemp.ciudad" required class="form-control" />
+							<div *ngIf="ciudad.invalid && (ciudad.dirty || ciudad.touched)"
+								class="text-danger">
+								<div *ngIf="ciudad.errors.required">
+									<small>Se requiere una ciudad</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="form-group">
 							<!-- <mat-label>Rif</mat-label> -->
