@@ -61,9 +61,10 @@ export class PedidoShowComponent implements OnInit {
 
     private dialogRef: MatDialogRef<PedidoShowComponent>,
         @Inject(MAT_DIALOG_DATA) data
-
+        
   ) 
   {
+    console.log(data);
     this.pedidoShow = data.pedidoShow;
 
     //Verifica que el pedido haya pasado por el proceso de almacen

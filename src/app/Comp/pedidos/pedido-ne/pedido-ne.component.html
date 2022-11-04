@@ -225,16 +225,28 @@
 				</div>
 				<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"  style="border-color: rgb(117, 240, 59);border-style: solid;border-width: 0px; padding-top:0px; padding-left:0px; padding-bottom:0px; padding-right:3px;">
 					<div class="card">
-						<div class="card-body" style="height: 230px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
+						<div class="card-body" style="height: 280px; padding-top:4px; padding-left:3px; padding-bottom:4px; padding-right:0px;">
 							<div class="row">
 								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 									<div class="input-group input-group-sm mb-3">
 											<div class="input-group-prepend" style="width: 135px;">
 												<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Fecha Despacho</span>
 											</div>
-											<div class="abs-center">
+											<div class="abs-center" *ngIf="this.pedido_.fdespacho">
 												<mat-label>{{this.pedido_.fdespacho | date: 'dd/MM/yyyy '}}</mat-label>
 											</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend" style="width: 135px;">
+											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Compañia</span>
+										</div>
+										<div class="abs-center">
+											<mat-label>{{this.pedido_.compania}}</mat-label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -245,7 +257,7 @@
 											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
 										</div>
 										<div class="abs-center">
-											<mat-label>{{this.pedido_.transporte}}</mat-label>
+											<mat-label>{{this.pedido_.transporteId}}</mat-label>
 										</div>
 									</div>
 								</div>

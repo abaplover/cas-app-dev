@@ -145,6 +145,7 @@
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="date"
 												name="fechacierre" id="fechacierre" #fechacierre="ngModel"
 												[(ngModel)]="this.transportePedido_.fechacierre" class="form-control"
+												(change)="this.habilitarCerrado()"
 												aria-label="Small" [readonly]="!this.close" />
 										</div>
 									</div>
@@ -179,11 +180,15 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Total USD</span>
 											</div>
-											<input class="form-control" aria-label="Small"
+											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.totalUSD | currency: " "}}</mat-label>
+											</div>
+											
+											<!-- <input class="form-control" aria-label="Small"
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
-												name="totalUSD" id="totalUSD" #totalUSD="ngModel"
-												[(ngModel)]="this.transportePedido_.totalUSD" readonly
-												class="form-control" aria-label="Small" />
+												name="totalUSD" id="totalUSD" 
+												[ngModel]="this.transportePedido_.totalUSD | currency" readonly
+												class="form-control" aria-label="Small" /> -->
 										</div>
 									</div>
 								</div>
@@ -195,11 +200,9 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Total BsF</span>
 											</div>
-											<input class="form-control" aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm" placeholder="" type="text"
-												name="totalBsF" id="totalBsF" #totalBsF="ngModel"
-												[(ngModel)]="this.transportePedido_.totalBsF" class="form-control"
-												aria-label="Small" readonly />
+											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.totalBsF | currency: " "}}</mat-label>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -210,11 +213,10 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Comisión USD</span>
 											</div>
-											<input class="form-control" aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm" placeholder="" type="text"
-												name="comisionUSD" id="comisionUSD" #comisionUSD="ngModel"
-												[(ngModel)]="this.transportePedido_.comisionUSD" class="form-control"
-												aria-label="Small" readonly />
+					
+												<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+													<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.comisionUSD | currency: " "}}</mat-label>
+												</div>
 										</div>
 									</div>
 								</div>
@@ -225,11 +227,9 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Comisión BsF</span>
 											</div>
-											<input class="form-control" aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm" placeholder="" type="text"
-												name="comisionBsF" id="comisionBsF" #comisionBsF="ngModel"
-												[(ngModel)]="this.transportePedido_.comisionBsF" class="form-control"
-												aria-label="Small" readonly />
+											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.comisionBsF | currency: " "}}</mat-label>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -436,8 +436,8 @@
 														<tr *ngFor="let ped of this.listaDetallePedido; index as i"
 															[style]="ped.modStatus.style">
 															<td class="col-0" scope="row">{{ped.nrofactura}}</td>
-															<td class="col-0" scope="row">{{ped.fechapedido | date:'MM/dd/yyyy'}}</td>
-															<td class="col-0" scope="row">{{ped.fentrega | date:'MM/dd/yyyy'}}</td>
+															<td class="col-0" scope="row">{{ped.fechapedido | date:'dd/MM/yyyy'}}</td>
+															<td class="col-0" scope="row">{{ped.fentrega | date:'dd/MM/yyyy'}}</td>
 															<td class="col-0" scope="row">{{ped.listaprecio}}</td>
 															<td class="col-0" scope="row">{{ped.idcliente}}</td>
 															<td class="col-1" style="text-align: left;">

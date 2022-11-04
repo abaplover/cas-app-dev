@@ -254,12 +254,24 @@
 													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Compañia</span>
 												</div>
 												<div class="abs-center">
-													<mat-label>{{this.pedidoShow.transporte}}</mat-label>
+													<mat-label>{{this.pedidoShow.compania ? this.pedidoShow.compania : this.pedidoShow.transporte}}</mat-label>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="input-group input-group-sm mb-3">
+												<div class="input-group-prepend" style="width: 135px;">
+													<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Transporte</span>
+												</div>
+												<div class="abs-center">
+													<mat-label>{{this.pedidoShow.transporteId}}</mat-label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row" *ngIf="this.pedidoShow.ftentrega">
 										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 													<div class="input-group-prepend" style="width: 135px;">
@@ -271,7 +283,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="row">
+									<div class="row" *ngIf="this.pedidoShow.fentrega">
 										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 135px;">
@@ -283,7 +295,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" >
+									<div class="row" *ngIf="this.pedidoShow.fpago" >
 										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="input-group input-group-sm mb-3">
 												<div class="input-group-prepend" style="width: 135px;">

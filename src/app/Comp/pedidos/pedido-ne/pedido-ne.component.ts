@@ -19,6 +19,7 @@ import { UmedidaService } from '../../../services/umedida.service';
 import { IimpuestoService } from '../../../services/iimpuesto.service';
 import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
 import { TipodService } from 'src/app/services/tipod.service';
+import { TransportePedidosService } from 'src/app/services/transporte-pedidos.service';
 // Class
 import { Client } from '../../../models/client';
 import { Vendedor } from '../../../models/vendedor';
@@ -82,7 +83,7 @@ export class PedidoNeComponent implements OnInit {
   tmontd: number=0;
   tmonti: number=0;
   tmontn: number=0;
-
+  TransportePedido: any;
   someticket = false; //Variable que almacena si tiene etiquetas
 
   public pedidoslist: Pedido[];
@@ -124,6 +125,7 @@ export class PedidoNeComponent implements OnInit {
     public loginS       : FirebaseloginService,
     public tipodS       : TipodService,
     private dialogo     : MatDialog,
+    public transportePedS : TransportePedidosService
   )
   {
     const currentYear = new Date().getFullYear();
@@ -225,7 +227,7 @@ timestampConvert(fec,col?:number){
   }
 }
 
-verdetalles(event, ped){
+async verdetalles(event, ped){
   ped.fentrega = undefined;
   ped.fpago = undefined;
   const dialogConfig = new MatDialogConfig;
@@ -256,8 +258,15 @@ verdetalles(event, ped){
   if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
     this.timestampConvert(ped.fpreparacion,7);
   }
+  
+  
+  if(this.pedidoVer_.transporteId)
+    this.TransportePedido = await this.transportePedS.getOne(this.pedidoVer_.transporteId);
 
-
+    if(this.TransportePedido){
+      this.pedidoVer_.compania = this.TransportePedido.compania;
+      // this.hasTransporte = true;
+    }
 
   dialogConfig.data = {
     pedidoShow: Object.assign({}, this.pedidoVer_)
@@ -477,7 +486,7 @@ onCancelar(pf?: NgForm,de?:number){
     return dateObject;
   }
 
-  selectEventPed(elemento){
+  async selectEventPed(elemento){
 
     this.pedido_ =  Object.assign({}, elemento);
 
@@ -500,7 +509,8 @@ onCancelar(pf?: NgForm,de?:number){
     if (elemento.ftentrega != null || typeof elemento.ftentrega != "undefined"){
         this.pedido_.ftentrega = this.timestampConvert2(elemento.ftentrega);
     }
-    if (elemento.fentrega != null || typeof elemento.fentrega != "undefined"){
+    
+    if (elemento.fentrega){
         this.pedido_.fentrega = this.timestampConvert2(elemento.fentrega);
     }
     if (elemento.fdespacho != null || typeof elemento.fdespacho != "undefined"){
@@ -510,7 +520,7 @@ onCancelar(pf?: NgForm,de?:number){
         this.pedido_.fpago = this.timestampConvert2(elemento.fpago);
     }
 
-
+    console.log(this.pedido_.ftentrega);
 
     this.moForm(this.pedidoService.selectedIndex);
 

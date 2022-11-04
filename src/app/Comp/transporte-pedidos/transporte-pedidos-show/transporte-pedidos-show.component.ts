@@ -92,7 +92,7 @@ export class TransportePedidosShowComponent implements OnInit {
     if (this.accion === 'CLOSE') {
       this.btnText        = 'Cerrar transporte';
       this.showButton     = true;
-      this.btnEnviar      = true;
+      // this.btnEnviar      = true;
       this.readonly       = true;
       this.close          = true;
 
@@ -279,6 +279,13 @@ export class TransportePedidosShowComponent implements OnInit {
     this.listaPedidosTransportes = [];
     this.detallePedido = {};
 
+  }
+  habilitarCerrado() {
+
+    if((!this.listaDetallePedido.some(peds => !peds.fentrega))){
+      console.log("Klk")
+      this.btnEnviar = true;
+    }
   }
 
 }

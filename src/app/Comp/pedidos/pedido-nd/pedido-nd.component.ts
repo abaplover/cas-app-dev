@@ -258,7 +258,7 @@ timestampConvert(fec,col?:number){
   }
 }
 
-verdetalles(event, ped){
+async verdetalles(event, ped){
 
   ped.fdespacho = undefined;
   ped.ftentrega = undefined;
@@ -290,7 +290,14 @@ verdetalles(event, ped){
   if (ped.fpreparacion !== null && typeof ped.fpreparacion != "undefined"){
     this.timestampConvert(ped.fpreparacion,7);
   }
+  if(this.pedidoVer_.transporteId)
+    this.TransportePedido = await this.transportePedS.getOne(this.pedidoVer_.transporteId);
 
+    if(this.TransportePedido){
+      this.pedidoVer_.compania = this.TransportePedido.compania;
+      this.TransportePedido = {};
+      // this.hasTransporte = true;
+    }
   dialogConfig.data = {
     pedidoShow: Object.assign({}, this.pedidoVer_)
   };
@@ -305,6 +312,7 @@ onCancelar(pf?: NgForm,de?:number){
       if(confirm("¿Quieres abandonar el pedido? " )) {
         if(pf != null) pf.reset();
         this.pedidoslistDet=[];
+        this.TransportePedido = {};
         this.totalPri = 0;
         this.totalCnt = 0;
         this.totalPed = 0;
@@ -323,7 +331,7 @@ onCancelar(pf?: NgForm,de?:number){
         this.totalPri = 0;
         this.totalCnt = 0;
         this.totalPed = 0;
-
+        this.TransportePedido = {};
         this.tmontb=0;
         this.tmontd=0;
         this.tmonti=0;
@@ -336,7 +344,7 @@ onCancelar(pf?: NgForm,de?:number){
     this.totalPri = 0;
     this.totalCnt = 0;
     this.totalPed = 0;
-
+    this.TransportePedido = {};
     this.tmontb=0;
     this.tmontd=0;
     this.tmonti=0;
@@ -915,12 +923,12 @@ downloadEtiquetas() {
 
     if(this.pedido_.transporteId)
     this.TransportePedido = await this.transportePedS.getOne(this.pedido_.transporteId);
-    console.log(this.TransportePedido);
+
     if(this.TransportePedido){
       this.pedido_.compania = this.TransportePedido.compania;
       this.hasTransporte = true;
     }
-
+    
     //Verifica que el pedido haya pasado por el proceso de almacen
     if (this.pedido_.nrobultos) this.someticket = true;
 
