@@ -245,7 +245,7 @@
 											<span class="input-group-text" style="width: 130px;" id="inputGroup-sizing-sm">Compañia</span>
 										</div>
 										<div class="abs-center">
-											<mat-label>{{this.pedido_.compania}}</mat-label>
+											<mat-label>{{this.pedido_.compania ? this.pedido_.compania : this.pedido_.transporte}}</mat-label>
 										</div>
 									</div>
 								</div>
