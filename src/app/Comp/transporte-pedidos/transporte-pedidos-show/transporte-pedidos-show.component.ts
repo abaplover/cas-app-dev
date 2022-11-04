@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TransportePedidos } from 'src/app/models/transporte-pedidos';
 import { Transporte } from 'src/app/models/transporte';
+import { TransportePedidosService } from 'src/app/services/transporte-pedidos.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -40,6 +40,7 @@ export class TransportePedidosShowComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<TransportePedidosShowComponent>,
     private datePipe: DatePipe,
+    private transporteService: TransportePedidosService,
     @Inject(MAT_DIALOG_DATA) data) {
     
     console.log(data);
@@ -283,9 +284,12 @@ export class TransportePedidosShowComponent implements OnInit {
   habilitarCerrado() {
 
     if((!this.listaDetallePedido.some(peds => !peds.fentrega))){
-      console.log("Klk")
       this.btnEnviar = true;
     }
+  }
+
+  pdfDownload(){
+    this.transporteService.generarImpresionPdf(this.transportePedido_, this.listaDetallePedido);
   }
 
 }

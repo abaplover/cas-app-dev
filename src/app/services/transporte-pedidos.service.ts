@@ -127,73 +127,97 @@ export class TransportePedidosService {
 
   }
 
-  async generarEtiquetas(transportePedido, pedidoDetails) {
+  async generarImpresionPdf(transportePedido: TransportePedidos, pedidoDetails) {
 
-  
-    var ticketDefinition;
-    let spaceBottom=260;
-  
-    //for (let i = 1; i<=numeroBultos;i++) {
-      ticketDefinition = {
-        pageSize: {
-          width: 460, //Pixeles 
-          height: 288
-        },
-        pageMargins: [ 20, 15, 20, 10 ],
-    
-        footer: {
-    
-              columns:
-              [
-                { //columna 0
-                  width: 25,
-                  text:''
-                },
+    //['FACT. N', 'MONTO', 'CLIENTE', 'R.I.F', 'FLETE DESTINO', 'FLETE ORIGEN', 'CIUDAD DESTINO', 'BULTOS'],
+
+    var ticketDefinition = {
+      content: [
+        { text: 'Guia de despacho' },
+        {
+          width: 800,
+          table: {
+            style: {
+              fontSize: 10
+            },
+            body: [
+              // [{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''},{text: ''}],
+              [{ text: 'Ciudad:     ', colSpan: 2 },
+              { text: ''},
+              { text: 'Fecha   de   del 20  ', colSpan: 2 },
+              { text: ''},
+              { text: 'Representante', colSpan: 2},
+              { text: ''},
+              { text: 'C.I', colSpan: 2 },
+              { text: 'C.I', },
+              // { text: 'C.I', },
+              // { text: 'C.I', },
+              // // { text: 'C.I', },
               ],
-    
-        },
-        content: [],
-        defaultStyle: {
-          fontSize: 10
-        },
-        styles:{
-          'linecentertitle': {
-              margin:[190,30,0,30] //change number 6 to increase nspace
-          },
-          'centerText': {
-            margin:[0,0,0,0],
-            alignment: "justify"
-          },
-          'lineSpacing': {
-            margin:[0,0,0,0] //change number 6 to increase nspace
-          },
-          'minSpacing': {
-            margin:[0,0,0,0.5] //change number 6 to increase nspace
-          },
-          'SpacingFull': {
-            margin:[0,0,0,30] //change number 6 to increase nspace
-          },
-          'SpacingFull2': {
-            margin:[0,0,0,60] //change number 6 to increase nspace
-          },
-          'SpacingFullxl': {
-            margin:[0,0,0,spaceBottom] //change number 6 to increase nspace
-          },
-          'boldtxt':{
-            bold: true
-          },
-          'numerosEtiquetas':{
-            bold: true,
-            fontSize: 34        
-          },
-          'righttxt':{
-            alignment:'right',
-            fontSize: 10
+              [
+                { text: 'Nombre de la empresa Obligatorio:', colSpan:8 }
+              ],
+              [
+                { text: 'Vehiculo: ' + transportePedido.vehiculo, colSpan: 2 }, {text: 'Disappear'},
+                { text: 'Placa N.: ' + transportePedido.placa,colSpan: 2 }, {text: 'Disappear'},
+                { text: 'Chofer: ' + transportePedido.chofer,colSpan: 2 }, {text: 'Disappear'},
+                { text: 'C.I  ',colSpan: 2 }, {text: 'Disappear'}
+              ],
+              [
+                {
+                  table: {
+                    style: {
+                      fontSize: 10
+                    },
+                    widths: ['*', '*', 150, '*', '*', '*', '*', '*'],
+                    // body: [ {text: 'test', colSpan: 8}]
+                    body: [
+                      [{ text: 'FACT. N', style: { fontSize: 10 } },
+                      { text: 'MONTO', style: { fontSize: 10 } },
+                      { text: 'CLIENTE', style: { fontSize: 10, width: 200 } },
+                      { text: 'R.I.F', style: { fontSize: 10 } },
+                      { text: 'FLETE DESTINO', style: { fontSize: 10 } },
+                      { text: 'FLETE ORIGEN', style: { fontSize: 10 } },
+                      { text: 'CIUDAD DESTINO', style: { fontSize: 10 } },
+                      { text: 'BULTOS', style: { fontSize: 10 } }]
+                    ]
+                  }, 
+                  colSpan:8
+                }
+              ]
+            ]
+
           }
-        }
-      };
-    //}
-  
+
+        },
+      ],
+    };
+    let spaceBottom = 260;
+
+    //for (let i = 1; i<=numeroBultos;i++) {
+
+    
+
+    pedidoDetails.forEach(pedido => {
+      ticketDefinition.content[1].table.body[3][0]['table'].body.push([
+        pedido.nrofactura,
+        pedido.totalmontobruto,
+        pedido.nomcliente,
+        '',
+        '',
+        '',
+        '',
+        pedido.nrobultos
+      ])
+
+    });
+    console.log(ticketDefinition.content[1].table.body[3][0]['table']);
+    setTimeout(function(){
+      
+
+    }, 900)
+    
+
     // for (let i = 1; i<=numeroBultos; i++) {
     //   ticketDefinition.content.push(
     //     {
@@ -212,7 +236,7 @@ export class TransportePedidosService {
     //     //Datos de la empresa
     //     {text: this.dempresaList[0].descripcion,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
     //     {text: this.dempresaList[0].rif,style: "boldtxt", alignment: 'left', fontSize: 12,border: [false, false, false, false]},
-  
+
     //     {
     //       columns:
     //       [
@@ -241,7 +265,7 @@ export class TransportePedidosService {
     //       // optional space between columns
     //       columnGap: 5
     //     },
-  
+
     //     //Esta es la linea superior
     //     {
     //       table : {
@@ -254,7 +278,7 @@ export class TransportePedidosService {
     //       },
     //       layout : 'headerLineOnly'
     //     },
-  
+
     //     //Detalle de pedido y numero de eqitueta
     //     {
     //       columns:
@@ -291,9 +315,9 @@ export class TransportePedidosService {
     //       // optional space between columns
     //       columnGap: 5
     //     },
-  
+
     //     { text:'Esta etiqueta representa un precinto de seguridad. No recibir si se encuentra violentado y contactar a su asesor comercial o directamente a la empresa.',style: "centerText",fontSize: 10,border: [true, false, true, false]},
-  
+
     //     //Esta es la linea inferior
     //     {
     //       table : {
@@ -306,7 +330,7 @@ export class TransportePedidosService {
     //       },
     //       layout : 'headerLineOnly'
     //     },
-  
+
     //     //Codigo de barras
     //     {
     //       // image : this.textToBase64Barcode(docAdd),alignment: "center"
@@ -318,27 +342,28 @@ export class TransportePedidosService {
     //   )
     // }
     //Elimina el ultimo salto de pagina porque deja una pagina en blanco al final
-    ticketDefinition.content.splice(ticketDefinition.content.length-1,1);
-  
-      /* const pdfDocGenerator1 = pdfMake.createPdf(ticketDefinition);
-      pdfDocGenerator1.getBlob((blob) => {
-        var file = blob; */
-     //si se va a generar en string base64
-     const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition);
-      pdfDocGenerator0.getBase64((data) => {
-        var file = data;
-  
-       //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
-     
-      //  const fileName = `Etiquetas pedido N° ${docAdd}`;
-  
-      //  const idfile = fileName +'.pdf';
-      /*  this.pedido_.pdfname = idfile;
-       this.pedido_.pdfb64 = file; */
-      //  const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
-      //  const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
-       //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
-  
+    // ticketDefinition.content.splice(ticketDefinition.content.length - 1, 1);
+
+    /* const pdfDocGenerator1 = pdfMake.createPdf(ticketDefinition);
+    pdfDocGenerator1.getBlob((blob) => {
+      var file = blob; */
+    //si se va a generar en string base64
+    const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition).open();
+
+    // pdfDocGenerator0.getBase64((data) => {
+    //   var file = data;
+
+    //const id = 'Order-'+ Math.random().toString(36).substring(2)+Date.now()+'.pdf';
+
+    //  const fileName = `Etiquetas pedido N° ${docAdd}`;
+
+    //  const idfile = fileName +'.pdf';
+    /*  this.pedido_.pdfname = idfile;
+     this.pedido_.pdfb64 = file; */
+    //  const fileRef:AngularFireStorageReference=this.afStorage.ref("Tickets").child(idfile);
+    //  const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base64  
+    //const task: AngularFireUploadTask = fileRef.put(file); //Para guardar desde un archivo .Blob
+
     //   task.snapshotChanges().pipe(
     //      finalize(() => {
     //        this.URLPublica = this.afStorage.ref("Tickets").child(idfile).getDownloadURL();
@@ -347,11 +372,11 @@ export class TransportePedidosService {
     //            this.URLPublica = downloadURL;
     //            this.onSubmitAlmacen(pf,this.URLPublica);
     //          });
-  
+
     //    })
     //  ).subscribe();
-  
-  
-   });//pdfDocGenerator
+
+
+    //  });//pdfDocGenerator
   }
 }
