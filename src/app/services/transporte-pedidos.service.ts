@@ -236,14 +236,14 @@ export class TransportePedidosService {
                     style: {
                       fontSize: 10
                     },
-                    widths: [50, '*', 150, '*', '*', '*', 100, 40],
+                    widths: [50, '*', 180, '*', 50, 40, 100, 40],
                     body: [
                       [{ text: 'FACT. N°', style: { fontSize: 11, bold: true } },
                       { text: 'MONTO', style: { fontSize: 11, bold: true } },
                       { text: 'CLIENTE', style: { fontSize: 11, bold: true, width: 200 } },
                       { text: 'R.I.F', style: { fontSize: 11, bold: true } },
-                      { text: 'FLETE DESTINO', style: { fontSize: 11, bold: true } },
-                      { text: 'FLETE ORIGEN', style: { fontSize: 11, bold: true } },
+                      { text: 'FLETE DESTINO', style: { fontSize: 8, bold: true } },
+                      { text: 'FLETE ORIGEN', style: { fontSize: 8, bold: true } },
                       { text: 'CIUDAD DESTINO', style: { fontSize: 11, bold: true } },
                       { text: 'BULTOS', style: { fontSize: 11, bold: true } }]
                     ]
