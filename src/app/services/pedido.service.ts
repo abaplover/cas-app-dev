@@ -402,16 +402,32 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep04
 
-  getPedidosByIDs(pedidos) {
-    this.pedidosCollectionRef =
-      this.db.collection('pedidos', ref => ref.where("uid", 'in', pedidos));
+  async getPedidosByIDs(pedidos) {
 
-    return new Promise<any>((resolve) => {
-      this.db.collection('pedidos', ref => ref.where("uid", 'in', pedidos))
-        .valueChanges().subscribe(pedidos => {
-          resolve(pedidos)
-        });
-    });
+    if(!pedidos || !pedidos.length) return [];
+
+    const collectionPath = this.db.collection('pedidos');
+    this.pedidosCollectionRef = this.db.collection('pedidos');
+    const batches = [];
+
+    while (pedidos.length) {
+      const batch = pedidos.splice(0,10)
+     
+
+      batches.push(
+          collectionPath.ref.where("uid", 'in', batch)
+          .get()
+          .then((results) => results.docs.map( result => ({
+            ...result.data()
+          })))
+        )        
+      
+    }
+      
+
+    return Promise.all(batches).then(
+      content => content.flat()
+    );
   }
 
   getPedidos() {

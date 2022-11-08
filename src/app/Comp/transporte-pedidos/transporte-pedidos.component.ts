@@ -145,6 +145,7 @@ export class TransportePedidosComponent implements OnInit {
 
     if (this.transporteVer.pedido) {
       this.pedidoslistDet = await this.getPedidosDetalles(this.transporteVer.pedido);
+      console.log(this.pedidoslistDet);
       await this.combinarDetalle();
     }
 
@@ -269,13 +270,14 @@ export class TransportePedidosComponent implements OnInit {
   async getPedidosDetalles(pedidos) {
 
     let uidArray = pedidos.map(ped => ped.uid);
+    
     return await this.pedidoService.getPedidosByIDs(uidArray);
 
   }
   async combinarDetalle() {
-
+    console.log(this.pedidoslistDet[0]);
     this.pedidoslistDet.map(ped_ => {
-
+      
       const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
       const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
