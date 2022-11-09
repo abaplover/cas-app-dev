@@ -221,7 +221,7 @@ export class TransportePedidosService {
               { text: '' },
               { text: 'Representante: ' + datosEmpresa[0].representante, fontSize: 10, colSpan: 2, bold:true },
               { text: '' },
-              { text: 'C.I. ' + + datosEmpresa[0].cedula, fontSize: 10, colSpan: 2, bold:true },
+              { text: 'C.I. ' + datosEmpresa[0].cedula, fontSize: 10, colSpan: 2, bold:true },
               { text: 'C.I', },
               ],
               [
