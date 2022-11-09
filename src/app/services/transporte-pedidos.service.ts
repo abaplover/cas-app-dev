@@ -225,7 +225,7 @@ export class TransportePedidosService {
               { text: 'C.I', },
               ],
               [
-                { text: 'Nombre de la empresa según los datos de configuración para la empresa: ' + datosEmpresa[0].descripcion, fontSize: 10, colSpan: 8, bold: true }
+                { text: 'Nombre de la empresa: ' + datosEmpresa[0].descripcion, fontSize: 10, colSpan: 8, bold: true }
               ],
               [
                 { text: 'Vehiculo: ' + transportePedido.vehiculo, fontSize: 10, colSpan: 2, bold:true }, { text: 'Disappear' },
