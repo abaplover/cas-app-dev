@@ -142,7 +142,7 @@ export class TransportePedidosService {
     //['FACT. N', 'MONTO', 'CLIENTE', 'R.I.F', 'FLETE DESTINO', 'FLETE ORIGEN', 'CIUDAD DESTINO', 'BULTOS'],
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'BsF',
     
       // These options are needed to round to whole numbers if that's what you want.
       //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
@@ -158,15 +158,15 @@ export class TransportePedidosService {
       this.clienteS.getClients().valueChanges().subscribe(cliente => resolve(cliente));
     })
 
-    console.log(clienteInfo);
     var ticketDefinition = {
       pageOrientation: 'landscape',
-      footer: {
-        columns: [
+      footer: function(currentPage, pageCount) {
+        if(currentPage == pageCount)
+        return {columns: [
           // 'Left part',
           { text: 'Por el Cliente:____________________________________________', alignment: 'center', bold: true },
           { text: 'Por IMPORTADORA RICAMAR, C.A.:________________________', alignment: 'justify', bold: true },
-        ],
+        ]}
 
       },
       content: [
@@ -195,7 +195,10 @@ export class TransportePedidosService {
               margin: [50, 0, 0, 0],
               width: 300,
             },
-            { text: 'GUIA DE CARGA', alignment: 'center', bold: true, fontSize: 12 },
+            { stack: [
+              {text: 'GUIA DE CARGA', alignment: 'center', bold: true, fontSize: 12},
+              {text: `N° ${transportePedido.id}`,alignment:'center', bold: true, fontSize: 11} 
+            ]},
 
           ], columnGap: 10
         },
@@ -222,7 +225,7 @@ export class TransportePedidosService {
               { text: 'C.I', },
               ],
               [
-                { text: 'Nombre de la empresa Obligatorio: ' + datosEmpresa[0].descripcion, fontSize: 10, colSpan: 8, bold: true }
+                { text: 'Nombre de la empresa según los datos de configuración para la empresa: ' + datosEmpresa[0].descripcion, fontSize: 10, colSpan: 8, bold: true }
               ],
               [
                 { text: 'Vehiculo: ' + transportePedido.vehiculo, fontSize: 10, colSpan: 2, bold:true }, { text: 'Disappear' },
@@ -263,16 +266,14 @@ export class TransportePedidosService {
       this.totalBultos = this.totalBultos + pedido.nrobultos;
 
       let clienteDetalle = clienteInfo.find(cliente => cliente.idcliente == pedido.idcliente);
-      console.log(formatter.format(pedido.totalmontobruto));
+      
       ticketDefinition.content[2].table.body[3][0]['table'].body.push([
         pedido.nrofactura,
-        formatter.format(pedido.totalmontobruto),
+        formatter.format((pedido.totalmontobruto * transportePedido.tasa)),
         pedido.nomcliente,
-        // '',
         `${clienteDetalle.rif[0]}-${clienteDetalle.rif.substring(1, clienteDetalle.rif.length)}`,
         '',
         '',
-        // '',
         clienteDetalle.zona,
         pedido.nrobultos
       ])
@@ -284,7 +285,6 @@ export class TransportePedidosService {
         decoration:'underline'
       }
     ]);
-    console.log(ticketDefinition.content[2].table.body[3][0]['table'].body)
 
     const pdfDocGenerator0 = pdfMake.createPdf(ticketDefinition).open();
 
