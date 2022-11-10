@@ -289,7 +289,7 @@ export class TransportePedidosShowComponent implements OnInit {
   }
 
   pdfDownload(){
-    this.transporteService.generarImpresionPdf(this.transportePedido_, this.listaDetallePedido);
+    this.transporteService.generarImpresionPdf(this.transportePedido_, this.listaDetallePedido.filter(ped => !ped.modStatus.deleted));
   }
 
 }

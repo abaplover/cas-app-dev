@@ -149,6 +149,7 @@ export class TransportePedidosService {
       //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
     });
     const fechaTransporte = new Date(transportePedido.fecha);
+    const bultos = await pedidoDetails.reduce((prev, curr) => prev + curr.nrobultos, 0);
 
     let datosEmpresa = await new Promise<any>((resolve) => {
       this.datoEmpresaS.getDatoemps().valueChanges().subscribe(datos => resolve(datos));
