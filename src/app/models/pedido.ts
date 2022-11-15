@@ -67,4 +67,5 @@ export interface Pedido {
   compania?: string;
   unidaddemedida?: string;
   modStatus?: any;
+  tasaDolar?: number;
 }

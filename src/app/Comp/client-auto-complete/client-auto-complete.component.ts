@@ -9,7 +9,7 @@ import { ClientService } from 'src/app/services/client.service';
 })
 export class ClientAutoCompleteComponent implements OnInit {
   public clienteList: Client[]; //arreglo vacio
-  public keywordCli = "descripcion";
+  public keywordCli = "idesc";
   constructor(
     public clienteS     : ClientService,
   ) { }

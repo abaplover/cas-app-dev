@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {AngularFireDatabase, AngularFireList, AngularFireObject, snapshotChanges} from '@angular/fire/database';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFirestoreDocument } from '@angular/fire/firestore/document/document';
 import { RippleRef } from '@angular/material/core';
 import { firestore } from 'firebase';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 //import{AngularFirestore,AngularFirestoreCollection,AngularFirestoreDocument} from '@angular/fire/firestore';
 //import{observable} from 'rxjs';
@@ -24,6 +26,9 @@ export class ClientService {
 
   phoneClient: string;
 
+  clienterep: Observable<Client[]>;
+  clienteDocrep: AngularFirestoreDocument<Client>;
+  clienteColletionrep: AngularFirestoreCollection<Client>;
 
   client: AngularFireList<any>;
 
@@ -38,6 +43,18 @@ export class ClientService {
   getClients()
   {
     return this.clientList = this.firebase.list('clients');
+  }
+
+  getClientsRep(strq){
+    this.clienteColletionrep = this.afs.collection("clients");
+    this.clienterep = this.clienteColletionrep.snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        console.log(a);
+        const data = a.payload.doc.data() as Client;
+        return data;
+      })
+    }));
+    return this.clienterep;
   }
 
   getSpecificClient(idClient){
