@@ -74,7 +74,7 @@
 										pattern="^[a-zA-Z0-9%\u00E0-\u00FC ]{2,35}$"
 									>
 										<option selected value={{zn.descripcion}}  *ngFor = "let zn of zonasList">
-											{{zn.descripcion}}
+											{{zn.idzventa}} - {{zn.descripcion}}
 										</option>
 									</select>
 									<div *ngIf="zona.invalid && (zona.dirty || zona.touched)" class="text-danger">

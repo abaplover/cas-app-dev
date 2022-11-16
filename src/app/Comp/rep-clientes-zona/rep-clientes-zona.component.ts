@@ -53,7 +53,7 @@ export class RepClientesZonaComponent implements OnDestroy, OnInit, AfterViewIni
 
   showSpinner = false;
 
-  public clienteList: Client[]; //arreglo vacio
+  public clienteList: any[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
   public Ped_: Pedido[]; //arreglo vacio
@@ -73,22 +73,6 @@ export class RepClientesZonaComponent implements OnDestroy, OnInit, AfterViewIni
       'copy', {
         extend: 'excelHtml5',
         text: 'Excel',
-        customizeData: function (data) {
-          //Recorremos todas las filas de la tabla
-          for (var i = 0; i < data.body.length; i++) {
-            //Quitamos los puntos como separador de miles 
-            //y las comas de los decimaleslas cambiamos por puntos
-            data.body[i][9] = data.body[i][9].replace(".", "-");
-            data.body[i][9] = data.body[i][9].replace(",", ".");
-            data.body[i][9] = data.body[i][9].replace("-", ",");
-            data.body[i][10] = data.body[i][10].replace(".", "-");
-            data.body[i][10] = data.body[i][10].replace(",", ".");
-            data.body[i][10] = data.body[i][10].replace("-", ",");
-            data.body[i][11] = data.body[i][11].replace(".", "-");
-            data.body[i][11] = data.body[i][11].replace(",", ".");
-            data.body[i][11] = data.body[i][11].replace("-", ",");
-          }
-        }
       }, 'pdf', 'print'
     ]
   };
@@ -185,6 +169,17 @@ export class RepClientesZonaComponent implements OnDestroy, OnInit, AfterViewIni
       if(this.codCli)
       this.clienteList = this.clienteList.filter(client => client.idcliente == this.codCli);
 
+      this.clienteList.forEach(element => {
+        let zona = this.zonaVentas.find(zona => zona.descripcion === element.zona);
+        // console.log(zona)
+        if(zona)
+        element.idzventa = zona.idzventa;
+        // element['idzventa'] = this.zonaVentas.find(zona => zona.descripcion === element.zona).idzventa;
+      });
+
+      console.log(this.clienteList);
+      
+
       if (!this.firstTime) {
         this.rerender();
       }
@@ -207,36 +202,6 @@ export class RepClientesZonaComponent implements OnDestroy, OnInit, AfterViewIni
     return dateObject;
   }//timestampConvert
 
-  verdetalles(ped) {
-    const dialogConfig = new MatDialogConfig;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "100%";
-
-    this.pedidoVer_ = Object.assign({}, ped);
-    this.pedidoVer_.fechapedido = this.timestampConvert(ped.fechapedido);
-
-    if (ped.ffactura !== null && typeof ped.ffactura != "undefined") {
-      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura);
-    }
-    if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined") {
-      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho);
-    }
-    if (ped.fpago !== null && typeof ped.fpago != "undefined") {
-      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago);
-    }
-    if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined") {
-      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega);
-    }
-    if (ped.fentrega !== null && typeof ped.fentrega != "undefined") {
-      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega);
-    }
-
-    dialogConfig.data = {
-      pedidoShow: Object.assign({}, this.pedidoVer_)
-    };
-
-    this.dialogo.open(PedidoShowComponent, dialogConfig);
-  }//verdetalles
   rerender(): void {
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {

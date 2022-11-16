@@ -25,7 +25,7 @@
 								<mat-select value=selected multiple name="zonVent" [(ngModel)]="this.zonVent"
 									(selectionChange)="onBookChange($event)">
 									<mat-option value={{zv.descripcion}} *ngFor="let zv of zonaVentas">
-										{{zv.descripcion}}
+										{{zv.idzventa }} - {{zv.descripcion}}
 									</mat-option>
 								</mat-select>
 							</mat-form-field>
@@ -77,6 +77,7 @@
 					<!-- <th style="width: 140px;">N° de Pedido</th> -->
 					<th>RIF</th>
 					<th>Nombre del Cliente</th>
+					<th>ID Zona</th>
 					<th>Zona</th>
 					<th>Lista de precios</th>
 				</tr>
@@ -85,6 +86,7 @@
 				<tr *ngFor="let client of clienteList">
 					<td>{{client.rif}}</td>
 					<td>{{client.descripcion}}</td>
+					<td>{{client.idzventa}}</td>
 					<td>{{client.zona}}</td>
 					<td>{{client.listaprecio}}</td>
 					<!-- <td>{{client.nomvendedor}}</td> -->
