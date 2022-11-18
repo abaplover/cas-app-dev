@@ -282,7 +282,7 @@ export class TransportePedidosService {
     });
     ticketDefinition.content[2].table.body[3][0]['table'].body.push([
       {
-        margin:[0,0,25,0],text: 'TOTAL: ' + this.totalBultos, alignment: 'right', colSpan: 8, bold: true,
+        margin:[0,0,25,0],text: 'TOTAL: ' + bultos, alignment: 'right', colSpan: 8, bold: true,
         decoration:'underline'
       }
     ]);

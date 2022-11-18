@@ -30,7 +30,7 @@ export class TransportePedidosShowComponent implements OnInit {
   vendedorList: any[];
   zventaList: any[];
 
-  cabeceraDetalle = ['N. Factura', 'Fe. Pedido', 'Fe. Entrega', 'Lista P.', 'N. Cliente', 'Nombre', 'Vendedor', 'Monto bruto', '%', 'Monto Neto', 'Bultos']
+  cabeceraDetalle = ['N. Factura', 'Fe. Pedido', 'Fe. Entrega', 'Lista P.', 'N. Cliente', 'Nombre', 'Vendedor', 'Monto USD', 'Com. USD', '%', 'Monto Bsf','Com. Bsf', 'Bultos']
   public detallePedido: Pedido = { fpreparacion: null, nrobultos: 0, idcliente: '', nomcliente: '', nomvendedor: '', totalmontobruto: 0, totalmontoneto: 0 };
   public transporteList: Transporte[] = []; //arreglo vacio
 
@@ -42,7 +42,7 @@ export class TransportePedidosShowComponent implements OnInit {
     private datePipe: DatePipe,
     private transporteService: TransportePedidosService,
     @Inject(MAT_DIALOG_DATA) data) {
-    
+
     console.log(data);
     this.transportePedido_ = data.transportePedido;
     this.listaPedidosTransportes = data.transportePedido.pedido;
@@ -84,18 +84,18 @@ export class TransportePedidosShowComponent implements OnInit {
 
     if (this.accion === 'DELETE') {
       this.btnText = 'Eliminar transporte';
-      this.showButton   = true;
-      this.readonly     = true;
-      this.delete       = true;
-      this.btnEnviar    = true;
+      this.showButton = true;
+      this.readonly = true;
+      this.delete = true;
+      this.btnEnviar = true;
     }
 
     if (this.accion === 'CLOSE') {
-      this.btnText        = 'Cerrar transporte';
-      this.showButton     = true;
+      this.btnText = 'Cerrar transporte';
+      this.showButton = true;
       // this.btnEnviar      = true;
-      this.readonly       = true;
-      this.close          = true;
+      this.readonly = true;
+      this.close = true;
 
     }
   }
@@ -139,8 +139,16 @@ export class TransportePedidosShowComponent implements OnInit {
 
     let montoneto = await this.roundTo(((elemento.totalmontobruto * this.detallePedido.porcentaje) / 100), 2);
 
-    if (this.detallePedido.porcentaje)
+    if (this.detallePedido.tasaDolar)
+      this.detallePedido.totalmontobrutoBsf = elemento.totalmontobruto * elemento.tasaDolar;
+
+    if (this.detallePedido.porcentaje) {
       this.detallePedido.totalPorcentaje = montoneto;
+
+      if (this.detallePedido.totalmontobrutoBsf && this.detallePedido.tasaDolar)
+        this.detallePedido.totalPorcentajeBsf = this.roundTo(this.detallePedido.totalPorcentaje * this.detallePedido.tasaDolar, 2);
+    }
+
 
   }//selectEvent
   timestampConvert(fec, col?: number) {
@@ -176,6 +184,8 @@ export class TransportePedidosShowComponent implements OnInit {
       this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
         uid: this.detallePedido.uid,
         totalPorcentaje: this.detallePedido.totalPorcentaje,
+        totalmontobrutoBsf: this.detallePedido.totalmontobrutoBsf,
+        totalPorcentajeBsf: this.detallePedido.totalPorcentajeBsf,
         modStatus: this.detallePedido.modStatus
       }];
     }
@@ -226,26 +236,26 @@ export class TransportePedidosShowComponent implements OnInit {
       if (!this.transportePedido_.comisionUSD)
         this.transportePedido_.comisionUSD = transportePed.totalPorcentaje;
 
-      if (this.transportePedido_.comisionBsF)
-        this.transportePedido_.comisionBsF =
-          this.roundTo((this.transportePedido_.comisionUSD * this.transportePedido_.tasa), 2);
-
-      if (!this.transportePedido_.comisionBsF)
-        this.transportePedido_.comisionBsF = this.roundTo((this.transportePedido_.comisionUSD * this.transportePedido_.tasa), 2);
-
-
       if (this.transportePedido_.totalUSD)
         this.transportePedido_.totalUSD = this.transportePedido_.totalUSD + transportePed.totalmontobruto;
 
       if (!this.transportePedido_.totalUSD)
         this.transportePedido_.totalUSD = transportePed.totalmontobruto;
 
+      if (this.transportePedido_.comisionBsF)
+        this.transportePedido_.comisionBsF =
+          this.roundTo((this.transportePedido_.comisionBsF + transportePed.totalPorcentajeBsf), 2);
+
+      if (!this.transportePedido_.comisionBsF)
+        this.transportePedido_.comisionBsF = this.roundTo(transportePed.totalPorcentajeBsf, 2);
+
+
       if (this.transportePedido_.totalBsF)
         this.transportePedido_.totalBsF = this.roundTo(
-          (this.transportePedido_.totalUSD * this.transportePedido_.tasa), 2);
+          (this.transportePedido_.totalBsF + transportePed.totalmontobrutoBsf), 2);
 
       if (!this.transportePedido_.totalBsF)
-        this.transportePedido_.totalBsF = this.roundTo((this.transportePedido_.totalUSD * this.transportePedido_.tasa), 2);
+        this.transportePedido_.totalBsF = this.roundTo((transportePed.totalmontobrutoBsf), 2);
     }
 
     if (operacion === this.delOperation) {
@@ -254,10 +264,10 @@ export class TransportePedidosShowComponent implements OnInit {
       this.transportePedido_.comisionUSD = this.transportePedido_.comisionUSD - transportePed.totalmontoneto;
 
       this.transportePedido_.totalBsF = this.roundTo(
-        this.transportePedido_.totalBsF - (transportePed.totalmontobruto * this.transportePedido_.tasa), 2);
+        this.transportePedido_.totalBsF - (transportePed.totalmontobrutoBsf), 2);
 
       this.transportePedido_.comisionBsF = this.roundTo(
-        this.transportePedido_.comisionBsF - (transportePed.totalmontoneto * this.transportePedido_.tasa), 2);
+        this.transportePedido_.comisionBsF - (transportePed.totalPorcentajeBsf), 2);
 
     }
 
@@ -283,12 +293,12 @@ export class TransportePedidosShowComponent implements OnInit {
   }
   habilitarCerrado() {
 
-    if((!this.listaDetallePedido.some(peds => !peds.fentrega))){
+    if ((!this.listaDetallePedido.some(peds => !peds.fentrega))) {
       this.btnEnviar = true;
     }
   }
 
-  pdfDownload(){
+  pdfDownload() {
     this.transporteService.generarImpresionPdf(this.transportePedido_, this.listaDetallePedido.filter(ped => !ped.modStatus.deleted));
   }
 

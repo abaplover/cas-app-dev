@@ -55,6 +55,7 @@ export interface Pedido {
   tipodoc?: string;
   totalCnt?: number;
   totalmontobruto?: number;
+  totalmontobrutoBsf?: number;
   totalmontodescuento?: number;
   totalmontoimpuesto?: number;
   totalmontoneto?: number;
@@ -62,6 +63,7 @@ export interface Pedido {
   totalpormaterial?: number;
   totalPri?: number;
   totalPorcentaje?: number;
+  totalPorcentajeBsf?: number;
   transporteId?: string;
   transporte?: string;
   compania?: string;

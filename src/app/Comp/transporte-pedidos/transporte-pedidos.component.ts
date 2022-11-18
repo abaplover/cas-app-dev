@@ -298,6 +298,8 @@ export class TransportePedidosComponent implements OnInit {
         ped_.fdespacho = new Date(ped_.fdespacho.seconds * 1000);
 
       ped_.totalPorcentaje = pedido.totalPorcentaje;
+      ped_.totalPorcentajeBsf = pedido.totalPorcentajeBsf;
+      ped_.totalmontobrutoBsf = pedido.totalmontobrutoBsf;
     });
   }
 

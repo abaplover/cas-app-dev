@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<mat-dialog-content style="max-height: 157vh;">
 
 	<div class="card bg-light mb-5">
 		<div class="card-body text-info panel panel-login" style="border-style: solid; border-width: 0px; ">
@@ -99,7 +99,7 @@
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="card">
 							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 200px; ">
-								<div class="row">
+								<!-- <div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 										<div class="input-group input-group-sm mb-3">
 											<div class="input-group-prepend" style="width: 125px;">
@@ -115,7 +115,7 @@
 												class="form-control" aria-label="Small" />
 										</div>
 									</div>
-								</div>
+								</div> -->
 								<div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 										<div class="input-group input-group-sm mb-3">
@@ -126,8 +126,7 @@
 											<input class="form-control" aria-label="Small"
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="text"
 												name="cedula" id="cedula" #cedula="ngModel" required
-												[(ngModel)]="this.transportePedido_.cedula" 
-												[readonly]="this.readonly"
+												[(ngModel)]="this.transportePedido_.cedula" [readonly]="this.readonly"
 												class="form-control" aria-label="Small" />
 										</div>
 									</div>
@@ -161,8 +160,8 @@
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="date"
 												name="fechacierre" id="fechacierre" #fechacierre="ngModel"
 												[(ngModel)]="this.transportePedido_.fechacierre" class="form-control"
-												(change)="this.habilitarCerrado()"
-												aria-label="Small" [readonly]="!this.close" />
+												(change)="this.habilitarCerrado()" aria-label="Small"
+												[readonly]="!this.close" />
 										</div>
 									</div>
 								</div>
@@ -196,10 +195,12 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Total USD</span>
 											</div>
-											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
-												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.totalUSD | currency: " "}}</mat-label>
+											<div class="abs-center"
+												style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{
+													this.transportePedido_.totalUSD | currency: " "}}</mat-label>
 											</div>
-											
+
 											<!-- <input class="form-control" aria-label="Small"
 												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
 												name="totalUSD" id="totalUSD" 
@@ -216,8 +217,10 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Total BsF</span>
 											</div>
-											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
-												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.totalBsF | currency: " "}}</mat-label>
+											<div class="abs-center"
+												style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{
+													this.transportePedido_.totalBsF | currency: " "}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -229,10 +232,12 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Comisión USD</span>
 											</div>
-					
-												<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
-													<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.comisionUSD | currency: " "}}</mat-label>
-												</div>
+
+											<div class="abs-center"
+												style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{
+													this.transportePedido_.comisionUSD | currency: " "}}</mat-label>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -243,8 +248,10 @@
 												<span class="input-group-text" style="width: 120px;"
 													id="inputGroup-sizing-sm">Comisión BsF</span>
 											</div>
-											<div class="abs-center" style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
-												<mat-label style="margin-right:5px; margin-left:5px">{{ this.transportePedido_.comisionBsF | currency: " "}}</mat-label>
+											<div class="abs-center"
+												style="border: darkgray; border-style:solid; border-width: thin; border-radius: 5px; background:#e9ecef">
+												<mat-label style="margin-right:5px; margin-left:5px">{{
+													this.transportePedido_.comisionBsF | currency: " "}}</mat-label>
 											</div>
 										</div>
 									</div>
@@ -257,155 +264,171 @@
 
 				<div class="row" style="height: 5px;"></div>
 				<div class="row">
-					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+					<div class="col-">
 						<div class="card" *ngIf="this.create || this.edit">
-							<div class="card-body" style="padding-right: 8px;padding-left:  8px; ">
+							<div class="card-body" style="padding-right: 8px;padding-left:  35px; ">
 								<div class="row">
-									<div class="col-sm-11 col-md-11 col-lg-11 col-xl-11" style="padding-right: 1px;">
-										<div class="row">
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold;">N° DOC.
-												</mat-label>
-												<div class="ng-autocomplete" style="width: 150%;">
-													<ng-autocomplete [data]="pedidosPreparados"
-														[searchKeyword]="keywordPed" placeHolder="No.Doc"
-														[itemTemplate]="itemTemplate"
-														[notFoundTemplate]="notFoundTemplate" name="nrofactura"
-														(inputChanged)='onChangeSearch($event)'
-														(selected)='selectEvent($event)'
-														
-														(inputCleared)='closeautoComplete()' notFoundText="No existe">
-													</ng-autocomplete>
-													<ng-template #itemTemplate let-item>
-														<a [innerHTML]="item.nrofactura"></a>
-													</ng-template>
-													<ng-template #notFoundTemplate let-notFound>
-														<div [innerHTML]="notFound"></div>
-													</ng-template>
-												</div>
-
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Fe. Pedido
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" style="font-size: 14px; height: 42px;"
-														name="fechapedido" id="fechapedido" #fechapedido="ngModel"
-														[ngModel]="this.detallePedido.fechapedido | date:'MM/dd/yyyy'"
-														(ngModelChange)="this.detallePedido.fechapedido = $event"
-														class="form-control" readonly />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px;padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Fe. Entrega
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="fentrega"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.fentrega" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px;padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Lista P
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="listaprecio"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.listaprecio" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px;padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">N° Cliente
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="idcliente"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.idcliente" required
-														readonly=true class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Nombre Cliente
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="nomcliente"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.nomcliente" readonly=true
-														class="form-control" />
-												</div>
+									<!-- <div class="col" style="padding-right: 5px;"> -->
+									<div class="row">
+										<div class="col col-md" style="padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold;">N° DOC.
+											</mat-label>
+											<div class="ng-autocomplete" style="width: 100%">
+												<ng-autocomplete [data]="pedidosPreparados" [searchKeyword]="keywordPed"
+													placeHolder="No.Doc" [itemTemplate]="itemTemplate"
+													[notFoundTemplate]="notFoundTemplate" name="nrofactura"
+													(inputChanged)='onChangeSearch($event)'
+													(selected)='selectEvent($event)'
+													(inputCleared)='closeautoComplete()' notFoundText="No existe">
+												</ng-autocomplete>
+												<ng-template #itemTemplate let-item>
+													<a [innerHTML]="item.nrofactura"></a>
+												</ng-template>
+												<ng-template #notFoundTemplate let-notFound>
+													<div [innerHTML]="notFound"></div>
+												</ng-template>
 											</div>
 
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Vendedor
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="nomvendedor"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.nomvendedor" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Monto Bruto
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="totalmontobruto"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.totalmontobruto" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">%
-												</mat-label>
-												<div class="input-group input-group-sm mb-1">
-													<input type="text" name="porcentaje"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.porcentaje" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">Total
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="totalPorcentaje"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.totalPorcentaje" readonly=true
-														class="form-control" />
-												</div>
-											</div>
-											<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-												style="padding-left: 1px; padding-right: 1px;">
-												<mat-label style="font-size:smaller; font-weight: bold; ">N° Bultos
-												</mat-label>
-												<div class="input-group input-group-sm mb-3">
-													<input type="text" name="nrobultos"
-														style="font-size: 14px; height: 42px;"
-														[(ngModel)]="this.detallePedido.nrobultos" readonly=true
-														class="form-control" />
-												</div>
+										</div>
+										<div class="col-md" style="padding-left: 1px; padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">Fe. Pedido
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" style="font-size: 11px; height: 42px;"
+													name="fechapedido" id="fechapedido" #fechapedido="ngModel"
+													[ngModel]="this.detallePedido.fechapedido | date:'MM/dd/yyyy'"
+													(ngModelChange)="this.detallePedido.fechapedido = $event"
+													class="form-control" readonly />
 											</div>
 										</div>
+										<div class="col-md" style="padding-left: 1px;padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">Fe. Entrega
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="fentrega"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.fentrega" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm" style="padding-left: 1px;padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">Lista P
+											</mat-label>
+											<div class="input-group input-group-sm mb-2">
+												<input type="text" name="listaprecio"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.listaprecio" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm" style="padding-left: 1px;padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">N° Cliente
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="idcliente"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.idcliente" required readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-" style="padding-left: 1px; padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">Nombre Cliente
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="nomcliente"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.nomcliente" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+
+										<div class="col-" style="padding-left: 1px; padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">Vendedor
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="nomvendedor"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.nomvendedor" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+
+										<div class="col-sm" style="padding-left: 1px; padding-right: 1px; width: 80%; ">
+											<mat-label style="font-size:smaller; font-weight: bold;flex-grow: 0.5; ">
+												Monto USD
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="totalmontobruto"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.totalmontobruto" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm" style="padding-left: 1px; padding-right: 1px; width: 80%; ">
+											<mat-label style="font-size:smaller; font-weight: bold;flex-grow: 0.5; ">
+												Com.
+												USD
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="totalPorcentaje"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.totalPorcentaje" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col"
+											style="padding-left: 1px; padding-right: 1px; flex-grow: 0.5; width: 50%; ">
+											<mat-label style="font-size:smaller; font-weight: bold; ">%
+											</mat-label>
+											<div class="input-group input-group-sm ">
+												<input type="text" name="porcentaje"
+													style="font-size: 11px; height: 42px; width: 10px;"
+													[(ngModel)]="this.detallePedido.porcentaje" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm" style="padding-left: 1px; padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold; flex-grow: 0.5;">
+												Monto Bs
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="totalmontobrutoBsf"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.totalmontobrutoBsf" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm" style="padding-left: 1px; padding-right: 1px;">
+											<mat-label style="font-size:smaller; font-weight: bold;flex-grow: 0.5; ">
+												Com. Bs
+											</mat-label>
+											<div class="input-group input-group-sm mb-3">
+												<input type="text" name="totalPorcentajeBsf"
+													style="font-size: 11px; height: 42px;"
+													[(ngModel)]="this.detallePedido.totalPorcentajeBsf" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm"
+											style="padding-left: 1px; padding-right: 1px; flex-grow: 0.5;">
+											<mat-label style="font-size:smaller; font-weight: bold; ">N° Bultos
+											</mat-label>
+											<div class="input-group input-group-sm mb-3" style="width: 50px;">
+												<input type="text" name="nrobultos"
+													style="font-size: 11px; height: 42px; width: 10px;"
+													[(ngModel)]="this.detallePedido.nrobultos" readonly=true
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-sm">
+											<button type="submit" class="btn btn-link" [disabled]="pedidoForm.invalid">
+												<i class="fas fa-plus fa-3x"></i>
+											</button>
+										</div>
 									</div>
-									<div class="col-sm-1 col-md-1 col-lg-1 col-xl-1"
-										style="padding-left: 1px;padding-right: 1px;">
-										<button type="submit" class="btn btn-link" [disabled]="pedidoForm.invalid">
-											<i class="fas fa-plus fa-3x"></i>
-										</button>
+									<!-- </div> -->
+									<div class="col-0">
+
 									</div>
 
 								</div>
@@ -445,6 +468,12 @@
 															<td class="col-0" style="text-align: right;">
 																{{cabeceraDetalle[10]}}
 															</td>
+															<td class="col-0" style="text-align: right;">
+																{{cabeceraDetalle[11]}}
+															</td>
+															<td class="col-0" style="text-align: right;">
+																{{cabeceraDetalle[12]}}
+															</td>
 														</tr>
 													</thead>
 													<tbody class="thead-secondary table-secondary"
@@ -452,8 +481,10 @@
 														<tr *ngFor="let ped of this.listaDetallePedido; index as i"
 															[style]="ped.modStatus.style">
 															<td class="col-0" scope="row">{{ped.nrofactura}}</td>
-															<td class="col-0" scope="row">{{ped.fechapedido | date:'dd/MM/yyyy'}}</td>
-															<td class="col-0" scope="row">{{ped.fentrega | date:'dd/MM/yyyy'}}</td>
+															<td class="col-0" scope="row">{{ped.fechapedido |
+																date:'dd/MM/yyyy'}}</td>
+															<td class="col-0" scope="row">{{ped.fentrega |
+																date:'dd/MM/yyyy'}}</td>
 															<td class="col-0" scope="row">{{ped.listaprecio}}</td>
 															<td class="col-0" scope="row">{{ped.idcliente}}</td>
 															<td class="col-1" style="text-align: left;">
@@ -463,9 +494,13 @@
 															<td class="col-0" style="text-align: right;">
 																{{ped.totalmontobruto | currency:" "}}</td>
 															<td class="col-0" style="text-align: right;">
+																{{ped.totalPorcentaje | currency:" "}}</td>
+															<td class="col-0" style="text-align: right;">
 																{{ped.porcentaje}}</td>
 															<td class="col-0" style="text-align: right;">
-																{{ped.totalPorcentaje | currency:" "}}</td>
+																{{ped.totalmontobrutoBsf | currency:" "}}</td>
+															<td class="col-0" style="text-align: right;">
+																{{ped.totalPorcentajeBsf | currency:" "}}</td>
 															<td class="col-0" style="text-align: right;">
 																{{ped.nrobultos}}</td>
 															<th class="col-0" style="cursor: pointer;" scope="col"
