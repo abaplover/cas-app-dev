@@ -12,6 +12,7 @@ export class TransportePedidos {
 	estatus?: string;
 	fechaCierre?: string;
 	totalPedidos?: number;
+	totalBultos?: number;
 	totalUSD?: number;
 	totalBsF?: number;
 	comisionUSD?: number;

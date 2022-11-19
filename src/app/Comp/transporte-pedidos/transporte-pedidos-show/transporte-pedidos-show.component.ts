@@ -30,7 +30,7 @@ export class TransportePedidosShowComponent implements OnInit {
   vendedorList: any[];
   zventaList: any[];
 
-  cabeceraDetalle = ['N. Factura', 'Fe. Pedido', 'Fe. Entrega', 'Lista P.', 'N. Cliente', 'Nombre', 'Vendedor', 'Monto USD', 'Com. USD', '%', 'Monto Bsf','Com. Bsf', 'Bultos']
+  cabeceraDetalle = ['N. Factura', 'Fe. Pedido', 'Fe. Entrega', 'Lista P.', 'N. Cliente', 'Nombre', 'Vendedor', 'Monto USD', 'Com. USD', '%', 'Monto Bsf', 'Com. Bsf', 'Bultos']
   public detallePedido: Pedido = { fpreparacion: null, nrobultos: 0, idcliente: '', nomcliente: '', nomvendedor: '', totalmontobruto: 0, totalmontoneto: 0 };
   public transporteList: Transporte[] = []; //arreglo vacio
 
@@ -43,7 +43,7 @@ export class TransportePedidosShowComponent implements OnInit {
     private transporteService: TransportePedidosService,
     @Inject(MAT_DIALOG_DATA) data) {
 
-    console.log(data);
+    // console.log(data);
     this.transportePedido_ = data.transportePedido;
     this.listaPedidosTransportes = data.transportePedido.pedido;
     this.pedidosPreparados = data.pedidosPreparados;
@@ -163,7 +163,6 @@ export class TransportePedidosShowComponent implements OnInit {
         break;
     }
 
-    console.log(fec);
   };
   roundTo(num: number, places: number): number {
     const factor = 10 ** places;
@@ -224,6 +223,12 @@ export class TransportePedidosShowComponent implements OnInit {
 
     if (operacion === this.addOperation) {
 
+      if (this.transportePedido_.totalBultos)
+        this.transportePedido_.totalBultos = this.transportePedido_.totalBultos + transportePed.nrobultos;
+
+      if (!this.transportePedido_.totalBultos)
+        this.transportePedido_.totalBultos = transportePed.nrobultos;
+
       if (this.transportePedido_.totalPedidos)
         this.transportePedido_.totalPedidos = this.transportePedido_.totalPedidos + 1;
 
@@ -268,6 +273,8 @@ export class TransportePedidosShowComponent implements OnInit {
 
       this.transportePedido_.comisionBsF = this.roundTo(
         this.transportePedido_.comisionBsF - (transportePed.totalPorcentajeBsf), 2);
+
+      this.transportePedido_.totalBultos = this.transportePedido_.totalBultos - transportePed.nrobultos;
 
     }
 

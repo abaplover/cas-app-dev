@@ -98,7 +98,7 @@
 
 					<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
 						<div class="card">
-							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 200px; ">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px; ">
 								<!-- <div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 										<div class="input-group input-group-sm mb-3">
@@ -165,14 +165,6 @@
 										</div>
 									</div>
 								</div>
-
-							</div>
-						</div>
-
-					</div>
-					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-						<div class="card">
-							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px; ">
 								<div class="row">
 									<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
 										<div class="input-group input-group-sm mb-3">
@@ -188,6 +180,30 @@
 										</div>
 									</div>
 								</div>
+								<div class="row">
+									<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+										<div class="input-group input-group-sm mb-3">
+											<div class="input-group-prepend" style="width: 125px;">
+												<span class="input-group-text" style="width: 120px;"
+													id="inputGroup-sizing-sm">Total Bultos</span>
+											</div>
+											<input class="form-control" aria-label="Small"
+												aria-describedby="inputGroup-sizing-sm" placeholder="" type="number"
+												name="totalBultos" id="totalBultos" #totalBultos="ngModel"
+												[(ngModel)]="this.transportePedido_.totalBultos" readonly
+												class="form-control" aria-label="Small" />
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+						<div class="card">
+							<div class="card-body" style="padding-right: 8px;padding-left:  8px; height: 250px; ">
+								
 								<div class="row">
 									<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
 										<div class="input-group input-group-sm mb-3">

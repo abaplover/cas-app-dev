@@ -270,7 +270,7 @@ export class TransportePedidosService {
       
       ticketDefinition.content[2].table.body[3][0]['table'].body.push([
         pedido.nrofactura,
-        formatter.format((pedido.totalmontobruto * transportePedido.tasa)),
+        formatter.format((pedido.totalmontobrutoBsf)),
         pedido.nomcliente,
         `${clienteDetalle.rif[0]}-${clienteDetalle.rif.substring(1, clienteDetalle.rif.length)}`,
         '',

@@ -210,7 +210,7 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedidos = transporteInfo.transportePedido;
     this.transportePedidos.pedido = this.listaDetallePedido;
     this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
-    console.log(this.transportePedidos);
+
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
     this.actualizarReferenciaPedidos(transporteInfo)
   }
@@ -221,7 +221,6 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedidos.pedido = this.listaDetallePedido;
     this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
 
-    console.log(this.transportePedidos);
     this.transportePedS.delete(this.transportePedidos.id, this.pedidoslistDet);
   }
 
