@@ -8,6 +8,7 @@ import { TransportePedidosService } from 'src/app/services/transporte-pedidos.se
 import { TransporteService } from 'src/app/services/transporte.service';
 import { ZventaService } from 'src/app/services/zventa.service';
 import { VendedorService } from 'src/app/services/vendedor.service';
+// import { ClientService } from 'src/app/services/client.service';
 import { ToastrService } from 'ngx-toastr';
 import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
 import { MrechazoService } from 'src/app/services/mrechazo.service';
@@ -16,6 +17,7 @@ import { Mrechazo } from '../../models/mrechazo';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TransportePedidosShowComponent } from './transporte-pedidos-show/transporte-pedidos-show.component';
 import { ClientService } from 'src/app/services/client.service';
+import { Client } from 'src/app/models/client';
 import { MatPaginator } from '@angular/material/paginator';
 import { Zventa } from 'src/app/models/zventa';
 import { Transporte } from 'src/app/models/transporte';
@@ -43,6 +45,7 @@ export class TransportePedidosComponent implements OnInit {
   public zventaList: Zventa[];
   public transporteList: Transporte[] = []; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
+  public clienteList: Client[]; //arreglo vacio
   public pedidosPreparados: Pedido[];
   public mrechazoList: Mrechazo[]; //arreglo vacio
   public transportePedidos: TransportePedidos;
@@ -58,7 +61,7 @@ export class TransportePedidosComponent implements OnInit {
     // private toastr: ToastrService,
     public mrechazoS: MrechazoService,
     private dialogo: MatDialog,
-    // private clienteS: ClientService,
+    private clienteS: ClientService,
     public transportePedS: TransportePedidosService,
     public transporteS: TransporteService,
     public zventas: ZventaService,
@@ -85,6 +88,10 @@ export class TransportePedidosComponent implements OnInit {
     this.vendedorS.getVendedors().valueChanges().subscribe(vendedor => {
       this.vendedorList = vendedor;
     });
+
+    this.clienteS.getClients().valueChanges().subscribe(cliente => {
+      this.clienteList = cliente;
+    })
 
     //ELEMENT_DATA
 
@@ -156,6 +163,7 @@ export class TransportePedidosComponent implements OnInit {
       pedidosPreparados: this.pedidosPreparados,
       zventaList: this.zventaList,
       vendedorList: this.vendedorList,
+      clienteList: this.clienteList,
       transporteList: this.transporteList
     };
 
@@ -211,6 +219,7 @@ export class TransportePedidosComponent implements OnInit {
     this.transportePedidos.pedido = this.listaDetallePedido;
     this.pedidoslistDet = await this.getPedidosDetalles(this.listaDetallePedido);
 
+    console.log(this.transportePedidos);
     this.transportePedS.update(this.transportePedidos.id, this.transportePedidos);
     this.actualizarReferenciaPedidos(transporteInfo)
   }
@@ -277,8 +286,9 @@ export class TransportePedidosComponent implements OnInit {
     console.log(this.pedidoslistDet[0]);
     this.pedidoslistDet.map(ped_ => {
 
-      const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
-      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
+      // const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
+      const zventas = this.clienteList.find(cliente => cliente.idcliente == ped_.idcliente);
+      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.zona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
 
       ped_.porcentaje = porcentaje.porcentaje;
