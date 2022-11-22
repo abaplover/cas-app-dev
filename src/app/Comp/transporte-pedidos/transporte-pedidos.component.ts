@@ -152,7 +152,7 @@ export class TransportePedidosComponent implements OnInit {
 
     if (this.transporteVer.pedido) {
       this.pedidoslistDet = await this.getPedidosDetalles(this.transporteVer.pedido);
-      console.log(this.pedidoslistDet);
+      // console.log(this.pedidoslistDet);
       await this.combinarDetalle();
     }
 

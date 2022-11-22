@@ -54,6 +54,34 @@ export class TransportePedidosShowComponent implements OnInit {
     this.zventaList = data.zventaList;
     this.accion = data.accion;
 
+    this.listaDetallePedido.sort((a, b) => {
+      const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
+      const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
+
+    this.listaPedidosTransportes.sort((a, b) => {
+      const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
+      const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
+
     if (!this.listaDetallePedido)
       this.listaDetallePedido = [];
 
@@ -104,6 +132,7 @@ export class TransportePedidosShowComponent implements OnInit {
   ngOnInit(): void {
 
     console.log(this.listaDetallePedido);
+    console.log(this.listaPedidosTransportes);
     if (!this.transportePedido_.totalBultos)
       this.transportePedido_.totalBultos = this.listaDetallePedido.reduce((prev, curr) => prev + curr.nrobultos, 0);
   }
@@ -114,6 +143,7 @@ export class TransportePedidosShowComponent implements OnInit {
       this.dialogRef.close();
   }
   doAction() {
+    console.log(this.listaDetallePedido);
     this.dialogRef.close({
       event: this.accion,
       data: {
@@ -156,7 +186,7 @@ export class TransportePedidosShowComponent implements OnInit {
       if (this.detallePedido.totalmontobrutoBsf && this.detallePedido.tasaDolar)
         this.detallePedido.totalPorcentajeBsf = this.roundTo(this.detallePedido.totalPorcentaje * this.detallePedido.tasaDolar, 2);
 
-        if (this.detallePedido.totalmontobrutoBsf && !this.detallePedido.tasaDolar)
+      if (this.detallePedido.totalmontobrutoBsf && !this.detallePedido.tasaDolar)
         this.detallePedido.totalPorcentajeBsf = this.roundTo(this.detallePedido.totalPorcentaje * this.transportePedido_.tasa, 2);
     }
 
@@ -223,6 +253,7 @@ export class TransportePedidosShowComponent implements OnInit {
     }
 
     if (this.edit && !this.listaDetallePedido[i].modStatus.deleted) {
+      console.log(this.listaDetallePedido[i]);
       this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
       this.listaDetallePedido[i].modStatus = { style: "background-color:#ff3300", deleted: true };
       this.listaPedidosTransportes[i].modStatus = { style: "background-color:#ff3300", deleted: true };
@@ -275,9 +306,9 @@ export class TransportePedidosShowComponent implements OnInit {
     }
 
     if (operacion === this.delOperation) {
-
+      console.log(transportePed);
       this.transportePedido_.totalUSD = this.roundTo(this.transportePedido_.totalUSD - transportePed.totalmontobruto, 2);
-      this.transportePedido_.comisionUSD = this.transportePedido_.comisionUSD - transportePed.totalmontoneto;
+      this.transportePedido_.comisionUSD = this.transportePedido_.comisionUSD - transportePed.totalPorcentaje;
 
       this.transportePedido_.totalBsF = this.roundTo(
         this.transportePedido_.totalBsF - (transportePed.totalmontobrutoBsf), 2);
