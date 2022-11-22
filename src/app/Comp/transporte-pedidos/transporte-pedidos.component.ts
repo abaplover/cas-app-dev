@@ -139,6 +139,37 @@ export class TransportePedidosComponent implements OnInit {
     return dateObject.getFullYear() + "-" + m3s + "-" + d1a;
   }//timestampConvert
 
+  ordenarListados() {
+    if (this.pedidoslist)
+      this.pedidoslistDet.sort((a, b) => {
+        const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
+    if (this.transporteVer.pedido)
+      this.transporteVer.pedido.sort((a, b) => {
+        const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
+  }
+
   async openDialog(event, transporte) {
 
     const dialogConfig = new MatDialogConfig;
@@ -156,6 +187,7 @@ export class TransportePedidosComponent implements OnInit {
       await this.combinarDetalle();
     }
 
+    this.ordenarListados();
     dialogConfig.data = {
       transportePedido: Object.assign({}, this.transporteVer),
       detallePedidos: this.pedidoslistDet,
@@ -251,6 +283,13 @@ export class TransportePedidosComponent implements OnInit {
         let IsRef = await this.transportePedS.CheckPedidoRef(ped_, transporteInfo.transportePedido); //Se determina si el pedido sigue referencia al transporte
 
         if (IsRef) {
+          if (!ped_.totalPorcentajeBsf)
+            ped_.totalPorcentajeBsf = 0;
+
+          if (!ped_.totalmontobrutoBsf)
+            ped_.totalmontobrutoBsf = 0;
+
+          console.log(ped_);
           this.transportePedS.UpdatePedido(ped_, ''); // Se actualizan los pedidos eliminando la referencia al transporte
         }
       }
@@ -267,6 +306,13 @@ export class TransportePedidosComponent implements OnInit {
         const ped_ = this.pedidoslistDet.find(ped => ped.uid == pedido.uid);
         let IsRef = await this.transportePedS.CheckPedidoRef(ped_, transporteInfo.transportePedido); //Se determina si el pedido no tiene referencia
 
+        if (!ped_.totalPorcentajeBsf)
+          ped_.totalPorcentajeBsf = 0;
+
+        if (!ped_.totalmontobrutoBsf)
+          ped_.totalmontobrutoBsf = 0;
+
+        console.log(ped_);
         if (!IsRef) {
           this.transportePedS.UpdatePedido(ped_, transporteInfo.transportePedido.id); // Se actualizan los pedidos agregando la referencia al transporte
         }

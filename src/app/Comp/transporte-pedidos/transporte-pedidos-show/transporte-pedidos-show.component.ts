@@ -54,34 +54,6 @@ export class TransportePedidosShowComponent implements OnInit {
     this.zventaList = data.zventaList;
     this.accion = data.accion;
 
-    this.listaDetallePedido.sort((a, b) => {
-      const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
-      const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-
-      // names must be equal
-      return 0;
-    });
-
-    this.listaPedidosTransportes.sort((a, b) => {
-      const nameA = a.uid.toUpperCase(); // ignore upper and lowercase
-      const nameB = b.uid.toUpperCase(); // ignore upper and lowercase
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-
-      // names must be equal
-      return 0;
-    });
-
     if (!this.listaDetallePedido)
       this.listaDetallePedido = [];
 
@@ -177,6 +149,7 @@ export class TransportePedidosShowComponent implements OnInit {
     if (this.detallePedido.tasaDolar)
       this.detallePedido.totalmontobrutoBsf = elemento.totalmontobruto * elemento.tasaDolar;
 
+    console.log(this.detallePedido)
     if (!this.detallePedido.tasaDolar)
       this.detallePedido.totalmontobrutoBsf = elemento.totalmontobruto * this.transportePedido_.tasa;
 
@@ -310,11 +283,21 @@ export class TransportePedidosShowComponent implements OnInit {
       this.transportePedido_.totalUSD = this.roundTo(this.transportePedido_.totalUSD - transportePed.totalmontobruto, 2);
       this.transportePedido_.comisionUSD = this.transportePedido_.comisionUSD - transportePed.totalPorcentaje;
 
-      this.transportePedido_.totalBsF = this.roundTo(
-        this.transportePedido_.totalBsF - (transportePed.totalmontobrutoBsf), 2);
+      if (transportePed.totalmontobrutoBsf)
+        this.transportePedido_.totalBsF = this.roundTo(
+          this.transportePedido_.totalBsF - (transportePed.totalmontobrutoBsf), 2);
 
-      this.transportePedido_.comisionBsF = this.roundTo(
-        this.transportePedido_.comisionBsF - (transportePed.totalPorcentajeBsf), 2);
+      if (!transportePed.totalmontobrutoBsf)
+        this.transportePedido_.totalBsF = this.roundTo(
+          this.transportePedido_.totalBsF - (transportePed.totalmontobruto * this.transportePedido_.tasa), 2);
+
+      if (transportePed.totalPorcentajeBsf)
+        this.transportePedido_.comisionBsF = this.roundTo(
+          this.transportePedido_.comisionBsF - (transportePed.totalPorcentajeBsf), 2);
+
+      if (!transportePed.totalPorcentajeBsf)
+        this.transportePedido_.comisionBsF = this.roundTo(
+          this.transportePedido_.comisionBsF - (transportePed.totalPorcentaje * this.transportePedido_.tasa), 2);
 
       this.transportePedido_.totalBultos = this.transportePedido_.totalBultos - transportePed.nrobultos;
 
