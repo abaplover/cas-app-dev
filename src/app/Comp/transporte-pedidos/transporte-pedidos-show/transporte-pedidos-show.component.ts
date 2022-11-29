@@ -191,18 +191,26 @@ export class TransportePedidosShowComponent implements OnInit {
     if (this.create)
       this.detallePedido.modStatus = { style: "background-color:transparent" };
 
-    if (this.detallePedido && !this.listaDetallePedido.includes(this.detallePedido)) {
+    if (this.detallePedido) {
       this.actualizarTotales(this.addOperation, this.detallePedido);
-      this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
-      this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
-        uid: this.detallePedido.uid,
-        totalPorcentaje: this.detallePedido.totalPorcentaje,
-        totalmontobrutoBsf: this.detallePedido.totalmontobrutoBsf,
-        totalPorcentajeBsf: this.detallePedido.totalPorcentajeBsf,
-        modStatus: this.detallePedido.modStatus
-      }];
-    }
 
+      if (!this.listaDetallePedido.filter(ped => ped.uid == this.detallePedido.uid)) {
+        this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
+        this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
+          uid: this.detallePedido.uid,
+          totalPorcentaje: this.detallePedido.totalPorcentaje,
+          totalmontobrutoBsf: this.detallePedido.totalmontobrutoBsf,
+          totalPorcentajeBsf: this.detallePedido.totalPorcentajeBsf,
+          modStatus: this.detallePedido.modStatus
+        }];
+      }
+
+      if (this.listaDetallePedido.filter(ped => ped.uid == this.detallePedido.uid)) {
+        let pedIndex = this.listaDetallePedido.findIndex(ped => ped.uid == this.detallePedido.uid);
+        this.listaDetallePedido[pedIndex] = this.detallePedido;
+        this.listaPedidosTransportes[pedIndex]['modStatus'] = this.detallePedido.modStatus;
+      }
+    }
 
     if (!this.btnEnviar)
       this.btnEnviar = true;
@@ -226,7 +234,6 @@ export class TransportePedidosShowComponent implements OnInit {
     }
 
     if (this.edit && !this.listaDetallePedido[i].modStatus.deleted) {
-      console.log(this.listaDetallePedido[i]);
       this.actualizarTotales(this.delOperation, this.listaDetallePedido[i])
       this.listaDetallePedido[i].modStatus = { style: "background-color:#ff3300", deleted: true };
       this.listaPedidosTransportes[i].modStatus = { style: "background-color:#ff3300", deleted: true };
