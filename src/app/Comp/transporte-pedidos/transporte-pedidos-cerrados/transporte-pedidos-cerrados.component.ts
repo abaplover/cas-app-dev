@@ -3,9 +3,11 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Client } from 'src/app/models/client';
 import { TransportePedidos } from 'src/app/models/transporte-pedidos';
 import { Vendedor } from 'src/app/models/vendedor';
 import { Zventa } from 'src/app/models/zventa';
+import { ClientService } from 'src/app/services/client.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 
 
@@ -22,6 +24,7 @@ export class TransportePedidosCerradosComponent implements OnInit {
   public zventaList: Zventa[];
   // public transporteList: Transporte[] = []; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
+  public clienteList: Client[]; //arreglo vacio
   transporteVer = {} as TransportePedidos;
   transportePedidosList = [];
   dataSource: any;
@@ -34,6 +37,7 @@ export class TransportePedidosCerradosComponent implements OnInit {
     private transportesPedS: TransportePedidosService,
     public pedidoService: PedidoService,
     public zventas: ZventaService,
+    private clienteS: ClientService,
     public vendedorS: VendedorService,
     private dialogo: MatDialog,) { }
 
@@ -44,6 +48,9 @@ export class TransportePedidosCerradosComponent implements OnInit {
     this.vendedorS.getVendedors().valueChanges().subscribe(vendedor => {
       this.vendedorList = vendedor;
     });
+    this.clienteS.getClients().valueChanges().subscribe(cliente => {
+      this.clienteList = cliente;
+    })
     this.getTransportes();
   }
 
@@ -98,8 +105,8 @@ export class TransportePedidosCerradosComponent implements OnInit {
   }
   async combinarDetalle() {
     this.pedidoslistDet.map(ped_ => {
-      const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
-      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.vzona);
+      const zventas = this.clienteList.find(cliente => cliente.idcliente == ped_.idcliente);
+      const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.zona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
       ped_.porcentaje = porcentaje.porcentaje;
       ped_.modStatus = pedido.modStatus;

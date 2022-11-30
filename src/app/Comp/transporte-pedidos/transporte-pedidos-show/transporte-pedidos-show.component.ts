@@ -194,7 +194,9 @@ export class TransportePedidosShowComponent implements OnInit {
     if (this.detallePedido) {
       this.actualizarTotales(this.addOperation, this.detallePedido);
 
-      if (!this.listaDetallePedido.filter(ped => ped.uid == this.detallePedido.uid)) {
+      console.log(this.listaPedidosTransportes);
+      console.log(this.listaPedidosTransportes.filter(ped => ped.uid == this.detallePedido.uid));
+      if (this.listaPedidosTransportes.filter(ped => ped.uid == this.detallePedido.uid).length == 0) {
         this.listaDetallePedido = [...this.listaDetallePedido, this.detallePedido];
         this.listaPedidosTransportes = [...this.listaPedidosTransportes, {
           uid: this.detallePedido.uid,
@@ -204,12 +206,13 @@ export class TransportePedidosShowComponent implements OnInit {
           modStatus: this.detallePedido.modStatus
         }];
       }
-
-      if (this.listaDetallePedido.filter(ped => ped.uid == this.detallePedido.uid)) {
+      else {
         let pedIndex = this.listaDetallePedido.findIndex(ped => ped.uid == this.detallePedido.uid);
         this.listaDetallePedido[pedIndex] = this.detallePedido;
+        if(this.listaPedidosTransportes[pedIndex]['modStatus']) 
         this.listaPedidosTransportes[pedIndex]['modStatus'] = this.detallePedido.modStatus;
       }
+
     }
 
     if (!this.btnEnviar)
