@@ -289,7 +289,6 @@ export class TransportePedidosComponent implements OnInit {
           if (!ped_.totalmontobrutoBsf)
             ped_.totalmontobrutoBsf = 0;
 
-          console.log(ped_);
           this.transportePedS.UpdatePedido(ped_, ''); // Se actualizan los pedidos eliminando la referencia al transporte
         }
       }
@@ -329,10 +328,9 @@ export class TransportePedidosComponent implements OnInit {
 
   }
   async combinarDetalle() {
-    console.log(this.pedidoslistDet[0]);
+
     this.pedidoslistDet.map(ped_ => {
 
-      // const zventas = this.vendedorList.find(vendedor => vendedor.idvendedor == ped_.idvendedor);
       const zventas = this.clienteList.find(cliente => cliente.idcliente == ped_.idcliente);
       const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.zona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
@@ -360,7 +358,6 @@ export class TransportePedidosComponent implements OnInit {
 
   limpiarTodo() {
     this.listaDetallePedido = [];
-    // this.transportePedidos = {};
     this.pedidoslistDet = [];
   }
 
