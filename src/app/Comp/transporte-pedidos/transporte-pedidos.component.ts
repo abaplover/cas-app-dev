@@ -334,6 +334,7 @@ export class TransportePedidosComponent implements OnInit {
       const zventas = this.clienteList.find(cliente => cliente.idcliente == ped_.idcliente);
       const porcentaje = this.zventaList.find(zona => zona.descripcion == zventas.zona);
       const pedido = this.transporteVer.pedido.find(ped => ped.uid == ped_.uid);
+      const pedIndex = this.transporteVer.pedido.findIndex(ped => ped.uid == ped_.uid);
 
       ped_.porcentaje = porcentaje.porcentaje;
       ped_.modStatus = pedido.modStatus;
@@ -351,9 +352,29 @@ export class TransportePedidosComponent implements OnInit {
         ped_.fdespacho = new Date(ped_.fdespacho.seconds * 1000);
 
       ped_.totalPorcentaje = pedido.totalPorcentaje;
-      ped_.totalPorcentajeBsf = pedido.totalPorcentajeBsf;
-      ped_.totalmontobrutoBsf = pedido.totalmontobrutoBsf;
+     
+      if (ped_.tasaDolar) {
+        ped_.totalmontobrutoBsf = ped_.totalmontobruto * ped_.tasaDolar;
+        ped_.totalPorcentajeBsf = ped_.totalPorcentaje * ped_.tasaDolar;
+
+        this.transporteVer.pedido[pedIndex].totalmontobrutoBsf =  ped_.totalmontobrutoBsf;
+        this.transporteVer.pedido[pedIndex].totalPorcentajeBsf =  ped_.totalPorcentajeBsf;
+      }
+      else {
+        ped_.totalmontobrutoBsf = pedido.totalmontobrutoBsf;
+        ped_.totalPorcentajeBsf = pedido.totalPorcentajeBsf;
+      }
+
     });
+
+    this.transporteVer.totalBsF = this.transporteVer.pedido
+    .filter(ped => !ped.modStatus.deleted)
+    .reduce((prev, curr) => prev + curr.totalmontobrutoBsf, 0);
+
+    this.transporteVer.comisionBsF = this.transporteVer.pedido
+    .filter(ped => !ped.modStatus.deleted)
+    .reduce((prev, curr) => prev + curr.totalPorcentajeBsf, 0);
+
   }
 
   limpiarTodo() {

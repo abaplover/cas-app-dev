@@ -89,7 +89,7 @@ export class GcobrovListComponent implements OnInit {
       this.cobroslist = cobros;
 
       this.cobroslist = this.cobroslist.filter(cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
-        || (cobros.montopendiente));      
+        || (cobros.montopendiente));
 
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
@@ -193,7 +193,7 @@ export class GcobrovListComponent implements OnInit {
     if (val == "TOTAL") {
       this.cobro_.montodepago = parseFloat((this.pedidoPend_.totalmontoneto - this.pagoparcialpagado).toFixed(2));
       this.montodepago = this.cobro_.montodepago;
-      this.pedidoPend_.status = "COBRADO"
+      // this.pedidoPend_.status = "COBRADO"
       this.pagototal = true;
     }
     else if (val == "PARCIAL") {
@@ -363,23 +363,17 @@ export class GcobrovListComponent implements OnInit {
       this.pedidoPend_.totalmontoneto = await this.roundTo(Number(this.pedidoPend_.totalmontoneto), 2);
       this.pagoparcialpagado = await this.roundTo(Number(this.pagoparcialpagado), 2);
 
-      // console.log("Cobrado (true)/Negado (false): ",
-      //   this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago)),
-      //   this.pedidoPend_.totalmontoneto,
-      //   Number(this.pagoparcialpagado),
-      //   Number(this.cobro_.montodepago));
-
       if (this.pedidoPend_.totalmontoneto === (Number(this.pagoparcialpagado) + Number(this.cobro_.montodepago))) {
 
         this.pedidoPend_.status = "COBRADO";
 
       }
-      //  else {
-      //   this.pedidoPend_.status="ENTREGADO";
-      // }
+      else {
+        this.pedidoPend_.statuscobro = "ABONADO";
+      }
 
       console.log(this.pedidoPend_.status);
-
+      this.pedidoPend_.lastaction = "COBRO";
       this.cobro_.modificado = new Date;
       this.cobro_.modificadopor = this.loginS.getCurrentUser().email;
       this.cobro_.idpedido = this.pedidoPend_.idpedido;
@@ -388,7 +382,7 @@ export class GcobrovListComponent implements OnInit {
       this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
-      this.pedidoPend_.statuscobro = "ABONADO"; // Se asigna estatus de cobro "ABONADO sin importar que este cobrado"
+      // this.pedidoPend_.statuscobro = "ABONADO"; // Se asigna estatus de cobro "ABONADO sin importar que este cobrado"
 
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;

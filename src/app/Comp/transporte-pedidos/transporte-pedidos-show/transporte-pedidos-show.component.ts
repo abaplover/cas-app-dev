@@ -103,14 +103,26 @@ export class TransportePedidosShowComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.transportePedido_.totalBultos)
-      this.transportePedido_.totalBultos = this.listaDetallePedido.reduce((prev, curr) => prev + curr.nrobultos, 0);
-    console.log(this.listaPedidosTransportes);
+      this.transportePedido_.totalBultos = this.listaDetallePedido.reduce((prev, curr) => curr.nrobultos ? prev + curr.nrobultos : prev, 0);
     this.contarPedidos();
+
+    if (this.close)
+      this.habilitarCerrado();
+
+      this.obtenerTotales();
   }
 
   contarPedidos() {
     this.transportePedido_.totalPedidos =
       this.listaPedidosTransportes.filter(ped => !ped.modStatus || !ped.modStatus.deleted).length;
+  }
+
+  obtenerTotales(){
+    // console.log(this.detallePedido);
+    // this.detallePedido.totalmontobrutoBsf
+    // = this.listaDetallePedido.filter(ped => !ped.modStatus.deleted).reduce((prev, curr) => prev + curr.totalmontobrutoBsf, 0);
+    
+    // console.log(this.listaDetallePedido);
   }
 
   onClose() {
@@ -151,10 +163,10 @@ export class TransportePedidosShowComponent implements OnInit {
     let montoneto = await this.roundTo(((elemento.totalmontobruto * this.detallePedido.porcentaje) / 100), 2);
 
     if (this.detallePedido.tasaDolar)
-      this.detallePedido.totalmontobrutoBsf = elemento.totalmontobruto * elemento.tasaDolar;
+      this.detallePedido.totalmontobrutoBsf = this.roundTo(elemento.totalmontobruto * elemento.tasaDolar, 2);
 
     if (!this.detallePedido.tasaDolar)
-      this.detallePedido.totalmontobrutoBsf = elemento.totalmontobruto * this.transportePedido_.tasa;
+      this.detallePedido.totalmontobrutoBsf = this.roundTo(elemento.totalmontobruto * this.transportePedido_.tasa, 2);
 
     if (this.detallePedido.porcentaje) {
       this.detallePedido.totalPorcentaje = montoneto;
@@ -320,8 +332,8 @@ export class TransportePedidosShowComponent implements OnInit {
 
   }
   habilitarCerrado() {
-
-    if ((!this.listaDetallePedido.some(peds => !peds.fentrega && !peds.modStatus.deleted))) {
+    
+    if ((!this.listaDetallePedido.filter(ped => !ped.modStatus.deleted).some(peds => !peds.fentrega))) {
       this.btnEnviar = true;
     }
   }
