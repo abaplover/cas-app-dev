@@ -210,17 +210,17 @@ export class GeneralComponent implements OnInit {
         .limit(5000)
 
       //tipo de documento de cobro
-      if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
-        if(this.tipodoc == ""){ } else {
-          queryCobros = queryCobros.where("tipodoc", '==', this.tipodoc);
-        }
-      }
+      // if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
+      //   if(this.tipodoc == ""){ } else {
+      //     queryCobros = queryCobros.where("tipodoc", '==', this.tipodoc);
+      //   }
+      // }
 
-      if (typeof this.tipopago == "undefined" || this.tipopago == null) { } else {
-        if(this.tipopago == ""){ } else {
-          queryCobros = queryCobros.where("tipopago", '==', this.tipopago);
-        }
-      }
+      // if (typeof this.tipopago == "undefined" || this.tipopago == null) { } else {
+      //   if(this.tipopago == ""){ } else {
+      //     queryCobros = queryCobros.where("tipopago", '==', this.tipopago);
+      //   }
+      // }
 
       /* if (typeof this.viapago == "undefined" || this.viapago == null) { } else {
         if(this.viapago == ""){ } else {
@@ -228,17 +228,17 @@ export class GeneralComponent implements OnInit {
         }
       } */
 
-      if (typeof this.banco == "undefined" || this.banco == null) { } else {
-        if(this.banco == ""){ } else {
-          queryCobros = queryCobros.where("banco", '==', this.banco);
-        }
-      }
+      // if (typeof this.banco == "undefined" || this.banco == null) { } else {
+      //   if(this.banco == ""){ } else {
+      //     queryCobros = queryCobros.where("banco", '==', this.banco);
+      //   }
+      // }
 
-      if (typeof this.vendedor == "undefined" || this.vendedor == null) { } else {
-        if(this.vendedor == ""){ } else {
-          queryCobros = queryCobros.where("nomvendedor", '==', this.vendedor);
-        }
-      }
+      // if (typeof this.vendedor == "undefined" || this.vendedor == null) { } else {
+      //   if(this.vendedor == ""){ } else {
+      //     queryCobros = queryCobros.where("nomvendedor", '==', this.vendedor);
+      //   }
+      // }
 
       if (typeof this.cliente == "undefined" || this.cliente == null) { } else {
         if(this.cliente == ""){ } else {
@@ -262,6 +262,22 @@ export class GeneralComponent implements OnInit {
         //Filtramos por via de pago porque no se permiten dos in en el query
         if(this.viapago == "" || typeof this.viapago == "undefined"){ } else {
           this.cobrosDet_ = this.cobrosDet_.filter(value => this.viapago.includes(value.viadepago));
+        }
+
+        if(this.tipodoc == "" || typeof this.tipodoc == "undefined"){ } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(value => this.tipodoc.includes(value.tipodoc));
+        }
+
+        if(this.tipopago == "" || typeof this.tipopago == "undefined"){ } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(value => this.tipopago.includes(value.tipopago));
+        }
+
+        if(this.banco == "" || typeof this.banco == "undefined"){ } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(value => this.banco.includes(value.banco));
+        }
+
+        if(this.vendedor == "" || typeof this.vendedor == "undefined"){ } else {
+          this.cobrosDet_ = this.cobrosDet_.filter(value => this.vendedor.includes(value.nomvendedor));
         }
 
         this.montototalUSD = 0;
@@ -344,7 +360,9 @@ export class GeneralComponent implements OnInit {
   }
 
   SelectedValue(Value){
-    this.codCli = Value;
+    
+    if(Value)
+    this.cliente = this.clientesList.find(cliente => cliente.idcliente == Value).descripcion;
   }
 
 }

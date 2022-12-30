@@ -410,7 +410,6 @@
 			
 		</div>
 	
-
 	</div>
 
 <!-- Tabla principal -->
@@ -419,8 +418,20 @@
 			<mat-label>Buscar por</mat-label>
 			<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
 		</mat-form-field>
+		<button mat-raised-button color="primary" (click)="exporter.exportTable('xlsx')" style="margin-left:40px"> Excel</button>
+		<div>
+			<table class="mat-elevation-z8 table-hover">
+				<th>
+					Total de Registros: {{this.totalRegistros}}
+				</th>
+				<th>
+					Total Deuda: {{this.totalDeuda | currency:" "}}
+				</th>
+			</table>
+		</div>
+		<br>
 
-		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
+		<table mat-table matTableExporter [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort #exporter="matTableExporter">
 		
 		<!-- Position Column -->
 		<ng-container matColumnDef="idpedido">
@@ -524,5 +535,7 @@
 		  [pageSizeOptions]="[40,60,10,20]" 
 		  showFirstLastButtons
 		></mat-paginator>
+		
+
   	</div>
 </div>

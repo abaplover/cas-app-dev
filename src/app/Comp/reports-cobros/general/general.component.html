@@ -51,7 +51,7 @@
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Tipo Documento</mat-label>
-										<mat-select value=selected
+										<mat-select value=selected multiple
 											name="tipococ" 
 											[(ngModel)]="this.tipodoc"
 
@@ -70,7 +70,7 @@
 								<div class="form-group">
 									<mat-form-field appearance="legacy" class="campo-width">
 										<mat-label>Tipo de Pago</mat-label>
-										<mat-select value=selected
+										<mat-select value=selected multiple
 											name="tipopago" 
 											[(ngModel)]="this.tipopago"
 
@@ -102,7 +102,7 @@
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Banco</mat-label>
-											<mat-select value=selected
+											<mat-select value=selected multiple
 												name="banco"
 												[(ngModel)]="this.banco"
 											>
@@ -117,7 +117,7 @@
 								<div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Vendedor</mat-label>
-											<mat-select value=selected
+											<mat-select value=selected multiple
 												name="vendedor"
 												[(ngModel)]="this.vendedor"s											>
 												<mat-option value={{vendedor.descripcion}} *ngFor = "let vendedor of vendedorList">
@@ -128,7 +128,7 @@
 								</div>
 							</div>
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-								<div class="form-group">
+								<!-- <div class="form-group">
 										<mat-form-field appearance="legacy" class="campo-width">
 											<mat-label>Cliente</mat-label>
 											<mat-select value=selected
@@ -141,7 +141,13 @@
 												</mat-option>
 											</mat-select>
 										</mat-form-field>
-								</div>
+								</div> -->
+								<!-- <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"> -->
+									<!-- este componente permite la busqueda del cliente al escribir -->
+									<div>
+										<app-client-auto-complete (SelectedValue)="SelectedValue($event)"></app-client-auto-complete>
+									</div>
+								<!-- </div> -->
 							</div>
 							
 							<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 checkClass">

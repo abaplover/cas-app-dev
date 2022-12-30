@@ -61,6 +61,8 @@ export class GcobroListComponent implements OnInit {
   visual = false;
 
   showSpinner = false;
+  totalRegistros = 0;
+  totalDeuda = 0;
 
   public vpagoList: Vpago[]; //arreglo vacio
   public tipodocList: TipodocCobros[]; //arreglo vacio
@@ -94,8 +96,6 @@ export class GcobroListComponent implements OnInit {
     this.pedidoS.getPedidosPendientes().subscribe(pedidosP => {
       this.cobroslist = pedidosP;
 
-      console.log(this.cobroslist);
-
       this.pedidoS.getPedidosContado().subscribe(pedidos => {
         this.cobroslist.push(...pedidos);
 
@@ -104,22 +104,23 @@ export class GcobroListComponent implements OnInit {
           this.cobroslist.push(...pedidosPrepago);
 
           let tempList = this.cobroslist.map(e => e['idpedido'])
-                                        .map((e, i, final) => final.indexOf(e) === i && i)
-                                        .filter((e) => this.cobroslist[e]).map(e => this.cobroslist[e]);
+            .map((e, i, final) => final.indexOf(e) === i && i)
+            .filter((e) => this.cobroslist[e]).map(e => this.cobroslist[e]);
 
           this.cobroslist = [...tempList];
 
           this.cobroslist = this.cobroslist.filter(
-                            cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
-                                  ||  (cobros.montopendiente));
+            cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
+              || (cobros.montopendiente));
 
+          this.cobroslist.sort();
+          this.totalRegistros = this.cobroslist.length;
+          this.totalDeuda = this.roundTo(this.cobroslist.reduce((prev, curr) => curr.montopendiente ? curr.montopendiente + prev : curr.totalmontobruto + prev, 0), 2);
           this.dataSource = new MatTableDataSource(this.cobroslist);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.showSpinner = false;
         })
-        //ELEMENT_DATA
-
       });
 
     })
@@ -175,7 +176,7 @@ export class GcobroListComponent implements OnInit {
       }
 
       if (this.pagoparcialpagado > 0) {
-        this.importeremanente = await this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado, 2)
+        this.importeremanente = this.roundTo(this.pedidoPend_.totalmontoneto - this.pagoparcialpagado, 2)
         this.showSpinner = false;
       } else {
         this.importeremanente = this.pedidoPend_.totalmontoneto;
@@ -294,7 +295,7 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
-      
+
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
       this.pedidoPend_.pagopuntual = true;
@@ -440,7 +441,7 @@ export class GcobroListComponent implements OnInit {
     this.toastr.success('Operación Terminada', 'Se ha enviado una notificación de cobro');
   }
 
-  async roundTo(num: number, places: number) {
+  roundTo(num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };

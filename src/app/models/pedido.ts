@@ -14,6 +14,7 @@ export interface Pedido {
   descripcionmaterial?: string;
   descuentoporc?: number;
   descuentovalor?: number;
+  diasRetraso?: number;
   email?: string;
   fdespacho?: Date;
   fechapedido?: Date;

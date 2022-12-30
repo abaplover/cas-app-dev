@@ -43,7 +43,7 @@ export class GcobroregListComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
-  displayedColumns: string[] = ['fechadepago', 'idpedido','nrofacturapedido', 'nomvendedor','nomcliente','tipopago', 'viadepago', 'banco', 'montodepago','montobsf'];
+  displayedColumns: string[] = ['fechadepago', 'idpedido','nrofacturapedido', 'nomvendedor','nomcliente','tipodoc','tipopago', 'viadepago', 'banco', 'montodepago','montobsf'];
   
   cobro_ = {} as Cobro;
   cobro0_ = {} as Cobro;

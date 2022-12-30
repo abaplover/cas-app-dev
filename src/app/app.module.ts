@@ -67,6 +67,7 @@ import { DataTablesModule } from 'angular-datatables';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 
 //Component
@@ -363,7 +364,8 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     NgxCurrencyModule,
     MatRadioModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTableExporterModule
   ],
   providers: [
     PedidoService,

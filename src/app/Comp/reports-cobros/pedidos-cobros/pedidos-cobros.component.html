@@ -150,6 +150,7 @@
 				<th>Vendedor</th>
 				<th>Total</th>
 				<th>Abono</th>
+				<th>Dias de defase</th>
 				<th>Cumplimiento Pago</th>
 			  </tr>
 			</thead>
@@ -169,6 +170,7 @@
 				<td>{{p.nomvendedor}}</td>
 				<td>{{p.totalmontoneto | currency:" "}}</td>
 				<td>{{p.montopendiente | currency:" "}}</td>
+				<td>{{p.diasRetraso}}</td>
 				<td>
 					<!-- Si el ultimo pago fue puntual es verde -->
 					<!-- Si la fecha es vencida, o el ultimo registro no fue puntual es rojo -->

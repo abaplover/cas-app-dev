@@ -266,8 +266,8 @@ export class PedidoService {
       ref.where("status", 'in', ['ENTREGADO'])
         .where("fpago", ">=", this.today) //Fecha de vencimiento
         // .where("montopendiente", "<", 0)
-        .orderBy("fpago", "desc")
-        .orderBy("creado", "desc")
+        .orderBy("fpago", "asc")
+        // .orderBy("creado", "desc")
     );
 
     this.pedidosPendientes = this.pedidosPendientesColletionE
@@ -288,7 +288,7 @@ export class PedidoService {
     //Busca todos los cobros con estatus - VENCIDO
     var hoy = new Date();
     this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
-      .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "desc").orderBy("creado", "desc").limit(300));
+      .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "asc").orderBy("creado", "desc").limit(300));
     this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;

@@ -52,6 +52,8 @@ export class GcobrovListComponent implements OnInit {
   vp_efectivo = true;
   pagototal = true;
   pagoparcialpagado: number;
+  totalRegistros = 0;
+  totalDeuda = 0;
 
   ver: boolean;
   public vpagoList: Vpago[]; //arreglo vacio
@@ -91,6 +93,9 @@ export class GcobrovListComponent implements OnInit {
       this.cobroslist = this.cobroslist.filter(cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
         || (cobros.montopendiente));
 
+        this.totalRegistros = this.cobroslist.length;
+        this.totalDeuda = this.roundTo(this.cobroslist.reduce((prev, curr) => curr.montopendiente ? curr.montopendiente + prev : curr.totalmontobruto + prev, 0), 2);
+  
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
       this.dataSource.sort = this.sort;
@@ -116,6 +121,8 @@ export class GcobrovListComponent implements OnInit {
 
     this.pedidoS.getPedidosPagoVencido().subscribe(cobros => {
       this.cobroslist = cobros;
+      this.totalRegistros = this.cobroslist.length;
+      this.totalDeuda = this.roundTo(this.cobroslist.reduce((prev, curr) => curr.montopendiente ? curr.montopendiente + prev : curr.totalmontobruto + prev, 0), 2);
 
       //ELEMENT_DATA
       this.dataSource = new MatTableDataSource(this.cobroslist);
@@ -421,7 +428,7 @@ export class GcobrovListComponent implements OnInit {
     }
   }
 
-  async roundTo(num: number, places: number) {
+  roundTo(num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };

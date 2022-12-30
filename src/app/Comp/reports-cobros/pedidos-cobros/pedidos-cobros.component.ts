@@ -41,7 +41,7 @@ export class PedidosCobrosComponent implements OnInit {
   codVen: string;
   conPag: any;
   opcpedidosCobrosRep = false;
-  
+
   pedidoVer_ = {} as Pedido;
   visual = false;
 
@@ -54,7 +54,7 @@ export class PedidosCobrosComponent implements OnInit {
   montototalUSD = 0;
   montototalPendiente = 0;
 
-  pagoparcialpagado:number = 0;
+  pagoparcialpagado: number = 0;
 
   public clienteList: Client[]; //arreglo vacio
   public vendedorList: Vendedor[]; //arreglo vacio
@@ -63,40 +63,42 @@ export class PedidosCobrosComponent implements OnInit {
 
   dtInstance: any;
 
-  matrisDetCobro: Cobro[]=[];
+  matrisDetCobro: Cobro[] = [];
   pedidoPend_ = {} as Pedido;
   MostrarCob: string;
   importeremanente = 0;
 
   showSpinner = false;
-  
+
   //data table
   dtOptionsAv: any = {
     pagingType: 'full_numbers',
     pageLength: 30,
-    ordering : true,
+    ordering: true,
     language: {
       url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
     },
-    bInfo : false,
+    bInfo: false,
     processing: true,
     dom: 'Bfrtip',
     buttons: [
-      'copy', {extend: 'excelHtml5',
-      text: 'Excel',
-      customizeData: function(data) {
-        //Recorremos todas las filas de la tabla
-        for(var i = 0; i < data.body.length; i++) {
-          //Quitamos los puntos como separador de miles 
-          //y las comas de los decimaleslas cambiamos por puntos
-          data.body[i][8] = data.body[i][8].replace( ".", "-" );
-          data.body[i][8] = data.body[i][8].replace( ",", "." );
-          data.body[i][8] = data.body[i][8].replace( "-", "," );
-          data.body[i][9] = data.body[i][9].replace( ".", "-" );
-          data.body[i][9] = data.body[i][9].replace( ",", "." );
-          data.body[i][9] = data.body[i][9].replace( "-", "," );
+      'copy', {
+        extend: 'excelHtml5',
+        text: 'Excel',
+        customizeData: function (data) {
+          //Recorremos todas las filas de la tabla
+          for (var i = 0; i < data.body.length; i++) {
+            //Quitamos los puntos como separador de miles 
+            //y las comas de los decimaleslas cambiamos por puntos
+            data.body[i][8] = data.body[i][8].replace(".", "-");
+            data.body[i][8] = data.body[i][8].replace(",", ".");
+            data.body[i][8] = data.body[i][8].replace("-", ",");
+            data.body[i][9] = data.body[i][9].replace(".", "-");
+            data.body[i][9] = data.body[i][9].replace(",", ".");
+            data.body[i][9] = data.body[i][9].replace("-", ",");
+          }
         }
-      }}, 'pdf', 'print'
+      }, 'pdf', 'print'
     ]
   };
 
@@ -115,7 +117,7 @@ export class PedidosCobrosComponent implements OnInit {
       private http: HttpClient,
       private dialogo: MatDialog,
       public chRes: ChangeDetectorRef
-  ) {
+    ) {
 
   }//constructor
 
@@ -130,7 +132,7 @@ export class PedidosCobrosComponent implements OnInit {
     const currentm = new Date().getMonth();
     const currentd = new Date().getDate();
 
-    
+
     this.pedidoPend_ = {} as Pedido;
 
     this.maxDated = new Date(currentYear, currentm, currentd);
@@ -188,7 +190,7 @@ export class PedidosCobrosComponent implements OnInit {
     query = (ref: CollectionReference) => {
       let q = ref.where("fechapedido", ">=", this.desD)
         .where("fechapedido", "<=", this.hasT)
-        .where("status","in",['ENTREGADO','COBRADO'])
+        .where("status", "in", ['ENTREGADO', 'COBRADO'])
         .orderBy("fechapedido", "desc")
         .orderBy("creado", "desc")
         .limit(5000)
@@ -203,31 +205,44 @@ export class PedidosCobrosComponent implements OnInit {
     }
 
     this.pedidoS.getPedidosReporteCobros(query).subscribe(ped => {
-      
+
       this.Ped_ = ped;
 
       this.montototalUSD = 0;
       this.montototalPendiente = 0;
 
-      this.Ped_.forEach(ped => {
-        if(this.timestampConvert(ped.fpago) < this.today) ped.fvencida = true;
-        //Se hace el cambio a null porque en html no me permitia comparar con undefined
-        if(ped.pagopuntual == undefined ) ped.pagopuntual = null;
+      this.Ped_.forEach(async ped => {
+        // if(this.timestampConvert(ped.fpago) < this.today) ped.fvencida = true;        
 
         this.montototalUSD += Number(ped.totalmontoneto);
 
-        if(ped.montopendiente) {
+        let tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime() ) / (1000 * 3600 * 24));
+
+        if (tiempo > 0 && ped.status == 'COBRADO')
+          ped.pagopuntual = false;
+
+        if (tiempo <= 0 && ped.status == 'COBRADO')
+          ped.pagopuntual = true;
+
+        if (tiempo <= 0 && ped.status != 'COBRADO')
+          ped.pagopuntual = null;
+
+          ped.diasRetraso = tiempo;
+          // console.log(ped.diasRetraso);
+        if (ped.pagopuntual == undefined) ped.pagopuntual = null;
+
+        if (ped.montopendiente) {
           this.montototalPendiente += Number(ped.montopendiente)
         } else {
           this.montototalPendiente += 0;
         }
       });
 
-      if(!this.firstTime){
+      if (!this.firstTime) {
         this.rerender();
       }
 
-      
+
       setTimeout(() => {
         this.showSpinner = false;
       }, 500);
@@ -280,24 +295,27 @@ export class PedidosCobrosComponent implements OnInit {
   }//verdetalles
 
   rerender(): void {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-  
-        dtInstance.clear().destroy();
-  
-        this.dtTrigger.next();
-      })
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+
+      dtInstance.clear().destroy();
+
+      this.dtTrigger.next();
+    })
   }
 
-  onCancelar(pf?: NgForm ){
-    if(pf != null) pf.reset();
+  onCancelar(pf?: NgForm) {
+    if (pf != null) pf.reset();
     this.pedidoPend_ = {} as Pedido;
     this.MostrarCob = 'display:none;';
     this.pagoparcialpagado = 0;
     this.opcpedidosCobrosRep = false;
   }//onCancelar
 
-  SelectedValue(Value){
+  SelectedValue(Value) {
     this.codCli = Value;
+  }
+  async getDiffDays(startDate, endDate) {
+    return startDate - endDate
   }
 
 }

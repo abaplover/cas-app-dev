@@ -40,6 +40,7 @@
     "jquery": "^3.5.1",
     "jsbarcode": "^3.11.5",
     "jszip": "^3.5.0",
+    "mat-table-exporter": "^10.2.4",
     "moment": "^2.28.0",
     "ngx-currency": "^2.5.3",
     "ngx-print": "^1.2.1",

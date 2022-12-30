@@ -292,7 +292,9 @@
 			<input matInput (keyup)="applyFilter($event)" placeholder="Buscar por" #input>
 		</mat-form-field>
 
-		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort>
+		
+
+		<table mat-table matTableExporter [dataSource]="dataSource" class="mat-elevation-z8 table-hover" matSort #exporter="matTableExporter">
 		
 			<!-- Position Column -->
 			<ng-container matColumnDef="Pedido">
@@ -391,6 +393,8 @@
 				<td class="mat-cell" colspan="9" style="text-align: left;">No hay datos que coincidan con la busqueda</td>
 			</tr>
 		</table>
+		<button mat-button (click)="exporter.exportTable('csv')"></button>
+
   	</div>
 </div>
 
