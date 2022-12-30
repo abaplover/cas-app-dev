@@ -53,7 +53,7 @@ export class PedidosCobrosComponent implements OnInit {
 
   montototalUSD = 0;
   montototalPendiente = 0;
-
+  public cobrosDet_: Cobro[];
   pagoparcialpagado: number = 0;
 
   public clienteList: Client[]; //arreglo vacio
@@ -112,6 +112,7 @@ export class PedidosCobrosComponent implements OnInit {
       public clienteS: ClientService,
       public vendedorS: VendedorService,
       public cobroService: CobrosService,
+      public cobrosS: CobrosService,
       public cpagoS: CpagoService,
       public pedidoS: PedidoService,
       private http: HttpClient,
@@ -181,6 +182,7 @@ export class PedidosCobrosComponent implements OnInit {
   onSubmitSearch(pf?: NgForm) {
     this.showSpinner = true;
     let query: any;
+    let queryC: any;
     let hora = new Date().getHours();
     hora = 24 - hora;
     this.hasT.setHours(new Date().getHours() + hora - 1);
@@ -203,49 +205,68 @@ export class PedidosCobrosComponent implements OnInit {
       }
       return q;
     }
+    queryC = (ref: CollectionReference) => {
+      //Busqueda entre fechas
+      let queryCobros = ref.where("fechadepago", ">=", this.desD)
+        .where("fechadepago", "<=", this.hasT)
+        .orderBy("fechadepago", "desc")
+        .limit(5000)
+      return queryCobros;
+    }
 
     this.pedidoS.getPedidosReporteCobros(query).subscribe(ped => {
+      this.cobrosS.getCobrosRep01(queryC).subscribe(cobro => {
+        this.Ped_ = ped;
+        let cobrosList = cobro;
+        this.montototalUSD = 0;
+        this.montototalPendiente = 0;
+        let tiempo;
+        this.Ped_.forEach(async ped => {
+          // if(this.timestampConvert(ped.fpago) < this.today) ped.fvencida = true;        
 
-      this.Ped_ = ped;
+          this.montototalUSD += Number(ped.totalmontoneto);
 
-      this.montototalUSD = 0;
-      this.montototalPendiente = 0;
+          let fechaPago = cobrosList.find(cobro => cobro.idpedido == ped.idpedido && cobro.tipopago == 'TOTAL');
+          
+          console.log(fechaPago);
+          if (fechaPago) {
+            tiempo = Math.ceil((this.timestampConvert(fechaPago.fechadepago).getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24));
+          }
+          else {
+            tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24));
+          }
 
-      this.Ped_.forEach(async ped => {
-        // if(this.timestampConvert(ped.fpago) < this.today) ped.fvencida = true;        
 
-        this.montototalUSD += Number(ped.totalmontoneto);
+          if (tiempo > 0 )
+            ped.pagopuntual = false;
 
-        let tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime() ) / (1000 * 3600 * 24));
+          if (tiempo <= 0 && ped.status == 'COBRADO')
+            ped.pagopuntual = true;
 
-        if (tiempo > 0 && ped.status == 'COBRADO')
-          ped.pagopuntual = false;
-
-        if (tiempo <= 0 && ped.status == 'COBRADO')
-          ped.pagopuntual = true;
-
-        if (tiempo <= 0 && ped.status != 'COBRADO')
-          ped.pagopuntual = null;
+          if (tiempo <= 0 && ped.status != 'COBRADO')
+            ped.pagopuntual = null;
 
           ped.diasRetraso = tiempo;
           // console.log(ped.diasRetraso);
-        if (ped.pagopuntual == undefined) ped.pagopuntual = null;
+          if (ped.pagopuntual == undefined) ped.pagopuntual = null;
 
-        if (ped.montopendiente) {
-          this.montototalPendiente += Number(ped.montopendiente)
-        } else {
-          this.montototalPendiente += 0;
+          if (ped.montopendiente) {
+            this.montototalPendiente += Number(ped.montopendiente)
+          } else {
+            this.montototalPendiente += 0;
+          }
+        });
+
+        if (!this.firstTime) {
+          this.rerender();
         }
-      });
-
-      if (!this.firstTime) {
-        this.rerender();
-      }
 
 
-      setTimeout(() => {
-        this.showSpinner = false;
-      }, 500);
+        setTimeout(() => {
+          this.showSpinner = false;
+        }, 500);
+
+      })
     })
     this.opcpedidosCobrosRep = true;
 

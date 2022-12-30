@@ -233,7 +233,7 @@ export class CobrosService {
         const data = a.payload.doc.data() as CobroDet;
         return data;
       })
-    }));
+    }));  
 
     return this.cobrosdetrep;
   }//getAveriasRep02

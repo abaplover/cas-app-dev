@@ -209,37 +209,6 @@ export class GeneralComponent implements OnInit {
         .orderBy("fechadepago", "desc")
         .limit(5000)
 
-      //tipo de documento de cobro
-      // if (typeof this.tipodoc == "undefined" || this.tipodoc == null) { } else {
-      //   if(this.tipodoc == ""){ } else {
-      //     queryCobros = queryCobros.where("tipodoc", '==', this.tipodoc);
-      //   }
-      // }
-
-      // if (typeof this.tipopago == "undefined" || this.tipopago == null) { } else {
-      //   if(this.tipopago == ""){ } else {
-      //     queryCobros = queryCobros.where("tipopago", '==', this.tipopago);
-      //   }
-      // }
-
-      /* if (typeof this.viapago == "undefined" || this.viapago == null) { } else {
-        if(this.viapago == ""){ } else {
-          queryCobros = queryCobros.where("viadepago", 'in', this.viapago);
-        }
-      } */
-
-      // if (typeof this.banco == "undefined" || this.banco == null) { } else {
-      //   if(this.banco == ""){ } else {
-      //     queryCobros = queryCobros.where("banco", '==', this.banco);
-      //   }
-      // }
-
-      // if (typeof this.vendedor == "undefined" || this.vendedor == null) { } else {
-      //   if(this.vendedor == ""){ } else {
-      //     queryCobros = queryCobros.where("nomvendedor", '==', this.vendedor);
-      //   }
-      // }
-
       if (typeof this.cliente == "undefined" || this.cliente == null) { } else {
         if(this.cliente == ""){ } else {
           queryCobros = queryCobros.where("nomcliente", '==', this.cliente);
