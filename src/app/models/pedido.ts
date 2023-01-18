@@ -65,6 +65,7 @@ export interface Pedido {
   totalPri?: number;
   totalPorcentaje?: number;
   totalPorcentajeBsf?: number;
+  totalAbonado?: number;
   transporteId?: string;
   transporte?: string;
   compania?: string;
