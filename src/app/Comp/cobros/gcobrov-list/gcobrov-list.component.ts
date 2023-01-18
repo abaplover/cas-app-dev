@@ -21,6 +21,9 @@ import { PedidoService } from 'src/app/services/pedido.service';
 import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
 import { AlertsService } from 'src/app/services/alerts.service';
+import { DatePipe } from '@angular/common';
+import { TableUtil } from 'src/app/tableUtils';
+import { Util } from 'src/app/Util';
 
 @Component({
   selector: 'app-gcobrov-list',
@@ -144,14 +147,26 @@ export class GcobrovListComponent implements OnInit {
     });
   }
 
-
+  exportExcel() {
+    console.log(this.dataSource);
+    let pipe = new DatePipe('en-US');
+    const cobrosPendientesArr: Partial<any>[] = this.dataSource.filteredData.map(x => ({
+      Pedido: x.idpedido,
+      NroFactura: x.nrofactura,
+      CondicionDePago: x.condiciondepago,
+      FechaDeVencimiento: pipe.transform(Util.getFecha(x.fpago), 'dd/MM/yyyy'),
+      NombreCliente: x.nomcliente,
+      NombreVendedor: x.nomvendedor,
+      Subtotal: x.totalmontobruto,
+      MontoPendiente: x.montopendiente
+    }));
+    TableUtil.exportArrayToExcel(cobrosPendientesArr, "CobrosVencidos");
+  }
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }//applyFilter
-  checkValue() {
-  }
-
 
   tipodocSelected(val) {
     if (val == "GE01" || val == "SP01" || val == "DC01") {

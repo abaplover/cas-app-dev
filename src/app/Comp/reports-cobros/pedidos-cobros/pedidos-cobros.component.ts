@@ -170,6 +170,7 @@ export class PedidosCobrosComponent implements OnInit {
   regresar() {
     this.opcpedidosCobrosRep = false;
     this.codCli = null;
+    this.Ped_ = [];
   }
 
   onBookChange(event) {
@@ -228,16 +229,18 @@ export class PedidosCobrosComponent implements OnInit {
 
           let fechaPago = cobrosList.find(cobro => cobro.idpedido == ped.idpedido && cobro.tipopago == 'TOTAL');
           
-          console.log(fechaPago);
-          if (fechaPago) {
-            tiempo = Math.ceil((this.timestampConvert(fechaPago.fechadepago).getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24));
+          if(!ped.fpago)
+            ped.fpago = ped.fechapedido;
+          
+          if (fechaPago && ped.status == 'COBRADO') {
+            tiempo = Math.ceil((this.timestampConvert(fechaPago.fechadepago).getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
           }
           else {
-            tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24));
+            tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
           }
 
 
-          if (tiempo > 0 )
+          if (tiempo > 0)
             ped.pagopuntual = false;
 
           if (tiempo <= 0 && ped.status == 'COBRADO')
@@ -250,6 +253,7 @@ export class PedidosCobrosComponent implements OnInit {
           // console.log(ped.diasRetraso);
           if (ped.pagopuntual == undefined) ped.pagopuntual = null;
 
+          console.log(ped.montopendiente);
           if (ped.montopendiente) {
             this.montototalPendiente += Number(ped.montopendiente)
           } else {

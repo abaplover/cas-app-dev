@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject, forkJoin, merge } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, BehaviorSubject, forkJoin, merge, combineLatest, of } from 'rxjs';
+import { map, take, switchMap } from 'rxjs/operators';
 import { Pedido } from '../models/pedido';
 import { PedidoDet } from '../models/pedidoDet';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -9,6 +9,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import * as firebase from 'firebase';
 import * as moment from 'moment';
 import { TransportePedidosService } from './transporte-pedidos.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,7 @@ export class PedidoService {
   items2: Observable<Pedido[]>;
   itemDoc2: AngularFirestoreDocument<Pedido>;
 
+  pedidosrepMat: Observable<any>;
   pedidosrep: Observable<Pedido[]>;
   pedidoDocrep: AngularFirestoreDocument<Pedido>;
   pedidosColletionrep: AngularFirestoreCollection<Pedido>;
@@ -267,7 +269,7 @@ export class PedidoService {
         .where("fpago", ">=", this.today) //Fecha de vencimiento
         // .where("montopendiente", "<", 0)
         .orderBy("fpago", "asc")
-        // .orderBy("creado", "desc")
+      // .orderBy("creado", "desc")
     );
 
     this.pedidosPendientes = this.pedidosPendientesColletionE
@@ -402,28 +404,68 @@ export class PedidoService {
     return this.pedidosrep;
   }//getPedidosRep04
 
+  getPedidosRepMat(strq) {
+    this.pedidosColletionrep = this.db.collection("pedidos", strq);
+
+    this.pedidosrepMat = this.db.collection<Pedido>("pedidos", strq).valueChanges()
+      .pipe(
+        switchMap(pedidos => {
+          const pedidosIds = pedidos.map(ped => ped.uid)
+          return combineLatest(
+            of(pedidos),
+            combineLatest(
+              pedidosIds.map(pedidoId => 
+                // console.log(pedidoId);
+                this.db.collection<PedidoDet>("pedidosDet", ref =>
+                  ref.where('idpedido', '==', pedidoId)).valueChanges().pipe(
+                    map(pedidoDetalle => pedidoDetalle[0])
+                  )              
+              )
+            )
+          )
+        }),
+        map(([pedidos, pedidoDetalle]) => {
+          return pedidos.map(pedido => {
+            console.log(pedido);
+            console.log(pedidoDetalle);
+            return {
+              detalle: pedidoDetalle.find(ped => ped.idpedido == pedido.uid)
+            }
+          })
+        })
+      )
+    return this.pedidosrepMat;
+    // this.pedidosrep = this.pedidosColletionrep.snapshotChanges().pipe(map(changes => {
+    //   return changes.map(a => {
+    //     const data = a.payload.doc.data() as Pedido;
+    //     return data;
+    //   })
+    // }));
+    // return this.pedidosrep;
+  }//getPedidosRepMat
+
   async getPedidosByIDs(pedidos) {
 
-    if(!pedidos || !pedidos.length) return [];
+    if (!pedidos || !pedidos.length) return [];
 
     const collectionPath = this.db.collection('pedidos');
     this.pedidosCollectionRef = this.db.collection('pedidos');
     const batches = [];
 
     while (pedidos.length) {
-      const batch = pedidos.splice(0,10)
-     
+      const batch = pedidos.splice(0, 10)
+
 
       batches.push(
-          collectionPath.ref.where("uid", 'in', batch)
+        collectionPath.ref.where("uid", 'in', batch)
           .get()
-          .then((results) => results.docs.map( result => ({
+          .then((results) => results.docs.map(result => ({
             ...result.data()
           })))
-        )        
-      
+      )
+
     }
-      
+
 
     return Promise.all(batches).then(
       content => content.flat()

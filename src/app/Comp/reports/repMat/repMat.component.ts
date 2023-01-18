@@ -3,6 +3,10 @@ import { ClientService } from '../../../services/client.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { CpagoService } from '../../../services/cpago.service';
 import { PedidoService } from 'src/app/services/pedido.service';
+import { GarticuloService } from '../../../services/garticulo.service'
+import { Garticulo } from 'src/app/models/garticulo';
+import { Product } from 'src/app/models/product';
+import { ProductService } from 'src/app/services/product.service';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Cpago } from '../../../models/cpago';
 import { Client } from '../../../models/client';
@@ -17,20 +21,23 @@ import * as firebase from 'firebase';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
 import { DataTableDirective } from 'angular-datatables';
-import { AppModule } from 'src/app/app.module';
-//declare const $;
 
-// platformBrowserDynamic().bootstrapModule(AppModule, {
-//   providers: [{provide: DEFAULT_CURRENCY_CODE, useValue: 'DOP'}]
-// })
+interface MatRep {
+  matId: string,
+  text: string,
+  grpArt?: string,
+  quantity: number,
+  unitM: string,
+  amount: number
+}
 
 @Component({
-  selector: 'app-rep01',
-  templateUrl: './rep01.component.html',
-  styleUrls: ['./rep01.component.css']
+  selector: 'app-repMat',
+  templateUrl: './repMat.component.html',
+  styleUrls: ['./repMat.component.css']
 })
 
-export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
+export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
 
@@ -42,13 +49,14 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   hasT: Date;
   staTus: any;
   codCli: string;
+  grpArt: string;
   codVen: string;
   conPag: any;
   opcrep01 = false;
   pedidoVer_ = {} as Pedido;
   totalRegistro: number = 0;
   totalBruto: number = 0;
-  totalDescuento: number = 0;
+  totalCantidades: number = 0;
   totalNeto: number = 0;
   firstTime: boolean = false;
 
@@ -59,37 +67,39 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   public vendedorList: Vendedor[]; //arreglo vacio
   public cpagoList: Cpago[]; //arreglo vacio
   public Ped_: Pedido[]; //arreglo vacio
+  public matList: MatRep[] = [];
+  public grpArticulo: Garticulo[];
+  public productosList: Product[];
+  cols: any[];
 
+  exportColumns: any[];
 
   //data table
   dtOptions: any = {
     pagingType: 'full_numbers',
     pageLength: 30,
-    ordering : true,
+    ordering: true,
     language: {
       url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
     },
     processing: true,
     dom: 'Bfrtip',
     buttons: [
-      'copy',{extend: 'excelHtml5',
-      text: 'Excel',
-      customizeData: function(data) {
-        //Recorremos todas las filas de la tabla
-        for(var i = 0; i < data.body.length; i++) {
-          //Quitamos los puntos como separador de miles 
-          //y las comas de los decimaleslas cambiamos por puntos
-          data.body[i][9] = data.body[i][9].replace( ".", "-" );
-          data.body[i][9] = data.body[i][9].replace( ",", "." );
-          data.body[i][9] = data.body[i][9].replace( "-", "," );
-          data.body[i][10] = data.body[i][10].replace( ".", "-" );
-          data.body[i][10] = data.body[i][10].replace( ",", "." );
-          data.body[i][10] = data.body[i][10].replace( "-", "," );
-          data.body[i][11] = data.body[i][11].replace( ".", "-" );
-          data.body[i][11] = data.body[i][11].replace( ",", "." );
-          data.body[i][11] = data.body[i][11].replace( "-", "," );
+      'copy', {
+        extend: 'excelHtml5',
+        text: 'Excel',
+        customizeData: function (data) {
+          //Recorremos todas las filas de la tabla
+          for (var i = 0; i < data.body.length; i++) {
+            //Quitamos los puntos como separador de miles 
+            //y las comas de los decimaleslas cambiamos por puntos
+            data.body[i][5] = data.body[i][5].replace(".", "-");
+            data.body[i][5] = data.body[i][5].replace(",", ".");
+            data.body[i][5] = data.body[i][5].replace("-", ",");
+
+          }
         }
-      }},'pdf', 'print'
+      }, 'pdf', 'print'
     ]
   };
   //dtOptions: DataTables.Settings = {};
@@ -104,10 +114,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       public vendedorS: VendedorService,
       public cpagoS: CpagoService,
       public pedidoS: PedidoService,
+      public gArticuloS: GarticuloService,
+      public productsS: ProductService,
       private http: HttpClient,
       private dialogo: MatDialog,
       public chRes: ChangeDetectorRef
-  ) {
+    ) {
 
   }//constructor
 
@@ -124,18 +136,15 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     this.maxDateh = new Date(currentYear, currentm, currentd);
     this.minDateh = new Date(currentYear, currentm, currentd);
 
-    this.clienteS.getClients().valueChanges().subscribe(cs => {
-      this.clienteList = cs;
+    this.gArticuloS.getGarticulo().valueChanges().subscribe(grupoArt => {
+      console.log(grupoArt);
+      this.grpArticulo = grupoArt;
+    });
+
+    this.productsS.getProducts().valueChanges().subscribe(productos => {
+      this.productosList = productos;
     })
 
-    this.vendedorS.getVendedors().valueChanges().subscribe(vs => {
-      this.vendedorList = vs;
-    })
-
-    this.cpagoS.getCpagos().valueChanges().subscribe(cp => {
-      this.cpagoList = cp;
-    })
-    this.firstTime = true;
 
   }//ngOnInit
 
@@ -165,11 +174,12 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       //console.log(event.value);
     }
   }
-  onSubmitSearch(pf?: NgForm) {
+  async onSubmitSearch(pf?: NgForm) {
     this.showSpinner = true;
     let query: any;
     let hora = new Date().getHours();
     hora = 24 - hora;
+    let productosFiltrados;
     this.hasT.setHours(new Date().getHours() + hora - 1);
 
     query = (ref: CollectionReference) => {
@@ -178,54 +188,54 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
         .orderBy("fechapedido", "desc")
         .orderBy("creado", "desc")
         .limit(5000)
-
-      if (typeof this.codCli == "undefined" || this.codCli == null) { } else {
-        q = q.where("idcliente", "==", this.codCli)
-      }
-      // if (typeof this.staTus == "undefined" || this.staTus == null || this.staTus == '') { } else {
-      //   if(this.staTus == ""){ } else {
-      //     q = q.where("status", "in", this.staTus);
-      //   }
-      //   // q = q.where("status", "==", this.staTus)
-      // }
-      if (typeof this.codVen == "undefined" || this.codVen == null) { } else {
-        q = q.where("nomvendedor", "==", this.codVen)
-      }
-      if (typeof this.conPag == "undefined" || this.conPag == "null" || this.conPag == null) { } else {
-        if (this.conPag == "") { } else {
-          q = q.where("condiciondepago", "in", this.conPag)
-        }
-      }
       return q;
     }
 
-    this.pedidoS.getPedidosRep01(query).subscribe(ped => {
-      
-      this.Ped_ = ped;
-      
-      if(this.staTus == "" || typeof this.staTus == "undefined"){ } else {
-          this.Ped_ = this.Ped_.filter(value => this.staTus.includes(value.status));
-      }
+    if (this.grpArt)
+      productosFiltrados = this.productosList.filter(product => product.grupodearticulos === this.grpArt)
+      // console.log(productosFiltrados);
+    this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
+      this.matList = [];
+      repMat.forEach(ped => {
+        const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = ped.detalle;
+        
+        if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial))
+        {
+          return;
+        }
+          
 
-      this.totalRegistro = this.Ped_.length;
+        if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
 
-      this.totalBruto = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontobruto, 0),2);
+          let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
+          this.matList[index].amount = this.matList[index].amount + totalpormaterial;
+          this.matList[index].quantity = this.matList[index].amount + cantidadmaterial;
+        }
+        else {
+          this.matList.push({
+            matId: codigodematerial,
+            text: descripcionmaterial,
+            quantity: cantidadmaterial,
+            unitM: unidaddemedida,
+            grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
+            amount: totalpormaterial
+          });
 
-      this.totalDescuento = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontodescuento, 0),2);
+        }
+      });
+      console.log(this.matList.length);
 
-      this.totalNeto = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontoneto, 0),2);
-      //
-      // if(!this.firstTime){
-      //   this.rerender();
-      // }
+      this.totalRegistro = this.matList.length;
+      this.totalCantidades = this.roundTo(this.matList.reduce((total, row) => total + row.quantity, 0), 2);
+      this.totalNeto = this.roundTo(this.matList.reduce((total, row) => total + row.amount, 0), 2);
+
       setTimeout(() => {
         this.showSpinner = false;
       }, 500);
-      
-    })
+    });
 
     this.opcrep01 = true;
-    
+
 
   }//onSubmitSearch
 
@@ -237,36 +247,6 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     return dateObject;
   }//timestampConvert
 
-  verdetalles(ped) {
-    const dialogConfig = new MatDialogConfig;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = "100%";
-
-    this.pedidoVer_ = Object.assign({}, ped);
-    this.pedidoVer_.fechapedido = this.timestampConvert(ped.fechapedido);
-
-    if (ped.ffactura !== null && typeof ped.ffactura != "undefined") {
-      this.pedidoVer_.ffactura = this.timestampConvert(ped.ffactura);
-    }
-    if (ped.fdespacho !== null && typeof ped.fdespacho != "undefined") {
-      this.pedidoVer_.fdespacho = this.timestampConvert(ped.fdespacho);
-    }
-    if (ped.fpago !== null && typeof ped.fpago != "undefined") {
-      this.pedidoVer_.fpago = this.timestampConvert(ped.fpago);
-    }
-    if (ped.ftentrega !== null && typeof ped.ftentrega != "undefined") {
-      this.pedidoVer_.ftentrega = this.timestampConvert(ped.ftentrega);
-    }
-    if (ped.fentrega !== null && typeof ped.fentrega != "undefined") {
-      this.pedidoVer_.fentrega = this.timestampConvert(ped.fentrega);
-    }
-
-    dialogConfig.data = {
-      pedidoShow: Object.assign({}, this.pedidoVer_)
-    };
-
-    this.dialogo.open(PedidoShowComponent, dialogConfig);
-  }//verdetalles
   rerender(): void {
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -277,8 +257,36 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     })
   }
 
-  SelectedValue(Value){
+  SelectedValue(Value) {
     this.codCli = Value;
+  }
+
+  exportPdf() {
+    // import("jspdf").then(jsPDF => {
+    //   import("jspdf-autotable").then(x => {
+    //     const doc = new jsPDF.default(0, 0);
+    //     doc.autoTable(this.exportColumns, this.products);
+    //     doc.save('products.pdf');
+    //   })
+    // })
+  }
+
+  exportExcel() {
+    import("xlsx").then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(this.matList);
+      const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, "products");
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    // let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    // let EXCEL_EXTENSION = '.xlsx';
+    // const data: Blob = new Blob([buffer], {
+    //   type: EXCEL_TYPE
+    // });
+    // FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
 }

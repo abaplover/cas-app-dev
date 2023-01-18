@@ -136,6 +136,7 @@ import { Rep01Component } from './Comp/reports/rep01/rep01.component';
 import { Rep02Component } from './Comp/reports/rep02/rep02.component';
 import { Rep03Component } from './Comp/reports/rep03/rep03.component';
 import { Rep04Component } from './Comp/reports/rep04/rep04.component';
+import { RepMatComponent } from './Comp/reports/repMat/repMat.component';
 import { TransporteComponent } from './Comp/transportes/transporte/transporte.component';
 import { TransporteListComponent } from './Comp/transportes/transporte-list/transporte-list.component';
 import { RegistrarAveriasComponent } from './Comp/averias/registrar-averias/registrar-averias.component';
@@ -286,6 +287,7 @@ firebase.firestore().settings({experimentalForceLongPolling: true}); */
     Rep02Component,
     Rep03Component,
     Rep04Component,
+    RepMatComponent,
     TransporteComponent,
     TransporteListComponent,
     RegistrarAveriasComponent,

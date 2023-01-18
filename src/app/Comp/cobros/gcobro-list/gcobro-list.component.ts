@@ -21,7 +21,10 @@ import { TipodcobrosService } from 'src/app/services/tipodcobros.service';
 import * as moment from 'moment';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { MatPaginator } from '@angular/material/paginator';
-
+import { CustomExporter } from './custom-exporter';
+import { TableUtil } from '../../../tableUtils';
+import { DatePipe } from '@angular/common';
+import { Util } from 'src/app/Util';
 
 
 @Component({
@@ -39,6 +42,7 @@ export class GcobroListComponent implements OnInit {
   montodepago = null;
   disableBSF = false;
   maxDate = moment(new Date()).format('YYYY-MM-DD');
+  customExporter: CustomExporter;
 
 
   //datos de la tabla externa
@@ -86,7 +90,7 @@ export class GcobroListComponent implements OnInit {
   ngOnInit(): void {
     this.showSpinner = true;
     this.pedidoPend_ = {} as Pedido;
-
+    // this.customExporter = new CustomExporter(); // YOU CAN BENEFIT FROM DI TOO.
     this.cargarDatos();
 
   }//ngOnInit
@@ -113,7 +117,7 @@ export class GcobroListComponent implements OnInit {
             cobros => (!cobros.montopendiente && cobros.montopendiente != 0)
               || (cobros.montopendiente));
 
-          this.cobroslist.sort();
+          this.cobroslist.sort((x, y) => { if (x.fpago) return x.fpago.seconds - y.fpago.seconds });
           this.totalRegistros = this.cobroslist.length;
           this.totalDeuda = this.roundTo(this.cobroslist.reduce((prev, curr) => curr.montopendiente ? curr.montopendiente + prev : curr.totalmontobruto + prev, 0), 2);
           this.dataSource = new MatTableDataSource(this.cobroslist);
@@ -136,6 +140,22 @@ export class GcobroListComponent implements OnInit {
     this.bancoS.getBancos().valueChanges().subscribe(bc => {
       this.bancoList = bc;
     })
+  }
+
+  exportExcel() {
+    console.log(this.dataSource);
+    let pipe = new DatePipe('en-US');
+    const cobrosPendientesArr: Partial<any>[] = this.dataSource.filteredData.map(x => ({
+      Pedido: x.idpedido,
+      NroFactura: x.nrofactura,
+      CondicionDePago: x.condiciondepago,
+      FechaDeVencimiento: pipe.transform(Util.getFecha(x.fpago), 'dd/MM/yyyy'),
+      NombreCliente: x.nomcliente,
+      NombreVendedor: x.nomvendedor,
+      Subtotal: x.totalmontobruto,
+      MontoPendiente: x.montopendiente
+    }));
+    TableUtil.exportArrayToExcel(cobrosPendientesArr, "CobrosPendientes");
   }
 
   applyFilter(event: Event) {
