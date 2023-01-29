@@ -426,9 +426,10 @@ export class PedidoService {
         }),
         map(([pedidos, pedidoDetalle]) => {
           return pedidos.map(pedido => {
-            console.log(pedido);
-            console.log(pedidoDetalle);
+            // console.log(pedido);
+            // console.log(pedidoDetalle);
             return {
+              cabecera: pedido,
               detalle: pedidoDetalle.find(ped => ped.idpedido == pedido.uid)
             }
           })

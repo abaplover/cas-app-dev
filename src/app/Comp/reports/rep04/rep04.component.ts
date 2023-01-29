@@ -51,6 +51,7 @@ export class Rep04Component implements OnInit {
   //dtOptions: DataTables.Settings = {};
   dtTrigger= new Subject<any>();
   data: any;
+  dtInitialized: any;
   //-----------------------------------------------------------
 
   constructor
@@ -119,8 +120,8 @@ export class Rep04Component implements OnInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
-    this.firstTime = false;
+    // this.dtTrigger.next();
+    // this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -178,8 +179,12 @@ export class Rep04Component implements OnInit {
       this.Ped_ = ped;
       this.data = this.Ped_;
 
-      if(!this.firstTime){
+      if (this.dtInitialized) {
         this.rerender();
+      }
+      else {
+        this.dtInitialized = true;
+        this.dtTrigger.next();
       }
 
     })

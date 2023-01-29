@@ -75,6 +75,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       'copy',{extend: 'excelHtml5',
       text: 'Excel',
       customizeData: function(data) {
+        console.log(data);
         //Recorremos todas las filas de la tabla
         for(var i = 0; i < data.body.length; i++) {
           //Quitamos los puntos como separador de miles 
@@ -95,6 +96,7 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   //dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
   data: any;
+  dtInitialized: boolean;
   //-----------------------------------------------------------
   //data table
 
@@ -140,8 +142,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
-    this.firstTime = false;
+    // this.dtTrigger.next();
+    // this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -214,10 +216,15 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
       this.totalDescuento = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontodescuento, 0),2);
 
       this.totalNeto = this.roundTo(this.Ped_.reduce((total, row) => total + row.totalmontoneto, 0),2);
-      //
-      // if(!this.firstTime){
-      //   this.rerender();
-      // }
+      
+      if (this.dtInitialized) {
+        this.rerender();
+      }
+      else {
+        this.dtInitialized = true;
+        this.dtTrigger.next();
+      }
+      
       setTimeout(() => {
         this.showSpinner = false;
       }, 500);

@@ -51,6 +51,7 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
   //dtOptions: DataTables.Settings = {};
   dtTrigger= new Subject<any>();
   data: any;
+  dtInitialized: boolean;
   //-----------------------------------------------------------
 
 
@@ -124,8 +125,8 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     //this.dtTrigger.next();
-    this.dtTrigger.next();
-    this.firstTime = false;
+    // this.dtTrigger.next();
+    // this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -178,8 +179,13 @@ export class Rep02Component implements OnDestroy, OnInit, AfterViewInit {
     this.pedidoS.getPedidosRep02(query).subscribe(ped =>{
       this.Ped_ = ped;
       this.data = this.Ped_;
-      if(!this.firstTime){
+      
+      if (this.dtInitialized) {
         this.rerender();
+      }
+      else {
+        this.dtInitialized = true;
+        this.dtTrigger.next();
       }
     })
 

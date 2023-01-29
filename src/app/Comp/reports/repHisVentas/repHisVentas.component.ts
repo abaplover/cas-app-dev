@@ -11,7 +11,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Cpago } from '../../../models/cpago';
 import { Client } from '../../../models/client';
 import { Vendedor } from '../../../models/vendedor';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { Pedido } from 'src/app/models/pedido';
 import { Subject } from 'rxjs';
 import { HttpBackend, HttpClient } from '@angular/common/http';
@@ -21,23 +21,54 @@ import * as firebase from 'firebase';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PedidoShowComponent } from '../../pedidos/pedido-show/pedido-show.component';
 import { DataTableDirective } from 'angular-datatables';
+import * as _moment from 'moment';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { Moment } from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
+
+const moment = _moment;
 
 interface MatRep {
   matId: string,
   text: string,
   grpArt?: string,
-  quantity: number,
-  unitM: string,
-  amount: number
+  QM1?: number,
+  QM2?: number,
+  QM3?: number,
+  QM4?: number,
+  QM5?: number,
+  QM6?: number,
 }
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
-  selector: 'app-repMat',
-  templateUrl: './repMat.component.html',
-  styleUrls: ['./repMat.component.css']
+  selector: 'app-repHisVentas.',
+  templateUrl: './repHisVentas.component.html',
+  styleUrls: ['./repHisVentas.component.css'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {
+      provide: MAT_DATE_FORMATS, useValue: MY_FORMATS
+    }
+  ]
 })
 
-export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
+export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild(DataTableDirective, { static: true })
   dtElement: DataTableDirective;
 
@@ -49,7 +80,7 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
   hasT: Date;
   staTus: any;
   codCli: string;
-  grpArt: string;
+  grpArt: any;
   codVen: string;
   conPag: any;
   opcrep01 = false;
@@ -58,8 +89,8 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
   totalBruto: number = 0;
   totalCantidades: number = 0;
   totalNeto: number = 0;
-  firstTime: boolean = false;
-
+  dtInitialized: boolean = false;
+  materialesSelected: any;
 
   showSpinner = false;
 
@@ -73,6 +104,8 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
   cols: any[];
 
   exportColumns: any[];
+  date = new FormControl(moment());
+  date2 = new FormControl(moment());
 
   //data table
   dtOptions: any = {
@@ -105,7 +138,6 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
   //dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
   data: any;
-  dtInitialized: any;
   //-----------------------------------------------------------
   //data table
 
@@ -124,18 +156,48 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
 
   }//constructor
 
+  chosenYearHandler(normalizedYear: Moment) {
+    const ctrlValue = this.date.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date.setValue(ctrlValue);
+  }
+
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    const ctrlValue2 = this.date2.value;
+
+    ctrlValue.month(normalizedMonth.month());
+    this.date.setValue(ctrlValue);
+
+    ctrlValue2.month(normalizedMonth.month() + 5);
+    this.date2.setValue(ctrlValue2)
+
+    datepicker.close();
+  }
+  chosenYearHandler2(normalizedYear: Moment) {
+    const ctrlValue = this.date2.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date2.setValue(ctrlValue);
+  }
+
+  chosenMonthHandler2(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date2.value;
+    const ctrlValue2 = this.date.value;
+
+    ctrlValue.month(normalizedMonth.month());
+    this.date2.setValue(ctrlValue);
+
+    ctrlValue2.month(normalizedMonth.month() - 5);
+    this.date.setValue(ctrlValue2)
+
+    datepicker.close();
+  }
   roundTo(num: number, places: number) {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
 
   ngOnInit(): void {
-    const currentYear = new Date().getFullYear();
-    const currentm = new Date().getMonth();
-    const currentd = new Date().getDate();
-    this.maxDated = new Date(currentYear, currentm, currentd);
-    this.maxDateh = new Date(currentYear, currentm, currentd);
-    this.minDateh = new Date(currentYear, currentm, currentd);
 
     this.gArticuloS.getGarticulo().valueChanges().subscribe(grupoArt => {
       console.log(grupoArt);
@@ -181,7 +243,16 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
     let hora = new Date().getHours();
     hora = 24 - hora;
     let productosFiltrados;
+
+    this.desD = new Date(this.date.value);
+    this.hasT = new Date(this.date2.value);
+    this.desD.setDate(1);
+    this.hasT.setDate(0);
+
+    console.log(this.desD);
+    console.log(this.hasT);
     this.hasT.setHours(new Date().getHours() + hora - 1);
+
 
     query = (ref: CollectionReference) => {
       let q = ref.where("fechapedido", ">=", this.desD)
@@ -194,41 +265,64 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
 
     if (this.grpArt)
       productosFiltrados = this.productosList.filter(product => this.grpArt.includes(product.grupodearticulos))
-    // console.log(productosFiltrados);
+
+    if(this.materialesSelected)
+    productosFiltrados = this.productosList.filter(product => this.materialesSelected.includes(product.idmaterial))
+
     this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
+
       this.matList = [];
       repMat.forEach(ped => {
-        const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = ped.detalle;
+        const { codigodematerial, descripcionmaterial, cantidadmaterial } = ped.detalle;
+        const { fechapedido } = ped.cabecera;
+        let fechadePedido = this.timestampConvert(fechapedido);
 
         if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial)) {
           return;
         }
-
+        let key = '';
+        switch (this.desD.getMonth() - fechadePedido.getMonth()) {
+          case 0:
+            key = 'QM1';
+            break;
+          case -1:
+            key = 'QM2';
+            break;
+          case -2:
+            key = 'QM3';
+            break;
+          case -3:
+            key = 'QM4';
+            break;
+          case -4:
+            key = 'QM5';
+            break;
+          case -5:
+            key = 'QM6';
+            break;
+        }
 
         if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
 
           let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
-          this.matList[index].amount = this.matList[index].amount + totalpormaterial;
-          this.matList[index].quantity = this.matList[index].amount + cantidadmaterial;
+          this.matList[index][key] = this.matList[index][key] ? this.matList[index][key] + cantidadmaterial : cantidadmaterial;
         }
         else {
-          this.matList.push({
+          let matObj = {
             matId: codigodematerial,
             text: descripcionmaterial,
-            quantity: cantidadmaterial,
-            unitM: unidaddemedida,
             grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
-            amount: totalpormaterial
-          });
+          };
+          matObj[key] = cantidadmaterial;
+          this.matList.push(matObj);
 
         }
       });
-      console.log(this.matList.length);
-
       this.totalRegistro = this.matList.length;
-      this.totalCantidades = this.roundTo(this.matList.reduce((total, row) => total + row.quantity, 0), 2);
-      this.totalNeto = this.roundTo(this.matList.reduce((total, row) => total + row.amount, 0), 2);
 
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 500);
       if (this.dtInitialized) {
         this.rerender();
       }
@@ -237,9 +331,6 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
         this.dtTrigger.next();
       }
 
-      setTimeout(() => {
-        this.showSpinner = false;
-      }, 500);
     });
 
     this.opcrep01 = true;
@@ -269,6 +360,15 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
     this.codCli = Value;
   }
 
+  exportPdf() {
+    // import("jspdf").then(jsPDF => {
+    //   import("jspdf-autotable").then(x => {
+    //     const doc = new jsPDF.default(0, 0);
+    //     doc.autoTable(this.exportColumns, this.products);
+    //     doc.save('products.pdf');
+    //   })
+    // })
+  }
 
   exportExcel() {
     import("xlsx").then(xlsx => {

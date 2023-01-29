@@ -46,6 +46,7 @@ export class Rep03Component implements OnInit, AfterViewInit {
   //dtOptions: DataTables.Settings = {};
   dtTrigger= new Subject<any>();
   data: any;
+  dtInitialized: any;
   //-----------------------------------------------------------
 
   constructor
@@ -112,8 +113,8 @@ export class Rep03Component implements OnInit, AfterViewInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
-    this.firstTime = false;
+    // this.dtTrigger.next();
+    // this.firstTime = false;
   }
 
   ngOnDestroy(): void {
@@ -182,8 +183,12 @@ export class Rep03Component implements OnInit, AfterViewInit {
       this.Ped_ = ped;
       this.data = this.Ped_;
       
-      if(!this.firstTime){
+      if (this.dtInitialized) {
         this.rerender();
+      }
+      else {
+        this.dtInitialized = true;
+        this.dtTrigger.next();
       }
     })
 

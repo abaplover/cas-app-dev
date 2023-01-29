@@ -1,0 +1,165 @@
+<div class="container9" style=" padding:10px;">
+
+	<div *ngIf="showSpinner" class="bars-spinner">
+		<mat-spinner></mat-spinner>
+	</div>
+
+	<form #rep01="ngForm" *ngIf="!this.opcrep01">
+		<div class="row">
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+				<div id="ndesp" class="card" style="padding:10px;">
+
+					<div class="row">
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Desde</mat-label>
+									<input #ref matInput [matDatepicker]="picker1" name="fdesde" id="fdesde"
+										[formControl]="date">
+									<mat-datepicker-toggle matSuffix [for]="picker1">
+										<mat-icon matDatepickerToggleIcon>
+											event_note
+										</mat-icon>
+									</mat-datepicker-toggle>
+									<mat-datepicker #picker1 startView="year" (yearSelected)="chosenYearHandler($event)"
+										(monthSelected)="chosenMonthHandler($event, picker1)"
+										panelClass="example-month-picker"></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Hasta</mat-label>
+									<input matInput [matDatepicker]="picker" name="fhasta" id="fhasta"
+										[formControl]="date2" required>
+									<mat-datepicker-toggle matSuffix [for]="picker">
+										<mat-icon matDatepickerToggleIcon>
+											event_note
+										</mat-icon>
+									</mat-datepicker-toggle>
+									<mat-datepicker #picker startView="year" (yearSelected)="chosenYearHandler2($event)"
+										(monthSelected)="chosenMonthHandler2($event, picker)"
+										panelClass="example-month-picker"></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+
+						<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width">
+									<mat-label>Grupo de Articulos</mat-label>
+									<mat-select value=selected multiple name="Grupo de Articulos"
+										[(ngModel)]="this.grpArt">
+										<mat-option value={{cdc.descripcion}} *ngFor="let cdc of grpArticulo">
+											{{cdc.idgarticulo}} - {{cdc.descripcion}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+
+							</div>
+						</div>
+
+						<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3" style="padding-right: 1px;">
+							<div class="form-group">
+								<mat-form-field appearance="legacy" class="campo-width" style="width: 180%;">
+									<mat-label>Materiales</mat-label>
+									<mat-select value=selected multiple name="Materiales"
+										[(ngModel)]="this.materialesSelected">
+										<mat-option value={{mat.idmaterial}} *ngFor="let mat of productosList">
+											{{mat.idmaterial}} - {{mat.descripcion}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+
+							</div>
+						</div>
+					</div>
+						<div class="row">
+
+							<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+								<div class="form-group" style="text-align:right;">
+									<button smat-stroked-button class="btn btn-primary"
+										style=" height: 35px !important; margin-right: 2px;" type="reset">
+										Limpiar
+									</button>
+
+									<button smat-stroked-button id="btnenviarne" class="btn btn-primary"
+										name="btnenviarne" style=" height: 35px !important;" type="submit"
+										[disabled]="rep01.invalid" (click)="onSubmitSearch(rep01)">
+										<i class="fas fa-search" data-toggle="tooltip" data-placement="top"
+											title="Buscar"></i> Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</form>
+	<!--Form notificar factura-->
+
+	<!-- *ngIf="this.opcrep01" -->
+	<div id="rep01">
+		<button *ngIf="this.opcrep01" id="back" name="back" class="btn btn-primary btn-space" type="button"
+			(click)="regresar()">
+			<i class="fas fa-search" data-toggle="tooltip" data-placement="top" title="Regresar"></i> Nueva Busqueda
+		</button>
+		<br /><br />
+		<!-- <div *ngIf="this.opcrep01">
+			<div>
+				<p style="font-weight:bold ;">Total de registros: {{this.totalRegistro | number}} </p>
+				<p style="font-weight:bold ;">Total Cantidades: {{totalCantidades | number }}</p>
+				<p style="font-weight:bold ;">Total Monto: {{totalNeto | number }}</p>
+			</div>
+		</div> -->
+		<table id="dtable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+			class="table table-striped table-bordered row-border hover">
+			<thead>
+				<tr>
+					<th style="width: 100px;">N° Material</th>
+					<th style="width: 200px;">Descripción</th>
+					<th style="width: 150px;">G. Art.</th>
+					<th style="width: 100px;">CTD M1</th>
+					<th style="width: 100px;">CTD M2</th>
+					<th style="width: 100px;">CTD M3</th>
+					<th style="width: 100px;">CTD M4</th>
+					<th style="width: 100px;">CTD M5</th>
+					<th style="width: 100px;">CTD M6</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let p of matList">
+
+					<td>{{p.matId}}</td>
+					<td>{{p.text}}</td>
+					<td>{{p.grpArt}}</td>
+					<td>{{p.QM1 | number}}</td>
+					<td>{{p.QM2 | number}}</td>
+					<td>{{p.QM3 | number}}</td>
+					<td>{{p.QM4 | number}}</td>
+					<td>{{p.QM5 | number}}</td>
+					<td>{{p.QM6 | number}}</td>
+				</tr>
+			</tbody>
+
+		</table>
+
+
+	</div>
+
+
+
+</div><!-- Contenedor -->
