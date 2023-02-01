@@ -193,41 +193,49 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     if (this.grpArt)
-      productosFiltrados = this.productosList.filter(product => this.grpArt.includes(product.grupodearticulos))
+      productosFiltrados = this.productosList.filter(product => product.grupodearticulos === this.grpArt)
     // console.log(productosFiltrados);
     this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
       this.matList = [];
+      console.log(repMat);
       repMat.forEach(ped => {
-        const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = ped.detalle;
+        ped.detalle.forEach(pedDet_ => {
+          const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = pedDet_;
 
-        if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial)) {
-          return;
-        }
+          if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial)) {
+            return;
+          }
 
 
-        if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
+          if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
 
-          let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
-          this.matList[index].amount = this.matList[index].amount + totalpormaterial;
-          this.matList[index].quantity = this.matList[index].amount + cantidadmaterial;
-        }
-        else {
-          this.matList.push({
-            matId: codigodematerial,
-            text: descripcionmaterial,
-            quantity: cantidadmaterial,
-            unitM: unidaddemedida,
-            grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
-            amount: totalpormaterial
-          });
+            let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
+            this.matList[index].amount = this.matList[index].amount + totalpormaterial;
+            this.matList[index].quantity = this.matList[index].amount + cantidadmaterial;
+          }
+          else {
+            this.matList.push({
+              matId: codigodematerial,
+              text: descripcionmaterial,
+              quantity: cantidadmaterial,
+              unitM: unidaddemedida,
+              grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
+              amount: totalpormaterial
+            });
 
-        }
+          }
+        })
+
       });
       console.log(this.matList.length);
 
       this.totalRegistro = this.matList.length;
       this.totalCantidades = this.roundTo(this.matList.reduce((total, row) => total + row.quantity, 0), 2);
       this.totalNeto = this.roundTo(this.matList.reduce((total, row) => total + row.amount, 0), 2);
+
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 500);
 
       if (this.dtInitialized) {
         this.rerender();
@@ -236,10 +244,6 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
         this.dtInitialized = true;
         this.dtTrigger.next();
       }
-
-      setTimeout(() => {
-        this.showSpinner = false;
-      }, 500);
     });
 
     this.opcrep01 = true;

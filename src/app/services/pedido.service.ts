@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, forkJoin, merge, combineLatest, of } from 'rxjs';
-import { map, take, switchMap } from 'rxjs/operators';
+import { map, take, switchMap, flatMap } from 'rxjs/operators';
 import { Pedido } from '../models/pedido';
 import { PedidoDet } from '../models/pedidoDet';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -410,15 +410,17 @@ export class PedidoService {
     this.pedidosrepMat = this.db.collection<Pedido>("pedidos", strq).valueChanges()
       .pipe(
         switchMap(pedidos => {
-          const pedidosIds = pedidos.map(ped => ped.uid)
+          console.log(pedidos);
+          const pedidosIds = pedidos.filter(ped => ped.status != 'ELIMINADO').map(ped => ped.uid)
           return combineLatest(
             of(pedidos),
             combineLatest(
               pedidosIds.map(pedidoId => 
                 // console.log(pedidoId);
+               
                 this.db.collection<PedidoDet>("pedidosDet", ref =>
                   ref.where('idpedido', '==', pedidoId)).valueChanges().pipe(
-                    map(pedidoDetalle => pedidoDetalle[0])
+                    map(pedidoDetalle => pedidoDetalle)
                   )              
               )
             )
@@ -427,10 +429,9 @@ export class PedidoService {
         map(([pedidos, pedidoDetalle]) => {
           return pedidos.map(pedido => {
             // console.log(pedido);
-            // console.log(pedidoDetalle);
+            console.log(pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid));
             return {
-              cabecera: pedido,
-              detalle: pedidoDetalle.find(ped => ped.idpedido == pedido.uid)
+              detalle: pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid)
             }
           })
         })

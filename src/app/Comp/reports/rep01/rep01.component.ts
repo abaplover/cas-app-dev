@@ -142,8 +142,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    // this.dtTrigger.next();
-    // this.firstTime = false;
+    this.dtTrigger.next();
+    this.firstTime = false;
   }
 
   ngOnDestroy(): void {
