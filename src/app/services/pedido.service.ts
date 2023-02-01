@@ -431,6 +431,7 @@ export class PedidoService {
             // console.log(pedido);
             console.log(pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid));
             return {
+              cabecera: pedido,
               detalle: pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid)
             }
           })

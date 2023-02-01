@@ -266,57 +266,60 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
     if (this.grpArt)
       productosFiltrados = this.productosList.filter(product => this.grpArt.includes(product.grupodearticulos))
 
-    if(this.materialesSelected)
-    productosFiltrados = this.productosList.filter(product => this.materialesSelected.includes(product.idmaterial))
+    if (this.materialesSelected)
+      productosFiltrados = this.productosList.filter(product => this.materialesSelected.includes(product.idmaterial))
 
     this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
 
       this.matList = [];
       repMat.forEach(ped => {
-        const { codigodematerial, descripcionmaterial, cantidadmaterial } = ped.detalle;
-        const { fechapedido } = ped.cabecera;
-        let fechadePedido = this.timestampConvert(fechapedido);
+        ped.detalle.forEach(pedDet_ => {
+          const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = pedDet_;
 
-        if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial)) {
-          return;
-        }
-        let key = '';
-        switch (this.desD.getMonth() - fechadePedido.getMonth()) {
-          case 0:
-            key = 'QM1';
-            break;
-          case -1:
-            key = 'QM2';
-            break;
-          case -2:
-            key = 'QM3';
-            break;
-          case -3:
-            key = 'QM4';
-            break;
-          case -4:
-            key = 'QM5';
-            break;
-          case -5:
-            key = 'QM6';
-            break;
-        }
+          const { fechapedido } = ped.cabecera;
+          let fechadePedido = this.timestampConvert(fechapedido);
 
-        if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
+          if (productosFiltrados && !productosFiltrados.find(prod => prod.idmaterial == codigodematerial)) {
+            return;
+          }
+          let key = '';
+          switch (this.desD.getMonth() - fechadePedido.getMonth()) {
+            case 0:
+              key = 'QM1';
+              break;
+            case -1:
+              key = 'QM2';
+              break;
+            case -2:
+              key = 'QM3';
+              break;
+            case -3:
+              key = 'QM4';
+              break;
+            case -4:
+              key = 'QM5';
+              break;
+            case -5:
+              key = 'QM6';
+              break;
+          }
 
-          let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
-          this.matList[index][key] = this.matList[index][key] ? this.matList[index][key] + cantidadmaterial : cantidadmaterial;
-        }
-        else {
-          let matObj = {
-            matId: codigodematerial,
-            text: descripcionmaterial,
-            grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
-          };
-          matObj[key] = cantidadmaterial;
-          this.matList.push(matObj);
+          if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
 
-        }
+            let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
+            this.matList[index][key] = this.matList[index][key] ? this.matList[index][key] + cantidadmaterial : cantidadmaterial;
+          }
+          else {
+            let matObj = {
+              matId: codigodematerial,
+              text: descripcionmaterial,
+              grpArt: this.productosList.find(mat => mat.idmaterial == codigodematerial).grupodearticulos,
+            };
+            matObj[key] = cantidadmaterial;
+            this.matList.push(matObj);
+
+          }
+        })
       });
       this.totalRegistro = this.matList.length;
 
