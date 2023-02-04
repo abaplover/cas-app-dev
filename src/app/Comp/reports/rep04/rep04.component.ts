@@ -69,7 +69,8 @@ export class Rep04Component implements OnInit {
           pagingType: 'full_numbers',
           pageLength: 30,
           language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+            url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json',
+            decimal: ",",
           },
           processing: true,
           dom: 'Bfrtip',

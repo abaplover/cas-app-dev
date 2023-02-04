@@ -113,7 +113,8 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
     pageLength: 30,
     ordering: true,
     language: {
-      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json',
+      decimal: ",",
     },
     processing: true,
     dom: 'Bfrtip',

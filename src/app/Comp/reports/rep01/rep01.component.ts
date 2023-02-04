@@ -67,7 +67,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
     pageLength: 30,
     ordering : true,
     language: {
-      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json',
+      decimal: ",",
     },
     processing: true,
     dom: 'Bfrtip',
@@ -142,8 +143,8 @@ export class Rep01Component implements OnDestroy, OnInit, AfterViewInit {
   }//ngOnInit
 
   ngAfterViewInit(): void {
-    this.dtTrigger.next();
-    this.firstTime = false;
+    // this.dtTrigger.next();
+    // this.firstTime = false;
   }
 
   ngOnDestroy(): void {

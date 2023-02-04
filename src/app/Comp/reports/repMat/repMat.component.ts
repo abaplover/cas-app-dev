@@ -80,7 +80,9 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
     pageLength: 30,
     ordering: true,
     language: {
-      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json'
+      url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json',
+      decimal: ",",
+      
     },
     processing: true,
     dom: 'Bfrtip',
@@ -193,7 +195,7 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     if (this.grpArt)
-      productosFiltrados = this.productosList.filter(product => product.grupodearticulos === this.grpArt)
+    productosFiltrados = this.productosList.filter(product => this.grpArt.includes(product.grupodearticulos))
     // console.log(productosFiltrados);
     this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
       this.matList = [];
@@ -211,7 +213,7 @@ export class RepMatComponent implements OnDestroy, OnInit, AfterViewInit {
 
             let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
             this.matList[index].amount = this.matList[index].amount + totalpormaterial;
-            this.matList[index].quantity = this.matList[index].amount + cantidadmaterial;
+            this.matList[index].quantity = this.matList[index].quantity + cantidadmaterial;
           }
           else {
             this.matList.push({
