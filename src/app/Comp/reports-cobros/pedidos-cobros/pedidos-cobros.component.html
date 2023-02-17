@@ -175,7 +175,7 @@
 					<!-- Si el ultimo pago fue puntual es verde -->
 					<!-- Si la fecha es vencida, o el ultimo registro no fue puntual es rojo -->
 					<!-- Si la fecha no esta vencida y no han registrado un pago es amarillo -->
-					<div [ngClass]="p.pagopuntual ? 'colorGreen' : (p.pagopuntual===false || p.fvencida ? 'colorRed' : (!p.fvencida && p.pagopuntual== null ? 'colorYellow' : 'colorW'))"></div>
+					<div [ngClass]="p.statusNoCobrado ? 'colorOrange' : (p.pagopuntual ? 'colorGreen' : (p.pagopuntual===false || p.fvencida ? 'colorRed' : (!p.fvencida && p.pagopuntual== null ? 'colorYellow' : 'colorW')))"></div>
 				</td>
 
 			  </tr>

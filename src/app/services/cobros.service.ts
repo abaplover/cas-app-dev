@@ -52,9 +52,9 @@ export class CobrosService {
   cobroDocrep: AngularFirestoreDocument<Cobro>;
   cobrosColletionrep: AngularFirestoreCollection<Cobro>;
 
-  cobrosdetrep: Observable<CobroDet[]>;
-  cobrosdetDocrep: AngularFirestoreDocument<CobroDet>;
-  cobrosdetColletionrep: AngularFirestoreCollection<CobroDet>;
+  cobrosdetrep: Observable<Cobro[]>;
+  cobrosdetDocrep: AngularFirestoreDocument<Cobro>;
+  cobrosdetColletionrep: AngularFirestoreCollection<Cobro>;
 
   constructor(public db: AngularFirestore) { 
 
@@ -227,10 +227,10 @@ export class CobrosService {
   }//getCobrosRep
 
   getCobrosRep02(queryCobrosDet){
-    this.cobrosdetColletionrep = this.db.collection('cobrosDet', queryCobrosDet);
+    this.cobrosdetColletionrep = this.db.collection('cobros');
     this.cobrosdetrep = this.cobrosdetColletionrep.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        const data = a.payload.doc.data() as CobroDet;
+        const data = a.payload.doc.data() as Cobro;
         return data;
       })
     }));  

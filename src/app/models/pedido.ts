@@ -52,6 +52,7 @@ export interface Pedido {
   preciomaterial?: number;
   status?: string;
   statuscobro?    : string;
+  statusNoCobrado? : boolean;
   ticketurl?: string;
   tipodoc?: string;
   totalCnt?: number;

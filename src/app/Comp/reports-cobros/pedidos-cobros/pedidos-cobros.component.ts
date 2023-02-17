@@ -67,6 +67,7 @@ export class PedidosCobrosComponent implements OnInit {
   pedidoPend_ = {} as Pedido;
   MostrarCob: string;
   importeremanente = 0;
+  statusNoCobrado = false; //Indicador de status cobrado sin cobros en los pedidos.
 
   showSpinner = false;
 
@@ -216,7 +217,7 @@ export class PedidosCobrosComponent implements OnInit {
     }
 
     this.pedidoS.getPedidosReporteCobros(query).subscribe(ped => {
-      this.cobrosS.getCobrosRep01(queryC).subscribe(cobro => {
+      this.cobrosS.getCobrosRep02(queryC).subscribe(cobro => {
         this.Ped_ = ped;
         let cobrosList = cobro;
         this.montototalUSD = 0;
@@ -225,14 +226,13 @@ export class PedidosCobrosComponent implements OnInit {
         this.Ped_.forEach(async ped => {
           // if(this.timestampConvert(ped.fpago) < this.today) ped.fvencida = true;        
 
-          console.log(cobrosList);
           this.montototalUSD += Number(ped.totalmontoneto);
 
           let cobroPagado = cobrosList.find(cobro => cobro.idpedido == ped.idpedido && cobro.tipopago == 'TOTAL');
-          
-          if(!ped.fpago)
+          ped.statusNoCobrado = false;
+          if (!ped.fpago)
             ped.fpago = ped.fechapedido;
-          
+
           if (cobroPagado && ped.status == 'COBRADO') {
             tiempo = Math.ceil((this.timestampConvert(cobroPagado.fechadepago).getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
           }
@@ -240,6 +240,9 @@ export class PedidosCobrosComponent implements OnInit {
             tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
           }
 
+          if (!cobroPagado && ped.status == 'COBRADO') {
+            ped.statusNoCobrado = true;
+          }
 
           if (tiempo > 0)
             ped.pagopuntual = false;
@@ -255,8 +258,8 @@ export class PedidosCobrosComponent implements OnInit {
           if (ped.pagopuntual == undefined) ped.pagopuntual = null;
 
           let montoAbonado = cobrosList.filter(cob => cob.idpedido == ped.idpedido)
-          .reduce((total, cobro) => cobro.montodepago && (cobro.status != 'ELIMINADO') ? total + cobro.montodepago : total,0)
-          
+            .reduce((total, cobro) => cobro.montodepago && (cobro.status != 'ELIMINADO') ? total + cobro.montodepago : total, 0)
+
           ped.totalAbonado = montoAbonado;
           ped.montopendiente = ped.totalmontoneto - ped.totalAbonado;
 

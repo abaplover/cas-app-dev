@@ -24,6 +24,12 @@
 	width: 25%;
 	margin: 0 auto;
 }
+.colorOrange  {
+	background-color: Orange;
+	height: 5vh;border-radius: 50%;
+	width: 25%;
+	margin: 0 auto;
+}
 .colorW  {
 	background-color: transparent;
 	height: 5vh;border-radius: 50%;

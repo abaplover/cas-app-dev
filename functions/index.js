@@ -19,12 +19,18 @@ const db = admin.firestore();
 const transport = nodemailer.createTransport({
 
 	//==========================1============================
-	host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+	// host: 'smtp.gmail.com',
+    // port: 465,
+    // secure: true,
+	host: "smtp-mail.outlook.com",
+    secureConnection: false,
+    port: 587,
+    tls: {
+        chipers: "SSLv3"
+    },
 	auth: {
-		user: "CasRicamar@gmail.com",
-		pass: "owwvyibtxdaaxbmh"
+		user: "cas@ricamar.com.ve",
+		pass: "2701cASricamaR852697*#"
 	}
 	//==========================1============================
 
@@ -288,7 +294,7 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	let fdespachodia_;
 	let fecDespacho_ = '';
 	let fdespacho_;
-	if (typeof newValue.fdespacho !== "undefined"){
+	if (typeof newValue.fdespacho !== "undefined" && fdespacho_ && fdespacho_.seconds){
 		fdespacho_ = new Date(newValue.fdespacho.seconds*1000);
 		fdespacho_.setTime(fdespacho_.getTime() - 240 * 60 * 1000);
 
@@ -304,13 +310,13 @@ exports.PedmailUp = functions.firestore.document("pedidos/{id}").onUpdate((chang
 	let fectentrega_ = '';
 	let ftentrega_;
 	if (typeof newValue.ftentrega !== "undefined"){
-		ftentrega_ = new Date(newValue.ftentrega.seconds*1000);
-		ftentrega_.setTime(ftentrega_.getTime() - 240 * 60 * 1000);
+		// ftentrega_ = new Date(newValue.ftentrega.seconds*1000);
+		// ftentrega_.setTime(ftentrega_.getTime() - 240 * 60 * 1000);
 
-		ftentregames_ = month[ftentrega_.getMonth()];
-    	ftentregaano_ = ftentrega_.getFullYear();
-		ftentregadia_ = ftentrega_.getDate();
-		fectentrega_ = ftentregadia_+'/'+ftentregames_+'/'+ftentregaano_;
+		// ftentregames_ = month[ftentrega_.getMonth()];
+    	// ftentregaano_ = ftentrega_.getFullYear();
+		// ftentregadia_ = ftentrega_.getDate();
+		// fectentrega_ = ftentregadia_+'/'+ftentregames_+'/'+ftentregaano_;
 	}
 
 	var mailOptions = {
