@@ -19,43 +19,7 @@ const db = admin.firestore();
 const transport = nodemailer.createTransport({
 
 	//==========================1============================
-	// host: 'smtp.gmail.com',
-    // port: 465,
-    // secure: true,
-	host: "smtp-mail.outlook.com",
-    secureConnection: false,
-    port: 587,
-    tls: {
-        chipers: "SSLv3"
-    },
-	auth: {
-		user: "cas@ricamar.com.ve",
-		pass: "2701cASricamaR852697*#"
-	}
-	//==========================1============================
-
-	//==========================2============================
-		//Usuario Email           : ricamarcloud@gmail.com
-		//Contrasena Email        : wswgubuyeffbqasd
-		//Contrasena de Aplicacion: ouqffxswjaulvywz
-
-		// host: 'smtp.gmail.com',
-		// port: 465,
-		// secure: true,
-		// auth: {
-		// 	user: "ricamarcloud@gmail.com",
-		// 	pass: "ouqffxswjaulvywz"
-		// }
-	//==========================2============================
-
-	//==========================3============================
-	// host: 'smtp.gmail.com',
-    // port: 465,
-    // secure: true,
-	// auth: {
-	// 	user: "yhonatandcarruido@gmail.com",
-	// 	pass: "wswgubuyeffbqasd"
-	// }
+	
 	//==========================3============================
 })
 
