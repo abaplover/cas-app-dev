@@ -473,7 +473,97 @@ exports.CobroemailUp = functions.firestore.document("cobros/{id}").onUpdate((cha
 		return false;
 	}
 }) //CobroemailUp
+exports.cobroRecibo = functions.firestore.document("cobros/{id}").onUpdate((change,context)=>{
+	let saludo_ = "Gracias por su compra.";
+	const newValue = change.after.data();
+	const email = newValue.emailcliente;
+	const name = newValue.nomcliente;
+	const pdfb64_ = newValue.pdfb64;
+	const nfactura_ = newValue.nrofactura;
+	const idpedido_ = newValue.idpedido;
+	const enviaremail = newValue.sendmail;
+	const companyhead_ = newValue.companyhead;
+	const fvto_ = newValue.fpvencimiento;
 
+	let pdfname_ = idpedido_+".pdf";
+	asunto = "Gracias por su pago, Pedido N° "+ idpedido_;
+	bodytxt = "Estimado " + name + ", usted presenta un pago pendiente correspondiente al pedido N° "+idpedido_ + ", con nota de entrega/factura N° " + nfactura_;
+	let enviar = false;
+
+	let dateObjectT = new Date(fvto_*1000);
+	dateObjectT.setTime(dateObjectT.getTime() - 240 * 60 * 1000);
+
+	var month 	  = new Array();
+		month[0]  = "01";
+		month[1]  = "02";
+		month[2]  = "03";
+		month[3]  = "04";
+		month[4]  = "05";
+		month[5]  = "06";
+		month[6]  = "07";
+		month[7]  = "08";
+		month[8]  = "09";
+		month[9]  = "10";
+		month[10] = "11";
+		month[11] = "12";
+
+	let min_ = dateObjectT.getMinutes();
+	var horas = new Array();
+	horas [0]  = "12:" + min_ + " PM";
+	horas [23] = "11:" + min_ + " PM";
+	horas [22] = "10:" + min_ + " PM";
+	horas [21] = "09:" + min_ + " PM";
+	horas [20] = "08:" + min_ + " PM";
+	horas [19] = "07:" + min_ + " PM";
+	horas [18] = "06:" + min_ + " PM";
+	horas [17] = "05:" + min_ + " PM";
+	horas [16] = "04:" + min_ + " PM";
+	horas [15] = "03:" + min_ + " PM";
+	horas [14] = "02:" + min_ + " PM";
+	horas [13] = "01:" + min_ + " PM";
+	horas [12] = "12:" + min_ + " AM";
+	horas [11] = "11:" + min_ + " AM";
+	horas [10] = "10:" + min_ + " AM";
+	horas [9]  = "09:" + min_ + " AM";
+	horas [8]  = "08:" + min_ + " AM";
+	horas [7]  = "07:" + min_ + " AM";
+	horas [6]  = "06;" + min_ + " AM";
+	horas [5]  = "05:" + min_ + " AM";
+	horas [4]  = "04:" + min_ + " AM";
+	horas [3]  = "03:" + min_ + " AM";
+	horas [2]  = "02:" + min_ + " AM";
+	horas [1]  = "01:" + min_ + " AM";
+	//getTimezoneOffset
+	let mes_ = month[dateObjectT.getMonth()];
+    let ano_ = dateObjectT.getFullYear();
+	let dia_ = dateObjectT.getDate();
+	let hor_ = horas[dateObjectT.getHours()];
+	let seg_ = dateObjectT.toUTCString();
+	const fvencimiento_ = dia_+'/'+mes_+'/'+ano_;
+
+	if (enviaremail === true){
+		enviar = true;
+	}
+
+	var mailOptions = {
+		html: 'Embedded image: <img src="cid:apollcasapp1550raf"/>',
+		attachments: [
+			{
+				filename: 'noimage.png',
+				path: '/img/',
+				cid: 'apollcasapp1550raf' //same cid value as in the html img src
+			}
+		]
+	}
+
+	// if (enviar){
+	// 	enviar = false;
+	// 	return sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdfname_,companyhead_,fvencimiento_);
+	// }else{
+	// 	enviar = false;
+	// 	return false;
+	// }
+}) //CobroemailUp
 
 
 //CUANDO SE CREA UNA AVERIA
@@ -1174,311 +1264,6 @@ function sendpedidomail(email,name,pedUid,tmn,fped,mailOptions,codc,nomc,codv,no
 }//sendpedidomail
 
 //ENVIA MAIL COBROS
-function sendcobromail(email,name,pdfb64_,nfactura_,idpedido_,asunto,bodytxt,pdfname_,companyhead_,fvencimiento_)
-{
-	return transport.sendMail({
-		from: "CAS-Ricamar<Cas@ricamar.com.ve>",
-		to: email,
-		bcc: "casricamar@gmail.com,ricamarcloud@gmail.com",
-		subject: `${asunto}`,
-		html: 	`
-
-
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml"><head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-		<!--[if !mso]><!-->
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<!--<![endif]-->
-		<!--[if (gte mso 9)|(IE)]>
-		<xml>
-		  <o:OfficeDocumentSettings>
-			<o:AllowPNG/>
-			<o:PixelsPerInch>96</o:PixelsPerInch>
-		  </o:OfficeDocumentSettings>
-		</xml>
-		  <![endif]-->
-		  <!--[if (gte mso 9)|(IE)]>
-			<style type="text/css">
-			  body {width: 600px;margin: 0 auto;}
-			  table {border-collapse: collapse;}
-			  table, td {mso-table-lspace: 0pt;mso-table-rspace: 0pt;}
-			  img {-ms-interpolation-mode: bicubic;}
-			</style>
-		  <![endif]-->
-		<style type="text/css">
-	  body, p, div {
-		font-family: Helvetica;
-		font-size: 14px;
-	  }
-	  body {
-		color: #000000;
-	  }
-	  body a {
-		color: #1188E6;
-		text-decoration: none;
-	  }
-	  p { margin: 0; padding: 0; }
-	  table.wrapper {
-		width:100% !important;
-		table-layout: fixed;
-		-webkit-font-smoothing: antialiased;
-		-webkit-text-size-adjust: 100%;
-		-moz-text-size-adjust: 100%;
-		-ms-text-size-adjust: 100%;
-	  }
-	  img.max-width {
-		max-width: 100% !important;
-	  }
-	  .column.of-2 {
-		width: 50%;
-	  }
-	  .column.of-3 {
-		width: 33.333%;
-	  }
-	  .column.of-4 {
-		width: 25%;
-	  }
-	  @media screen and (max-width:480px) {
-		.preheader .rightColumnContent,
-		.footer .rightColumnContent {
-		  text-align: left !important;
-		}
-		.preheader .rightColumnContent div,
-		.preheader .rightColumnContent span,
-		.footer .rightColumnContent div,
-		.footer .rightColumnContent span {
-		  text-align: left !important;
-		}
-		.preheader .rightColumnContent,
-		.preheader .leftColumnContent {
-		  font-size: 80% !important;
-		  padding: 5px 0;
-		}
-		table.wrapper-mobile {
-		  width: 100% !important;
-		  table-layout: fixed;
-		}
-		img.max-width {
-		  height: auto !important;
-		  max-width: 100% !important;
-		}
-		a.bulletproof-button {
-		  display: block !important;
-		  width: auto !important;
-		  font-size: 80%;
-		  padding-left: 0 !important;
-		  padding-right: 0 !important;
-		}
-		.columns {
-		  width: 100% !important;
-		}
-		.column {
-		  display: block !important;
-		  width: 100% !important;
-		  padding-left: 0 !important;
-		  padding-right: 0 !important;
-		  margin-left: 0 !important;
-		  margin-right: 0 !important;
-		}
-	  }
-	</style>
-		<!--user entered Head Start--><link href="https://fonts.googleapis.com/css?family=Viga&display=swap" rel="stylesheet"><style>
-	  body {font-family: 'Viga', sans-serif;}
-  </style><!--End Head user entered-->
-	  </head>
-	  <body>
-		<center class="wrapper" data-link-color="#1188E6" data-body-style="font-size:14px; font-family:inherit; color:#000000; background-color:#f0f0f0;">
-		  <div class="webkit">
-			<table cellpadding="0" cellspacing="0" border="0" width="100%" class="wrapper" bgcolor="#f0f0f0">
-			  <tbody><tr>
-				<td valign="top" bgcolor="#f0f0f0" width="100%">
-				  <table width="100%" role="content-container" class="outer" align="center" cellpadding="0" cellspacing="0" border="0">
-					<tbody><tr>
-					  <td width="100%">
-						<table width="100%" cellpadding="0" cellspacing="0" border="0">
-						  <tbody><tr>
-							<td>
-							  <!--[if mso]>
-	  <center>
-	  <table><tr><td width="600">
-	<![endif]-->
-									  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px;" align="center">
-										<tbody><tr>
-										  <td role="modules-container" style="padding:0px 0px 0px 0px; color:#000000; text-align:left;" bgcolor="#ffffff" width="100%" align="left"><table class="module preheader preheader-hide" role="module" data-type="preheader" border="0" cellpadding="0" cellspacing="0" width="100%" style="display: none !important; mso-hide: all; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0;">
-		  <tbody>
-			  <tr>
-					<td role="module-content">
-					  <p></p>
-					</td>
-			  </tr>
-		  </tbody>
-	  </table>
-	  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:30px 20px 40px 30px;" bgcolor="#D5DBDB">
-		  <tbody>
-			<tr role="module-content">
-			  <td height="100%" valign="top">
-				  <table class="column" width="550" style="width:550px; border-spacing:0; border-collapse:collapse; margin:0px 0px 0px 0px;" cellpadding="0" cellspacing="0" align="left" border="0" bgcolor="">
-					  <tbody>
-						  <tr>
-							  <td style="padding:0px;margin:0px;border-spacing:0;">
-								  <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; fixed;font-family: Helvetica;font-size: 18px;" data-muid="b422590c-5d79-4675-8370-a10c2c76af02">
-									  <tbody>
-										  <tr>
-											  <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="left">
-
-											  </td>
-										  </tr>
-										 <!--Company Blok-->
-									  </tbody>
-								  </table>
-
-								  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="1995753e-0c64-4075-b4ad-321980b82dfe">
-									  <tbody></tbody>
-									  ${companyhead_}
-								  </table>
-								  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="2ffbd984-f644-4c25-9a1e-ef76ac62a549">
-									  <tbody>
-											  <tr>
-												  <td style="padding:18px 20px 20px 0px; line-height:24px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content">
-													  <div>
-														  <div style="font-family: inherit; text-align: inherit">
-
-														  </div>
-													  <div></div>
-													  </div>
-												  </td>
-											  </tr>
-									  </tbody>
-								  </table>
-							  </td>
-						  </tr>
-					  </tbody>
-				  </table>
-			  </td>
-			</tr>
-		  </tbody>
-	  </table>
-
-
-	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
-		  <tbody>
-			  <tr>
-				  <td style="padding:30px 20px 18px 30px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: inherit"><span style="color: #0055ff; font-size: 24px">
-				  	Notificación de cobro
-				  </span></div><div></div></div></td>
-			  </tr>
-		  </tbody>
-	  </table>
-	  <table class="module" role="module" data-type="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="f7373f10-9ba4-4ca7-9a2e-1a2ba700deb9">
-		  <tbody>
-			  <tr>
-				  <td style="padding:0px 30px 0px 30px;" role="module-content" height="100%" valign="top" bgcolor="">
-					  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" height="3px" style="line-height:3px; font-size:3px;">
-						  <tbody>
-							  <tr>
-								  <td style="padding:0px 0px 3px 0px;" bgcolor="#e7e7e7"></td>
-							  </tr>
-						  </tbody>
-					  </table>
-				  </td>
-			  </tr>
-		  </tbody>
-	  </table>
-	  <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="264ee24b-c2b0-457c-a9c1-d465879f9935">
-		  <tbody>
-			  <tr>
-				  <td style="padding:18px 20px 18px 30px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content">
-					  <table class="table" style="width:100%;border-style:solid;border-width:0px">
-						  <tbody>
-							  <tr>
-								  <th style="text-align:left;width:140px;" scope="row">
-								  	<span>${bodytxt}</span><br />
-								  </th>
-							  </tr>
-							  <tr>
-								  <td></td>
-							  </tr>
-						  </tbody>
-					  </table>
-				  </td>
-			  </tr>
-			  <tr>
-			  	<td  style="padding:30px">
-	  				<h4>Fecha de vencimiento: ${fvencimiento_}<h4>
-			    </td>
-			  </tr>
-		  </tbody>
-	  </table>
-
-	<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" role="module" data-type="columns" style="padding:0px 20px 0px 20px;" bgcolor="#0055ff">
-	  <tbody>
-		  <tr role="module-content">
-			  <!--Estaba el footer-->
-		  </tr>
-	  </tbody>
-  	</table>
-
-	</td>
-	</tr>
-	</tbody>
-	</table>
-					<!--[if mso]>
-					</td>
-				</tr>
-				</table>
-			</center>
-			<![endif]-->
-			</td>
-		</tr>
-		</tbody></table>
-	</td>
-	</tr>
-	</tbody></table>
-	</td>
-	</tr>
-	</tbody></table>
-	</div>
-	</center>
-
-
-	</body>
-	</html>
-
-
-
-
-
-
-
-
-
-
-				`,
-		attachments:[
-						{
-							filename: pdfname_,
-							content: pdfb64_,
-							encoding: 'base64'
-						}
-					//,{
-					// 	filename: 'logimprmcasappydctsystem.PNG',
-					// 	path: './img/logimprmcasappydctsystem.PNG',
-					// 	cid: 'logimprmcasappydctsystem'
-					// },
-					// {
-					// 	filename: 'logimprmcasappydctsystem2.PNG',
-					// 	path: './img/logimprmcasappydctsystem2.PNG',
-					// 	cid: 'logimprmcasappydctsystem2'
-					// }
-
-
-				]
-
-
-	}).then(r=>console.log('Email enviado sin problemas')).catch(e=>console.log('El error es: ',e));
-}//sendcobromail
-
 //ENVIA MAIL AVERIAS
 function sendaveriamail(email,name,aveUid,tmn,fave,mailOptions,codc,nomc,codv,nomv,codeBlock_,companyBkl_,clientedir_,observ_,pdfurl_,pdfname_,pdfb64_,asunto,bodytxt,saludo_,idaveria_,bodyFecha_,txta,txtr,txtc,nrodocfat,strtxtr,strtxtc)
 {

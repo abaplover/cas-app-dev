@@ -250,9 +250,11 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
     this.desD.setDate(1);
     this.hasT.setDate(0);
 
+    this.hasT.setMonth(this.hasT.getMonth() + 1);
+
     console.log(this.desD);
     console.log(this.hasT);
-    this.hasT.setHours(new Date().getHours() + hora - 1);
+    // this.hasT.setHours(new Date().getHours() + hora - 1);
 
 
     query = (ref: CollectionReference) => {
@@ -273,6 +275,7 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
     this.pedidoS.getPedidosRepMat(query).subscribe(repMat => {
 
       this.matList = [];
+      console.log(repMat);
       repMat.forEach(ped => {
         ped.detalle.forEach(pedDet_ => {
           const { codigodematerial, descripcionmaterial, totalpormaterial, unidaddemedida, cantidadmaterial, } = pedDet_;
@@ -284,28 +287,35 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
             return;
           }
           let key = '';
-          switch (this.desD.getMonth() - fechadePedido.getMonth()) {
+          console.log(this.differenceInMonths(this.desD, fechadePedido));
+          switch (Math.abs(this.differenceInMonths(this.desD, fechadePedido))) {
             case 0:
               key = 'QM1';
               break;
-            case -1:
+            case 1:
               key = 'QM2';
               break;
-            case -2:
+            case 2:
               key = 'QM3';
               break;
-            case -3:
+            case 3:
               key = 'QM4';
               break;
-            case -4:
+            case 4:
               key = 'QM5';
               break;
-            case -5:
+            case 5:
               key = 'QM6';
               break;
+            default:
+              // console.log(this.desD.getMonth())
+              // console.log(fechadePedido.getMonth())
+              // if(fechadePedido.getMonth() == 0)
+              //   console.log(fechadePedido);
           }
+            // console.log(key);
 
-          if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
+            if (this.matList && this.matList.find(mat => mat.matId == codigodematerial)) {
 
             let index = this.matList.findIndex(mat => mat.matId == codigodematerial);
             this.matList[index][key] = this.matList[index][key] ? this.matList[index][key] + cantidadmaterial : cantidadmaterial;
@@ -390,6 +400,12 @@ export class RepHisVentasComponent implements OnDestroy, OnInit, AfterViewInit {
     //   type: EXCEL_TYPE
     // });
     // FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+  differenceInMonths(date1, date2) {
+    const monthDiff = date1.getMonth() - date2.getMonth();
+    const yearDiff = date1.getYear() - date2.getYear();
+  
+    return monthDiff + yearDiff * 12;
   }
 
 }

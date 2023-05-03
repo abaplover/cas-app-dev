@@ -6,7 +6,7 @@ import { Pedido } from 'src/app/models/pedido';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { FirebaseloginService } from 'src/app/services/firebaselogin.service';
-
+import * as pdfMake from "pdfmake/build/pdfmake";
 //  Service 
 import { Cobro } from 'src/app/models/cobro';
 import { CobroDet } from 'src/app/models/cobro-det';
@@ -25,6 +25,8 @@ import { CustomExporter } from './custom-exporter';
 import { TableUtil } from '../../../tableUtils';
 import { DatePipe } from '@angular/common';
 import { Util } from 'src/app/Util';
+import { finalize } from 'rxjs/operators';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 
 
 @Component({
@@ -85,6 +87,7 @@ export class GcobroListComponent implements OnInit {
     public tipodcobroS: TipodcobrosService,
     public bancoS: BancoService,
     public pedidoS: PedidoService,
+    private afStorage: AngularFireStorage,
   ) { }
 
   ngOnInit(): void {
@@ -96,6 +99,8 @@ export class GcobroListComponent implements OnInit {
   }//ngOnInit
 
   cargarDatos() {
+
+    // this.cobro_.fechadepago = new Date();
 
     this.pedidoS.getPedidosPendientes().subscribe(pedidosP => {
       this.cobroslist = pedidosP;
@@ -272,7 +277,7 @@ export class GcobroListComponent implements OnInit {
     }
   }//moForm
 
-  async onSubmit(pf?: NgForm) {
+  async onSubmit(pf?: NgForm, reciboUrl?: any) {
     if (this.pedidoPend_.idpedido != null) {
 
       let thisHour = moment().hour();
@@ -315,6 +320,7 @@ export class GcobroListComponent implements OnInit {
       this.cobro_.nomvendedor = this.pedidoPend_.nomvendedor;
       this.cobro_.tipodocpedido = this.pedidoPend_.tipodoc;
       this.cobro_.nrofacturapedido = this.pedidoPend_.nrofactura;
+      this.cobro_.recibopagourl = reciboUrl;
 
       //Monto pendiente para registrar en la tabla pedidos
       this.pedidoPend_.montopendiente = this.importeremanente - this.cobro_.montodepago;
@@ -333,6 +339,7 @@ export class GcobroListComponent implements OnInit {
 
   //select via de pago
   vpagoselected(val) {
+    console.log(this.cobro_.viadepago);
     //si no es efectivo
     if (val.substr(0, 3) != "EFE") {
       this.vp_efectivo = false;
@@ -465,5 +472,44 @@ export class GcobroListComponent implements OnInit {
     const factor = 10 ** places;
     return Math.round(num * factor) / factor;
   };
+
+  async onImprimir(form) {
+    let _cobro = {
+      nrofactura: this.cobro_.nrofacturapedido,
+      viadepago: this.vpagoList.find(vpago => vpago.nombre == this.cobro_.viadepago).descripcion,
+      moneda: this.cobro_.moneda,
+      fechadepago: new DatePipe('en-US').transform(this.cobro_.fechadepago, 'dd/MM/yyyy'),
+      montodepago: this.cobro_.montodepago,
+      montobsf: this.cobro_.montobsf
+    };
+    let pedidosDet = await new Promise<any>((resolve) => {
+      this.pedidoS.getPedidosDet(this.pedidoPend_.uid).subscribe(datos => resolve(datos));
+    });
+
+
+    let documentDefinition = await this.cobroService.generarReciboCobro(this.pedidoPend_, pedidosDet, _cobro);
+    const pdfDocGenerator0 = pdfMake.createPdf(documentDefinition);
+    pdfDocGenerator0.getBase64(async (data) => {
+      var file = data;
+      var fileId = this.pedidoPend_.nrofactura;
+      const idfile = fileId + '_' + this.cobro_.fechadepago + '_RECIBO.pdf';
+      const fileRef: AngularFireStorageReference = this.afStorage.ref("Orders").child(idfile);
+
+      const task: AngularFireUploadTask = fileRef.putString(file, 'base64') //Para guardar desde un string base6
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          // this.URLPublica = this.afStorage.ref("Orders").child(idfile).getDownloadURL();
+          fileRef.getDownloadURL().subscribe(downloadURL => {
+            console.log(downloadURL);
+            this.cobro_.recibopagourl = downloadURL;
+            // this.URLPublica = downloadURL;
+            // this.onSubmit(form, downloadURL);
+            console.log(downloadURL);
+          });
+        })
+      ).subscribe();
+
+    });//pdfDocGenerator
+  }
 
 }

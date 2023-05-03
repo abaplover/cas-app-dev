@@ -290,7 +290,7 @@ export class PedidoService {
     //Busca todos los cobros con estatus - VENCIDO
     var hoy = new Date();
     this.pedidosColletionVencido = this.db.collection('pedidos', ref => ref.where("fpago", "<", hoy)
-      .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "asc").orderBy("creado", "desc").limit(300));
+      .where("status", 'in', ['ENTREGADO']).orderBy("fpago", "asc").orderBy("creado", "desc"));
     this.pedidosVencido = this.pedidosColletionVencido.snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Pedido;
@@ -428,8 +428,6 @@ export class PedidoService {
         }),
         map(([pedidos, pedidoDetalle]) => {
           return pedidos.map(pedido => {
-            // console.log(pedido);
-            console.log(pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid));
             return {
               cabecera: pedido,
               detalle: pedidoDetalle.flat().filter(ped => ped.idpedido == pedido.uid)

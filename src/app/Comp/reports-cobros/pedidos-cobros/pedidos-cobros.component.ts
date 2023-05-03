@@ -217,7 +217,7 @@ export class PedidosCobrosComponent implements OnInit {
     }
 
     this.pedidoS.getPedidosReporteCobros(query).subscribe(ped => {
-      this.cobrosS.getCobrosRep02(queryC).subscribe(cobro => {
+      this.cobrosS.getCobrosRep01(queryC).subscribe(cobro => {
         this.Ped_ = ped;
         let cobrosList = cobro;
         this.montototalUSD = 0;
@@ -229,9 +229,13 @@ export class PedidosCobrosComponent implements OnInit {
           this.montototalUSD += Number(ped.totalmontoneto);
 
           let cobroPagado = cobrosList.find(cobro => cobro.idpedido == ped.idpedido && cobro.tipopago == 'TOTAL');
+          let hasCobros = cobrosList.find(cobro => cobro.idpedido == ped.idpedido );
           ped.statusNoCobrado = false;
           if (!ped.fpago)
             ped.fpago = ped.fechapedido;
+
+          if(ped.status == 'ENTREGADO' && cobroPagado) //Debido a un error en las transacciones algunos pedidos cobrados no actualizaron el status a cobrado
+            ped.status = 'COBRADO';
 
           if (cobroPagado && ped.status == 'COBRADO') {
             tiempo = Math.ceil((this.timestampConvert(cobroPagado.fechadepago).getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
@@ -240,7 +244,7 @@ export class PedidosCobrosComponent implements OnInit {
             tiempo = Math.ceil((this.today.getTime() - this.timestampConvert(ped.fpago).getTime()) / (1000 * 3600 * 24)) - 1;
           }
 
-          if (!cobroPagado && ped.status == 'COBRADO') {
+          if (!hasCobros && ped.status == 'COBRADO') {
             ped.statusNoCobrado = true;
           }
 

@@ -17,6 +17,7 @@ export interface Cobro {
 	pdfb64?                :string;
 	sendmail?              :boolean;
 	status?				   :string;
+	recibopagourl?		   :string;
 	tipodocpedido		   :string; //Tipo de documento de pedido
 	tipodoc?			   :string; //Tipo de documento de cobro 
 	tipopago?              :string;

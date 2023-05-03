@@ -180,9 +180,12 @@
 												class="btn btn-primary btn-space" 
 												type="button" 
 												[disabled]="cobroForm.invalid"
-												(click)="onSubmit(cobroForm)"
+												(click)="onImprimir(cobroForm)"
 											>
 												<i class="fas fa-cloud-upload-alt"></i> Guardar
+											</button>
+											<button class="btn btn-light" type="reset" (click)="onImprimir(cobroForm)">
+												<i class="fas fa-sync-alt"></i> Imprimir Cobro
 											</button>
 											<button class="btn btn-light" type="reset" (click)="onCancelar(cobroForm)">
 												<i class="fas fa-sync-alt"></i> Cancelar

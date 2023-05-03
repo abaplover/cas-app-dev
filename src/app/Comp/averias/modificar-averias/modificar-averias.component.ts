@@ -704,16 +704,20 @@ export class ModificarAveriasComponent implements OnInit {
 
   aceptarRechazarItems(e, ind) {
     let estado_ = false;
+    console.log(e.target.checked);
     if (e.target.checked) {
       estado_ = true;
     }
+    this.gestionaveriasService.matrisDetAveria[ind].aprobado = estado_;
 
-    for (let i in this.gestionaveriasService.matrisDetAveria) {
-      //Actualiza los registros 
-      if (this.gestionaveriasService.matrisDetAveria[i].indice == ind) {
-        this.gestionaveriasService.matrisDetAveria[i].aprobado = estado_;
-      }
-    }
+    // for (let i in this.gestionaveriasService.matrisDetAveria) {
+    //   //Actualiza los registros 
+      
+    //   if (this.gestionaveriasService.matrisDetAveria[i].indice == ind) {
+    //     console.log(ind);
+    //     this.gestionaveriasService.matrisDetAveria[i].aprobado = estado_;
+    //   }
+    // }
   }
 
   onSubmit(pf?: NgForm, url?: string, aveNro?: any) {
